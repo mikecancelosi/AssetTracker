@@ -1,0 +1,70 @@
+﻿<UserControl x:Class="AssetTracker.View.SearchBox"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:AssetTracker.View"
+             xmlns:viewmodel="clr-namespace:AssetTracker.ViewModel"
+             mc:Ignorable="d"
+             d:DesignHeight="600"
+             d:DesignWidth="300">
+    <StackPanel Orientation="Vertical"
+                Background="White">
+
+        <StackPanel.Resources>
+            <Style TargetType="ListBoxItem">
+                <EventSetter Event="MouseDoubleClick" Handler="ItemDoubleClicked"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ListBoxItem">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="{Binding Width, ElementName=Column_ID}" />
+                                    <ColumnDefinition Width="{Binding Width, ElementName=Column_Label}" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{Binding ID}"
+                                           Grid.Column="0" />
+                                <TextBlock Text="{Binding Label}"
+                                           Grid.Column="1" />
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+
+        </StackPanel.Resources>
+
+        <StackPanel Orientation="Horizontal"
+                    Margin="10,10,10,0"
+                    Height="50">
+
+            <Button Content="+" Width="50" Margin="5,0,5,0"/>
+            <Button Content="Modify"
+                    Width="50"
+                    Margin="5,0" />           
+
+        </StackPanel>
+        <TextBox Margin="5" />
+
+        <Grid x:Name="GridHeader"
+              Margin="5,5,5,5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition x:Name="Column_ID"
+                                  Width="1*" />
+                <ColumnDefinition x:Name="Column_Label"
+                                  Width="3*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0"
+                       Text="ID"
+                       HorizontalAlignment="Center" />
+            <TextBlock Grid.Column="1"
+                       Text="Label"
+                       HorizontalAlignment="Center" />
+        </Grid>      
+        <ListBox x:Name="MainGrid" ItemsSource="{Binding Items}" SelectionMode="Single" >          
+
+        </ListBox>
+
+    </StackPanel>
+</UserControl>

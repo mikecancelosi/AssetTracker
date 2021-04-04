@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="AssetManagerModelStoreContainer" CdmEntityContainer="AssetManagerEntities">
+    <EntitySetMapping Name="assetcategories">
+      <EntityTypeMapping TypeName="AssetManagerModel.assetcategory">
+        <MappingFragment StoreEntitySet="assetcategory">
+          <ScalarProperty Name="ca_id" ColumnName="ca_id" />
+          <ScalarProperty Name="ca_name" ColumnName="ca_name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="assetconnections">
+      <EntityTypeMapping TypeName="AssetManagerModel.assetconnection">
+        <MappingFragment StoreEntitySet="assetconnection">
+          <ScalarProperty Name="ct_id" ColumnName="ct_id" />
+          <ScalarProperty Name="ct_parentid" ColumnName="ct_parentid" />
+          <ScalarProperty Name="ct_childid" ColumnName="ct_childid" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="assetlinks">
+      <EntityTypeMapping TypeName="AssetManagerModel.assetlink">
+        <MappingFragment StoreEntitySet="assetlink">
+          <ScalarProperty Name="li_id" ColumnName="li_id" />
+          <ScalarProperty Name="li_location" ColumnName="li_location" />
+          <ScalarProperty Name="li_asid" ColumnName="li_asid" />
+          <ScalarProperty Name="li_ltid" ColumnName="li_ltid" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="assetlinktypes">
+      <EntityTypeMapping TypeName="AssetManagerModel.assetlinktype">
+        <MappingFragment StoreEntitySet="assetlinktype">
+          <ScalarProperty Name="lt_id" ColumnName="lt_id" />
+          <ScalarProperty Name="lt_name" ColumnName="lt_name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="discussions">
+      <EntityTypeMapping TypeName="AssetManagerModel.discussion">
+        <MappingFragment StoreEntitySet="discussion">
+          <ScalarProperty Name="di_id" ColumnName="di_id" />
+          <ScalarProperty Name="di_contents" ColumnName="di_contents" />
+          <ScalarProperty Name="di_asid" ColumnName="di_asid" />
+          <ScalarProperty Name="di_parentid" ColumnName="di_parentid" />
+          <ScalarProperty Name="di_usid" ColumnName="di_usid" />
+          <ScalarProperty Name="di_date" ColumnName="di_date" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="phases">
+      <EntityTypeMapping TypeName="AssetManagerModel.phase">
+        <MappingFragment StoreEntitySet="phase">
+          <ScalarProperty Name="ph_id" ColumnName="ph_id" />
+          <ScalarProperty Name="ph_name" ColumnName="ph_name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="secpermissions">
+      <EntityTypeMapping TypeName="AssetManagerModel.secpermission">
+        <MappingFragment StoreEntitySet="secpermission">
+          <ScalarProperty Name="pr_id" ColumnName="pr_id" />
+          <ScalarProperty Name="pr_name" ColumnName="pr_name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="secpermission2">
+      <EntityTypeMapping TypeName="AssetManagerModel.secpermission2">
+        <MappingFragment StoreEntitySet="secpermission2">
+          <ScalarProperty Name="p2_id" ColumnName="p2_id" />
+          <ScalarProperty Name="p2_usid" ColumnName="p2_usid" />
+          <ScalarProperty Name="p2_prid" ColumnName="p2_prid" />
+          <ScalarProperty Name="p2_allow" ColumnName="p2_allow" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="secpermission3">
+      <EntityTypeMapping TypeName="AssetManagerModel.secpermission3">
+        <MappingFragment StoreEntitySet="secpermission3">
+          <ScalarProperty Name="p3_id" ColumnName="p3_id" />
+          <ScalarProperty Name="p3_roid" ColumnName="p3_roid" />
+          <ScalarProperty Name="p3_prid" ColumnName="p3_prid" />
+          <ScalarProperty Name="p3_allow" ColumnName="p3_allow" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="secroles">
+      <EntityTypeMapping TypeName="AssetManagerModel.secrole">
+        <MappingFragment StoreEntitySet="secrole">
+          <ScalarProperty Name="ro_id" ColumnName="ro_id" />
+          <ScalarProperty Name="ro_name" ColumnName="ro_name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="settings">
+      <EntityTypeMapping TypeName="AssetManagerModel.setting">
+        <MappingFragment StoreEntitySet="setting">
+          <ScalarProperty Name="sc_id" ColumnName="sc_id" />
+          <ScalarProperty Name="sc_allowmultiassign" ColumnName="sc_allowmultiassign" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="users">
+      <EntityTypeMapping TypeName="AssetManagerModel.user">
+        <MappingFragment StoreEntitySet="user">
+          <ScalarProperty Name="us_id" ColumnName="us_id" />
+          <ScalarProperty Name="us_displayname" ColumnName="us_displayname" />
+          <ScalarProperty Name="us_roid" ColumnName="us_roid" />
+          <ScalarProperty Name="us_fname" ColumnName="us_fname" />
+          <ScalarProperty Name="us_lname" ColumnName="us_lname" />
+          <ScalarProperty Name="us_email" ColumnName="us_email" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="assets">
+      <EntityTypeMapping TypeName="AssetManagerModel.asset">
+        <MappingFragment StoreEntitySet="Asset">
+          <ScalarProperty Name="as_phid" ColumnName="as_phid" />
+          <ScalarProperty Name="as_usid" ColumnName="as_usid" />
+          <ScalarProperty Name="as_caid" ColumnName="as_caid" />
+          <ScalarProperty Name="as_parentid" ColumnName="as_parentid" />
+          <ScalarProperty Name="as_description" ColumnName="as_description" />
+          <ScalarProperty Name="as_displayname" ColumnName="as_displayname" />
+          <ScalarProperty Name="as_id" ColumnName="as_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

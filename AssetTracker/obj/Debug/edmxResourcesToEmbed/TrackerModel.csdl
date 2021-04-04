@@ -1,0 +1,381 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="AssetManagerModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="assetcategory">
+    <Key>
+      <PropertyRef Name="ca_id" />
+    </Key>
+    <Property Name="ca_id" Type="Int32" Nullable="false" />
+    <Property Name="ca_name" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Assets" Relationship="AssetManagerModel.FK_asset_assetcategory1" FromRole="assetcategory" ToRole="Asset1" />
+  </EntityType>
+  <EntityType Name="assetconnection">
+    <Key>
+      <PropertyRef Name="ct_id" />
+    </Key>
+    <Property Name="ct_id" Type="Int32" Nullable="false" />
+    <Property Name="ct_parentid" Type="Int32" Nullable="false" />
+    <Property Name="ct_childid" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Asset" Relationship="AssetManagerModel.FK_assetconnection_child1" FromRole="assetconnection" ToRole="Asset1" />
+    <NavigationProperty Name="Asset1" Relationship="AssetManagerModel.FK_assetconnection_parent1" FromRole="assetconnection" ToRole="Asset1" />
+  </EntityType>
+  <EntityType Name="assetlink">
+    <Key>
+      <PropertyRef Name="li_id" />
+    </Key>
+    <Property Name="li_id" Type="Int32" Nullable="false" />
+    <Property Name="li_location" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="li_asid" Type="Int32" Nullable="false" />
+    <Property Name="li_ltid" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="assetlinktype" Relationship="AssetManagerModel.FK_assetlink_assetlinktype" FromRole="assetlink" ToRole="assetlinktype" />
+    <NavigationProperty Name="Asset" Relationship="AssetManagerModel.FK_assetlink_asset1" FromRole="assetlink" ToRole="Asset1" />
+  </EntityType>
+  <EntityType Name="assetlinktype">
+    <Key>
+      <PropertyRef Name="lt_id" />
+    </Key>
+    <Property Name="lt_id" Type="Int32" Nullable="false" />
+    <Property Name="lt_name" Type="String" MaxLength="20" FixedLength="true" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="assetlinks" Relationship="AssetManagerModel.FK_assetlink_assetlinktype" FromRole="assetlinktype" ToRole="assetlink" />
+  </EntityType>
+  <EntityType Name="discussion">
+    <Key>
+      <PropertyRef Name="di_id" />
+    </Key>
+    <Property Name="di_id" Type="Int32" Nullable="false" />
+    <Property Name="di_contents" Type="String" MaxLength="500" FixedLength="true" Unicode="true" Nullable="false" />
+    <Property Name="di_asid" Type="Int32" Nullable="false" />
+    <Property Name="di_parentid" Type="Int32" />
+    <Property Name="di_usid" Type="Int32" Nullable="false" />
+    <Property Name="di_date" Type="DateTime" Nullable="false" Precision="3" />
+    <NavigationProperty Name="discussion1" Relationship="AssetManagerModel.FK_discussion_discussion" FromRole="discussion" ToRole="discussion1" />
+    <NavigationProperty Name="discussion2" Relationship="AssetManagerModel.FK_discussion_discussion" FromRole="discussion1" ToRole="discussion" />
+    <NavigationProperty Name="Asset" Relationship="AssetManagerModel.FK_discussion_asset1" FromRole="discussion" ToRole="Asset1" />
+  </EntityType>
+  <EntityType Name="phase">
+    <Key>
+      <PropertyRef Name="ph_id" />
+    </Key>
+    <Property Name="ph_id" Type="Int32" Nullable="false" />
+    <Property Name="ph_name" Type="String" MaxLength="20" FixedLength="true" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Assets" Relationship="AssetManagerModel.FK_asset_phase1" FromRole="phase" ToRole="Asset1" />
+  </EntityType>
+  <EntityType Name="secpermission">
+    <Key>
+      <PropertyRef Name="pr_id" />
+    </Key>
+    <Property Name="pr_id" Type="Int32" Nullable="false" />
+    <Property Name="pr_name" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="secpermission2" Relationship="AssetManagerModel.FK_secpermission2_secpermission" FromRole="secpermission" ToRole="secpermission2" />
+    <NavigationProperty Name="secpermission3" Relationship="AssetManagerModel.FK_secpermission3_secpermission" FromRole="secpermission" ToRole="secpermission3" />
+  </EntityType>
+  <EntityType Name="secpermission2">
+    <Key>
+      <PropertyRef Name="p2_id" />
+    </Key>
+    <Property Name="p2_id" Type="Int32" Nullable="false" />
+    <Property Name="p2_usid" Type="Int32" Nullable="false" />
+    <Property Name="p2_prid" Type="Int32" Nullable="false" />
+    <Property Name="p2_allow" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="secpermission" Relationship="AssetManagerModel.FK_secpermission2_secpermission" FromRole="secpermission2" ToRole="secpermission" />
+    <NavigationProperty Name="user" Relationship="AssetManagerModel.FK_secpermission2_user" FromRole="secpermission2" ToRole="user" />
+  </EntityType>
+  <EntityType Name="secpermission3">
+    <Key>
+      <PropertyRef Name="p3_id" />
+    </Key>
+    <Property Name="p3_id" Type="Int32" Nullable="false" />
+    <Property Name="p3_roid" Type="Int32" Nullable="false" />
+    <Property Name="p3_prid" Type="Int32" Nullable="false" />
+    <Property Name="p3_allow" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="secpermission" Relationship="AssetManagerModel.FK_secpermission3_secpermission" FromRole="secpermission3" ToRole="secpermission" />
+    <NavigationProperty Name="secrole" Relationship="AssetManagerModel.FK_secpermission3_secrole" FromRole="secpermission3" ToRole="secrole" />
+  </EntityType>
+  <EntityType Name="secrole">
+    <Key>
+      <PropertyRef Name="ro_id" />
+    </Key>
+    <Property Name="ro_id" Type="Int32" Nullable="false" />
+    <Property Name="ro_name" Type="String" MaxLength="20" FixedLength="true" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="secpermission3" Relationship="AssetManagerModel.FK_secpermission3_secrole" FromRole="secrole" ToRole="secpermission3" />
+    <NavigationProperty Name="users" Relationship="AssetManagerModel.FK_user_secrole" FromRole="secrole" ToRole="user" />
+  </EntityType>
+  <EntityType Name="setting">
+    <Key>
+      <PropertyRef Name="sc_id" />
+    </Key>
+    <Property Name="sc_id" Type="Int32" Nullable="false" />
+    <Property Name="sc_allowmultiassign" Type="Boolean" Nullable="false" />
+  </EntityType>
+  <EntityType Name="user">
+    <Key>
+      <PropertyRef Name="us_id" />
+    </Key>
+    <Property Name="us_id" Type="Int32" Nullable="false" />
+    <Property Name="us_displayname" Type="String" MaxLength="100" FixedLength="true" Unicode="true" Nullable="false" />
+    <Property Name="us_roid" Type="Int32" Nullable="false" />
+    <Property Name="us_fname" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
+    <Property Name="us_lname" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
+    <Property Name="us_email" Type="String" MaxLength="100" FixedLength="true" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="secpermission2" Relationship="AssetManagerModel.FK_secpermission2_user" FromRole="user" ToRole="secpermission2" />
+    <NavigationProperty Name="secrole" Relationship="AssetManagerModel.FK_user_secrole" FromRole="user" ToRole="secrole" />
+    <NavigationProperty Name="Assets" Relationship="AssetManagerModel.FK_asset_user1" FromRole="user" ToRole="Asset1" />
+  </EntityType>
+  <EntityContainer Name="AssetManagerEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="assetcategories" EntityType="Self.assetcategory" />
+    <EntitySet Name="assetconnections" EntityType="Self.assetconnection" />
+    <EntitySet Name="assetlinks" EntityType="Self.assetlink" />
+    <EntitySet Name="assetlinktypes" EntityType="Self.assetlinktype" />
+    <EntitySet Name="discussions" EntityType="Self.discussion" />
+    <EntitySet Name="phases" EntityType="Self.phase" />
+    <EntitySet Name="secpermissions" EntityType="Self.secpermission" />
+    <EntitySet Name="secpermission2" EntityType="Self.secpermission2" />
+    <EntitySet Name="secpermission3" EntityType="Self.secpermission3" />
+    <EntitySet Name="secroles" EntityType="Self.secrole" />
+    <EntitySet Name="settings" EntityType="Self.setting" />
+    <EntitySet Name="users" EntityType="Self.user" />
+    <AssociationSet Name="FK_assetlink_assetlinktype" Association="AssetManagerModel.FK_assetlink_assetlinktype">
+      <End Role="assetlinktype" EntitySet="assetlinktypes" />
+      <End Role="assetlink" EntitySet="assetlinks" />
+    </AssociationSet>
+    <AssociationSet Name="FK_discussion_discussion" Association="AssetManagerModel.FK_discussion_discussion">
+      <End Role="discussion" EntitySet="discussions" />
+      <End Role="discussion1" EntitySet="discussions" />
+    </AssociationSet>
+    <AssociationSet Name="FK_secpermission2_secpermission" Association="AssetManagerModel.FK_secpermission2_secpermission">
+      <End Role="secpermission" EntitySet="secpermissions" />
+      <End Role="secpermission2" EntitySet="secpermission2" />
+    </AssociationSet>
+    <AssociationSet Name="FK_secpermission3_secpermission" Association="AssetManagerModel.FK_secpermission3_secpermission">
+      <End Role="secpermission" EntitySet="secpermissions" />
+      <End Role="secpermission3" EntitySet="secpermission3" />
+    </AssociationSet>
+    <AssociationSet Name="FK_secpermission2_user" Association="AssetManagerModel.FK_secpermission2_user">
+      <End Role="user" EntitySet="users" />
+      <End Role="secpermission2" EntitySet="secpermission2" />
+    </AssociationSet>
+    <AssociationSet Name="FK_secpermission3_secrole" Association="AssetManagerModel.FK_secpermission3_secrole">
+      <End Role="secrole" EntitySet="secroles" />
+      <End Role="secpermission3" EntitySet="secpermission3" />
+    </AssociationSet>
+    <AssociationSet Name="FK_user_secrole" Association="AssetManagerModel.FK_user_secrole">
+      <End Role="secrole" EntitySet="secroles" />
+      <End Role="user" EntitySet="users" />
+    </AssociationSet>
+    <EntitySet Name="assets" EntityType="AssetManagerModel.asset" />
+    <AssociationSet Name="FK_asset_assetcategory1" Association="AssetManagerModel.FK_asset_assetcategory1">
+      <End Role="assetcategory" EntitySet="assetcategories" />
+      <End Role="Asset1" EntitySet="assets" />
+    </AssociationSet>
+    <AssociationSet Name="FK_asset_phase1" Association="AssetManagerModel.FK_asset_phase1">
+      <End Role="phase" EntitySet="phases" />
+      <End Role="Asset1" EntitySet="assets" />
+    </AssociationSet>
+    <AssociationSet Name="FK_asset_user1" Association="AssetManagerModel.FK_asset_user1">
+      <End Role="user" EntitySet="users" />
+      <End Role="Asset1" EntitySet="assets" />
+    </AssociationSet>
+    <AssociationSet Name="FK_assetconnection_child1" Association="AssetManagerModel.FK_assetconnection_child1">
+      <End Role="Asset1" EntitySet="assets" />
+      <End Role="assetconnection" EntitySet="assetconnections" />
+    </AssociationSet>
+    <AssociationSet Name="FK_assetconnection_parent1" Association="AssetManagerModel.FK_assetconnection_parent1">
+      <End Role="Asset1" EntitySet="assets" />
+      <End Role="assetconnection" EntitySet="assetconnections" />
+    </AssociationSet>
+    <AssociationSet Name="FK_assetlink_asset1" Association="AssetManagerModel.FK_assetlink_asset1">
+      <End Role="Asset1" EntitySet="assets" />
+      <End Role="assetlink" EntitySet="assetlinks" />
+    </AssociationSet>
+    <AssociationSet Name="FK_discussion_asset1" Association="AssetManagerModel.FK_discussion_asset1">
+      <End Role="Asset1" EntitySet="assets" />
+      <End Role="discussion" EntitySet="discussions" />
+    </AssociationSet>
+  </EntityContainer>
+  <Association Name="FK_assetlink_assetlinktype">
+    <End Type="AssetManagerModel.assetlinktype" Role="assetlinktype" Multiplicity="1" />
+    <End Type="AssetManagerModel.assetlink" Role="assetlink" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="assetlinktype">
+        <PropertyRef Name="lt_id" />
+      </Principal>
+      <Dependent Role="assetlink">
+        <PropertyRef Name="li_ltid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_discussion_discussion">
+    <End Type="AssetManagerModel.discussion" Role="discussion" Multiplicity="0..1" />
+    <End Type="AssetManagerModel.discussion" Role="discussion1" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="discussion">
+        <PropertyRef Name="di_id" />
+      </Principal>
+      <Dependent Role="discussion1">
+        <PropertyRef Name="di_parentid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_secpermission2_secpermission">
+    <End Type="AssetManagerModel.secpermission" Role="secpermission" Multiplicity="1" />
+    <End Type="AssetManagerModel.secpermission2" Role="secpermission2" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="secpermission">
+        <PropertyRef Name="pr_id" />
+      </Principal>
+      <Dependent Role="secpermission2">
+        <PropertyRef Name="p2_prid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_secpermission3_secpermission">
+    <End Type="AssetManagerModel.secpermission" Role="secpermission" Multiplicity="1" />
+    <End Type="AssetManagerModel.secpermission3" Role="secpermission3" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="secpermission">
+        <PropertyRef Name="pr_id" />
+      </Principal>
+      <Dependent Role="secpermission3">
+        <PropertyRef Name="p3_prid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_secpermission2_user">
+    <End Type="AssetManagerModel.user" Role="user" Multiplicity="1" />
+    <End Type="AssetManagerModel.secpermission2" Role="secpermission2" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="user">
+        <PropertyRef Name="us_id" />
+      </Principal>
+      <Dependent Role="secpermission2">
+        <PropertyRef Name="p2_usid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_secpermission3_secrole">
+    <End Type="AssetManagerModel.secrole" Role="secrole" Multiplicity="1" />
+    <End Type="AssetManagerModel.secpermission3" Role="secpermission3" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="secrole">
+        <PropertyRef Name="ro_id" />
+      </Principal>
+      <Dependent Role="secpermission3">
+        <PropertyRef Name="p3_roid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_user_secrole">
+    <End Type="AssetManagerModel.secrole" Role="secrole" Multiplicity="1" />
+    <End Type="AssetManagerModel.user" Role="user" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="secrole">
+        <PropertyRef Name="ro_id" />
+      </Principal>
+      <Dependent Role="user">
+        <PropertyRef Name="us_roid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="asset">
+    <Key>
+      <PropertyRef Name="as_id" />
+    </Key>
+    <Property Name="as_id" Type="Int32" Nullable="false" />
+    <Property Name="as_displayname" Type="String" Nullable="false" MaxLength="100" FixedLength="true" Unicode="true" />
+    <Property Name="as_description" Type="String" MaxLength="1000" FixedLength="true" Unicode="true" />
+    <Property Name="as_parentid" Type="Int32" />
+    <Property Name="as_caid" Type="Int32" Nullable="false" />
+    <Property Name="as_usid" Type="Int32" />
+    <Property Name="as_phid" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="assetcategory" Relationship="AssetManagerModel.FK_asset_assetcategory1" FromRole="Asset1" ToRole="assetcategory" />
+    <NavigationProperty Name="phase" Relationship="AssetManagerModel.FK_asset_phase1" FromRole="Asset1" ToRole="phase" />
+    <NavigationProperty Name="user" Relationship="AssetManagerModel.FK_asset_user1" FromRole="Asset1" ToRole="user" />
+    <NavigationProperty Name="assetconnections" Relationship="AssetManagerModel.FK_assetconnection_child1" FromRole="Asset1" ToRole="assetconnection" />
+    <NavigationProperty Name="assetconnections1" Relationship="AssetManagerModel.FK_assetconnection_parent1" FromRole="Asset1" ToRole="assetconnection" />
+    <NavigationProperty Name="assetlink" Relationship="AssetManagerModel.FK_assetlink_asset1" FromRole="Asset1" ToRole="assetlink" />
+    <NavigationProperty Name="discussions" Relationship="AssetManagerModel.FK_discussion_asset1" FromRole="Asset1" ToRole="discussion" />
+  </EntityType>
+  <Association Name="FK_asset_assetcategory1">
+    <End Type="AssetManagerModel.assetcategory" Role="assetcategory" Multiplicity="1" />
+    <End Type="AssetManagerModel.asset" Role="Asset1" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="assetcategory">
+        <PropertyRef Name="ca_id" />
+      </Principal>
+      <Dependent Role="Asset1">
+        <PropertyRef Name="as_caid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_asset_phase1">
+    <End Type="AssetManagerModel.phase" Role="phase" Multiplicity="1" />
+    <End Type="AssetManagerModel.asset" Role="Asset1" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="phase">
+        <PropertyRef Name="ph_id" />
+      </Principal>
+      <Dependent Role="Asset1">
+        <PropertyRef Name="as_phid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_asset_user1">
+    <End Type="AssetManagerModel.user" Role="user" Multiplicity="0..1" />
+    <End Type="AssetManagerModel.asset" Role="Asset1" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="user">
+        <PropertyRef Name="us_id" />
+      </Principal>
+      <Dependent Role="Asset1">
+        <PropertyRef Name="as_usid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_assetconnection_child1">
+    <End Type="AssetManagerModel.asset" Role="Asset1" Multiplicity="1" />
+    <End Type="AssetManagerModel.assetconnection" Role="assetconnection" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Asset1">
+        <PropertyRef Name="as_id" />
+      </Principal>
+      <Dependent Role="assetconnection">
+        <PropertyRef Name="ct_parentid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_assetconnection_parent1">
+    <End Type="AssetManagerModel.asset" Role="Asset1" Multiplicity="1" />
+    <End Type="AssetManagerModel.assetconnection" Role="assetconnection" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Asset1">
+        <PropertyRef Name="as_id" />
+      </Principal>
+      <Dependent Role="assetconnection">
+        <PropertyRef Name="ct_parentid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_assetlink_asset1">
+    <End Type="AssetManagerModel.asset" Role="Asset1" Multiplicity="1" />
+    <End Type="AssetManagerModel.assetlink" Role="assetlink" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Asset1">
+        <PropertyRef Name="as_id" />
+      </Principal>
+      <Dependent Role="assetlink">
+        <PropertyRef Name="li_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_discussion_asset1">
+    <End Type="AssetManagerModel.asset" Role="Asset1" Multiplicity="1" />
+    <End Type="AssetManagerModel.discussion" Role="discussion" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Asset1">
+        <PropertyRef Name="as_id" />
+      </Principal>
+      <Dependent Role="discussion">
+        <PropertyRef Name="di_asid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

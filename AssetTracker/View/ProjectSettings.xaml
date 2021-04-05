@@ -1,12 +1,315 @@
-﻿<UserControl x:Class="AssetTracker.View.ProjectSettings"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:AssetTracker.View"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
+﻿<Page x:Class="AssetTracker.View.ProjectSettings"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:AssetTracker.View"
+      xmlns:viewmodel="clr-namespace:AssetTracker.ViewModel"
+      mc:Ignorable="d"
+      d:DesignHeight="900"
+      d:DesignWidth="1500"
+      Title="ProjectSettings"
+      Background="AntiqueWhite"
+      ShowsNavigationUI="False">
+
+    <Grid Margin="100,30">
+        <Grid.Resources>
+            <BooleanToVisibilityConverter x:Key="BoolToVis" />
+        </Grid.Resources>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="3*" />
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Orientation="Vertical"
+                    x:Name="Navigation">
+            <StackPanel.Resources>
+
+                <Style TargetType="{x:Type RadioButton}">
+                    <Setter Property="Focusable"
+                            Value="False" />
+                    <Setter Property="GroupName"
+                            Value="filter" />
+                    <Setter Property="IsTabStop"
+                            Value="False" />
+                    <Setter Property="VerticalAlignment"
+                            Value="Center" />
+                    <Setter Property="HorizontalAlignment"
+                            Value="Stretch" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type RadioButton}">
+                                <ControlTemplate.Resources>
+
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="VerticalAlignment"
+                                                Value="Center" />
+                                        <Setter Property="HorizontalAlignment"
+                                                Value="Left" />
+                                    </Style>
+
+                                </ControlTemplate.Resources>
+                                <Border x:Name="PART_border"
+                                        BorderThickness="0"
+                                        Padding="10"
+                                        Background="FloralWhite"
+                                        >
+                                    <StackPanel Orientation="Horizontal"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Center">
+                                        <ContentPresenter x:Name="PART_content" />
+                                    </StackPanel>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsChecked"
+                                             Value="True">
+                                        <Setter TargetName="PART_content"
+                                                Property="TextBlock.FontWeight"
+                                                Value="Bold" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+
+            </StackPanel.Resources>
+
+            <Expander Header="User Management">
+                <StackPanel>
+                    <RadioButton x:Name="UsersBtn" Content="Users" />
+                    <RadioButton x:Name="RolesBtn" Content="Roles" />
+                </StackPanel>
+            </Expander>
+            <RadioButton x:Name="PhasesBtn" Content="Phases" />
+            <RadioButton x:Name="CategoriesBtn" Content="Category" />
+        </StackPanel>
+
+        <Grid Grid.Column="1"
+              Margin="50,0">
             
+            <StackPanel x:Name="Users"
+                        Orientation="Vertical"
+                        Visibility="{Binding ElementName=UsersBtn, Path=IsChecked,Converter={StaticResource BoolToVis}}">
+
+                <TextBlock Text="Users"
+                           FontSize="24" />
+
+                <Grid Margin="0,40">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="1*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBox Text="Search.." />
+                    <Button Grid.Column="1"
+                            HorizontalAlignment="Right"
+                            Content="+ Add User" />
+                </Grid>
+
+                <Grid x:Name="UserList">
+                    <Grid.DataContext>
+                        <viewmodel:ProjectSettingsViewModel />
+                    </Grid.DataContext>
+                    <ListView VerticalAlignment="Top"
+                              ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                              ItemsSource="{Binding Users}">
+                        <ListView.Resources>
+                            <Style TargetType="{x:Type GridViewColumnHeader}">
+                                <Setter Property="HorizontalContentAlignment"
+                                        Value="Left" />
+                                <Setter Property="Padding"
+                                        Value="6,0" />
+                                <Setter Property="FontSize"
+                                        Value="14" />
+                                <Setter Property="FontWeight"
+                                        Value="Medium" />
+                            </Style>
+                        </ListView.Resources>
+
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="ID"
+                                                Width="100"
+                                                DisplayMemberBinding="{Binding us_id}" />
+                                <GridViewColumn Header="Name"
+                                                Width="300"
+                                                DisplayMemberBinding="{Binding us_displayname}" />
+                                <GridViewColumn Header="Role"
+                                                Width="200"
+                                                DisplayMemberBinding="{Binding SecRole.ro_name}" />
+
+                            </GridView>
+                        </ListView.View>
+
+                    </ListView>
+                </Grid>
+
+            </StackPanel>
+            <StackPanel x:Name="Roles"
+                        Orientation="Vertical"
+                        Visibility="{Binding ElementName=RolesBtn, Path=IsChecked,Converter={StaticResource BoolToVis}}">
+
+                <TextBlock Text="Roles"
+                           FontSize="24" />
+
+                <Grid Margin="0,40">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="1*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBox Text="Search.." />
+                    <Button Grid.Column="1"
+                            HorizontalAlignment="Right"
+                            Content="+ Add Role" />
+                </Grid>
+
+                <Grid x:Name="RolesList">
+                    <Grid.DataContext>
+                        <viewmodel:ProjectSettingsViewModel />
+                    </Grid.DataContext>
+                    <ListView VerticalAlignment="Top"
+                              ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                              ItemsSource="{Binding Roles}">
+                        <ListView.Resources>
+                            <Style TargetType="{x:Type GridViewColumnHeader}">
+                                <Setter Property="HorizontalContentAlignment"
+                                        Value="Left" />
+                                <Setter Property="Padding"
+                                        Value="6,0" />
+                                <Setter Property="FontSize"
+                                        Value="14" />
+                                <Setter Property="FontWeight"
+                                        Value="Medium" />
+                            </Style>
+                        </ListView.Resources>
+
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="ID"
+                                                Width="100"
+                                                DisplayMemberBinding="{Binding ro_id}" />
+                                <GridViewColumn Header="Name"
+                                                Width="300"
+                                                DisplayMemberBinding="{Binding ro_name}" />
+
+                            </GridView>
+                        </ListView.View>
+
+                    </ListView>
+                </Grid>
+
+            </StackPanel>
+            <StackPanel x:Name="Phases"
+                        Orientation="Vertical"
+                        Visibility="{Binding ElementName=PhasesBtn, Path=IsChecked,Converter={StaticResource BoolToVis}}">
+
+                <TextBlock Text="Phases"
+                           FontSize="24" />
+
+                <Grid Margin="0,40">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="1*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBox Text="Search.." />
+                    <Button Grid.Column="1"
+                            HorizontalAlignment="Right"
+                            Content="+ Add Phase" />
+                </Grid>
+
+                <Grid x:Name="PhaseList">
+                    <Grid.DataContext>
+                        <viewmodel:ProjectSettingsViewModel />
+                    </Grid.DataContext>
+                    <ListView VerticalAlignment="Top"
+                              ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                              ItemsSource="{Binding Phases}">
+                        <ListView.Resources>
+                            <Style TargetType="{x:Type GridViewColumnHeader}">
+                                <Setter Property="HorizontalContentAlignment"
+                                        Value="Left" />
+                                <Setter Property="Padding"
+                                        Value="6,0" />
+                                <Setter Property="FontSize"
+                                        Value="14" />
+                                <Setter Property="FontWeight"
+                                        Value="Medium" />
+                            </Style>
+                        </ListView.Resources>
+
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="ID"
+                                                Width="100"
+                                                DisplayMemberBinding="{Binding ph_id}" />
+                                <GridViewColumn Header="Name"
+                                                Width="300"
+                                                DisplayMemberBinding="{Binding ph_name}" />
+
+                            </GridView>
+                        </ListView.View>
+
+                    </ListView>
+                </Grid>
+
+            </StackPanel>
+            <StackPanel x:Name="Category"
+                        Orientation="Vertical"
+                        Visibility="{Binding ElementName=CategoriesBtn, Path=IsChecked,Converter={StaticResource BoolToVis}}">
+
+                <TextBlock Text="Categories"
+                           FontSize="24" />
+
+                <Grid Margin="0,40">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="1*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBox Text="Search.." />
+                    <Button Grid.Column="1"
+                            HorizontalAlignment="Right"
+                            Content="+ Add Category" />
+                </Grid>
+
+                <Grid x:Name="CategoryList">
+                    <Grid.DataContext>
+                        <viewmodel:ProjectSettingsViewModel />
+                    </Grid.DataContext>
+                    <ListView VerticalAlignment="Top"
+                              ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                              ItemsSource="{Binding Categories}">
+                        <ListView.Resources>
+                            <Style TargetType="{x:Type GridViewColumnHeader}">
+                                <Setter Property="HorizontalContentAlignment"
+                                        Value="Left" />
+                                <Setter Property="Padding"
+                                        Value="6,0" />
+                                <Setter Property="FontSize"
+                                        Value="14" />
+                                <Setter Property="FontWeight"
+                                        Value="Medium" />
+                            </Style>
+                        </ListView.Resources>
+
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="ID"
+                                                Width="100"
+                                                DisplayMemberBinding="{Binding ca_id}" />
+                                <GridViewColumn Header="Name"
+                                                Width="300"
+                                                DisplayMemberBinding="{Binding ca_name}" />
+
+                            </GridView>
+                        </ListView.View>
+
+                    </ListView>
+                </Grid>
+
+            </StackPanel>
+
+        </Grid>
+
     </Grid>
-</UserControl>
+</Page>

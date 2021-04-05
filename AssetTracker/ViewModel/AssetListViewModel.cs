@@ -1,8 +1,6 @@
-﻿using AssetTracker.DAL;
-using AssetTracker.Model;
+﻿using AssetTracker.Model;
 using AssetTracker.Services;
 using AssetTracker.View;
-using Mehdime.Entity;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -14,33 +12,27 @@ namespace AssetTracker.ViewModel
 {
     public class AssetListViewModel
     {
-        private ObservableCollection<Asset> assets;
-        public ObservableCollection<Asset> Assets
+        private List<Asset> assets;
+        public List<Asset> Assets
         {
             get
             {
-                if(assets == null)
+                if (assets == null)
                 {
-                    assets = new ObservableCollection<Asset>();
-                    assetRepo.Get().ToList().ForEach(a => assets.Add(a));
+                    assets = new List<Asset>();
+                    var temp = (from a in context.Assets
+                                select a).ToList();
+                    assets = temp;
                 }
-               
-                return assets;                                   
+
+                return assets;
             }
         }
-
-        private GenericRepository<Asset> assetRepo;
-        private IDbContextScopeFactory scopeFactory;
-
-        public AssetListViewModel()
-        {
-            scopeFactory = new DbContextScopeFactory();
-            assetRepo = new GenericRepository<Asset>(scopeFactory);
-        }
+        private TrackerContext context = new TrackerContext();
 
         public void AddItem()
         {
-           
+
         }
 
         

@@ -83,20 +83,6 @@
     <Compile Include="AssetLinkType.cs">
       <DependentUpon>DBO.tt</DependentUpon>
     </Compile>
-    <Compile Include="DAL\GenericRepository.cs" />
-    <Compile Include="DBContextScope\Enums\DbContextScopeOption.cs" />
-    <Compile Include="DBContextScope\Implementations\AmbientContextSuppressor.cs" />
-    <Compile Include="DBContextScope\Implementations\AmbientDbContextLocator.cs" />
-    <Compile Include="DBContextScope\Implementations\DbContextCollection.cs" />
-    <Compile Include="DBContextScope\Implementations\DbContextReadOnlyScope.cs" />
-    <Compile Include="DBContextScope\Implementations\DbContextScope.cs" />
-    <Compile Include="DBContextScope\Implementations\DbContextScopeFactory.cs" />
-    <Compile Include="DBContextScope\Interfaces\IAmbientDbContextLocator.cs" />
-    <Compile Include="DBContextScope\Interfaces\IDbContextCollection.cs" />
-    <Compile Include="DBContextScope\Interfaces\IDbContextFactory.cs" />
-    <Compile Include="DBContextScope\Interfaces\IDbContextReadOnlyScope.cs" />
-    <Compile Include="DBContextScope\Interfaces\IDbContextScope.cs" />
-    <Compile Include="DBContextScope\Interfaces\IDbContextScopeFactory.cs" />
     <Compile Include="DBO.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -149,6 +135,7 @@
     <Compile Include="Utilities\Disposable.cs" />
     <Compile Include="ViewModel\AssetCreateViewModel.cs" />
     <Compile Include="ViewModel\AssetListViewModel.cs" />
+    <Compile Include="ViewModel\ProjectSettingsViewModel.cs" />
     <Compile Include="ViewModel\SearchBoxViewModel.cs" />
     <Compile Include="View\AssetCreate.xaml.cs">
       <DependentUpon>AssetCreate.xaml</DependentUpon>
@@ -195,8 +182,8 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="View\AssetList.xaml">
-      <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Changelog.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -207,8 +194,8 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="View\ProjectSettings.xaml">
-      <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\SearchBox.xaml">
       <Generator>MSBuild:Compile</Generator>

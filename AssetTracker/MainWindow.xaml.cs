@@ -1,7 +1,6 @@
-﻿using AssetTracker.DAL;
-using AssetTracker.Model;
+﻿using AssetTracker.Model;
 using AssetTracker.Services;
-using Mehdime.Entity;
+using AssetTracker.View;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,32 +22,21 @@ namespace AssetTracker
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
-    {
-        private GenericRepository<DatabaseBackedObject> assetRepo;
-        private IDbContextScopeFactory scopeFactory;
-
-        private bool LoadingData = false;
-
+    {       
         public MainWindow()
         {
             InitializeComponent();
-
-            if(LoadingData)
-            {
-                scopeFactory = new DbContextScopeFactory();
-                assetRepo = new GenericRepository<DatabaseBackedObject>(scopeFactory);
-                FillWithData();
-            }
+            NavigateToAssetList();
         }
 
-        private void FillWithData()
+        public void NavigateToAssetList()
         {
-            using(IDbContextScope scope = scopeFactory.Create())
-            {
-                List<DatabaseBackedObject> objectsToCreate = DefaultRepositoryData.BuildTestData();
-                objectsToCreate.ForEach(x => assetRepo.Insert(x,x.GetType()));
-                scope.SaveChanges();
-            }
+            ContentFrame.Navigate(new AssetList());
+        }
+
+        private void NavigateToSettings(object sender, RoutedEventArgs e)
+        {
+            ContentFrame.Navigate(new ProjectSettings());
         }
     }
 }

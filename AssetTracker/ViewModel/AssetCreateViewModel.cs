@@ -1,7 +1,6 @@
-﻿using AssetTracker.DAL;
+﻿
 using AssetTracker.Model;
 using AssetTracker.Services;
-using Mehdime.Entity;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,14 +9,8 @@ namespace AssetTracker.ViewModel
 {
     public class AssetCreateViewModel
     {
-        private GenericRepository<Asset> assetRepo;
-        private IDbContextScopeFactory scopeFactory;
-
-        public AssetCreateViewModel()
-        {
-            scopeFactory = new DbContextScopeFactory();
-            assetRepo = new GenericRepository<Asset>(scopeFactory);
-        }
+        private TrackerContext context = new TrackerContext();
+       
 
         public bool CreateAsset(string name, string description, int categoryID, out List<Violation> violations, int assignedToID = 0, int parentID = 0)
         {
@@ -30,7 +23,7 @@ namespace AssetTracker.ViewModel
             };
             if (asset.IsValid(out violations))
             {
-                assetRepo.Insert(asset);
+                context.Assets.Add(asset);
                 return true;
             }
             else

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AssetTracker.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,11 +19,15 @@ namespace AssetTracker.View
     /// <summary>
     /// Interaction logic for ProjectSettings.xaml
     /// </summary>
-    public partial class ProjectSettings : UserControl
+    public partial class ProjectSettings : Page
     {
+        private ProjectSettingsViewModel vm;
+
         public ProjectSettings()
         {
             InitializeComponent();
+            vm = new ProjectSettingsViewModel();
         }
+     
     }
 }

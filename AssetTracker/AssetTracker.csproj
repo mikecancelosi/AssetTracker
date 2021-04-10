@@ -71,9 +71,6 @@
     <Compile Include="AssetCategory.cs">
       <DependentUpon>DBO.tt</DependentUpon>
     </Compile>
-    <Compile Include="AssetConnection.cs">
-      <DependentUpon>DBO.tt</DependentUpon>
-    </Compile>
     <Compile Include="assetGetInformation_Result.cs">
       <DependentUpon>DBO.tt</DependentUpon>
     </Compile>
@@ -81,6 +78,9 @@
       <DependentUpon>DBO.tt</DependentUpon>
     </Compile>
     <Compile Include="AssetLinkType.cs">
+      <DependentUpon>DBO.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Change.cs">
       <DependentUpon>DBO.tt</DependentUpon>
     </Compile>
     <Compile Include="DBO.Context.cs">
@@ -104,6 +104,7 @@
     <Compile Include="Extensions\ObservableCollectionExtensions.cs" />
     <Compile Include="Model\Asset.cs" />
     <Compile Include="Model\AssetCategory.cs" />
+    <Compile Include="Model\Change.cs" />
     <Compile Include="Model\DatabaseBackedObject.cs" />
     <Compile Include="Model\Phase.cs" />
     <Compile Include="Model\SecRole.cs" />
@@ -134,6 +135,7 @@
     </Compile>
     <Compile Include="Utilities\Disposable.cs" />
     <Compile Include="ViewModel\AssetCreateViewModel.cs" />
+    <Compile Include="ViewModel\AssetDetailViewModel.cs" />
     <Compile Include="ViewModel\AssetListViewModel.cs" />
     <Compile Include="ViewModel\ProjectSettingsViewModel.cs" />
     <Compile Include="ViewModel\SearchBoxViewModel.cs" />
@@ -154,6 +156,9 @@
     </Compile>
     <Compile Include="View\ProjectSettings.xaml.cs">
       <DependentUpon>ProjectSettings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ProjectStatus.xaml.cs">
+      <DependentUpon>ProjectStatus.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\SearchBox.xaml.cs">
       <DependentUpon>SearchBox.xaml</DependentUpon>
@@ -194,6 +199,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="View\ProjectSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ProjectStatus.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

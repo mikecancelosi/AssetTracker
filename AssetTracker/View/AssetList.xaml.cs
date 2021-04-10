@@ -1,4 +1,5 @@
-﻿using AssetTracker.ViewModel;
+﻿using AssetTracker.Model;
+using AssetTracker.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,9 +31,15 @@ namespace AssetTracker.View
 
         private void AddItem_Click(object sender, RoutedEventArgs e)
         {
-
-            //AssetCreateControl.Visibility = Visibility.Visible;
+            AssetCreateControl.Visibility = Visibility.Visible;
             // Make everything else not interactable
+        }
+
+        private void ListViewItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            Asset ast = MainGrid.SelectedItem as Asset;
+            AssetDetail assetDetail = new AssetDetail(ast);
+            NavigationService.Navigate(assetDetail);
         }
     }
 }

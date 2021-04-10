@@ -21,7 +21,7 @@ namespace AssetTracker.View
     /// </summary>
     public partial class ProjectSettings : Page
     {
-        private ProjectSettingsViewModel vm;
+        public ProjectSettingsViewModel vm;
 
         public ProjectSettings()
         {

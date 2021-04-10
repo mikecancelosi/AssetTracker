@@ -5,8 +5,8 @@
       <PropertyRef Name="as_id" />
     </Key>
     <Property Name="as_id" Type="int" Nullable="false" />
-    <Property Name="as_displayname" Type="nchar" MaxLength="100" Nullable="false" />
-    <Property Name="as_description" Type="nchar" MaxLength="1000" />
+    <Property Name="as_displayname" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="as_description" Type="nvarchar" MaxLength="50" />
     <Property Name="as_parentid" Type="int" />
     <Property Name="as_caid" Type="int" Nullable="false" />
     <Property Name="as_usid" Type="int" />
@@ -17,22 +17,14 @@
       <PropertyRef Name="ca_id" />
     </Key>
     <Property Name="ca_id" Type="int" Nullable="false" />
-    <Property Name="ca_name" Type="nchar" MaxLength="50" Nullable="false" />
-  </EntityType>
-  <EntityType Name="AssetConnection">
-    <Key>
-      <PropertyRef Name="ct_id" />
-    </Key>
-    <Property Name="ct_id" Type="int" Nullable="false" />
-    <Property Name="ct_parentid" Type="int" Nullable="false" />
-    <Property Name="ct_childid" Type="int" Nullable="false" />
+    <Property Name="ca_name" Type="nvarchar" MaxLength="50" Nullable="false" />
   </EntityType>
   <EntityType Name="AssetLink">
     <Key>
       <PropertyRef Name="li_id" />
     </Key>
     <Property Name="li_id" Type="int" Nullable="false" />
-    <Property Name="li_location" Type="varchar(max)" Nullable="false" />
+    <Property Name="li_location" Type="nvarchar(max)" Nullable="false" />
     <Property Name="li_asid" Type="int" Nullable="false" />
     <Property Name="li_ltid" Type="int" Nullable="false" />
   </EntityType>
@@ -41,14 +33,27 @@
       <PropertyRef Name="lt_id" />
     </Key>
     <Property Name="lt_id" Type="int" Nullable="false" />
-    <Property Name="lt_name" Type="nchar" MaxLength="20" Nullable="false" />
+    <Property Name="lt_name" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Changes">
+    <Key>
+      <PropertyRef Name="ch_id" />
+    </Key>
+    <Property Name="ch_id" Type="int" Nullable="false" />
+    <Property Name="ch_description" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="ch_datetime" Type="datetime" Nullable="false" />
+    <Property Name="ch_oldvalue" Type="nvarchar" MaxLength="50" />
+    <Property Name="ch_newvalue" Type="nvarchar" MaxLength="50" />
+    <Property Name="ch_field" Type="nvarchar" MaxLength="50" />
+    <Property Name="ch_recid" Type="int" Nullable="false" />
+    <Property Name="ch_usid" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="Discussion">
     <Key>
       <PropertyRef Name="di_id" />
     </Key>
     <Property Name="di_id" Type="int" Nullable="false" />
-    <Property Name="di_contents" Type="nchar" MaxLength="500" Nullable="false" />
+    <Property Name="di_contents" Type="nvarchar" MaxLength="500" Nullable="false" />
     <Property Name="di_asid" Type="int" Nullable="false" />
     <Property Name="di_parentid" Type="int" />
     <Property Name="di_usid" Type="int" Nullable="false" />
@@ -59,14 +64,14 @@
       <PropertyRef Name="ph_id" />
     </Key>
     <Property Name="ph_id" Type="int" Nullable="false" />
-    <Property Name="ph_name" Type="nchar" MaxLength="20" Nullable="false" />
+    <Property Name="ph_name" Type="nvarchar" MaxLength="50" Nullable="false" />
   </EntityType>
   <EntityType Name="SecPermission">
     <Key>
       <PropertyRef Name="pr_id" />
     </Key>
     <Property Name="pr_id" Type="int" Nullable="false" />
-    <Property Name="pr_name" Type="nchar" MaxLength="50" Nullable="false" />
+    <Property Name="pr_name" Type="nvarchar" MaxLength="50" Nullable="false" />
   </EntityType>
   <EntityType Name="SecPermission2">
     <Key>
@@ -91,7 +96,7 @@
       <PropertyRef Name="ro_id" />
     </Key>
     <Property Name="ro_id" Type="int" Nullable="false" />
-    <Property Name="ro_name" Type="nchar" MaxLength="20" Nullable="false" />
+    <Property Name="ro_name" Type="nvarchar" MaxLength="50" Nullable="false" />
   </EntityType>
   <EntityType Name="Setting">
     <Key>
@@ -105,11 +110,11 @@
       <PropertyRef Name="us_id" />
     </Key>
     <Property Name="us_id" Type="int" Nullable="false" />
-    <Property Name="us_displayname" Type="nchar" MaxLength="100" Nullable="false" />
+    <Property Name="us_displayname" Type="nvarchar" MaxLength="100" Nullable="false" />
     <Property Name="us_roid" Type="int" Nullable="false" />
-    <Property Name="us_fname" Type="nchar" MaxLength="50" Nullable="false" />
-    <Property Name="us_lname" Type="nchar" MaxLength="50" Nullable="false" />
-    <Property Name="us_email" Type="nchar" MaxLength="100" Nullable="false" />
+    <Property Name="us_fname" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="us_lname" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="us_email" Type="nvarchar" MaxLength="100" Nullable="false" />
   </EntityType>
   <Association Name="FK_asset_assetcategory">
     <End Role="AssetCategory" Type="Self.AssetCategory" Multiplicity="1" />
@@ -120,6 +125,18 @@
       </Principal>
       <Dependent Role="Asset">
         <PropertyRef Name="as_caid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Asset_Parent">
+    <End Role="Asset" Type="Self.Asset" Multiplicity="0..1" />
+    <End Role="Asset1" Type="Self.Asset" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Asset">
+        <PropertyRef Name="as_id" />
+      </Principal>
+      <Dependent Role="Asset1">
+        <PropertyRef Name="as_parentid" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -144,30 +161,6 @@
       </Principal>
       <Dependent Role="Asset">
         <PropertyRef Name="as_usid" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_assetconnection_child">
-    <End Role="Asset" Type="Self.Asset" Multiplicity="1" />
-    <End Role="AssetConnection" Type="Self.AssetConnection" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Asset">
-        <PropertyRef Name="as_id" />
-      </Principal>
-      <Dependent Role="AssetConnection">
-        <PropertyRef Name="ct_childid" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_assetconnection_parent">
-    <End Role="Asset" Type="Self.Asset" Multiplicity="1" />
-    <End Role="AssetConnection" Type="Self.AssetConnection" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Asset">
-        <PropertyRef Name="as_id" />
-      </Principal>
-      <Dependent Role="AssetConnection">
-        <PropertyRef Name="ct_parentid" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -283,9 +276,9 @@
   <EntityContainer Name="ModelStoreContainer">
     <EntitySet Name="Asset" EntityType="Self.Asset" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AssetCategory" EntityType="Self.AssetCategory" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="AssetConnection" EntityType="Self.AssetConnection" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AssetLink" EntityType="Self.AssetLink" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AssetLinkType" EntityType="Self.AssetLinkType" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Changes" EntityType="Self.Changes" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Discussion" EntityType="Self.Discussion" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Phase" EntityType="Self.Phase" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SecPermission" EntityType="Self.SecPermission" Schema="dbo" store:Type="Tables" />
@@ -298,6 +291,10 @@
       <End Role="AssetCategory" EntitySet="AssetCategory" />
       <End Role="Asset" EntitySet="Asset" />
     </AssociationSet>
+    <AssociationSet Name="FK_Asset_Parent" Association="Self.FK_Asset_Parent">
+      <End Role="Asset" EntitySet="Asset" />
+      <End Role="Asset1" EntitySet="Asset" />
+    </AssociationSet>
     <AssociationSet Name="FK_asset_phase" Association="Self.FK_asset_phase">
       <End Role="Phase" EntitySet="Phase" />
       <End Role="Asset" EntitySet="Asset" />
@@ -305,14 +302,6 @@
     <AssociationSet Name="FK_asset_user" Association="Self.FK_asset_user">
       <End Role="User" EntitySet="User" />
       <End Role="Asset" EntitySet="Asset" />
-    </AssociationSet>
-    <AssociationSet Name="FK_assetconnection_child" Association="Self.FK_assetconnection_child">
-      <End Role="Asset" EntitySet="Asset" />
-      <End Role="AssetConnection" EntitySet="AssetConnection" />
-    </AssociationSet>
-    <AssociationSet Name="FK_assetconnection_parent" Association="Self.FK_assetconnection_parent">
-      <End Role="Asset" EntitySet="Asset" />
-      <End Role="AssetConnection" EntitySet="AssetConnection" />
     </AssociationSet>
     <AssociationSet Name="FK_assetlink_asset" Association="Self.FK_assetlink_asset">
       <End Role="Asset" EntitySet="Asset" />

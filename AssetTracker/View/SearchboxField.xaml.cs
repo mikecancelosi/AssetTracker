@@ -1,4 +1,5 @@
-﻿using AssetTracker.ViewModel;
+﻿using AssetTracker.Model;
+using AssetTracker.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,41 +23,26 @@ namespace AssetTracker.View
     public partial class SearchboxField : UserControl
     {
         private Type dboType;
-        public int SelectedValue 
-        { 
-            get
-            {
-                return vm.ID;
-            }
-        }
-        private SearchBox searchBox;
         private SearchBoxViewModel vm;
 
         public SearchboxField()
         {
             InitializeComponent();
-        }
 
-        public void SetType(Type type)
+        }       
+
+        public void SetSyncObject(DatabaseBackedObject sync)
         {
-            dboType = type;
-            vm = new SearchBoxViewModel(type);
+            dboType = sync.GetType();
+            vm = new SearchBoxViewModel(sync);
+            DataContext = vm;
+            ((SearchBox)searchbox.Child).SetViewModel(vm);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             //Open Searchbox with initialized type
-            if(searchBox == null)
-            {
-                searchBox = new SearchBox(dboType, vm);
-                searchBox.OnClose += SearchBox_OnClose;
-            }
-            searchBox.Visibility = Visibility.Visible;
-        }
-
-        private void SearchBox_OnClose(object sender, EventArgs e)
-        {
-            Value_Label.Content = vm.Label;
+            searchbox.IsOpen = true;
         }
     }
 }

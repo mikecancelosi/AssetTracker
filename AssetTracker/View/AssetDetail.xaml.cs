@@ -1,4 +1,5 @@
 ﻿using AssetTracker.Model;
+using AssetTracker.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -17,10 +18,9 @@ namespace AssetTracker.View
     /// <summary>
     /// Interaction logic for AssetDetail.xaml
     /// </summary>
-    public partial class AssetDetail : UserControl
+    public partial class AssetDetail : Page
     {
-        private Asset Model;
-
+        public AssetDetailViewModel vm;
         public AssetDetail()
         {
             InitializeComponent();
@@ -29,14 +29,14 @@ namespace AssetTracker.View
         public AssetDetail(Asset model)
         {
             InitializeComponent();
-            Model = model;
+            vm = new AssetDetailViewModel();
+            vm.myAsset = model;
+            DataContext = vm;
             Load();
         }
 
         private void Load()
         {
-            // Set place holder name, id
-
             // Load Hierarchy
 
             // Load Images

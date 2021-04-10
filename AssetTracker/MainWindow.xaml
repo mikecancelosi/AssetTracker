@@ -12,11 +12,13 @@
             <Style x:Key="NavText"
                    TargetType="{x:Type Button}">
                 <Setter Property="FontSize"
-                        Value="20" />
+                        Value="14" />
                 <Setter Property="Margin"
                         Value="10, 0" />
                 <Setter Property="HorizontalAlignment"
                         Value="Center" />
+                <Setter Property="Padding"
+                        Value="10" />
             </Style>
         </Grid.Resources>
 
@@ -28,7 +30,7 @@
 
         <Grid x:Name="Header"
               Grid.Row="0"
-              Margin="20">
+              Margin="5">
 
             <StackPanel Orientation="Horizontal">
                 <Image x:Name="AppLogo"
@@ -43,10 +45,13 @@
                             VerticalAlignment="Center">
                     <StackPanel.Resources>
                         <Style BasedOn="{StaticResource NavText}"
-                               TargetType="Button" />
+                               TargetType="Button">
+                        </Style>
                     </StackPanel.Resources>
-                    <Button Content="Asset List" />
-                    <Button Content="Project Status" />
+                    <Button Content="Asset List"
+                            Click="NavigateToAssetList" />
+                    <Button Content="Project Status" 
+                            Click="NavigateToProjectStatus" />
                     <Button Content="Settings" Click="NavigateToSettings" />
                 </StackPanel>
             </StackPanel>

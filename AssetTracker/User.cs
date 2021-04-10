@@ -17,7 +17,7 @@ namespace AssetTracker.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public User()
         {
-            this.Assets = new HashSet<Asset>();
+            this.AssetsAssigned = new HashSet<Asset>();
             this.SecPermission2 = new HashSet<SecPermission2>();
         }
     
@@ -29,7 +29,7 @@ namespace AssetTracker.Model
         public string us_email { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Asset> Assets { get; set; }
+        public virtual ICollection<Asset> AssetsAssigned { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SecPermission2> SecPermission2 { get; set; }
         public virtual SecRole SecRole { get; set; }

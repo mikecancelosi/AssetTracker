@@ -20,21 +20,22 @@ namespace AssetTracker.View
     /// </summary>
     public partial class AssetCreate : UserControl
     {
-        private AssetCreateViewModel viewmodel;        
+        private AssetCreateViewModel viewmodel;
 
         public AssetCreate()
         {
             InitializeComponent();
             viewmodel = new AssetCreateViewModel();
-            Value_Category.SetType(typeof(AssetCategory));
-            Value_ParentID.SetType(typeof(Asset));
-            Value_AssignedTo.SetType(typeof(User));
+            DataContext = viewmodel;
+            Value_Category.SetSyncObject(viewmodel.AssetToCreate.AssetCategory);
+            Value_ParentID.SetSyncObject(viewmodel.AssetToCreate.Parent);
+            Value_AssignedTo.SetSyncObject(viewmodel.AssetToCreate.AssignedToUser);
         }
 
-        public void OnSaveClicked()
+        public void OnSaveClicked(object sender, RoutedEventArgs e)
         {
             List<Violation> violations;
-            if (viewmodel.CreateAsset(Value_Name.Text,Value_Description.Text,Value_Category.SelectedValue,out violations))
+            if (viewmodel.CreateAsset(out violations))
             {
                 this.Visibility = Visibility.Hidden;
                 ResetDisplay();
@@ -54,6 +55,5 @@ namespace AssetTracker.View
         {
 
         }
-
     }
 }

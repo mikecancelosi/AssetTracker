@@ -22,15 +22,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="AssetConnections">
-      <EntityTypeMapping TypeName="Model.AssetConnection">
-        <MappingFragment StoreEntitySet="AssetConnection">
-          <ScalarProperty Name="ct_id" ColumnName="ct_id" />
-          <ScalarProperty Name="ct_parentid" ColumnName="ct_parentid" />
-          <ScalarProperty Name="ct_childid" ColumnName="ct_childid" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="AssetLinks">
       <EntityTypeMapping TypeName="Model.AssetLink">
         <MappingFragment StoreEntitySet="AssetLink">
@@ -46,18 +37,6 @@
         <MappingFragment StoreEntitySet="AssetLinkType">
           <ScalarProperty Name="lt_id" ColumnName="lt_id" />
           <ScalarProperty Name="lt_name" ColumnName="lt_name" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Discussions">
-      <EntityTypeMapping TypeName="Model.Discussion">
-        <MappingFragment StoreEntitySet="Discussion">
-          <ScalarProperty Name="di_id" ColumnName="di_id" />
-          <ScalarProperty Name="di_contents" ColumnName="di_contents" />
-          <ScalarProperty Name="di_asid" ColumnName="di_asid" />
-          <ScalarProperty Name="di_parentid" ColumnName="di_parentid" />
-          <ScalarProperty Name="di_usid" ColumnName="di_usid" />
-          <ScalarProperty Name="di_date" ColumnName="di_date" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -138,5 +117,31 @@
         </ComplexTypeMapping>
       </ResultMapping>
     </FunctionImportMapping>
+    <EntitySetMapping Name="Changes">
+      <EntityTypeMapping TypeName="Model.Change">
+        <MappingFragment StoreEntitySet="Changes">
+          <ScalarProperty Name="ch_usid" ColumnName="ch_usid" />
+          <ScalarProperty Name="ch_recid" ColumnName="ch_recid" />
+          <ScalarProperty Name="ch_field" ColumnName="ch_field" />
+          <ScalarProperty Name="ch_newvalue" ColumnName="ch_newvalue" />
+          <ScalarProperty Name="ch_oldvalue" ColumnName="ch_oldvalue" />
+          <ScalarProperty Name="ch_datetime" ColumnName="ch_datetime" />
+          <ScalarProperty Name="ch_description" ColumnName="ch_description" />
+          <ScalarProperty Name="ch_id" ColumnName="ch_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Discussions">
+      <EntityTypeMapping TypeName="Model.Discussion">
+        <MappingFragment StoreEntitySet="Discussion">
+          <ScalarProperty Name="di_date" ColumnName="di_date" />
+          <ScalarProperty Name="di_usid" ColumnName="di_usid" />
+          <ScalarProperty Name="di_parentid" ColumnName="di_parentid" />
+          <ScalarProperty Name="di_asid" ColumnName="di_asid" />
+          <ScalarProperty Name="di_contents" ColumnName="di_contents" />
+          <ScalarProperty Name="di_id" ColumnName="di_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

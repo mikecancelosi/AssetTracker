@@ -11,29 +11,9 @@
     <StackPanel Orientation="Vertical"
                 Background="White">
 
-        <StackPanel.Resources>
-            <Style TargetType="ListBoxItem">
-                <EventSetter Event="MouseDoubleClick" Handler="ItemDoubleClicked"/>
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="ListBoxItem">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="{Binding Width, ElementName=Column_ID}" />
-                                    <ColumnDefinition Width="{Binding Width, ElementName=Column_Label}" />
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="{Binding ID}"
-                                           Grid.Column="0" />
-                                <TextBlock Text="{Binding Label}"
-                                           Grid.Column="1" />
-                            </Grid>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-
-
-        </StackPanel.Resources>
+        <StackPanel.DataContext>
+            <viewmodel:SearchBoxViewModel />
+        </StackPanel.DataContext>
 
         <StackPanel Orientation="Horizontal"
                     Margin="10,10,10,0"
@@ -47,24 +27,40 @@
         </StackPanel>
         <TextBox Margin="5" />
 
-        <Grid x:Name="GridHeader"
-              Margin="5,5,5,5">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition x:Name="Column_ID"
-                                  Width="1*" />
-                <ColumnDefinition x:Name="Column_Label"
-                                  Width="3*" />
-            </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="0"
-                       Text="ID"
-                       HorizontalAlignment="Center" />
-            <TextBlock Grid.Column="1"
-                       Text="Label"
-                       HorizontalAlignment="Center" />
-        </Grid>      
-        <ListBox x:Name="MainGrid" ItemsSource="{Binding Items}" SelectionMode="Single" >          
+        <ListView Name="MainGrid"
+                  VerticalAlignment="Top"
+                  ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                  ItemsSource="{Binding Items}">
+            <ListView.Resources>
+                <Style TargetType="{x:Type GridViewColumnHeader}">
+                    <Setter Property="HorizontalContentAlignment"
+                            Value="Left" />
+                    <Setter Property="Padding"
+                            Value="6,0" />
+                    <Setter Property="FontSize"
+                            Value="14" />
+                    <Setter Property="FontWeight"
+                            Value="Medium" />
+                </Style>
 
-        </ListBox>
+                <Style TargetType="{x:Type ListViewItem}">
+                    <EventSetter Event="MouseDoubleClick"
+                                 Handler="ItemDoubleClicked" />
+                </Style>
+            </ListView.Resources>
+
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="ID"
+                                    Width="100"
+                                    DisplayMemberBinding="{Binding ID}" />
+                    <GridViewColumn Header="Name"
+                                    Width="300"
+                                    DisplayMemberBinding="{Binding Name}" />
+                </GridView>
+
+            </ListView.View>
+        </ListView>
 
     </StackPanel>
 </UserControl>

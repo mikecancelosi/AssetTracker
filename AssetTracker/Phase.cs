@@ -17,13 +17,13 @@ namespace AssetTracker.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Phase()
         {
-            this.Assets = new HashSet<Asset>();
+            this.AssetsInPhase = new HashSet<Asset>();
         }
     
         public int ph_id { get; set; }
         public string ph_name { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Asset> Assets { get; set; }
+        public virtual ICollection<Asset> AssetsInPhase { get; set; }
     }
 }

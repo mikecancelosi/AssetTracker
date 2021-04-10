@@ -1,12 +1,20 @@
-﻿<UserControl x:Class="AssetTracker.View.AssetDetail"
+﻿<Page x:Class="AssetTracker.View.AssetDetail"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:AssetTracker.View"
-             mc:Ignorable="d">
-
-    <Grid Background="Gray">
+             xmlns:viewmodel="clr-namespace:AssetTracker.ViewModel"
+             mc:Ignorable="d"
+             d:DesignWidth="1200" 
+             d:DesignHeight="800"
+             x:Name="AssetDetail1" >
+    <Page.DataContext>
+        <viewmodel:AssetDetailViewModel />
+    </Page.DataContext>
+    
+    <Grid Background="Gray">   
+        
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*" MaxWidth="250"/>
             <ColumnDefinition Width="5*" />
@@ -72,70 +80,114 @@
             </StackPanel>
         </StackPanel>
 
-        <StackPanel x:Name="RightPanel"
-                    Grid.Column="1"
-                    Margin="10">
+        <ScrollViewer Grid.Column="1"
+                      x:Name="RightPanel"
+                      Margin="10">
+            <StackPanel>
 
-            <StackPanel x:Name="Header"
-                        Orientation="Vertical"
-                        Grid.Column="1"
-                        Margin="0,40">
-                <StackPanel Orientation="Horizontal"
-                            Name="Title">
-                    <TextBlock x:Name="AssetName"
-                               Text="Placeholder name"
-                               FontSize="50" />
-                    <TextBlock x:Name="AssetID"
-                               Text="#5103"
-                               FontSize="16"
-                               Margin="10,0,0,0"
-                               VerticalAlignment="Center" />
-                </StackPanel>
-                <StackPanel x:Name="AssigningGrp"
-                            Orientation="Horizontal">
-                    <TextBlock Text="Assigned To:"
-                               FontSize="16" />
-                    <TextBlock x:Name="AssignedUser"
-                               Text="Mike Cancelosi"
-                               Margin="10,0"
-                               FontSize="16" />
+                <StackPanel x:Name="Header"
+                            Orientation="Vertical"
+                            Grid.Column="1"
+                            Margin="0,40">
+                    <StackPanel Orientation="Horizontal"
+                                Name="AssetTitle">
+                        <TextBlock x:Name="AssetName"
+                                   Text="{Binding myAsset.as_displayname}"
+                                   FontSize="50" />
+                        <TextBlock x:Name="AssetID"
+                                   FontSize="16"
+                                   Margin="10,0,0,0"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Left">                        
+                            <Run Text="#" />
+                            <Run Text="{Binding myAsset.as_id}" />
+                        </TextBlock>
+                    </StackPanel>
+                    <StackPanel x:Name="AssigningGrp"
+                                Orientation="Horizontal">
+                        <TextBlock Text="Assigned To:"
+                                   FontSize="16" />
+                        <TextBlock x:Name="AssignedUser"
+                                   Text="{Binding myAsset.AssignedToUser.us_displayname}"
+                                   Margin="10,0"
+                                   FontSize="16" />
+                    </StackPanel>
+
+                    <StackPanel x:Name="CurrentStatus"
+                                Orientation="Horizontal">
+                        <TextBlock Text="Current Status:"
+                                   FontSize="16" />
+                        <TextBlock x:Name="StatusValue"
+                                   Text="{Binding myAsset.Phase.ph_name}"
+                                   Margin="10,0"
+                                   FontSize="16" />
+                    </StackPanel>
+
                 </StackPanel>
 
-                <StackPanel x:Name="CurrentStatus"
-                            Orientation="Horizontal">
-                    <TextBlock Text="Current Status:"
-                               FontSize="16" />
-                    <TextBlock x:Name="StatusValue"
-                               Text="Concept"
-                               Margin="10,0"
-                               FontSize="16" />
-                </StackPanel>
+                <StackPanel Orientation="Vertical"
+                            Name="Body"
+                            Margin="50,0">
 
+
+                    <TextBlock Text="Timeline"
+                               FontSize="24"
+                               Foreground="White"
+                               Margin="0,5" />
+                    <local:ProductionTimeline Margin="5" />
+
+                    <TextBlock Text="Changelog"
+                               FontSize="24"
+                               Foreground="White"
+                               Margin="0,5" />
+                    <ListView Name="Changelog"
+                              VerticalAlignment="Top"
+                              ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                              ItemsSource="{Binding Assets}">
+                        <ListView.Resources>
+                            <Style TargetType="{x:Type GridViewColumnHeader}">
+                                <Setter Property="HorizontalContentAlignment"
+                                        Value="Left" />
+                                <Setter Property="Padding"
+                                        Value="6,0" />
+                                <Setter Property="FontSize"
+                                        Value="14" />
+                                <Setter Property="FontWeight"
+                                        Value="Medium" />
+                            </Style>
+
+                        </ListView.Resources>
+
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Date"
+                                                Width="100"
+                                                DisplayMemberBinding="{Binding as_id}" />
+                                <GridViewColumn Header="Description"
+                                                Width="200"
+                                                DisplayMemberBinding="{Binding as_displayname}" />
+                                <GridViewColumn Header="Completed by"
+                                                Width="200"
+                                                DisplayMemberBinding="{Binding as_description}" />
+                                <GridViewColumn Header="Old Value"
+                                                Width="200"
+                                                DisplayMemberBinding="{Binding Phase.ph_name}" />
+                                <GridViewColumn Header="New value"
+                                                Width="200"
+                                                DisplayMemberBinding="{Binding AssetCategory.ca_name}" />
+                            </GridView>
+
+                        </ListView.View>
+                    </ListView>
+                    <TextBlock Text="Discussion"
+                               FontSize="24"
+                               Foreground="White"
+                               Margin="0,5" />
+                    <local:ProductionTimeline Margin="5" />
+
+                </StackPanel>
             </StackPanel>
-
-            <StackPanel Orientation="Vertical"
-                        Name="Body"
-                        Margin="50,0">
-
-
-                <TextBlock Text="Timeline"
-                           FontSize="24"
-                           Foreground="White" Margin="0,5"/>
-                <local:ProductionTimeline Margin="5"/>
-
-                <TextBlock Text="Changelog"
-                           FontSize="24"
-                           Foreground="White"
-                           Margin="0,5" />
-                <local:Changelog Margin="5" Height="150"/>
-                <TextBlock Text="Discussion"
-                           FontSize="24"
-                           Foreground="White"
-                           Margin="0,5" />
-                <local:ProductionTimeline Margin="5" />
-
-            </StackPanel>
-        </StackPanel>
+        </ScrollViewer>
     </Grid>
 
-</UserControl>
+</Page>

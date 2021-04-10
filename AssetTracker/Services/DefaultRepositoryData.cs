@@ -142,7 +142,7 @@ namespace AssetTracker.Services
 
             output.Add(new Asset()
             {
-                as_displayname = "Main menu",
+                as_displayname = "Main womenu",
                 as_description = "Main menu UI",
                 as_usid = 3,
                 as_phid = 1,

@@ -1,9 +1,11 @@
-﻿using AssetTracker.ViewModel;
+﻿using AssetTracker.Model;
+using AssetTracker.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -19,29 +21,29 @@ namespace AssetTracker.View
     /// </summary>
     public partial class SearchBox : UserControl
     {
-        private SearchBoxViewModel viewModel;
-        public event EventHandler OnClose;
+        public SearchBoxViewModel viewModel;
 
-        public SearchBox(Type objType, SearchBoxViewModel vm)
+        public SearchBox()
         {
             InitializeComponent();
+        }
+
+        public void SetViewModel(SearchBoxViewModel vm)
+        {
             viewModel = vm;
-            MainGrid.DataContext = viewModel.Items;
+            MainGrid.DataContext = viewModel;
         }
 
         private void ItemDoubleClicked(object sender, MouseButtonEventArgs e)
         {
-            // Get ID from item
-
-            // Return info to viewmodel
-
-            // Hide self.
-
+            DatabaseBackedObject dbo = MainGrid.SelectedItem as DatabaseBackedObject;
+            viewModel.CurrentlySelectedObject = dbo;
+            CloseClicked(sender, e);
         }
 
         private void CloseClicked(object sender, MouseButtonEventArgs e)
         {
-            OnClose?.Invoke(this, e);
+            ((Popup)this.Parent).IsOpen = false;
         }
     }
 }

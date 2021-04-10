@@ -4,7 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:view="clr-namespace:AssetTracker.View"
+             xmlns:viewmodel="clr-namespace:AssetTracker.ViewModel"
              mc:Ignorable="d">
+    <UserControl.DataContext>
+        <viewmodel:AssetCreateViewModel />
+    </UserControl.DataContext>
     <StackPanel Background="White">
 
         <StackPanel x:Name="SettingsList"
@@ -15,10 +19,13 @@
                 <TextBlock x:Name="Label_Name"
                            Text="Asset Name"
                            Margin="5"
+                           Height="25"
                            Width="200" />
                 <TextBox x:Name="Value_Name"
                          Margin="5"
-                         Width="500" />
+                         Width="500"
+                         Height="25"
+                         Text="{Binding AssetToCreate.as_displayname}"/>
             </StackPanel>
 
             <StackPanel Orientation="Horizontal">
@@ -28,7 +35,8 @@
                 <TextBox x:Name="Value_Description"
                          Margin="5"
                          Width="{Binding ActualWidth, ElementName=Value_Name}"
-                         Height="100" />
+                         Height="100"
+                         Text="{Binding AssetToCreate.as_description}"/>
             </StackPanel>
 
             <StackPanel Orientation="Horizontal">
@@ -38,7 +46,7 @@
                 <view:SearchboxField x:Name="Value_Category"
                                      Height="{Binding ActualHeight, ElementName=Value_Name}"
                                      Margin="5"
-                                     Width="{Binding ActualWidth, ElementName=Value_Name}" />
+                                     Width="{Binding ActualWidth, ElementName=Value_Name}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Assigned To"
@@ -68,11 +76,11 @@
 
             <Button Content="Add"
                     Width="100"
-                    HorizontalAlignment="Center" />
-
+                    HorizontalAlignment="Center" 
+                    Click="OnSaveClicked"/>
 
             <TextBlock x:Name="AssetID"
-                       Text="#####"
+                       Text="{Binding AssetToCreate.as_id}"
                        Margin="15,0"
                        HorizontalAlignment="Right" />
 

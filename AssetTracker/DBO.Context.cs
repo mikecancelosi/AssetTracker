@@ -29,10 +29,8 @@ namespace AssetTracker.Model
     
         public virtual DbSet<Asset> Assets { get; set; }
         public virtual DbSet<AssetCategory> AssetCategories { get; set; }
-        public virtual DbSet<AssetConnection> AssetConnections { get; set; }
         public virtual DbSet<AssetLink> AssetLinks { get; set; }
         public virtual DbSet<AssetLinkType> AssetLinkTypes { get; set; }
-        public virtual DbSet<Discussion> Discussions { get; set; }
         public virtual DbSet<Phase> Phases { get; set; }
         public virtual DbSet<SecPermission> SecPermissions { get; set; }
         public virtual DbSet<SecPermission2> SecPermission2 { get; set; }
@@ -40,6 +38,8 @@ namespace AssetTracker.Model
         public virtual DbSet<SecRole> SecRoles { get; set; }
         public virtual DbSet<Setting> Settings { get; set; }
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Change> Changes { get; set; }
+        public virtual DbSet<Discussion> Discussions { get; set; }
     
         public virtual ObjectResult<assetGetInformation_Result> assetGetInformation()
         {

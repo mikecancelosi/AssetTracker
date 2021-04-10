@@ -19,7 +19,8 @@
             <ListView Name="MainGrid"
                       VerticalAlignment="Top"
                       ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                      ItemsSource="{Binding Assets}">
+                      ItemsSource="{Binding Assets}"
+                      >
                 <ListView.Resources>
                     <Style TargetType="{x:Type GridViewColumnHeader}">
                         <Setter Property="HorizontalContentAlignment"
@@ -30,6 +31,11 @@
                                 Value="14" />
                         <Setter Property="FontWeight"
                                 Value="Medium" />
+                    </Style>
+
+                    <Style TargetType="{x:Type ListViewItem}">
+                        <EventSetter Event="MouseDoubleClick"
+                                     Handler="ListViewItem_MouseDoubleClick" />
                     </Style>
                 </ListView.Resources>
 
@@ -51,8 +57,8 @@
                                         Width="200"
                                         DisplayMemberBinding="{Binding AssetCategory.ca_name}" />
                     </GridView>
-                </ListView.View>
 
+                </ListView.View>
             </ListView>
             <Button VerticalAlignment="Bottom"
                     HorizontalAlignment="Right"

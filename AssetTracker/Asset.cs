@@ -17,9 +17,8 @@ namespace AssetTracker.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Asset()
         {
-            this.AssetConnections = new HashSet<AssetConnection>();
-            this.AssetConnections1 = new HashSet<AssetConnection>();
             this.Discussions = new HashSet<Discussion>();
+            this.Children = new HashSet<Asset>();
         }
     
         public int as_id { get; set; }
@@ -32,13 +31,12 @@ namespace AssetTracker.Model
     
         public virtual AssetCategory AssetCategory { get; set; }
         public virtual Phase Phase { get; set; }
-        public virtual User User { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<AssetConnection> AssetConnections { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<AssetConnection> AssetConnections1 { get; set; }
+        public virtual User AssignedToUser { get; set; }
         public virtual AssetLink AssetLink { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Discussion> Discussions { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Asset> Children { get; set; }
+        public virtual Asset Parent { get; set; }
     }
 }

@@ -3,11 +3,12 @@ using AssetTracker.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Text;
 
 namespace AssetTracker.ViewModel
 {
-    public class SearchBoxViewModel
+    public class SearchBoxViewModel : INotifyPropertyChanged
     {
         private TrackerContext context = new TrackerContext();
 
@@ -16,7 +17,7 @@ namespace AssetTracker.ViewModel
         {
             get
             {
-                if (items == null)
+                if (items == null && DboType != null)
                 {
                     items = new List<DatabaseBackedObject>();
                     foreach(var x in context.Set(DboType))
@@ -30,21 +31,48 @@ namespace AssetTracker.ViewModel
             }
         }
 
+        private DatabaseBackedObject currentlySelectedObject;
+        public DatabaseBackedObject CurrentlySelectedObject
+        {
+            get
+            {
+                return currentlySelectedObject;
+            }
+            set
+            {
+                currentlySelectedObject = value;
+                NotifyPropertyChanged("CurrentlySelectedObject");
+            }
+        }
+
         public string Filter;
         private Type DboType;
-        public string Label;
-        public int ID;
-       
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void NotifyPropertyChanged(String info)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(info));
+            }
+        }
+
+        public SearchBoxViewModel()
+        {
+
+        }
+
         public SearchBoxViewModel(Type dbotype,string filter = "")
         {
             DboType = dbotype;
             Filter = filter;
         }
 
-        public void SetProperties(string label, int id)
+        public SearchBoxViewModel(DatabaseBackedObject syncObject)
         {
-            Label = label;
-            ID = id;
+            DboType = syncObject.GetType();
+            currentlySelectedObject = syncObject;
         }
+         
     }
 }

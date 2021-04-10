@@ -26,17 +26,42 @@ namespace AssetTracker
         public MainWindow()
         {
             InitializeComponent();
-            NavigateToAssetList();
+            NavigateToAssetList(null,null);
+            // FillDatabase();
+            //UpdateDatabase();
         }
 
-        public void NavigateToAssetList()
+        public void NavigateToAssetList(object sender, RoutedEventArgs e)
         {
             ContentFrame.Navigate(new AssetList());
+        }
+
+        public void NavigateToProjectStatus(object sender, RoutedEventArgs e)
+        {
+            ContentFrame.Navigate(new ProjectStatus());
         }
 
         private void NavigateToSettings(object sender, RoutedEventArgs e)
         {
             ContentFrame.Navigate(new ProjectSettings());
         }
+
+        private void FillDatabase()
+        {
+            List<DatabaseBackedObject> objectsToAdd = DefaultRepositoryData.BuildTestData();
+            TrackerContext context = new TrackerContext();
+            objectsToAdd.ForEach(x => context.Set(x.GetType()).Add(x));
+            context.SaveChanges();
+        }
+
+        private void UpdateDatabase()
+        {
+            List<DatabaseBackedObject> objectsToAdd = DefaultRepositoryData.BuildTestData();
+            TrackerContext context = new TrackerContext();
+            objectsToAdd.ForEach(x => context.Entry(x).State = System.Data.Entity.EntityState.Modified);
+            context.SaveChanges();
+        }
+
+
     }
 }

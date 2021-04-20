@@ -37,7 +37,8 @@ namespace AssetTracker.View
         private void ItemDoubleClicked(object sender, MouseButtonEventArgs e)
         {
             DatabaseBackedObject dbo = MainGrid.SelectedItem as DatabaseBackedObject;
-            viewModel.CurrentlySelectedObject = dbo;
+
+            viewModel.SelectionChanged(dbo.ID);
             CloseClicked(sender, e);
         }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,12 +15,20 @@ namespace AssetTracker.Model
             {
                 return 0;
             }
+            set
+            {
+
+            }
         }
         public virtual string Name
         {
             get
             {
                 return "";
+            }
+            set
+            {
+
             }
         }
 
@@ -37,6 +46,27 @@ namespace AssetTracker.Model
 
         public DatabaseBackedObject()
         {
+
+        }
+
+        public static void CopyProperties(DatabaseBackedObject copyFrom, DatabaseBackedObject copyTo)
+        {
+            Type dboType = copyFrom.GetType().BaseType;
+            if(copyTo.GetType().BaseType != dboType &&
+               copyTo.GetType() != dboType)
+            {
+                Console.Error.WriteLine("Dbo types do not match!");
+                return;
+            }
+
+            PropertyInfo[] properties = dboType.GetProperties();
+
+            foreach(PropertyInfo prop in properties)
+            {
+                object fromVal = prop.GetValue(copyFrom);
+                prop.SetValue(copyTo, fromVal);
+            }
+
 
         }
     }

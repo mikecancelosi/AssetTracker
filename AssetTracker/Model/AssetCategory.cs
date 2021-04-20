@@ -9,8 +9,29 @@ namespace AssetTracker.Model
     public partial class AssetCategory : DatabaseBackedObject
     {
 
-        public override int ID => ca_id;
-        public override string Name => ca_name;
+        public override int ID
+        {
+            get
+            {
+                return ca_id;
+            }
+            set
+            {
+                ca_id = value;
+            }
+        }
+        public override string Name
+        {
+            get
+            {
+                return ca_name;
+            }
+            set
+            {
+                ca_name = value;
+            }
+        }
+        
         public override bool IsValid(out List<Violation> violations)
         {
             violations = new List<Violation>();

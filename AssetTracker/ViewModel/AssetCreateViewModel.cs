@@ -20,14 +20,27 @@ namespace AssetTracker.ViewModel
 
         public AssetCreateViewModel()
         {
-            assetToCreate = new Asset()
-            {
-                AssetCategory = new AssetCategory(),
-                Parent = new Asset(),
-                AssignedToUser = new User()
-
-            };
+            assetToCreate = context.Assets.Create();
+            assetToCreate.AssetCategory = context.AssetCategories.Create();
+            assetToCreate.AssignedToUser = context.Users.Create();
+            assetToCreate.Parent = context.Assets.Create();
             
+
+        }
+
+        public void OnCategorySelectionChange()
+        {
+
+        }
+
+        public void OnUserSelectionChange()
+        {
+
+        }
+
+        public void OnParentSelectionChange()
+        {
+
         }
 
         public bool CreateAsset(out List<Violation> violations)
@@ -36,8 +49,6 @@ namespace AssetTracker.ViewModel
             {
                 if (assetToCreate.IsValid(out violations))
                 {
-
-                    context.Assets.Add(assetToCreate);
                     context.Entry(assetToCreate).State = System.Data.Entity.EntityState.Added;
                     context.SaveChanges();
                     Change change;
@@ -52,6 +63,10 @@ namespace AssetTracker.ViewModel
                 }
             }
             catch(DbEntityValidationException e)
+            {
+                throw;
+            }
+            catch(InvalidOperationException e)
             {
                 throw;
             }

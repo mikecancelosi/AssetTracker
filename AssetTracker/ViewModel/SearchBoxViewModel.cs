@@ -49,20 +49,12 @@ namespace AssetTracker.ViewModel
         private Type DboType;
 
         public event PropertyChangedEventHandler PropertyChanged;
-        protected void NotifyPropertyChanged(String info)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(info));
-            }
-        }
-
         public SearchBoxViewModel()
         {
 
         }
 
-        public SearchBoxViewModel(Type dbotype,string filter = "")
+        public SearchBoxViewModel(Type dbotype, string filter = "")
         {
             DboType = dbotype;
             Filter = filter;
@@ -72,6 +64,23 @@ namespace AssetTracker.ViewModel
         {
             DboType = syncObject.GetType();
             currentlySelectedObject = syncObject;
+        }
+
+
+        protected void NotifyPropertyChanged(String info)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(info));
+            }
+        }
+
+      
+        public void SelectionChanged(int id)
+        {
+            DatabaseBackedObject copyFrom = context.Set(DboType).Find(id) as DatabaseBackedObject;
+            DatabaseBackedObject.CopyProperties(copyFrom, CurrentlySelectedObject);
+            NotifyPropertyChanged("CurrentlySelectedObject");
         }
          
     }

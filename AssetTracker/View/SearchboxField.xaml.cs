@@ -2,6 +2,7 @@
 using AssetTracker.ViewModel;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,15 +21,17 @@ namespace AssetTracker.View
     /// <summary>
     /// Interaction logic for SearchboxField.xaml
     /// </summary>
-    public partial class SearchboxField : UserControl
+    public partial class SearchboxField : UserControl, INotifyPropertyChanged
     {
         private Type dboType;
         private SearchBoxViewModel vm;
 
+        public event PropertyChangedEventHandler PropertyChanged;
+        public DatabaseBackedObject CurrentSelection => vm.CurrentlySelectedObject;
+
         public SearchboxField()
         {
             InitializeComponent();
-
         }       
 
         public void SetSyncObject(DatabaseBackedObject sync)
@@ -37,6 +40,12 @@ namespace AssetTracker.View
             vm = new SearchBoxViewModel(sync);
             DataContext = vm;
             ((SearchBox)searchbox.Child).SetViewModel(vm);
+            vm.PropertyChanged += Vm_PropertyChanged;
+        }
+
+        private void Vm_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            PropertyChanged?.Invoke(sender,e);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

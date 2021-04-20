@@ -30,6 +30,10 @@ namespace AssetTracker.View
             Value_Category.SetSyncObject(viewmodel.AssetToCreate.AssetCategory);
             Value_ParentID.SetSyncObject(viewmodel.AssetToCreate.Parent);
             Value_AssignedTo.SetSyncObject(viewmodel.AssetToCreate.AssignedToUser);
+
+            Value_Category.PropertyChanged += (s,e) => { viewmodel.OnCategorySelectionChange(); };
+            Value_ParentID.PropertyChanged += (s, e) => { viewmodel.OnParentSelectionChange(); };
+            Value_AssignedTo.PropertyChanged += (s, e) => { viewmodel.OnUserSelectionChange(); };
         }
 
         public void OnSaveClicked(object sender, RoutedEventArgs e)

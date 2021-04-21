@@ -27,13 +27,13 @@ namespace AssetTracker.View
             InitializeComponent();
             viewmodel = new AssetCreateViewModel();
             DataContext = viewmodel;
-            Value_Category.SetSyncObject(viewmodel.AssetToCreate.AssetCategory);
-            Value_ParentID.SetSyncObject(viewmodel.AssetToCreate.Parent);
-            Value_AssignedTo.SetSyncObject(viewmodel.AssetToCreate.AssignedToUser);
+            Value_Category.SetType(typeof(AssetCategory));
+            Value_ParentID.SetType(typeof(Asset));
+            Value_AssignedTo.SetType(typeof(User));
 
-            Value_Category.PropertyChanged += (s,e) => { viewmodel.OnCategorySelectionChange(); };
-            Value_ParentID.PropertyChanged += (s, e) => { viewmodel.OnParentSelectionChange(); };
-            Value_AssignedTo.PropertyChanged += (s, e) => { viewmodel.OnUserSelectionChange(); };
+            Value_Category.PropertyChanged += (s,e) => { viewmodel.OnCategoryChanged(Value_Category.CurrentSelection); };
+            Value_ParentID.PropertyChanged += (s, e) => { viewmodel.OnParentAssetChanged(Value_ParentID.CurrentSelection); };
+            Value_AssignedTo.PropertyChanged += (s, e) => { viewmodel.OnUserChanged(Value_AssignedTo.CurrentSelection); };
         }
 
         public void OnSaveClicked(object sender, RoutedEventArgs e)

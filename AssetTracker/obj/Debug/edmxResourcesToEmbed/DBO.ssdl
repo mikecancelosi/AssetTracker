@@ -10,7 +10,7 @@
     <Property Name="as_parentid" Type="int" />
     <Property Name="as_caid" Type="int" Nullable="false" />
     <Property Name="as_usid" Type="int" />
-    <Property Name="as_phid" Type="int" Nullable="false" />
+    <Property Name="as_phid" Type="int" />
   </EntityType>
   <EntityType Name="AssetCategory">
     <Key>
@@ -141,7 +141,7 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_asset_phase">
-    <End Role="Phase" Type="Self.Phase" Multiplicity="1" />
+    <End Role="Phase" Type="Self.Phase" Multiplicity="0..1" />
     <End Role="Asset" Type="Self.Asset" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Phase">

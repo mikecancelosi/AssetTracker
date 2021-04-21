@@ -27,7 +27,7 @@ namespace AssetTracker.Model
         public Nullable<int> as_parentid { get; set; }
         public int as_caid { get; set; }
         public Nullable<int> as_usid { get; set; }
-        public int as_phid { get; set; }
+        public Nullable<int> as_phid { get; set; }
     
         public virtual AssetCategory AssetCategory { get; set; }
         public virtual Phase Phase { get; set; }

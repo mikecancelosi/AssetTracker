@@ -58,14 +58,8 @@ namespace AssetTracker.ViewModel
         {
             DboType = dbotype;
             Filter = filter;
+            currentlySelectedObject = Activator.CreateInstance(dbotype) as DatabaseBackedObject;
         }
-
-        public SearchBoxViewModel(DatabaseBackedObject syncObject)
-        {
-            DboType = syncObject.GetType();
-            currentlySelectedObject = syncObject;
-        }
-
 
         protected void NotifyPropertyChanged(String info)
         {

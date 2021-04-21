@@ -160,11 +160,8 @@
     <Compile Include="View\ProjectStatus.xaml.cs">
       <DependentUpon>ProjectStatus.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\SearchBox.xaml.cs">
-      <DependentUpon>SearchBox.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\SearchboxField.xaml.cs">
-      <DependentUpon>SearchboxField.xaml</DependentUpon>
+    <Compile Include="View\Searchbox.xaml.cs">
+      <DependentUpon>Searchbox.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -206,11 +203,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\SearchBox.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="View\SearchboxField.xaml">
+    <Page Include="View\Searchbox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

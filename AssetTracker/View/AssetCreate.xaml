@@ -43,7 +43,7 @@
                 <TextBlock Text="Category"
                            Margin="5"
                            Width="{Binding ActualWidth, ElementName=Label_Name}" />
-                <view:SearchboxField x:Name="Value_Category"
+                <view:Searchbox x:Name="Value_Category"
                                      Height="{Binding ActualHeight, ElementName=Value_Name}"
                                      Margin="5"
                                      Width="{Binding ActualWidth, ElementName=Value_Name}"/>
@@ -52,7 +52,7 @@
                 <TextBlock Text="Assigned To"
                            Margin="5"
                            Width="{Binding ActualWidth, ElementName=Label_Name}" />
-                <view:SearchboxField x:Name="Value_AssignedTo"
+                <view:Searchbox x:Name="Value_AssignedTo"
                                      Margin="5"
                                      Height="{Binding ActualHeight, ElementName=Value_Name}"
                                      Width="{Binding ActualWidth, ElementName=Value_Name}" />
@@ -61,7 +61,7 @@
                 <TextBlock Text="Parent"
                            Margin="5"
                            Width="{Binding ActualWidth, ElementName=Label_Name}" />
-                <view:SearchboxField x:Name="Value_ParentID"
+                <view:Searchbox x:Name="Value_ParentID"
                                      Margin="5"
                                      Height="{Binding ActualHeight, ElementName=Value_Name}"
                                      Width="{Binding ActualWidth, ElementName=Value_Name}" />

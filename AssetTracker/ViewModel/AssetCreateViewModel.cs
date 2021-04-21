@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data.Entity.Validation;
 using System.Text;
+using System.Linq;
 
 namespace AssetTracker.ViewModel
 {
@@ -21,26 +22,33 @@ namespace AssetTracker.ViewModel
         public AssetCreateViewModel()
         {
             assetToCreate = context.Assets.Create();
-            assetToCreate.AssetCategory = context.AssetCategories.Create();
-            assetToCreate.AssignedToUser = context.Users.Create();
-            assetToCreate.Parent = context.Assets.Create();
-            
-
+            context.Assets.Add(assetToCreate);
         }
 
-        public void OnCategorySelectionChange()
+        public void OnParentAssetChanged(DatabaseBackedObject newSelection)
         {
+            Asset parent = (from asset in context.Assets
+                            where asset.as_id == newSelection.ID
+                            select asset).FirstOrDefault();
 
+            context.Entry(assetToCreate).Property(x=>x.as_parentid).CurrentValue = (parent.ID);
         }
 
-        public void OnUserSelectionChange()
+        public void OnCategoryChanged(DatabaseBackedObject newSelection)
         {
-
+            AssetCategory category = (from cat in context.AssetCategories
+                                      where cat.ca_id == newSelection.ID
+                                      select cat).FirstOrDefault();
+            context.Entry(assetToCreate).Property(x => x.as_caid).CurrentValue = category.ID;
         }
 
-        public void OnParentSelectionChange()
+        public void OnUserChanged(DatabaseBackedObject newSelection)
         {
+            User user = (from u in context.Users
+                         where u.us_id == newSelection.ID
+                         select u).FirstOrDefault();
 
+            context.Entry(assetToCreate).Property(x => x.as_usid).CurrentValue = user.ID;
         }
 
         public bool CreateAsset(out List<Violation> violations)
@@ -49,7 +57,10 @@ namespace AssetTracker.ViewModel
             {
                 if (assetToCreate.IsValid(out violations))
                 {
-                    context.Entry(assetToCreate).State = System.Data.Entity.EntityState.Added;
+                    if (context.Entry(assetToCreate).State == System.Data.Entity.EntityState.Detached)
+                    {
+                        context.Assets.Add(assetToCreate);
+                    }
                     context.SaveChanges();
                     Change change;
                     if (CreateChange(assetToCreate, out violations, out change))
@@ -62,16 +73,16 @@ namespace AssetTracker.ViewModel
 
                 }
             }
-            catch(DbEntityValidationException e)
+            catch (DbEntityValidationException e)
             {
                 throw;
             }
-            catch(InvalidOperationException e)
+            catch (InvalidOperationException e)
             {
                 throw;
             }
-                     
-            
+
+
 
             //Handle Violations
             return false;

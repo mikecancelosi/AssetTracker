@@ -15,7 +15,7 @@
           <Property Name="as_parentid" Type="int" />
           <Property Name="as_caid" Type="int" Nullable="false" />
           <Property Name="as_usid" Type="int" />
-          <Property Name="as_phid" Type="int" Nullable="false" />
+          <Property Name="as_phid" Type="int" />
         </EntityType>
         <EntityType Name="AssetCategory">
           <Key>
@@ -146,7 +146,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_asset_phase">
-          <End Role="Phase" Type="Self.Phase" Multiplicity="1" />
+          <End Role="Phase" Type="Self.Phase" Multiplicity="0..1" />
           <End Role="Asset" Type="Self.Asset" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Phase">
@@ -359,9 +359,9 @@
           <Property Name="as_parentid" Type="Int32" />
           <Property Name="as_caid" Type="Int32" Nullable="false" />
           <Property Name="as_usid" Type="Int32" />
-          <Property Name="as_phid" Type="Int32" Nullable="false" />
+          <Property Name="as_phid" Type="Int32" />
           <NavigationProperty Name="AssetCategory" Relationship="Self.FK_asset_assetcategory" FromRole="Asset" ToRole="AssetCategory" />
-          <NavigationProperty Name="Phase" Relationship="Self.FK_asset_phase" FromRole="Asset" ToRole="Phase" />
+          <NavigationProperty Name="Phase" Relationship="Model.FK_asset_phase" FromRole="Asset" ToRole="Phase" />
           <NavigationProperty Name="AssignedToUser" Relationship="Self.FK_asset_user" FromRole="Asset" ToRole="User" />
           <NavigationProperty Name="AssetLink" Relationship="Self.FK_assetlink_asset" FromRole="Asset" ToRole="AssetLink" />
           <NavigationProperty Name="Discussions" Relationship="Model.FK_discussion_asset" FromRole="Asset" ToRole="Discussion1" />
@@ -477,7 +477,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_asset_phase">
-          <End Role="Phase" Type="Self.Phase" Multiplicity="1" />
+          <End Role="Phase" Type="Self.Phase" Multiplicity="0..1" />
           <End Role="Asset" Type="Self.Asset" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Phase">

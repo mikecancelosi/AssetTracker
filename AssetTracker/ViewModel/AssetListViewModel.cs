@@ -29,13 +29,11 @@ namespace AssetTracker.ViewModel
             }
         }
         private TrackerContext context = new TrackerContext();
-
-        public void AddItem()
-        {
-
-        }
-
         
+        public void Dispose()
+        {
+            context.Dispose();
+        }
 
 
     }

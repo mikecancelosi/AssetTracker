@@ -32,7 +32,7 @@
                 HorizontalAlignment="Right"
                 Click="Button_Click"
                 Grid.Column="2" Background="Transparent">
-            <Image Source="baseline_search_white_24dp.png" />
+            <Image Source="../Images/MaterialDesign/baseline_search_white_24dp.png" />
         </Button>
 
         <Popup x:Name="searchbox"

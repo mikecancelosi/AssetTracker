@@ -27,6 +27,12 @@ namespace AssetTracker.View
         {
             InitializeComponent();
             vm = new AssetListViewModel();
+            this.Unloaded += AssetList_Unloaded;
+        }
+
+        private void AssetList_Unloaded(object sender, RoutedEventArgs e)
+        {
+            vm.Dispose();
         }
 
         private void AddItem_Click(object sender, RoutedEventArgs e)

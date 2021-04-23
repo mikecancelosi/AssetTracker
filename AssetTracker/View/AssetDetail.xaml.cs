@@ -61,7 +61,15 @@ namespace AssetTracker.View
 
         private void OnSaveClicked(object sender, RoutedEventArgs e)
         {
+            List<Violation> violations = new List<Violation>();
+            if(vm.OnSave(out violations))
+            {
 
+            }
+            else
+            {
+
+            }
         }
 
         private void PromptSave()

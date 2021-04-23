@@ -53,7 +53,6 @@ namespace AssetTracker.ViewModel
 
             SetMetadata();
             SetHierarchy();
-
         }
 
         public void SetMetadata()
@@ -68,7 +67,7 @@ namespace AssetTracker.ViewModel
         #region HierarchySetup
         private void SetHierarchy()
         {
-            if(Hierarchy == null)
+            if (Hierarchy == null)
             {
                 Hierarchy = new List<AssetHierarchyObject>();
             }
@@ -87,7 +86,7 @@ namespace AssetTracker.ViewModel
             }
 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Hierarchy"));
-        }       
+        }
 
         private List<AssetHierarchyObject> CreateHierarchyFromParent(Asset refAsset, int level)
         {
@@ -98,7 +97,7 @@ namespace AssetTracker.ViewModel
                 level = level
             });
 
-            foreach(Asset child in refAsset.Children)
+            foreach (Asset child in refAsset.Children)
             {
                 objectList.AddRange(CreateHierarchyFromParent(child, level + 1));
             }
@@ -121,11 +120,51 @@ namespace AssetTracker.ViewModel
         {
             context.Entry(myAsset).Property(x => x.as_phid).CurrentValue = phaseID;
         }
-    }
-    public struct AssetHierarchyObject
-    {
-        public Asset asset { get; set; }
-        public int level { get; set; }
-        public System.Windows.Thickness marginFactor => new System.Windows.Thickness(level * 10, 0, 0, 10);
+
+        public string GetLatestAssetLink
+        {
+            get
+            {
+                if (myAsset != null)
+                {
+                    AssetLink al = (from l in context.AssetLinks
+                                    where l.li_asid == myAsset.ID
+                                    select l).FirstOrDefault();
+                    if (al != null)
+                    {
+                        return "Lastest asset version can be found at : " + al.li_location;
+                    }
+                }
+
+                return "File not uploaded yet";
+            }
+        }
+
+        public bool OnSave(out List<Violation> violations)
+        {
+            List<Change> changes = new List<Change>();
+            if (context.Entry(myAsset).State == System.Data.Entity.EntityState.Modified)
+            {
+                Asset beforeAsset = context.Entry(myAsset).GetDatabaseValues().ToObject() as Asset;
+                changes = myAsset.GetChanges(beforeAsset);               
+            }
+            if(myAsset.Save(context, out violations))
+            {
+                foreach(Change change in changes)
+                {
+                    change.Save(context, out violations);
+                }
+                return true;
+            }
+            return false;
+        }
+
+
+        public struct AssetHierarchyObject
+        {
+            public Asset asset { get; set; }
+            public int level { get; set; }
+            public System.Windows.Thickness marginFactor => new System.Windows.Thickness(level * 10, 0, 0, 10);
+        }
     }
 }

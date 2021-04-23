@@ -9,7 +9,7 @@
       d:DesignWidth="1200"
       d:DesignHeight="800">
     <Page.DataContext>
-        <viewmodel:AssetDetailViewModel />        
+        <viewmodel:AssetDetailViewModel />
     </Page.DataContext>
 
     <Grid Background="Gray">
@@ -20,74 +20,88 @@
             <ColumnDefinition Width="5*" />
         </Grid.ColumnDefinitions>
 
-        <StackPanel x:Name="LeftPanel"
-                    Orientation="Vertical"
-                    Grid.Column="0">
-            <Image Source="../Images/Placeholder.jpg"
-                   Height="100"
-                   Width="100"
-                   Stretch="Fill"
-                   Margin="0,50,0,10"
-                   HorizontalAlignment="Center" />
-            <StackPanel Orientation="Horizontal"
-                        Margin="10,0"
-                        HorizontalAlignment="Center">
+        <Grid  x:Name="LeftPanel"
+               Grid.Column="0">
+
+            <StackPanel Orientation="Vertical">
                 <Image Source="../Images/Placeholder.jpg"
-                       Height="50"
-                       Width="50"
+                       Height="100"
+                       Width="100"
                        Stretch="Fill"
-                       Margin="5,0" />
-                <Image Source="../Images/Placeholder.jpg"
-                       Height="50"
-                       Width="50"
-                       Stretch="Fill"
-                       Margin="5,0" />
-                <Image Source="../Images/Placeholder.jpg"
-                       Height="50"
-                       Width="50"
-                       Stretch="Fill"
-                       Margin="5,0" />
+                       Margin="0,50,0,10"
+                       HorizontalAlignment="Center" />
+                <StackPanel Orientation="Horizontal"
+                            Margin="10,0"
+                            HorizontalAlignment="Center">
+                    <Image Source="../Images/Placeholder.jpg"
+                           Height="50"
+                           Width="50"
+                           Stretch="Fill"
+                           Margin="5,0" />
+                    <Image Source="../Images/Placeholder.jpg"
+                           Height="50"
+                           Width="50"
+                           Stretch="Fill"
+                           Margin="5,0" />
+                    <Image Source="../Images/Placeholder.jpg"
+                           Height="50"
+                           Width="50"
+                           Stretch="Fill"
+                           Margin="5,0" />
+                </StackPanel>
+
+                <StackPanel x:Name="Metadata"
+                            Orientation="Vertical"
+                            Margin="20,20">
+
+                    <TextBlock FontSize="14"
+                               TextWrapping="Wrap"
+                               Foreground="Black"
+                               FontStyle="Italic"
+                               Text="{Binding Metadata}" />
+
+                </StackPanel>
+
+
+                <ItemsControl ItemsSource="{Binding Hierarchy}"
+                              Margin="40,0,0,0">
+
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Button Content="{Binding asset.as_displayname}"
+                                    Foreground="Black"
+                                    BorderThickness="0"
+                                    Background="Transparent"
+                                    FontSize="14"
+                                    Click="HierarchyObjectClicked"
+                                    Margin="{Binding marginFactor}"
+                                    Padding="5"
+                                    HorizontalContentAlignment="Left" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel  Orientation="Vertical"
+                                         HorizontalAlignment="Left" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+
+                </ItemsControl>
+
             </StackPanel>
 
-            <StackPanel x:Name="Metadata"
-                        Orientation="Vertical"
-                        Margin="20,20">
+            <Button x:Name="SaveButton"
+                    Background="Transparent"
+                    Width="64"
+                    Height="64"
+                    BorderThickness="0"
+                    VerticalAlignment="Bottom"
+                    Margin="5,25"
+                    Click="OnSaveClicked">
+                <Image Source="../Images/MaterialDesign/baseline_save_white_48dp.png" />
+            </Button>
 
-                <TextBlock FontSize="14"
-                           TextWrapping="Wrap"
-                           Foreground="Black"
-                           FontStyle="Italic"
-                           Text="{Binding Metadata}" />
-
-            </StackPanel>
-
-
-            <ItemsControl ItemsSource="{Binding Hierarchy}"
-                          Margin="40,0,0,0">
-
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Button Content="{Binding asset.as_displayname}"
-                                Foreground="Black"
-                                BorderThickness="0"
-                                Background="Transparent"
-                                FontSize="14"
-                                Click="HierarchyObjectClicked"
-                                Margin="{Binding marginFactor}"
-                                Padding="5"
-                                HorizontalContentAlignment="Left" />
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel  Orientation="Vertical"
-                                     HorizontalAlignment="Left" />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-
-            </ItemsControl>
-
-        </StackPanel>
+        </Grid>
 
         <ScrollViewer Grid.Column="1"
                       x:Name="RightPanel"
@@ -129,11 +143,11 @@
                                             <Setter Property="IsReadOnly"
                                                     Value="False" />
                                         </Trigger>
-                                        
+
                                     </Style.Triggers>
                                 </Style>
                             </Grid.Resources>
-                            
+
                             <TextBox   x:Name="DisplayName"
                                        Text="{Binding myAsset.as_displayname}"
                                        IsReadOnly="True">
@@ -144,12 +158,13 @@
                                     VerticalAlignment="Top"
                                     Margin="-10,-10"
                                     Background="Transparent"
-                                    BorderThickness="0" Click="EditDisplayNameClicked">
+                                    BorderThickness="0"
+                                    Click="EditDisplayNameClicked">
                                 <Border CornerRadius="15"
                                         BorderThickness="2"
                                         BorderBrush="#FF4F4F4F"
                                         Padding="3">
-                                    <Image Source="baseline_edit_white_24dp.png" />
+                                    <Image Source="../Images/MaterialDesign/baseline_edit_white_24dp.png" />
                                 </Border>
                             </Button>
                         </Grid>
@@ -165,16 +180,18 @@
                     <StackPanel x:Name="AssigningGrp"
                                 Orientation="Horizontal">
                         <TextBlock Text="Assigned To:"
-                                   FontSize="16" VerticalAlignment="Center"/>
+                                   FontSize="16"
+                                   VerticalAlignment="Center" />
                         <local:Searchbox x:Name="Searchbox_AssignedTo"
-                                        Margin="5"
-                                        Width="300" />
+                                         Margin="5"
+                                         Width="300" />
                     </StackPanel>
 
                     <StackPanel x:Name="CurrentStatus"
                                 Orientation="Horizontal">
                         <TextBlock Text="Current Status:"
-                                   FontSize="16" VerticalAlignment="Center" />
+                                   FontSize="16"
+                                   VerticalAlignment="Center" />
                         <local:Searchbox x:Name="Searchbox_Phase"
                                          Margin="5"
                                          Width="300" />
@@ -194,14 +211,12 @@
                     <StackPanel Orientation="Vertical"
                                 Name="Timeline">
 
-                        <StackPanel Orientation="Horizontal"
-                                    HorizontalAlignment="Right">
-                            <TextBlock Text="Latest Version Found At: "
-                                       Foreground="White" />
-                            <TextBlock Text="LINKPLACEHOLDER"
-                                       Foreground="White" />
+                        <TextBlock Text="{Binding GetLatestAssetLink}"
+                                   Foreground="White"
+                                   HorizontalAlignment="Right"
+                                   FontSize="16"
+                                   FontWeight="SemiBold" />
 
-                        </StackPanel>
 
                         <Grid Margin="0,10"
                               Background="GhostWhite"

@@ -34,6 +34,7 @@ namespace AssetTracker.View
             Value_Category.PropertyChanged += (s,e) => { viewmodel.OnCategoryChanged(Value_Category.CurrentSelection); };
             Value_ParentID.PropertyChanged += (s, e) => { viewmodel.OnParentAssetChanged(Value_ParentID.CurrentSelection); };
             Value_AssignedTo.PropertyChanged += (s, e) => { viewmodel.OnUserChanged(Value_AssignedTo.CurrentSelection); };
+
         }
 
         public void OnSaveClicked(object sender, RoutedEventArgs e)

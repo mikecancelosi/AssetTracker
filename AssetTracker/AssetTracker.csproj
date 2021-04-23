@@ -242,7 +242,6 @@
   <ItemGroup>
     <Resource Include="Images\Placeholder.jpg" />
     <Resource Include="Images\Search.png" />
-    <Resource Include="View\Search.png" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
@@ -260,9 +259,9 @@
       <LastGenOutput>DBO.cs</LastGenOutput>
       <CustomToolNamespace>AssetTracker.Model</CustomToolNamespace>
     </Content>
-    <Resource Include="View\baseline_search_white_24dp.png" />
+    <Resource Include="Images\MaterialDesign\baseline_save_white_48dp.png" />
+    <Resource Include="Images\MaterialDesign\baseline_save_white_24dp.png" />
     <Resource Include="Images\MaterialDesign\baseline_search_white_24dp.png" />
-    <Resource Include="View\baseline_edit_white_24dp.png" />
     <Resource Include="Images\MaterialDesign\baseline_edit_white_24dp.png" />
   </ItemGroup>
   <ItemGroup />

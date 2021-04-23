@@ -54,52 +54,23 @@ namespace AssetTracker.ViewModel
 
         public bool CreateAsset(out List<Violation> violations)
         {
-            try
+            if (assetToCreate.Save(context, out violations))
             {
-                if (assetToCreate.IsValid(out violations))
+                Change change = new Change()
                 {
-                    if (context.Entry(assetToCreate).State == System.Data.Entity.EntityState.Detached)
-                    {
-                        context.Assets.Add(assetToCreate);
-                    }
-                    context.SaveChanges();
-                    Change change;
-                    if (CreateChange(assetToCreate, out violations, out change))
-                    {
-                        context.Changes.Add(change);
-                        context.SaveChanges();
+                    ch_datetime = DateTime.Now,
+                    ch_description = "Asset Created",
+                    ch_recid = assetToCreate.as_id,
+                };
 
-                        return true;
-                    }
-
+                if(change.Save(context,out violations))
+                {
+                    return true;
                 }
             }
-            catch (DbEntityValidationException e)
-            {
-                throw;
-            }
-            catch (InvalidOperationException e)
-            {
-                throw;
-            }
 
-
-
-            //Handle Violations
             return false;
-
         }
-
-        private bool CreateChange(Asset asset, out List<Violation> violations, out Change change)
-        {
-            change = new Change()
-            {
-                ch_datetime = DateTime.Now,
-                ch_description = "Asset Created",
-                ch_recid = asset.as_id,
-            };
-
-            return change.IsValid(out violations);
-        }
+       
     }
 }

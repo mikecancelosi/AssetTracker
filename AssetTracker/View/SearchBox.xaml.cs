@@ -32,7 +32,7 @@ namespace AssetTracker.View
         public Searchbox()
         {
             InitializeComponent();
-        }       
+        }
 
         public void SetType(Type dboType)
         {
@@ -43,7 +43,7 @@ namespace AssetTracker.View
 
         private void Vm_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            PropertyChanged?.Invoke(sender,e);
+            PropertyChanged?.Invoke(sender, e);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -63,6 +63,11 @@ namespace AssetTracker.View
         private void CloseClicked(object sender, MouseButtonEventArgs e)
         {
             searchbox.IsOpen = false;
+        }
+
+        public void SetCurrentSelectedObject(int objectID)
+        {
+            vm.SelectionChanged(objectID);
         }
     }
 }

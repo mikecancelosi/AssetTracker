@@ -19,6 +19,7 @@ namespace AssetTracker.ViewModel
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+
         public AssetCreateViewModel()
         {
             assetToCreate = context.Assets.Create();

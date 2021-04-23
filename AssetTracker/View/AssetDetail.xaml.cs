@@ -32,20 +32,40 @@ namespace AssetTracker.View
             vm = new AssetDetailViewModel();
             vm.myAsset = model;
             DataContext = vm;
-            Load();
+
+            Searchbox_AssignedTo.SetType(typeof(User));
+            Searchbox_AssignedTo.SetCurrentSelectedObject(vm.myAsset.AssignedToUser.ID);
+            Searchbox_AssignedTo.PropertyChanged += (s, e) => { vm.OnAssignedUserChange(Searchbox_AssignedTo.CurrentSelection.ID); };
+
+            Searchbox_Phase.SetType(typeof(Phase));
+            Searchbox_Phase.SetCurrentSelectedObject(vm.myAsset.Phase.ID);
+            Searchbox_Phase.PropertyChanged += (s, e) => { vm.OnPhaseChanged(Searchbox_Phase.CurrentSelection.ID); };
         }
 
-        private void Load()
+        private void HierarchyObjectClicked(object sender, RoutedEventArgs e)
         {
-            // Load Hierarchy
+            PromptSave();
+            // Change viewmodel to new asset
 
-            // Load Images
-            
-            // Load Discussion
-            
-            // Load State 
+        }
 
-            // Load object history
+        private void EditDisplayNameClicked(object sender, RoutedEventArgs e)
+        {
+            DisplayName.IsReadOnly = !DisplayName.IsReadOnly;
+        }
+
+        private void OnClose()
+        {
+            PromptSave();
+        }
+
+        private void OnSaveClicked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void PromptSave()
+        {
 
         }
     }

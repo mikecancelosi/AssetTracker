@@ -66,8 +66,6 @@ namespace AssetTracker.Model
                 object fromVal = prop.GetValue(copyFrom);
                 prop.SetValue(copyTo, fromVal);
             }
-
-
-        }
+        }       
     }
 }

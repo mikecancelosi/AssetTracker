@@ -143,5 +143,14 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="Metadatas">
+      <EntityTypeMapping TypeName="Model.Metadata">
+        <MappingFragment StoreEntitySet="Metadata">
+          <ScalarProperty Name="md_recid" ColumnName="md_recid" />
+          <ScalarProperty Name="md_value" ColumnName="md_value" />
+          <ScalarProperty Name="md_id" ColumnName="md_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

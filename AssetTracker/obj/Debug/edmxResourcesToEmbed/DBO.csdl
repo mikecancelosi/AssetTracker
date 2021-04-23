@@ -4,7 +4,7 @@
     <Key>
       <PropertyRef Name="as_id" />
     </Key>
-    <Property Name="as_id" Type="Int32" Nullable="false" />
+    <Property Name="as_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="as_displayname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="as_description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="as_parentid" Type="Int32" />
@@ -302,6 +302,7 @@
       <End Role="Asset" EntitySet="Assets" />
       <End Role="Asset1" EntitySet="Assets" />
     </AssociationSet>
+    <EntitySet Name="Metadatas" EntityType="Model.Metadata" />
   </EntityContainer>
   <ComplexType Name="assetGetInformation_Result">
     <Property Type="Int32" Name="as_id" Nullable="false" />
@@ -375,4 +376,12 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <EntityType Name="Metadata">
+    <Key>
+      <PropertyRef Name="md_id" />
+    </Key>
+    <Property Name="md_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="md_value" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="md_recid" Type="Int32" Nullable="false" />
+  </EntityType>
 </Schema>

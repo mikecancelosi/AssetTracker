@@ -8,7 +8,6 @@ namespace AssetTracker.Model
 {
     public partial class Asset : DatabaseBackedObject
     {
-
         public override int ID 
         {
             get

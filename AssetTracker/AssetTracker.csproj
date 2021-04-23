@@ -102,6 +102,9 @@
       <DependentUpon>DBO.tt</DependentUpon>
     </Compile>
     <Compile Include="Extensions\ObservableCollectionExtensions.cs" />
+    <Compile Include="Metadata.cs">
+      <DependentUpon>DBO.tt</DependentUpon>
+    </Compile>
     <Compile Include="Model\Asset.cs" />
     <Compile Include="Model\AssetCategory.cs" />
     <Compile Include="Model\Change.cs" />
@@ -151,9 +154,6 @@
     <Compile Include="View\Changelog.xaml.cs">
       <DependentUpon>Changelog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\ProductionTimeline.xaml.cs">
-      <DependentUpon>ProductionTimeline.xaml</DependentUpon>
-    </Compile>
     <Compile Include="View\ProjectSettings.xaml.cs">
       <DependentUpon>ProjectSettings.xaml</DependentUpon>
     </Compile>
@@ -188,10 +188,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Changelog.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="View\ProductionTimeline.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -264,6 +260,10 @@
       <LastGenOutput>DBO.cs</LastGenOutput>
       <CustomToolNamespace>AssetTracker.Model</CustomToolNamespace>
     </Content>
+    <Resource Include="View\baseline_search_white_24dp.png" />
+    <Resource Include="Images\MaterialDesign\baseline_search_white_24dp.png" />
+    <Resource Include="View\baseline_edit_white_24dp.png" />
+    <Resource Include="Images\MaterialDesign\baseline_edit_white_24dp.png" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

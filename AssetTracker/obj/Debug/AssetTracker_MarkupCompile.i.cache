@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\App.xaml
-82063631102
+9-279448437
 2-1785203472
-48771984937
-18-1720886180
-MainWindow.xaml;View\AssetCreate.xaml;View\AssetDetail.xaml;View\AssetList.xaml;View\Changelog.xaml;View\ProjectSettings.xaml;View\ProjectStatus.xaml;View\Searchbox.xaml;
+51-1764754605
+18-1552859811
+MainWindow.xaml;View\AssetCreate.xaml;View\AssetDetail.xaml;View\AssetList.xaml;View\Changelog.xaml;View\ProjectSettings.xaml;View\ProjectStatus.xaml;View\Resources\DiscussionTemplate.xaml;View\Searchbox.xaml;
 
-True
+False
 

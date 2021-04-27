@@ -79,7 +79,7 @@
 
         </Grid>
 
-        <Frame x:Name="ContentFrame" Grid.Row="1" >
+        <Frame x:Name="ContentFrame" Grid.Row="1" Margin="200,0" NavigationUIVisibility="Hidden">
             
         </Frame>
         

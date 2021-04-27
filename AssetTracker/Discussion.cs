@@ -17,7 +17,7 @@ namespace AssetTracker.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Discussion()
         {
-            this.Discussion11 = new HashSet<Discussion>();
+            this.Children = new HashSet<Discussion>();
         }
     
         public int di_id { get; set; }
@@ -29,7 +29,8 @@ namespace AssetTracker.Model
     
         public virtual Asset Asset { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Discussion> Discussion11 { get; set; }
-        public virtual Discussion Discussion2 { get; set; }
+        public virtual ICollection<Discussion> Children { get; set; }
+        public virtual Discussion Parent { get; set; }
+        public virtual User User { get; set; }
     }
 }

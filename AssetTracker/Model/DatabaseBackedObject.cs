@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace AssetTracker.Model
 {
-    public abstract class DatabaseBackedObject 
+    public abstract class DatabaseBackedObject
     {
         public DatabaseBackedObject()
         {
@@ -40,7 +40,7 @@ namespace AssetTracker.Model
         }
 
         public virtual bool IsValid(out List<Violation> violations)
-        {          
+        {
             violations = new List<Violation>();
 
             return violations.Count() == 0;
@@ -49,7 +49,7 @@ namespace AssetTracker.Model
         public static void CopyProperties(DatabaseBackedObject copyFrom, DatabaseBackedObject copyTo)
         {
             Type dboType = copyFrom.GetType().BaseType;
-            if(copyTo.GetType().BaseType != dboType &&
+            if (copyTo.GetType().BaseType != dboType &&
                copyTo.GetType() != dboType)
             {
                 Console.Error.WriteLine("Dbo types do not match!");
@@ -58,7 +58,7 @@ namespace AssetTracker.Model
 
             PropertyInfo[] properties = dboType.GetProperties();
 
-            foreach(PropertyInfo prop in properties)
+            foreach (PropertyInfo prop in properties)
             {
                 if (prop.SetMethod != null)
                 {
@@ -74,10 +74,16 @@ namespace AssetTracker.Model
             {
                 if (IsValid(out violations))
                 {
-                    if (context.Entry(this).State == System.Data.Entity.EntityState.Detached)
+                    if (ID == 0)
                     {
-                        context.Set(GetType()).Attach(this);
+                        context.Set(GetType()).Add(this);
                     }
+                    else
+                    {
+                        var entity = context.Set(GetType()).Find(ID);
+                        context.Entry(entity).CurrentValues.SetValues(this);
+                    }
+
                     context.SaveChanges();
 
                     return true;
@@ -92,17 +98,17 @@ namespace AssetTracker.Model
             return false;
         }
 
-        
+
         public virtual List<Change> GetChanges(DatabaseBackedObject beforeObject)
         {
             // TODO: Load user id from current session
             // TODO: Add changes automatically, using long names from db + "Changed" e.g 'as_usid Changed'
 
             List<Change> output = new List<Change>();
-            int UserId = 0;           
+            int UserId = 0;
 
 
-            if(ID != beforeObject.ID)
+            if (ID != beforeObject.ID)
             {
                 output.Add(new Change()
                 {
@@ -115,7 +121,7 @@ namespace AssetTracker.Model
                     ch_usid = UserId
                 });
             }
-            if(Name != beforeObject.Name)
+            if (Name != beforeObject.Name)
             {
                 output.Add(new Change()
                 {

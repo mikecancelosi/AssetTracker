@@ -13,7 +13,22 @@ namespace AssetTracker.ViewModel
 {
     public class AssetDetailViewModel : INotifyPropertyChanged
     {
-        private Asset myasset;
+        private Asset myasset = new Asset()
+        {
+            as_displayname = "Asset Name",
+            as_id = 229,
+            Children = new List<Asset>()
+            {
+                new Asset()
+                {
+                    as_displayname = "Child 1"
+                },
+                new Asset()
+                {
+                    as_displayname = "Child 2"
+                }
+            }
+        };
         public event PropertyChangedEventHandler PropertyChanged;
         protected void NotifyPropertyChanged(String info)
         {
@@ -32,7 +47,7 @@ namespace AssetTracker.ViewModel
             }
             set
             {
-                myasset = value;
+                myasset = context.Assets.Find(value.ID);
                 OnModelChanged();
             }
         }
@@ -57,7 +72,7 @@ namespace AssetTracker.ViewModel
 
         public void SetMetadata()
         {
-            List<Metadata> data = (from m in context.Metadatas
+            List<Metadata> data = (from m in context.Metadata
                                    where m.md_recid == myAsset.ID
                                    select m).ToList();
             Metadata = string.Join(",", data.Select(x => x.md_value).ToList());
@@ -94,7 +109,8 @@ namespace AssetTracker.ViewModel
             objectList.Add(new AssetHierarchyObject()
             {
                 asset = refAsset,
-                level = level
+                level = level,
+                currentObject = refAsset.ID == myAsset.ID
             });
 
             foreach (Asset child in refAsset.Children)
@@ -159,12 +175,26 @@ namespace AssetTracker.ViewModel
             return false;
         }
 
+        public List<Discussion> DiscussionBoard { get; private set; }
+        public void CreateNewDiscussion(string content)
+        {
+            Discussion newDiscussion = context.Discussions.Create();
+            newDiscussion.di_contents = content;
+            newDiscussion.di_date = DateTime.Now;
+            newDiscussion.di_asid = myAsset.ID;
+            // TODO Assign discussion to current user.
+            context.Discussions.Add(newDiscussion);
+            context.SaveChanges();
+        }
+
+
 
         public struct AssetHierarchyObject
         {
             public Asset asset { get; set; }
             public int level { get; set; }
             public System.Windows.Thickness marginFactor => new System.Windows.Thickness(level * 10, 0, 0, 10);
+            public bool currentObject { get; set; }
         }
     }
 }

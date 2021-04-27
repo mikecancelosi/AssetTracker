@@ -114,6 +114,7 @@
     <NavigationProperty Name="AssetsAssigned" Relationship="Self.FK_asset_user" FromRole="User" ToRole="Asset" />
     <NavigationProperty Name="SecPermission2" Relationship="Self.FK_secpermission2_user" FromRole="User" ToRole="SecPermission2" />
     <NavigationProperty Name="SecRole" Relationship="Self.FK_user_secrole" FromRole="User" ToRole="SecRole" />
+    <NavigationProperty Name="Discussions" Relationship="Model.FK_Discussion_User" FromRole="User" ToRole="Discussion" />
   </EntityType>
   <Association Name="FK_asset_assetcategory">
     <End Role="AssetCategory" Type="Self.AssetCategory" Multiplicity="1" />
@@ -302,7 +303,11 @@
       <End Role="Asset" EntitySet="Assets" />
       <End Role="Asset1" EntitySet="Assets" />
     </AssociationSet>
-    <EntitySet Name="Metadatas" EntityType="Model.Metadata" />
+    <EntitySet Name="Metadata" EntityType="Model.Metadata" />
+    <AssociationSet Name="FK_Discussion_User" Association="Model.FK_Discussion_User">
+      <End Role="User" EntitySet="Users" />
+      <End Role="Discussion" EntitySet="Discussions" />
+    </AssociationSet>
   </EntityContainer>
   <ComplexType Name="assetGetInformation_Result">
     <Property Type="Int32" Name="as_id" Nullable="false" />
@@ -337,8 +342,9 @@
     <Property Name="di_usid" Type="Int32" Nullable="false" />
     <Property Name="di_date" Type="DateTime" Nullable="false" Precision="3" />
     <NavigationProperty Name="Asset" Relationship="Model.FK_discussion_asset" FromRole="Discussion1" ToRole="Asset" />
-    <NavigationProperty Name="Discussion11" Relationship="Model.FK_discussion_discussion" FromRole="Discussion1" ToRole="Discussion11" />
-    <NavigationProperty Name="Discussion2" Relationship="Model.FK_discussion_discussion" FromRole="Discussion11" ToRole="Discussion1" />
+    <NavigationProperty Name="Children" Relationship="Model.FK_discussion_discussion" FromRole="Discussion1" ToRole="Discussion11" />
+    <NavigationProperty Name="Parent" Relationship="Model.FK_discussion_discussion" FromRole="Discussion11" ToRole="Discussion1" />
+    <NavigationProperty Name="User" Relationship="Model.FK_Discussion_User" FromRole="Discussion" ToRole="User" />
   </EntityType>
   <Association Name="FK_discussion_asset">
     <End Type="Model.Asset" Role="Asset" Multiplicity="1" />
@@ -384,4 +390,16 @@
     <Property Name="md_value" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="md_recid" Type="Int32" Nullable="false" />
   </EntityType>
+  <Association Name="FK_Discussion_User">
+    <End Type="Model.User" Role="User" Multiplicity="1" />
+    <End Type="Model.Discussion" Role="Discussion" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="us_id" />
+      </Principal>
+      <Dependent Role="Discussion">
+        <PropertyRef Name="di_usid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema>

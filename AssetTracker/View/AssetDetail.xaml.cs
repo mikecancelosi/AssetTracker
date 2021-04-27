@@ -34,11 +34,17 @@ namespace AssetTracker.View
             DataContext = vm;
 
             Searchbox_AssignedTo.SetType(typeof(User));
-            Searchbox_AssignedTo.SetCurrentSelectedObject(vm.myAsset.AssignedToUser.ID);
+            if (vm.myAsset.AssignedToUser != null)
+            {
+                Searchbox_AssignedTo.SetCurrentSelectedObject(vm.myAsset.AssignedToUser.ID);
+            }
             Searchbox_AssignedTo.PropertyChanged += (s, e) => { vm.OnAssignedUserChange(Searchbox_AssignedTo.CurrentSelection.ID); };
 
             Searchbox_Phase.SetType(typeof(Phase));
-            Searchbox_Phase.SetCurrentSelectedObject(vm.myAsset.Phase.ID);
+            if(vm.myAsset.Phase != null)
+            {
+                Searchbox_Phase.SetCurrentSelectedObject(vm.myAsset.Phase.ID);
+            }            
             Searchbox_Phase.PropertyChanged += (s, e) => { vm.OnPhaseChanged(Searchbox_Phase.CurrentSelection.ID); };
         }
 
@@ -48,15 +54,15 @@ namespace AssetTracker.View
             // Change viewmodel to new asset
 
         }
-
-        private void EditDisplayNameClicked(object sender, RoutedEventArgs e)
-        {
-            DisplayName.IsReadOnly = !DisplayName.IsReadOnly;
-        }
-
+        
         private void OnClose()
         {
             PromptSave();
+        }
+
+        private void OnDeleteClicked(object sender, RoutedEventArgs e)
+        {
+          
         }
 
         private void OnSaveClicked(object sender, RoutedEventArgs e)
@@ -71,6 +77,25 @@ namespace AssetTracker.View
 
             }
         }
+
+        private void OnChangelogClicked(object sender, RoutedEventArgs e)
+        {
+            Changelog.Visibility = Visibility.Visible;
+        }
+
+        private void OnChangelogExited(object sender, RoutedEventArgs e)
+        {
+            Changelog.Visibility = Visibility.Collapsed;
+        }
+
+        private void DiscussionAddClicked(object sender, RoutedEventArgs e)
+        {
+            if (NewDiscussionReply.Text != "Start a new discussion..")
+            {
+                vm.CreateNewDiscussion(NewDiscussionReply.Text);
+            }
+        }
+        
 
         private void PromptSave()
         {

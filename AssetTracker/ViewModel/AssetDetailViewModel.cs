@@ -174,14 +174,13 @@ namespace AssetTracker.ViewModel
             }
             return false;
         }
-
-        public List<Discussion> DiscussionBoard { get; private set; }
         public void CreateNewDiscussion(string content)
         {
             Discussion newDiscussion = context.Discussions.Create();
             newDiscussion.di_contents = content;
             newDiscussion.di_date = DateTime.Now;
             newDiscussion.di_asid = myAsset.ID;
+            newDiscussion.di_usid = 1;
             // TODO Assign discussion to current user.
             context.Discussions.Add(newDiscussion);
             context.SaveChanges();

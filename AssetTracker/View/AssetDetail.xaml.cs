@@ -90,9 +90,11 @@ namespace AssetTracker.View
 
         private void DiscussionAddClicked(object sender, RoutedEventArgs e)
         {
-            if (NewDiscussionReply.Text != "Start a new discussion..")
+            string defaulttext = "Start a new discussion..";
+            if (NewDiscussionReply.Text != defaulttext)
             {
                 vm.CreateNewDiscussion(NewDiscussionReply.Text);
+                NewDiscussionReply.Text = defaulttext;
             }
         }
         

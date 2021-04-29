@@ -205,7 +205,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Resources\DiscussionTemplate.xaml">
+    <Page Include="View\Resources\DiscussionBoardResourceDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -269,6 +269,7 @@
       <LastGenOutput>DBO.cs</LastGenOutput>
       <CustomToolNamespace>AssetTracker.Model</CustomToolNamespace>
     </Content>
+    <Resource Include="Images\MaterialDesign\baseline_send_white_48dp.png" />
     <Resource Include="Images\MaterialDesign\baseline_more_vert_white_48dp.png" />
     <Resource Include="Images\MaterialDesign\baseline_edit_white_48dp.png" />
     <Resource Include="Images\MaterialDesign\baseline_reply_white_24dp.png" />

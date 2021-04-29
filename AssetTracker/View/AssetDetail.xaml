@@ -14,9 +14,16 @@
 
     </Page.DataContext>
     <Page.Resources>
-        <converters:InverseBooleanConverter x:Key="inverseBooleanConverter" />
-        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-        <converters:MultiBooleanToVisibilityConverter x:Key="multiBoolToVisConvert" />
+        <ResourceDictionary>
+          
+                <converters:InverseBooleanConverter x:Key="inverseBooleanConverter" />
+                <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+                <converters:MultiBooleanToVisibilityConverter x:Key="multiBoolToVisConvert" />
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary x:Name="DiscussDictionary"
+                                    Source="Resources/DiscussionBoardResourceDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Page.Resources>
 
     <Grid Background="Gray">
@@ -342,31 +349,9 @@
                                    Margin="0,5" />
 
                         <StackPanel Orientation="Vertical">
-                            <ContentControl Content="{Binding DiscussionBoard}" />
-                            <Grid Background="LightGray">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="1*" />
-                                    <ColumnDefinition Width="12*" />
-                                </Grid.ColumnDefinitions>
-                                <Image Source="..\Images\MaterialDesign\baseline_account_circle_white_48dp.png"
-                                       Height="40"
-                                       Margin="0,15" />
-                                <TextBox x:Name="NewDiscussionReply" 
-                                        Text="Start a new discussion.."
-                                         Margin="0,20,60,20"
-                                         Grid.Column="1"
-                                         VerticalContentAlignment="Center"
-                                         HorizontalContentAlignment="Stretch" />
-                                <Button Grid.Column="1"
-                                        Height="40"
-                                        Background="Transparent"
-                                        Width="40"
-                                        HorizontalAlignment="Right"
-                                        Margin="10"
-                                        BorderThickness="0" Click="DiscussionAddClicked">
-                                    <Image Source="..\Images\MaterialDesign\baseline_send_white_48dp.png" />
-                                </Button>
-                            </Grid>
+                            <ItemsControl ItemsSource="{Binding myAsset.Discussions}"
+                                          ItemTemplate="{StaticResource ResourceKey=DiscussionItem}" />
+                            <Control Template="{StaticResource ResourceKey=ReplyToDiscussion}" />
                         </StackPanel>
                         <!--#endregion-->
 

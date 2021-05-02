@@ -1,4 +1,5 @@
 ﻿using AssetTracker.Model;
+using AssetTracker.View.Commands;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -8,11 +9,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Input;
 
 namespace AssetTracker.ViewModel
 {
     public class AssetDetailViewModel : INotifyPropertyChanged
     {
+        /// <summary>
+        /// Debug display setup
+        /// </summary>
         private Asset myasset = new Asset()
         {
             as_displayname = "Asset Name",
@@ -55,6 +60,23 @@ namespace AssetTracker.ViewModel
         public string Metadata { get; private set; }
         public List<Change> Changelog { get; set; }
         public List<AssetHierarchyObject> Hierarchy { get; set; }
+
+        public List<Discussion> DiscussionBoard
+        {
+            get
+            {
+                return (from d in context.Discussions
+                        where (d.di_asid == myAsset.ID
+                        && d.di_parentid == null)
+                        select d).ToList();
+            }
+            set
+            {
+                DiscussionBoard = value;
+                NotifyPropertyChanged("DiscussionBoard");
+            }
+
+        }
 
 
         public void OnModelChanged()
@@ -162,11 +184,11 @@ namespace AssetTracker.ViewModel
             if (context.Entry(myAsset).State == System.Data.Entity.EntityState.Modified)
             {
                 Asset beforeAsset = context.Entry(myAsset).GetDatabaseValues().ToObject() as Asset;
-                changes = myAsset.GetChanges(beforeAsset);               
+                changes = myAsset.GetChanges(beforeAsset);
             }
-            if(myAsset.Save(context, out violations))
+            if (myAsset.Save(context, out violations))
             {
-                foreach(Change change in changes)
+                foreach (Change change in changes)
                 {
                     change.Save(context, out violations);
                 }
@@ -174,18 +196,24 @@ namespace AssetTracker.ViewModel
             }
             return false;
         }
-        public void CreateNewDiscussion(string content)
+        public void CreateNewDiscussion(int parentID, string content)
         {
             Discussion newDiscussion = context.Discussions.Create();
             newDiscussion.di_contents = content;
             newDiscussion.di_date = DateTime.Now;
             newDiscussion.di_asid = myAsset.ID;
             newDiscussion.di_usid = 1;
+            if (parentID > 0)
+            {
+                newDiscussion.di_parentid = parentID;
+            }
+
             // TODO Assign discussion to current user.
             context.Discussions.Add(newDiscussion);
             context.SaveChanges();
+            NotifyPropertyChanged("DiscussionBoard");
         }
-
+   
 
 
         public struct AssetHierarchyObject

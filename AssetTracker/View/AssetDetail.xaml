@@ -6,6 +6,7 @@
       xmlns:local="clr-namespace:AssetTracker.View"
       xmlns:viewmodel="clr-namespace:AssetTracker.ViewModel"
       xmlns:converters="clr-namespace:AssetTracker.View.Converters"
+      xmlns:prop="clr-namespace:AssetTracker.View.Properties"
       mc:Ignorable="d"
       d:DesignWidth="1200"
       d:DesignHeight="800">
@@ -348,10 +349,13 @@
                                    Foreground="White"
                                    Margin="0,5" />
 
-                        <StackPanel Orientation="Vertical">
-                            <ItemsControl ItemsSource="{Binding myAsset.Discussions}"
-                                          ItemTemplate="{StaticResource ResourceKey=DiscussionItem}" />
-                            <Control Template="{StaticResource ResourceKey=ReplyToDiscussion}" />
+                        <StackPanel Orientation="Vertical" x:Name="DiscussionBoardPanel" >
+                            <ItemsControl ItemsSource="{Binding DiscussionBoard}"
+                                          ItemTemplate="{StaticResource ResourceKey=DiscussionItem}"
+                                          Margin="10"
+                                           />
+                            <Control Template="{StaticResource ResourceKey=NewDiscussion}"
+                                     prop:DBOPropertyExtension.IDSource="0" />
                         </StackPanel>
                         <!--#endregion-->
 

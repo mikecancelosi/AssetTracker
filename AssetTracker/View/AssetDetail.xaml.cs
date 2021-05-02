@@ -1,4 +1,5 @@
 ﻿using AssetTracker.Model;
+using AssetTracker.View.Commands;
 using AssetTracker.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,8 @@ namespace AssetTracker.View
         {
             InitializeComponent();
         }
+        public ICommand DiscussionReplyClicked => new IDReceiverCmd((arr) => OnDiscussionReplyClicked(arr), (arr) => { return true; });
+
 
         public AssetDetail(Asset model)
         {
@@ -87,17 +90,18 @@ namespace AssetTracker.View
         {
             Changelog.Visibility = Visibility.Collapsed;
         }
-
-        private void DiscussionAddClicked(object sender, RoutedEventArgs e)
+        public void OnDiscussionReplyClicked(object input)
         {
-            string defaulttext = "Start a new discussion..";
-            if (NewDiscussionReply.Text != defaulttext)
+            string defaultText = "Start a new discussion..";
+            object[] values = input as object[];
+            int parentID = (int)values[0];
+            string content = values[1] as string;
+            if (content != defaultText)
             {
-                vm.CreateNewDiscussion(NewDiscussionReply.Text);
-                NewDiscussionReply.Text = defaulttext;
+                vm.CreateNewDiscussion(parentID, content);
             }
+
         }
-        
 
         private void PromptSave()
         {

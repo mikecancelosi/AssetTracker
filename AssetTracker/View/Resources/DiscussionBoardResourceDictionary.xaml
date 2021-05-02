@@ -1,119 +1,230 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:model="clr-namespace:AssetTracker.Model">
+                    xmlns:model="clr-namespace:AssetTracker.Model"
+                    xmlns:prop="clr-namespace:AssetTracker.View.Properties"
+                    xmlns:conv="clr-namespace:AssetTracker.View.Converters">
+    <ControlTemplate x:Key="NewDiscussion"
+                     TargetType="Control">
+        <ControlTemplate.Resources>
+            <conv:MultiBooleanToVisibilityConverter x:Key="MultiConverter" />
+        </ControlTemplate.Resources>
+        <Border BorderBrush="White"
+                BorderThickness="2"
+                CornerRadius="5"
+                Background="LightGray">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="12*" />
+                </Grid.ColumnDefinitions>
+                <Image Source="\Images\MaterialDesign\baseline_account_circle_white_48dp.png"
+                       Height="40"
+                       Margin="0,15"
+                       VerticalAlignment="Center" />
+                <TextBox x:Name="NewDiscussionReply"
+                         Text="Start a new discussion.."
+                         Margin="0,20,60,20"
+                         Grid.Column="1"
+                         VerticalContentAlignment="Center"
+                         HorizontalContentAlignment="Stretch" />
+                <Button Grid.Column="1"
+                        Height="40"
+                        Background="Transparent"
+                        Width="40"
+                        HorizontalAlignment="Right"
+                        Margin="10"
+                        BorderThickness="0"
+                        Command="{Binding DiscussionReplyClicked, RelativeSource={RelativeSource AncestorLevel=1, AncestorType=Page}}">
+                    <Button.CommandParameter>
+                        <MultiBinding>
+                            <MultiBinding.Converter>
+                                <conv:MultiValueConverter />
+                            </MultiBinding.Converter>
+                            <Binding Path="(prop:DBOPropertyExtension.IDSource)">
+                                <Binding.RelativeSource>
+                                    <RelativeSource Mode="TemplatedParent" />
+                                </Binding.RelativeSource>
+                            </Binding>
+                            <Binding ElementName="NewDiscussionReply"
+                                     Path="Text" />
+                        </MultiBinding>
 
-    <ControlTemplate x:Key="ReplyToDiscussion"
-                     TargetType="{x:Type Control}">
-        <Border BorderBrush="White" BorderThickness="2" CornerRadius="5" Background="LightGray">
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*" />
-                <ColumnDefinition Width="12*" />
-            </Grid.ColumnDefinitions>
-            <Image Source="\Images\MaterialDesign\baseline_account_circle_white_48dp.png"
-                   Height="40"
-                   Margin="0,15" />
-            <TextBox x:Name="NewDiscussionReply"
-                     Text="Start a new discussion.."
-                     Margin="0,20,60,20"
-                     Grid.Column="1"
-                     VerticalContentAlignment="Center"
-                     HorizontalContentAlignment="Stretch" />
-            <Button Grid.Column="1"
-                    Height="40"
-                    Background="Transparent"
-                    Width="40"
-                    HorizontalAlignment="Right"
-                    Margin="10"
-                    BorderThickness="0">
-                <Image Source="\Images\MaterialDesign\baseline_send_white_48dp.png" />
-            </Button>
-        </Grid>
+                    </Button.CommandParameter>
+                    <Image Source="\Images\MaterialDesign\baseline_send_white_48dp.png" />
+                </Button>
+            </Grid>
         </Border>
+    </ControlTemplate>
 
+    <ControlTemplate x:Key="DiscussionReply"
+                     TargetType="Control">
+        <ControlTemplate.Resources>
+            <conv:MultiBooleanToVisibilityConverter x:Key="MultiConverter" />
+        </ControlTemplate.Resources>
+        <Border BorderBrush="White"
+                BorderThickness="2"
+                CornerRadius="5"
+                Background="LightGray">
+            <Grid>
+
+                <TextBox x:Name="NewDiscussionReply"
+                         Text="Reply..."
+                         Margin="10,10,60,10"
+                         VerticalContentAlignment="Center"
+                         HorizontalContentAlignment="Stretch" />
+                <Button Height="30"
+                        Background="Transparent"
+                        Width="30"
+                        HorizontalAlignment="Right"
+                        Margin="10"
+                        BorderThickness="0"
+                        Command="{Binding DiscussionReplyClicked, RelativeSource={RelativeSource AncestorLevel=1, AncestorType=Page}}">
+                    <Button.CommandParameter>
+                        <MultiBinding>
+                            <MultiBinding.Converter>
+                                <conv:MultiValueConverter />
+                            </MultiBinding.Converter>
+                            <Binding Path="(prop:DBOPropertyExtension.IDSource)">
+                                <Binding.RelativeSource>
+                                    <RelativeSource Mode="TemplatedParent" />
+                                </Binding.RelativeSource>
+                            </Binding>
+                            <Binding ElementName="NewDiscussionReply"
+                                     Path="Text" />
+                        </MultiBinding>
+
+                    </Button.CommandParameter>
+                    <Image Source="\Images\MaterialDesign\baseline_send_white_48dp.png" />
+                </Button>
+            </Grid>
+        </Border>
     </ControlTemplate>
 
     <DataTemplate DataType="{x:Type model:Discussion}"
-                  x:Key="DiscussionItem">
-        <Grid Margin="0,10">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"
-                                  MaxWidth="50" />
-                <ColumnDefinition Width="10*" />
-            </Grid.ColumnDefinitions>
+                  x:Key="DiscussionItem">        
+        <Border
+                BorderBrush="LightGray"
+                >
+            <Border.Resources>
+                <conv:IsNullToVisibilityConverter x:Key="IsNullToVisibility" />
+                <conv:IsNullToThicknessConverter x:Key="IsNullToThick" />
+                <conv:DatetimeToTimeElapsedConverter x:Key="TimeDisplayConv" />
+            </Border.Resources>
+            <Border.Margin>
+                <MultiBinding>
+                    <MultiBinding.Converter>
+                        <conv:IsNullToThicknessConverter />
+                    </MultiBinding.Converter>
+                    <Binding Path="di_parentid"  />
+                    <Binding Source="0,0,0,50" />
+                </MultiBinding>
+            </Border.Margin>
+            <Border.BorderThickness>
+                <MultiBinding>
+                    <MultiBinding.Converter>
+                        <conv:IsNullToThicknessConverter />
+                    </MultiBinding.Converter>
+                    <Binding Path="di_parentid" />
+                    <Binding Source="2,2,2,2" />
+                    <Binding Source="0,2,0,0" />
+                </MultiBinding>
+            </Border.BorderThickness>
+            <StackPanel Orientation="Vertical">
+                <Grid>
 
-            <Grid Grid.Column="0"
-                  VerticalAlignment="Top">
-                <Image Source="/Images/MaterialDesign/baseline_account_circle_white_48dp.png"
-                       Width="40" />
-            </Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"
+                                          MaxWidth="50" />
+                        <ColumnDefinition Width="10*" />
+                    </Grid.ColumnDefinitions>
 
-            <StackPanel Orientation="Vertical"
-                        Grid.Column="1">
-                <Grid x:Name="ReplyHeader"
-                      Margin="0,5">
-                    <StackPanel Orientation="Horizontal"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Center">
+                    <Grid Grid.Column="0"
+                          VerticalAlignment="Top">
+                        <Image Source="/Images/MaterialDesign/baseline_account_circle_white_48dp.png"
+                               Width="40" />
+                    </Grid>
 
-                        <TextBlock Text="User Name"
-                                   Margin="0,0,5,0"
-                                   FontSize="16"
-                                   FontWeight="SemiBold" />
+                    <StackPanel Orientation="Vertical"
+                                Grid.Column="1"
+                                Margin="0,10">
+                       
+                        <Grid x:Name="ReplyHeader"
+                              Margin="0,5">
+                            <StackPanel Orientation="Horizontal"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center">
 
-                        <TextBlock Text="5m"
-                                   VerticalAlignment="Center"
-                                   Foreground="LightGray" />
+                                <TextBlock Text="User Name"
+                                           Margin="0,0,5,0"
+                                           FontSize="16"
+                                           FontWeight="SemiBold" />
+
+                                <TextBlock Text="{Binding di_date, Converter={StaticResource ResourceKey=TimeDisplayConv}}"
+                                           VerticalAlignment="Center"
+                                           Foreground="LightGray" />
+
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal"
+                                        HorizontalAlignment="Right">
+                                <StackPanel.Resources>
+                                    <Style TargetType="Button">
+                                        <Setter Property="Width"
+                                                Value="24" />
+                                        <Setter Property="Height"
+                                                Value="24" />
+                                        <Setter Property="Margin"
+                                                Value="2,5" />
+                                        <Setter Property="Background"
+                                                Value="Transparent" />
+                                    </Style>
+                                </StackPanel.Resources>
+
+                                <Button>
+                                    <Image Source="/Images/MaterialDesign/baseline_add_reaction_white_24dp.png" />
+                                </Button>
+
+                                <Button>
+                                    <Image Source="/Images/MaterialDesign/baseline_reply_white_24dp.png" />
+                                </Button>
+
+                                <Button>
+                                    <Image Source="/Images/MaterialDesign/baseline_edit_white_48dp.png" />
+                                </Button>
+
+                                <Button>
+                                    <Image Source="/Images/MaterialDesign/baseline_more_vert_white_48dp.png" />
+                                </Button>
+
+
+                            </StackPanel>
+                        </Grid>
+
+                        <StackPanel Orientation="Vertical">
+                            <TextBox x:Name="DiscussionContents"
+                                     Text="{Binding di_contents}"
+                                     Background="Transparent"
+                                     Padding="0,5"
+                                     BorderThickness="0" />
+
+                        </StackPanel>
 
                     </StackPanel>
 
-                    <StackPanel Orientation="Horizontal"
-                                HorizontalAlignment="Right">
-                        <StackPanel.Resources>
-                            <Style TargetType="Button">
-                                <Setter Property="Width"
-                                        Value="24" />
-                                <Setter Property="Height"
-                                        Value="24" />
-                                <Setter Property="Margin"
-                                        Value="2,5" />
-                                <Setter Property="Background"
-                                        Value="Transparent" />
-                            </Style>
-                        </StackPanel.Resources>
 
-                        <Button>
-                            <Image Source="/Images/MaterialDesign/baseline_add_reaction_white_24dp.png" />
-                        </Button>
-
-                        <Button>
-                            <Image Source="/Images/MaterialDesign/baseline_reply_white_24dp.png" />
-                        </Button>
-
-                        <Button>
-                            <Image Source="/Images/MaterialDesign/baseline_edit_white_48dp.png" />
-                        </Button>
-
-                        <Button>
-                            <Image Source="/Images/MaterialDesign/baseline_more_vert_white_48dp.png" />
-                        </Button>
-
-
-                    </StackPanel>
                 </Grid>
-                <StackPanel Orientation="Vertical">
-                    <TextBox Text="{Binding di_contents}"
-                             Background="Transparent"
-                             Margin="0,10"
-                             Padding="0,10" />                    
-                    <ItemsControl ItemsSource="{Binding Children}">
-                    </ItemsControl>
-                </StackPanel>
-                <Control Template="{StaticResource ResourceKey=ReplyToDiscussion}" />
+                <ItemsControl ItemsSource="{Binding Children}"
+                              ItemTemplate="{DynamicResource ResourceKey=DiscussionItem}" >
+                </ItemsControl>
+
+                <Control Template="{StaticResource ResourceKey=DiscussionReply}"
+                         prop:DBOPropertyExtension.IDSource="{Binding  di_id}"
+                         Visibility="{Binding di_parentid, Converter= {StaticResource ResourceKey=IsNullToVisibility} }">
+                </Control>
             </StackPanel>
-        </Grid>
+        </Border>
     </DataTemplate>
 
-   
+
 
 </ResourceDictionary>

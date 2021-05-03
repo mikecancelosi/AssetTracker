@@ -1,8 +1,11 @@
 ﻿using AssetTracker.Model;
 using AssetTracker.View.Commands;
+using AssetTracker.View.Properties;
 using AssetTracker.ViewModel;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -26,7 +29,7 @@ namespace AssetTracker.View
         {
             InitializeComponent();
         }
-        public ICommand DiscussionReplyClicked => new IDReceiverCmd((arr) => OnDiscussionReplyClicked(arr), (arr) => { return true; });
+        
 
 
         public AssetDetail(Asset model)
@@ -44,11 +47,13 @@ namespace AssetTracker.View
             Searchbox_AssignedTo.PropertyChanged += (s, e) => { vm.OnAssignedUserChange(Searchbox_AssignedTo.CurrentSelection.ID); };
 
             Searchbox_Phase.SetType(typeof(Phase));
-            if(vm.myAsset.Phase != null)
+            if (vm.myAsset.Phase != null)
             {
                 Searchbox_Phase.SetCurrentSelectedObject(vm.myAsset.Phase.ID);
-            }            
+            }
             Searchbox_Phase.PropertyChanged += (s, e) => { vm.OnPhaseChanged(Searchbox_Phase.CurrentSelection.ID); };
+
+            InitializeTimeline();
         }
 
         private void HierarchyObjectClicked(object sender, RoutedEventArgs e)
@@ -57,7 +62,7 @@ namespace AssetTracker.View
             // Change viewmodel to new asset
 
         }
-        
+
         private void OnClose()
         {
             PromptSave();
@@ -65,13 +70,13 @@ namespace AssetTracker.View
 
         private void OnDeleteClicked(object sender, RoutedEventArgs e)
         {
-          
+
         }
 
         private void OnSaveClicked(object sender, RoutedEventArgs e)
         {
             List<Violation> violations = new List<Violation>();
-            if(vm.OnSave(out violations))
+            if (vm.OnSave(out violations))
             {
 
             }
@@ -83,13 +88,135 @@ namespace AssetTracker.View
 
         private void OnChangelogClicked(object sender, RoutedEventArgs e)
         {
-            Changelog.Visibility = Visibility.Visible;
+            if (Changelog.Visibility == Visibility.Visible)
+            {
+                Changelog.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                Changelog.Visibility = Visibility.Visible;
+            }
         }
 
         private void OnChangelogExited(object sender, RoutedEventArgs e)
         {
             Changelog.Visibility = Visibility.Collapsed;
         }
+      
+
+        private void PromptSave()
+        {
+
+        }
+
+        #region Timeline
+        protected LinkedList<Control> DateControls = new LinkedList<Control>();
+        protected int DateOffset = 150;
+        protected int GetViewableDateCount => (int)Math.Floor((TimelineCanvas.Width / DateOffset));
+        protected int GetDateCount => GetViewableDateCount + 2;
+        protected DateTime startDate = DateTime.Today;
+
+        private void InitializeTimeline()
+        {
+            ControlTemplate dateTemplate = (ControlTemplate) TryFindResource("DateTemplate");
+            CultureInfo culture = new CultureInfo("en-US");
+            for (int i = 0; i < GetDateCount; i++)
+            {
+                Control dateControlInst = new Control();
+                dateControlInst.Template = dateTemplate;
+                TimeSpan addedDay = new TimeSpan(i, 0, 0, 0);
+                DateTime newDay = startDate + addedDay;
+                string displayString = newDay.Month + "/" + newDay.Day;
+                TextPropertyExtension.SetTextSource(dateControlInst, displayString);
+                TimelineCanvas.Children.Add(dateControlInst);
+                Canvas.SetTop(dateControlInst, 10);
+                Canvas.SetLeft(dateControlInst, (DateOffset * i) + hOff + 10);
+                DateControls.AddLast(dateControlInst);
+            }
+        }
+
+        #region DragScrolling
+        private Point scrollMousePoint = new Point();
+        private double hOff = 1;
+        private double TimelineOffsetX = 0;
+        private void scrollViewer_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            scrollMousePoint = e.GetPosition(TimelineCanvas);
+            hOff = TimelineOffsetX;
+            TimelineCanvas.CaptureMouse();
+        }
+
+        private void scrollViewer_PreviewMouseMove(object sender, MouseEventArgs e)
+        {
+            if (TimelineCanvas.IsMouseCaptured)
+            {
+                ScrollToHorizontalOffset(hOff + (scrollMousePoint.X - e.GetPosition(TimelineCanvas).X));
+            }
+        }
+
+        private void scrollViewer_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            TimelineCanvas.ReleaseMouseCapture();
+        }
+
+        private void ScrollToHorizontalOffset(double newX)
+        {           
+            double deltaX = TimelineOffsetX - newX;
+            double canvasWidth = TimelineCanvas.ActualWidth;
+            //Move Dates
+            int j = DateControls.Count;
+            for (int i = 0; i < j; i++)
+            {
+                Control con = DateControls.ElementAt(i);
+                double leftStart = Canvas.GetLeft(con);
+                double leftEnd = leftStart + deltaX;
+                if (leftEnd > (canvasWidth + DateOffset))
+                {
+                    DateControls.Remove(con);
+                    DateControls.AddFirst(con);
+                    startDate = startDate - new TimeSpan(1, 0, 0, 0);
+                    string displayString = startDate.Month + "/" + startDate.Day;
+                    TextPropertyExtension.SetTextSource(con, displayString);
+
+                    double nextLeft = Canvas.GetLeft(DateControls.ElementAt(1));
+                    Canvas.SetLeft(con, nextLeft - DateOffset);
+                }
+                else if (leftEnd < (-DateOffset))
+                {
+                    DateControls.Remove(con);
+                    DateControls.AddLast(con);
+
+                    startDate = startDate + new TimeSpan(1, 0, 0, 0);
+                    DateTime newDate = startDate + new TimeSpan(GetDateCount -1, 0, 0, 0);
+                    string displayString = newDate.Month + "/" + newDate.Day;
+                    TextPropertyExtension.SetTextSource(con, displayString);
+
+                    double nextLeft = Canvas.GetLeft(DateControls.ElementAt(DateControls.Count - 2));
+                    Canvas.SetLeft(con, nextLeft + DateOffset);
+                    i--;
+                    j--;
+                }
+                else
+                {
+                    Canvas.SetLeft(con, leftEnd);
+                }
+                
+            }
+
+
+            //Move blocks
+
+            //Adjust tooltips
+
+            TimelineOffsetX = newX;
+        }
+        #endregion
+
+        #endregion
+
+        #region Discussion
+
+        public ICommand DiscussionReplyClicked => new IDReceiverCmd((arr) => OnDiscussionReplyClicked(arr), (arr) => { return true; });
         public void OnDiscussionReplyClicked(object input)
         {
             string defaultText = "Start a new discussion..";
@@ -102,10 +229,6 @@ namespace AssetTracker.View
             }
 
         }
-
-        private void PromptSave()
-        {
-
-        }
+        #endregion
     }
 }

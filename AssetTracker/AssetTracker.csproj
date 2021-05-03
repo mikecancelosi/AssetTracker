@@ -173,6 +173,7 @@
       <DependentUpon>ProjectStatus.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Properties\DBOPropertyExtension.cs" />
+    <Compile Include="View\Properties\TextPropertyExtension.cs" />
     <Compile Include="View\Searchbox.xaml.cs">
       <DependentUpon>Searchbox.xaml</DependentUpon>
     </Compile>
@@ -209,6 +210,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\ProjectStatus.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Resources\AssetTimelineResourceDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

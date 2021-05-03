@@ -16,13 +16,15 @@
     </Page.DataContext>
     <Page.Resources>
         <ResourceDictionary>
-          
-                <converters:InverseBooleanConverter x:Key="inverseBooleanConverter" />
-                <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-                <converters:MultiBooleanToVisibilityConverter x:Key="multiBoolToVisConvert" />
+
+            <converters:InverseBooleanConverter x:Key="inverseBooleanConverter" />
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <converters:MultiBooleanToVisibilityConverter x:Key="multiBoolToVisConvert" />
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary x:Name="DiscussDictionary"
                                     Source="Resources/DiscussionBoardResourceDictionary.xaml" />
+                <ResourceDictionary x:Name="TimelineDictionary"
+                                    Source="Resources/AssetTimelineResourceDictionary.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Page.Resources>
@@ -271,6 +273,12 @@
                                              Width="300" />
                         </StackPanel>
 
+                        <TextBlock Text="{Binding GetLatestAssetLink}"
+                                   Foreground="Aquamarine"
+                                   HorizontalAlignment="Left"
+                                   FontSize="16"
+                                   FontWeight="SemiBold" />
+
                     </StackPanel>
 
                     <StackPanel Orientation="Vertical"
@@ -315,31 +323,17 @@
                                    FontSize="24"
                                    Foreground="White"
                                    Margin="0,5" />
-                        <StackPanel Orientation="Vertical"
-                                    Name="Timeline">
 
-                            <TextBlock Text="{Binding GetLatestAssetLink}"
-                                       Foreground="White"
-                                       HorizontalAlignment="Right"
-                                       FontSize="16"
-                                       FontWeight="SemiBold" />
+                        <Canvas Width="1000"
+                                Height="300"
+                                Background="White"
+                                ClipToBounds="True"
+                                x:Name="TimelineCanvas"
+                                MouseLeftButtonDown="scrollViewer_PreviewMouseLeftButtonDown"
+                                MouseLeftButtonUp="scrollViewer_PreviewMouseLeftButtonUp"
+                                MouseMove="scrollViewer_PreviewMouseMove">
 
-
-                            <Grid Margin="0,10"
-                                  Background="GhostWhite"
-                                  Height="150">
-
-                                <TextBlock Text="FUNCTIONALITY NOT IMPLEMENTED"
-                                           Foreground="Black"
-                                           HorizontalAlignment="Center"
-                                           VerticalAlignment="Center" />
-
-                            </Grid>
-
-
-
-                        </StackPanel>
-
+                        </Canvas>
                         <!--#endregion-->
 
 
@@ -349,11 +343,11 @@
                                    Foreground="White"
                                    Margin="0,5" />
 
-                        <StackPanel Orientation="Vertical" x:Name="DiscussionBoardPanel" >
+                        <StackPanel Orientation="Vertical"
+                                    x:Name="DiscussionBoardPanel">
                             <ItemsControl ItemsSource="{Binding DiscussionBoard}"
                                           ItemTemplate="{StaticResource ResourceKey=DiscussionItem}"
-                                          Margin="10"
-                                           />
+                                          Margin="10" />
                             <Control Template="{StaticResource ResourceKey=NewDiscussion}"
                                      prop:DBOPropertyExtension.IDSource="0" />
                         </StackPanel>

@@ -18,6 +18,7 @@ namespace AssetTracker.Model
         public AssetCategory()
         {
             this.AssetsInCategory = new HashSet<Asset>();
+            this.Phases = new HashSet<Phase>();
         }
     
         public int ca_id { get; set; }
@@ -25,5 +26,7 @@ namespace AssetTracker.Model
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Asset> AssetsInCategory { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Phase> Phases { get; set; }
     }
 }

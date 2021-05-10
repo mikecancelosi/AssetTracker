@@ -1,4 +1,5 @@
-﻿using AssetTracker.Model;
+﻿using AssetTracker.Enums;
+using AssetTracker.Model;
 using AssetTracker.View.Commands;
 using System;
 using System.Collections.Generic;
@@ -213,8 +214,50 @@ namespace AssetTracker.ViewModel
             context.SaveChanges();
             NotifyPropertyChanged("DiscussionBoard");
         }
-   
 
+        private List<PhaseTimelineObject> phaseTimelineObjects;
+        public List<PhaseTimelineObject> PhaseTimelineObjects
+        {
+            get
+            {
+                if(phaseTimelineObjects == null)
+                {
+                    phaseTimelineObjects = new List<PhaseTimelineObject>();
+                    List<Change> phaseChanges = Changelog.Where(x => x.ch_description == ChangeType.ChangedPhase).ToList();
+                    DateTime startDate = Changelog.FirstOrDefault(x => x.ch_description == ChangeType.CreatedAsset)?.ch_datetime ?? DateTime.MinValue;
+                    if(startDate == DateTime.MinValue)
+                    {
+                        throw new Exception("No instance of asset created change found!");
+                    }
+                    foreach (Change change in phaseChanges)
+                    {
+                        int parsedId;
+                        if (int.TryParse(change.ch_newvalue, out parsedId))
+                        {
+                            Phase newPhase = context.Phases.Find(parsedId);
+                            PhaseTimelineObject phaseTimelineObjectInst = new PhaseTimelineObject()
+                            {
+                                PhaseName = newPhase.ph_name,
+                                StartDate = startDate,
+                                EndDate = change.ch_datetime
+                            };
+                            startDate = change.ch_datetime;
+                            phaseTimelineObjects.Add(phaseTimelineObjectInst);
+                        }
+                        else
+                        {
+                            throw new Exception("Found new value was not an int!");
+                        }
+                    }
+                }
+                return phaseTimelineObjects;
+            }
+        }
+        
+        public DateTime GetCreationDate()
+        {
+            return Changelog.FirstOrDefault(x => x.ch_description == ChangeType.CreatedAsset).ch_datetime;
+        }
 
         public struct AssetHierarchyObject
         {
@@ -222,6 +265,13 @@ namespace AssetTracker.ViewModel
             public int level { get; set; }
             public System.Windows.Thickness marginFactor => new System.Windows.Thickness(level * 10, 0, 0, 10);
             public bool currentObject { get; set; }
+        }
+
+        public struct PhaseTimelineObject
+        {
+            public string PhaseName { get; set; }
+            public DateTime StartDate { get; set; }
+            public DateTime EndDate { get; set; }
         }
     }
 }

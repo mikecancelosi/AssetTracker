@@ -11,11 +11,15 @@
       Title="ProjectSettings"
       Background="AntiqueWhite"
       ShowsNavigationUI="False">
+    <Page.DataContext>
+        <viewmodel:ProjectSettingsViewModel />
+    </Page.DataContext>
 
     <Grid Margin="100,30">
         <Grid.Resources>
             <BooleanToVisibilityConverter x:Key="BoolToVis" />
         </Grid.Resources>
+
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" />
@@ -53,8 +57,7 @@
                                 <Border x:Name="PART_border"
                                         BorderThickness="0"
                                         Padding="10"
-                                        Background="FloralWhite"
-                                        >
+                                        Background="FloralWhite">
                                     <StackPanel Orientation="Horizontal"
                                                 HorizontalAlignment="Left"
                                                 VerticalAlignment="Center">
@@ -76,19 +79,22 @@
 
             </StackPanel.Resources>
 
-            <Expander Header="User Management" Background="FloralWhite">
+            <Expander Header="User Management"
+                      Background="FloralWhite">
                 <StackPanel Margin="30,0">
-                    <RadioButton x:Name="UsersBtn" Content="Users" />
-                    <RadioButton x:Name="RolesBtn" Content="Roles" />
+                    <RadioButton x:Name="UsersBtn"
+                                 Content="Users" />
+                    <RadioButton x:Name="RolesBtn"
+                                 Content="Roles" />
                 </StackPanel>
             </Expander>
-            <RadioButton x:Name="PhasesBtn" Content="Phases" />
-            <RadioButton x:Name="CategoriesBtn" Content="Category" />
+            <RadioButton x:Name="CategoriesBtn"
+                         Content="Category" />
         </StackPanel>
 
         <Grid Grid.Column="1"
               Margin="50,0">
-            
+
             <StackPanel x:Name="Users"
                         Orientation="Vertical"
                         Visibility="{Binding ElementName=UsersBtn, Path=IsChecked,Converter={StaticResource BoolToVis}}">
@@ -200,60 +206,6 @@
                 </Grid>
 
             </StackPanel>
-            <StackPanel x:Name="Phases"
-                        Orientation="Vertical"
-                        Visibility="{Binding ElementName=PhasesBtn, Path=IsChecked,Converter={StaticResource BoolToVis}}">
-
-                <TextBlock Text="Phases"
-                           FontSize="24" />
-
-                <Grid Margin="0,40">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1*" />
-                        <ColumnDefinition Width="1*" />
-                    </Grid.ColumnDefinitions>
-                    <TextBox Text="Search.." />
-                    <Button Grid.Column="1"
-                            HorizontalAlignment="Right"
-                            Content="+ Add Phase" />
-                </Grid>
-
-                <Grid x:Name="PhaseList">
-                    <Grid.DataContext>
-                        <viewmodel:ProjectSettingsViewModel />
-                    </Grid.DataContext>
-                    <ListView VerticalAlignment="Top"
-                              ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                              ItemsSource="{Binding Phases}">
-                        <ListView.Resources>
-                            <Style TargetType="{x:Type GridViewColumnHeader}">
-                                <Setter Property="HorizontalContentAlignment"
-                                        Value="Left" />
-                                <Setter Property="Padding"
-                                        Value="6,0" />
-                                <Setter Property="FontSize"
-                                        Value="14" />
-                                <Setter Property="FontWeight"
-                                        Value="Medium" />
-                            </Style>
-                        </ListView.Resources>
-
-                        <ListView.View>
-                            <GridView>
-                                <GridViewColumn Header="ID"
-                                                Width="100"
-                                                DisplayMemberBinding="{Binding ph_id}" />
-                                <GridViewColumn Header="Name"
-                                                Width="300"
-                                                DisplayMemberBinding="{Binding ph_name}" />
-
-                            </GridView>
-                        </ListView.View>
-
-                    </ListView>
-                </Grid>
-
-            </StackPanel>
             <StackPanel x:Name="Category"
                         Orientation="Vertical"
                         Visibility="{Binding ElementName=CategoriesBtn, Path=IsChecked,Converter={StaticResource BoolToVis}}">
@@ -269,7 +221,8 @@
                     <TextBox Text="Search.." />
                     <Button Grid.Column="1"
                             HorizontalAlignment="Right"
-                            Content="+ Add Category" />
+                            Content="+ Add Category"
+                            Click="AddCategoryClicked" />
                 </Grid>
 
                 <Grid x:Name="CategoryList">
@@ -291,7 +244,6 @@
                                         Value="Medium" />
                             </Style>
                         </ListView.Resources>
-
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn Header="ID"
@@ -303,11 +255,102 @@
 
                             </GridView>
                         </ListView.View>
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <EventSetter Event="MouseDoubleClick"
+                                             Handler="CategoryListItem_Clicked" />
+                            </Style>
+                        </ListView.ItemContainerStyle>
 
                     </ListView>
                 </Grid>
 
             </StackPanel>
+
+            <Border  x:Name="AddCategoryControl" 
+                     Padding="10"
+                    Background="Gray"                   
+                    Visibility="Collapsed">
+                <StackPanel Orientation="Vertical">
+
+                    <TextBlock x:Name="CategoryEditorHeaderText"
+                               Text="New Category"
+                               FontSize="24"
+                               Margin="0,0,0,10" />
+
+                    <StackPanel Orientation="Horizontal"
+                                Margin="0,0,0,10">
+                        <TextBlock Text="Category Name" />
+                        <TextBox Width="300"
+                                 Text="{Binding CurrentCategoryInst.ca_name}" />
+                    </StackPanel>
+
+                    <TextBlock Text="Phases"
+                               FontSize="20"
+                               Margin="0,0,0,10" />
+
+                    <ItemsControl ItemsSource="{Binding CurrentPhases}"
+                                  x:Name="PhaseListControl">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Vertical"
+                                            Margin="10" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal"
+                                            Grid.Column="1"
+                                            Margin="0,0,0,5">
+                                    <StackPanel.Resources>
+                                        <Style TargetType="Button">
+                                            <Setter Property="Width"
+                                                    Value="20" />
+                                            <Setter Property="Height"
+                                                    Value="20" />
+                                        </Style>
+                                    </StackPanel.Resources>
+
+                                    <TextBlock Margin="0,0,5,0"
+                                               VerticalAlignment="Center">
+                                        <Run Text="{Binding ph_step}" />
+                                        <Run Text="." />
+                                    </TextBlock>
+                                    <TextBox Text="{Binding ph_name}"
+                                             MinWidth="200" />
+                                    <Button Click="PhaseMoveUpClicked"
+                                            CommandParameter="{Binding ph_step}">
+                                        <Image Source="/Images/MaterialDesign/baseline_arrow_upward_white_48dp.png" />
+                                    </Button>
+                                    <Button Click="PhaseMoveDownClicked"
+                                            CommandParameter="{Binding ph_step}">
+                                        <Image Source="/Images/MaterialDesign/baseline_arrow_downward_white_48dp.png" />
+                                    </Button>
+                                    <Button Click="DeletePhaseClicked"
+                                            CommandParameter="{Binding ph_step}">
+                                        <Image Source="/Images/MaterialDesign/baseline_delete_white_48dp.png" />
+                                    </Button>
+
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+
+                    </ItemsControl>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Images/MaterialDesign/baseline_add_white_48dp.png"
+                               Width="20" />
+                        <Button Content="Add Phase"
+                                Click="AddPhaseClicked" />
+                    </StackPanel>
+
+                    <Button Content="Save"
+                            Click="SaveCategoryClicked" />
+
+                    <Button Content="Cancel"
+                            Click="ExitCategoryClicked" />
+
+                </StackPanel>
+            </Border>
 
         </Grid>
 

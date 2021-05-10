@@ -43,6 +43,8 @@
     <EntitySetMapping Name="Phases">
       <EntityTypeMapping TypeName="Model.Phase">
         <MappingFragment StoreEntitySet="Phase">
+          <ScalarProperty Name="ph_caid" ColumnName="ph_caid" />
+          <ScalarProperty Name="ph_step" ColumnName="ph_step" />
           <ScalarProperty Name="ph_id" ColumnName="ph_id" />
           <ScalarProperty Name="ph_name" ColumnName="ph_name" />
         </MappingFragment>

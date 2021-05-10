@@ -14,9 +14,9 @@ namespace AssetTracker.View.Properties
                                            typeof(string),
                                            typeof(TextPropertyExtension),
                                            new PropertyMetadata(null));
-        public static int GetTextSource(DependencyObject target)
+        public static string GetTextSource(DependencyObject target)
         {
-            return (int)target.GetValue(TextSourceProperty);
+            return (string)target.GetValue(TextSourceProperty);
         }
         public static void SetTextSource(DependencyObject target, string value)
         {

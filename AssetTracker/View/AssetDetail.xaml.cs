@@ -16,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using static AssetTracker.ViewModel.AssetDetailViewModel;
 
 namespace AssetTracker.View
 {
@@ -111,13 +112,22 @@ namespace AssetTracker.View
 
         #region Timeline
         protected LinkedList<Control> DateControls = new LinkedList<Control>();
-        protected int DateOffset = 150;
+        protected int DateOffset = 75;
         protected int GetViewableDateCount => (int)Math.Floor((TimelineCanvas.Width / DateOffset));
         protected int GetDateCount => GetViewableDateCount + 2;
-        protected DateTime startDate = DateTime.Today;
+        protected DateTime startDate;
+        protected static int PhaseHeight = 50;
+        protected int hInitialOff = 10;
+        protected int vIntialOffPhase = 50;
+        protected int maxVisibleCount = 10;
+        protected bool reachedStart = true;
+        protected string startDateDisplayString; 
+
 
         private void InitializeTimeline()
         {
+            //Init dates
+            startDate = vm.GetCreationDate();
             ControlTemplate dateTemplate = (ControlTemplate) TryFindResource("DateTemplate");
             CultureInfo culture = new CultureInfo("en-US");
             for (int i = 0; i < GetDateCount; i++)
@@ -127,12 +137,19 @@ namespace AssetTracker.View
                 TimeSpan addedDay = new TimeSpan(i, 0, 0, 0);
                 DateTime newDay = startDate + addedDay;
                 string displayString = newDay.Month + "/" + newDay.Day;
+                if(i == 0)
+                {
+                    startDateDisplayString = displayString;
+                }
                 TextPropertyExtension.SetTextSource(dateControlInst, displayString);
                 TimelineCanvas.Children.Add(dateControlInst);
                 Canvas.SetTop(dateControlInst, 10);
-                Canvas.SetLeft(dateControlInst, (DateOffset * i) + hOff + 10);
+                Canvas.SetLeft(dateControlInst, (DateOffset * i) + hOff + hInitialOff);
                 DateControls.AddLast(dateControlInst);
             }
+
+            // Phase blocks
+            InitPhaseBlocks();
         }
 
         #region DragScrolling
@@ -170,7 +187,7 @@ namespace AssetTracker.View
                 Control con = DateControls.ElementAt(i);
                 double leftStart = Canvas.GetLeft(con);
                 double leftEnd = leftStart + deltaX;
-                if (leftEnd > (canvasWidth + DateOffset))
+                if (leftEnd >= (canvasWidth + DateOffset))
                 {
                     DateControls.Remove(con);
                     DateControls.AddFirst(con);
@@ -179,9 +196,9 @@ namespace AssetTracker.View
                     TextPropertyExtension.SetTextSource(con, displayString);
 
                     double nextLeft = Canvas.GetLeft(DateControls.ElementAt(1));
-                    Canvas.SetLeft(con, nextLeft - DateOffset);
+                    Canvas.SetLeft(con, nextLeft - DateOffset);                    
                 }
-                else if (leftEnd < (-DateOffset))
+                else if (leftEnd <= (-DateOffset))
                 {
                     DateControls.Remove(con);
                     DateControls.AddLast(con);
@@ -200,17 +217,49 @@ namespace AssetTracker.View
                 {
                     Canvas.SetLeft(con, leftEnd);
                 }
+
+                if(startDate == vm.GetCreationDate() &&
+                   Canvas.GetLeft(con) <= hInitialOff)
+                {
+                    reachedStart = true;
+                }
                 
             }
 
 
             //Move blocks
+            double newPhaseX = Canvas.GetLeft(PhaseChunksParent) + deltaX;
+            Canvas.SetLeft(PhaseChunksParent, newPhaseX);
 
             //Adjust tooltips
 
             TimelineOffsetX = newX;
         }
+
+
+
         #endregion
+
+        private void InitPhaseBlocks()
+        {
+            Canvas.SetLeft(PhaseChunksParent, 0);
+            int offsetY = vIntialOffPhase;
+            // Phase blocks
+            foreach (PhaseTimelineObject phaseObject in vm.PhaseTimelineObjects)
+            {
+                Rectangle phaseRect = new Rectangle();
+                phaseRect.Height = PhaseHeight;
+                TimeSpan diffInDays;
+                diffInDays = phaseObject.EndDate - phaseObject.StartDate;
+                phaseRect.Width = diffInDays.Days * DateOffset;
+                double startPointX = ((phaseObject.StartDate - startDate).Days * DateOffset) + hOff + hInitialOff;
+                PhaseChunksParent.Children.Add(phaseRect);
+                Canvas.SetLeft(phaseRect, startPointX);
+                Canvas.SetTop(phaseRect, offsetY);
+                offsetY += PhaseHeight;
+                phaseRect.Fill = new SolidColorBrush(Colors.Red);
+            }
+        }
 
         #endregion
 

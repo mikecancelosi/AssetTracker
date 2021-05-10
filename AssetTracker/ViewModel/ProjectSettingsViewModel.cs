@@ -1,15 +1,26 @@
-﻿using AssetTracker.Model;
+﻿using AssetTracker.Extensions;
+using AssetTracker.Model;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace AssetTracker.ViewModel
 {
-    public class ProjectSettingsViewModel
+    public class ProjectSettingsViewModel : INotifyPropertyChanged
     {
         private TrackerContext context = new TrackerContext();
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void NotifyPropertyChanged(String info)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(info));
+            }
+        }
 
         private List<User> users;
         public List<User> Users
@@ -45,23 +56,6 @@ namespace AssetTracker.ViewModel
             }
         }
 
-        private List<Phase> phases;
-        public List<Phase> Phases
-        {
-            get
-            {
-                if (phases == null)
-                {
-                    phases = new List<Phase>();
-                    var temp = (from a in context.Phases
-                                select a).ToList();
-                    phases = temp;
-                }
-
-                return phases;
-            }
-        }
-
         private List<AssetCategory> categories;
         public List<AssetCategory> Categories
         {
@@ -79,9 +73,104 @@ namespace AssetTracker.ViewModel
             }
         }
 
-        public ProjectSettingsViewModel()
+        public AssetCategory CurrentCategoryInst { get; set; }
+
+        public List<Phase> CurrentPhases
         {
+            get
+            {
+                if (CurrentCategoryInst != null)
+                {
+                    return CurrentCategoryInst.Phases.ToList();
+                }
+                else
+                {
+                    return new List<Phase>();
+                }
+            }
+            set
+            {
+                if (CurrentCategoryInst != null)
+                {
+                    CurrentCategoryInst.Phases = value;
+                }
+            }
+        }      
+
+        public void OnNewCategoryClicked()
+        {
+            CurrentCategoryInst = context.AssetCategories.Create();
+        }
+
+        public void OnNewPhaseClicked()
+        {
+            Phase phaseInst = context.Phases.Create();
+            phaseInst.ph_step = CurrentCategoryInst.Phases.Count + 1;
+            CurrentCategoryInst.Phases.Add(phaseInst);
+            NotifyPropertyChanged("CurrentPhases");
+        }
+
+        public void OnPhaseUpClicked(int index)
+        {
+            if (index > 1)
+            {
+                List<Phase> copyList = CurrentCategoryInst.Phases.ToList();
+                Phase phaseAtIndex = CurrentPhases[index - 1];
+                Phase swapPhase = CurrentPhases[index - 2];
+                phaseAtIndex.ph_step = index - 1;
+                swapPhase.ph_step = index;
+                copyList.RemoveAt(index - 1);
+                copyList.Insert(index - 2, phaseAtIndex);
+                CurrentCategoryInst.Phases = copyList;
+                NotifyPropertyChanged("CurrentPhases");
+            }
+        }
+        public void OnPhaseDownClicked(int index)
+        {
+            if (index < CurrentPhases.Count)
+            {
+                List<Phase> copyList = CurrentCategoryInst.Phases.ToList();
+                Phase phaseAtIndex = CurrentPhases[index - 1];
+                Phase swapPhase = CurrentPhases[index];
+                phaseAtIndex.ph_step = index + 1;
+                swapPhase.ph_step = index;
+                copyList.RemoveAt(index - 1);
+                copyList.Insert(index, phaseAtIndex);
+                CurrentCategoryInst.Phases = copyList;
+                NotifyPropertyChanged("CurrentPhases");
+            }
+        }
+
+        public void OnPhaseDelete(int index)
+        {
+            CurrentCategoryInst.Phases.Remove(CurrentCategoryInst.Phases.ToList()[index -1 ]);
+            for (int i = index -1; i < CurrentCategoryInst.Phases.Count; i++)
+            {
+                CurrentCategoryInst.Phases.ToList()[i].ph_step = i + 1;
+            }
+            NotifyPropertyChanged("CurrentPhases");
 
         }
+
+        public void OnSaveCategory()
+        {
+            context.SaveChanges();
+            NotifyPropertyChanged("Categories");
+            CurrentCategoryInst = new AssetCategory();
+        }
+
+        public void OnExitCategory()
+        {
+            context.RevertChanges();
+            CurrentCategoryInst = new AssetCategory();
+        }
+
+        public void OnCategorySelectedForEdit(int id)
+        {
+            CurrentCategoryInst = context.AssetCategories.Find(id);
+            NotifyPropertyChanged("CurrentCategoryInst");
+            NotifyPropertyChanged("CurrentPhases");
+        }
+       
     }
 }

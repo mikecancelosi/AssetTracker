@@ -9,7 +9,7 @@
     <UserControl.DataContext>
         <viewmodel:AssetCreateViewModel />
     </UserControl.DataContext>
-    <StackPanel Background="White">
+    <StackPanel Background="White" VerticalAlignment="Stretch">
 
         <StackPanel x:Name="SettingsList"
                     Orientation="Vertical"

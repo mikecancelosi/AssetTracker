@@ -22,8 +22,11 @@ namespace AssetTracker.Model
     
         public int ph_id { get; set; }
         public string ph_name { get; set; }
+        public int ph_step { get; set; }
+        public int ph_caid { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Asset> AssetsInPhase { get; set; }
+        public virtual AssetCategory Category { get; set; }
     }
 }

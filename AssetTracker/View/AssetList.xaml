@@ -19,8 +19,7 @@
             <ListView Name="MainGrid"
                       VerticalAlignment="Top"
                       ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                      ItemsSource="{Binding Assets}"
-                      >
+                      ItemsSource="{Binding Assets}">
                 <ListView.Resources>
                     <Style TargetType="{x:Type GridViewColumnHeader}">
                         <Setter Property="HorizontalContentAlignment"
@@ -68,13 +67,10 @@
                     Content="Add Item"
                     Click="AddItem_Click" />
         </Grid>
-
-        <Grid x:Name="AddAssetContainer"
-              Grid.RowSpan="2">
-            <local:AssetCreate x:Name="AssetCreateControl"
+        
+        <local:AssetCreate x:Name="AssetCreateControl"
                                Visibility="Hidden"
-                               Width="800" />
-        </Grid>
+                               Width="800" Height="400"/>
 
     </Grid>
 </Page>

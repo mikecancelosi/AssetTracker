@@ -333,6 +333,8 @@
                                 MouseLeftButtonUp="scrollViewer_PreviewMouseLeftButtonUp"
                                 MouseMove="scrollViewer_PreviewMouseMove">
 
+                            <Canvas x:Name="PhaseChunksParent"/>
+
                         </Canvas>
                         <!--#endregion-->
 

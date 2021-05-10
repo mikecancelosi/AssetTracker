@@ -104,6 +104,8 @@
     <Compile Include="Discussion.cs">
       <DependentUpon>DBO.tt</DependentUpon>
     </Compile>
+    <Compile Include="Enums\ChangeType.cs" />
+    <Compile Include="Extensions\DBContextExtensions.cs" />
     <Compile Include="Extensions\ObservableCollectionExtensions.cs" />
     <Compile Include="Metadata.cs">
       <DependentUpon>DBO.tt</DependentUpon>
@@ -281,6 +283,10 @@
       <LastGenOutput>DBO.cs</LastGenOutput>
       <CustomToolNamespace>AssetTracker.Model</CustomToolNamespace>
     </Content>
+    <Resource Include="Images\MaterialDesign\baseline_arrow_downward_white_48dp.png" />
+    <Resource Include="Images\MaterialDesign\baseline_arrow_upward_white_48dp.png" />
+    <Resource Include="Images\MaterialDesign\baseline_drag_indicator_white_48dp.png" />
+    <Resource Include="Images\MaterialDesign\baseline_add_white_48dp.png" />
     <Resource Include="Images\MaterialDesign\baseline_send_white_48dp.png" />
     <Resource Include="Images\MaterialDesign\baseline_more_vert_white_48dp.png" />
     <Resource Include="Images\MaterialDesign\baseline_edit_white_48dp.png" />

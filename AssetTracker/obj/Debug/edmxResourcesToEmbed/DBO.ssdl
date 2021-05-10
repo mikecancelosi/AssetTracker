@@ -73,6 +73,8 @@
     </Key>
     <Property Name="ph_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="ph_name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="ph_step" Type="int" Nullable="false" />
+    <Property Name="ph_caid" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="SecPermission">
     <Key>
@@ -232,6 +234,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_Phase_AssetCategory">
+    <End Role="AssetCategory" Type="Self.AssetCategory" Multiplicity="1" />
+    <End Role="Phase" Type="Self.Phase" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AssetCategory">
+        <PropertyRef Name="ca_id" />
+      </Principal>
+      <Dependent Role="Phase">
+        <PropertyRef Name="ph_caid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_secpermission2_secpermission">
     <End Role="SecPermission" Type="Self.SecPermission" Multiplicity="1" />
     <End Role="SecPermission2" Type="Self.SecPermission2" Multiplicity="*" />
@@ -343,6 +357,10 @@
     <AssociationSet Name="FK_Discussion_User" Association="Self.FK_Discussion_User">
       <End Role="User" EntitySet="User" />
       <End Role="Discussion" EntitySet="Discussion" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Phase_AssetCategory" Association="Self.FK_Phase_AssetCategory">
+      <End Role="AssetCategory" EntitySet="AssetCategory" />
+      <End Role="Phase" EntitySet="Phase" />
     </AssociationSet>
     <AssociationSet Name="FK_secpermission2_secpermission" Association="Self.FK_secpermission2_secpermission">
       <End Role="SecPermission" EntitySet="SecPermission" />

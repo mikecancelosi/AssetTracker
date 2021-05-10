@@ -78,6 +78,8 @@
           </Key>
           <Property Name="ph_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ph_name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ph_step" Type="int" Nullable="false" />
+          <Property Name="ph_caid" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="SecPermission">
           <Key>
@@ -237,6 +239,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Phase_AssetCategory">
+          <End Role="AssetCategory" Type="Self.AssetCategory" Multiplicity="1" />
+          <End Role="Phase" Type="Self.Phase" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AssetCategory">
+              <PropertyRef Name="ca_id" />
+            </Principal>
+            <Dependent Role="Phase">
+              <PropertyRef Name="ph_caid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_secpermission2_secpermission">
           <End Role="SecPermission" Type="Self.SecPermission" Multiplicity="1" />
           <End Role="SecPermission2" Type="Self.SecPermission2" Multiplicity="*" />
@@ -349,6 +363,10 @@
             <End Role="User" EntitySet="User" />
             <End Role="Discussion" EntitySet="Discussion" />
           </AssociationSet>
+          <AssociationSet Name="FK_Phase_AssetCategory" Association="Self.FK_Phase_AssetCategory">
+            <End Role="AssetCategory" EntitySet="AssetCategory" />
+            <End Role="Phase" EntitySet="Phase" />
+          </AssociationSet>
           <AssociationSet Name="FK_secpermission2_secpermission" Association="Self.FK_secpermission2_secpermission">
             <End Role="SecPermission" EntitySet="SecPermission" />
             <End Role="SecPermission2" EntitySet="SecPermission2" />
@@ -400,6 +418,7 @@
           <Property Name="ca_id" Type="Int32" Nullable="false" />
           <Property Name="ca_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="AssetsInCategory" Relationship="Self.FK_asset_assetcategory" FromRole="AssetCategory" ToRole="Asset" />
+          <NavigationProperty Name="Phases" Relationship="Model.FK_Phase_AssetCategory1" FromRole="AssetCategory" ToRole="Phase" />
         </EntityType>
         <EntityType Name="AssetLink">
           <Key>
@@ -427,6 +446,9 @@
           <Property Name="ph_id" Type="Int32" Nullable="false" />
           <Property Name="ph_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="AssetsInPhase" Relationship="Self.FK_asset_phase" FromRole="Phase" ToRole="Asset" />
+          <Property Name="ph_step" Type="Int32" Nullable="false" />
+          <Property Name="ph_caid" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Category" Relationship="Model.FK_Phase_AssetCategory1" FromRole="Phase" ToRole="AssetCategory" />
         </EntityType>
         <EntityType Name="SecPermission">
           <Key>
@@ -682,6 +704,10 @@
             <End Role="User" EntitySet="Users" />
             <End Role="Discussion" EntitySet="Discussions" />
           </AssociationSet>
+          <AssociationSet Name="FK_Phase_AssetCategory1" Association="Model.FK_Phase_AssetCategory1">
+            <End Role="AssetCategory" EntitySet="AssetCategories" />
+            <End Role="Phase" EntitySet="Phases" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="assetGetInformation_Result">
           <Property Type="Int32" Name="as_id" Nullable="false" />
@@ -776,6 +802,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Phase_AssetCategory1">
+          <End Type="Model.AssetCategory" Role="AssetCategory" Multiplicity="1" />
+          <End Type="Model.Phase" Role="Phase" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AssetCategory">
+              <PropertyRef Name="ca_id" />
+            </Principal>
+            <Dependent Role="Phase">
+              <PropertyRef Name="ph_caid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -824,6 +862,8 @@
           <EntitySetMapping Name="Phases">
             <EntityTypeMapping TypeName="Model.Phase">
               <MappingFragment StoreEntitySet="Phase">
+                <ScalarProperty Name="ph_caid" ColumnName="ph_caid" />
+                <ScalarProperty Name="ph_step" ColumnName="ph_step" />
                 <ScalarProperty Name="ph_id" ColumnName="ph_id" />
                 <ScalarProperty Name="ph_name" ColumnName="ph_name" />
               </MappingFragment>

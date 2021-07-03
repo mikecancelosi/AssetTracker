@@ -20,6 +20,7 @@ namespace AssetTracker.Model
             this.AssetsAssigned = new HashSet<Asset>();
             this.SecPermission2 = new HashSet<SecPermission2>();
             this.Discussions = new HashSet<Discussion>();
+            this.Alerts = new HashSet<Alert>();
         }
     
         public int us_id { get; set; }
@@ -36,5 +37,7 @@ namespace AssetTracker.Model
         public virtual SecRole SecRole { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Discussion> Discussions { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Alert> Alerts { get; set; }
     }
 }

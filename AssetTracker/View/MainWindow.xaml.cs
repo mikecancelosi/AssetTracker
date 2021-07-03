@@ -1,6 +1,7 @@
 ﻿using AssetTracker.Model;
 using AssetTracker.Services;
 using AssetTracker.View;
+using AssetTracker.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,13 +23,15 @@ namespace AssetTracker
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
-    {       
+    {
+        public MainViewModel vm;
+
         public MainWindow()
         {
             InitializeComponent();
-            NavigateToAssetList(null,null);
-            // FillDatabase();
-            //UpdateDatabase();
+            vm = new MainViewModel();
+            DataContext =vm;                  
+            NavigateToDashboard(null,null);           
         }
 
         public void NavigateToAssetList(object sender, RoutedEventArgs e)
@@ -41,11 +44,17 @@ namespace AssetTracker
             ContentFrame.Navigate(new ProjectStatus());
         }
 
-        private void NavigateToSettings(object sender, RoutedEventArgs e)
+        private void NavigateToProjectConfig(object sender, RoutedEventArgs e)
         {
             ContentFrame.Navigate(new ProjectSettings());
         }
 
+        private void NavigateToDashboard(object sender, RoutedEventArgs e)
+        {
+            ContentFrame.Navigate(new UserDashboard());
+        }
+
+        #region DatabaseSetup
         private void FillDatabase()
         {
             List<DatabaseBackedObject> objectsToAdd = DefaultRepositoryData.BuildTestData();
@@ -61,7 +70,7 @@ namespace AssetTracker
             objectsToAdd.ForEach(x => context.Entry(x).State = System.Data.Entity.EntityState.Modified);
             context.SaveChanges();
         }
-
+        #endregion
 
     }
 }

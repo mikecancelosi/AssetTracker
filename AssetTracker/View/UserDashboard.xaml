@@ -1,0 +1,186 @@
+﻿<Page x:Class="AssetTracker.View.UserDashboard"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:AssetTracker.View"
+      xmlns:viewmodel="clr-namespace:AssetTracker.ViewModel"
+      mc:Ignorable="d"
+      d:DesignHeight="450"
+      d:DesignWidth="800"
+      Title="UserDashboard">
+    <Page.DataContext>
+        <viewmodel:UserDashboardViewModel />
+    </Page.DataContext>
+    <Page.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+    </Page.Resources>
+    <Grid Margin="50,0"
+          Background="Black">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="4*" />
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Column="0"
+                    Name="SubMenu">
+            <ListView ItemsSource="{Binding ProjectUpdateAlerts}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <TextBlock Text="{Binding ar_content}" />
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <ListView Margin="0,20,0,0"
+                      ItemsSource="{Binding ProjectWideAlerts}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="{Binding ar_content}" />
+                            <TextBlock Text="{Binding ar_usid}"
+                                       HorizontalAlignment="Right" />
+                            <TextBlock Text="{Binding ar_date}"
+                                       HorizontalAlignment="Right" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackPanel>
+
+        <Border Name="Content"
+                Grid.Column="1"
+                Margin="25,0,0,0">
+            <StackPanel Margin="10">
+
+                <StackPanel Name="Content_Header"
+                            Orientation="Horizontal"
+                            Margin="0,30,0,0">
+                    <Image Source="baseline_account_circle_white_48dp.png"
+                           Height="96px" />
+                    <Grid Margin="10,0,0,0">
+                        <Grid.Resources>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Foreground"
+                                        Value="White" />
+                                <Setter Property="VerticalAlignment"
+                                        Value="Center" />
+                            </Style>
+                        </Grid.Resources>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                        </Grid.RowDefinitions>
+                        <StackPanel Orientation="Horizontal"
+                                    Grid.Row="0"
+                                    VerticalAlignment="Bottom"
+                                    Margin="0,5">
+                            <TextBlock Text="{Binding myUser.Name}"
+                                       FontSize="24" />
+                            <TextBlock Text="{Binding myUser.ID}"
+                                       Margin="10,0,0,0"
+                                       Foreground="Gray">
+                                <Run Text="#" />
+                            </TextBlock>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal"
+                                    Grid.Row="1"
+                                    VerticalAlignment="Top"
+                                    Margin="0,0">
+                            <TextBlock Text="{Binding myUser.us_email}" />
+                            <TextBlock Text="{Binding myUser.SecRole.Name}"
+                                       Margin="30,0,0,0" />
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+
+                <Border x:Name="Content_Title"
+                        BorderBrush="White"
+                        BorderThickness="0,0,0,2"
+                        Margin="0,0,0,5">
+                    <TextBlock Text="DASHBOARD"
+                               Foreground="WHITE"
+                               FontSize="24"
+                               HorizontalAlignment="Right" />
+                </Border>
+
+                <StackPanel x:Name="Content_OverviewCounts"
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Center"
+                            Margin="0,20,0,0">
+                    <StackPanel.Resources>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="FontSize"
+                                    Value="30" />
+                            <Setter Property="Foreground"
+                                    Value="White" />
+                        </Style>
+                        <Style TargetType="Image">
+                            <Setter Property="Height"
+                                    Value="30" />
+                        </Style>
+                    </StackPanel.Resources>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding DiscussionAlertCount}" />
+                        <Image Source="baseline_edit_white_24dp.png" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal"
+                                Margin="100,0">
+                        <TextBlock Text="{Binding AssetAlertCount}" />
+                        <Image Source="baseline_edit_white_24dp.png" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding ReviewAlertCount}" />
+                        <Image Source="baseline_edit_white_24dp.png" />
+                    </StackPanel>
+                </StackPanel>
+
+                <Grid Margin="0,20,0,10">
+                    <TextBlock Text="Mark all as read."
+                               HorizontalAlignment="Right"
+                               Foreground="White" />
+                </Grid>
+
+                <ListView ItemsSource="{Binding UserAlerts}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1*" />
+                                    <ColumnDefinition Width="4*" />
+                                    <ColumnDefinition Width="1*" />
+                                    <ColumnDefinition Width="2*" />
+                                </Grid.ColumnDefinitions>
+                                <Image Grid.Column="0"
+                                       Source="baseline_add_reaction_white_24dp.png" />
+                                <StackPanel Grid.Column="1"
+                                            Orientation="Vertical">
+                                    <TextBlock Text="Subject header" />
+                                    <TextBlock Text="Detail text" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Content="!" />
+                                    <Button Content="A" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal"
+                                            HorizontalAlignment="Right">
+                                    <TextBlock Text="{Binding ar_date}" />
+                                    <TextBlock Text=">" />
+                                </StackPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <TextBlock Text="No alerts!"
+                           HorizontalAlignment="Center"
+                           Foreground="White"
+                           FontSize="24"
+                           Margin="0,10"
+                           Visibility="{Binding EmptyAlerts,Converter={StaticResource BoolToVis}}" />
+            </StackPanel>
+        </Border>
+
+    </Grid>
+</Page>

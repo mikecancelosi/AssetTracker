@@ -1,5 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Alert">
+    <Key>
+      <PropertyRef Name="ar_id" />
+    </Key>
+    <Property Name="ar_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ar_type" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="ar_asid" Type="int" />
+    <Property Name="ar_usid" Type="int" />
+    <Property Name="ar_priority" Type="bit" />
+    <Property Name="ar_recid" Type="int" />
+    <Property Name="ar_date" Type="date" Nullable="false" />
+    <Property Name="ar_viewed" Type="bit" Nullable="false" />
+    <Property Name="ar_projectwide" Type="bit" Nullable="false" />
+    <Property Name="ar_content" Type="nvarchar(max)" />
+  </EntityType>
   <EntityType Name="Asset">
     <Key>
       <PropertyRef Name="as_id" />
@@ -126,6 +141,30 @@
     <Property Name="us_lname" Type="nvarchar" MaxLength="50" Nullable="false" />
     <Property Name="us_email" Type="nvarchar" MaxLength="100" Nullable="false" />
   </EntityType>
+  <Association Name="FK_Alert_Asset">
+    <End Role="Asset" Type="Self.Asset" Multiplicity="0..1" />
+    <End Role="Alert" Type="Self.Alert" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Asset">
+        <PropertyRef Name="as_id" />
+      </Principal>
+      <Dependent Role="Alert">
+        <PropertyRef Name="ar_asid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Alert_User">
+    <End Role="User" Type="Self.User" Multiplicity="0..1" />
+    <End Role="Alert" Type="Self.Alert" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="us_id" />
+      </Principal>
+      <Dependent Role="Alert">
+        <PropertyRef Name="ar_usid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_asset_assetcategory">
     <End Role="AssetCategory" Type="Self.AssetCategory" Multiplicity="1" />
     <End Role="Asset" Type="Self.Asset" Multiplicity="*" />
@@ -308,6 +347,7 @@
   </Association>
   <Function Name="assetGetInformation" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <EntityContainer Name="ModelStoreContainer">
+    <EntitySet Name="Alert" EntityType="Self.Alert" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Asset" EntityType="Self.Asset" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AssetCategory" EntityType="Self.AssetCategory" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AssetLink" EntityType="Self.AssetLink" Schema="dbo" store:Type="Tables" />
@@ -322,6 +362,14 @@
     <EntitySet Name="SecRole" EntityType="Self.SecRole" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Setting" EntityType="Self.Setting" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Alert_Asset" Association="Self.FK_Alert_Asset">
+      <End Role="Asset" EntitySet="Asset" />
+      <End Role="Alert" EntitySet="Alert" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Alert_User" Association="Self.FK_Alert_User">
+      <End Role="User" EntitySet="User" />
+      <End Role="Alert" EntitySet="Alert" />
+    </AssociationSet>
     <AssociationSet Name="FK_asset_assetcategory" Association="Self.FK_asset_assetcategory">
       <End Role="AssetCategory" EntitySet="AssetCategory" />
       <End Role="Asset" EntitySet="Asset" />

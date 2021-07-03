@@ -18,6 +18,7 @@
     <NavigationProperty Name="Discussions" Relationship="Model.FK_discussion_asset" FromRole="Asset" ToRole="Discussion1" />
     <NavigationProperty Name="Children" Relationship="Model.FK_Asset_Parent" FromRole="Asset" ToRole="Asset1" />
     <NavigationProperty Name="Parent" Relationship="Model.FK_Asset_Parent" FromRole="Asset1" ToRole="Asset" />
+    <NavigationProperty Name="Alerts" Relationship="Model.FK_Alert_Asset" FromRole="Asset" ToRole="Alert" />
   </EntityType>
   <EntityType Name="AssetCategory">
     <Key>
@@ -119,6 +120,7 @@
     <NavigationProperty Name="SecPermission2" Relationship="Self.FK_secpermission2_user" FromRole="User" ToRole="SecPermission2" />
     <NavigationProperty Name="SecRole" Relationship="Self.FK_user_secrole" FromRole="User" ToRole="SecRole" />
     <NavigationProperty Name="Discussions" Relationship="Model.FK_Discussion_User" FromRole="User" ToRole="Discussion" />
+    <NavigationProperty Name="Alerts" Relationship="Model.FK_Alert_User" FromRole="User" ToRole="Alert" />
   </EntityType>
   <Association Name="FK_asset_assetcategory">
     <End Role="AssetCategory" Type="Self.AssetCategory" Multiplicity="1" />
@@ -316,6 +318,15 @@
       <End Role="AssetCategory" EntitySet="AssetCategories" />
       <End Role="Phase" EntitySet="Phases" />
     </AssociationSet>
+    <EntitySet Name="Alerts" EntityType="Model.Alert" />
+    <AssociationSet Name="FK_Alert_Asset" Association="Model.FK_Alert_Asset">
+      <End Role="Asset" EntitySet="Assets" />
+      <End Role="Alert" EntitySet="Alerts" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Alert_User" Association="Model.FK_Alert_User">
+      <End Role="User" EntitySet="Users" />
+      <End Role="Alert" EntitySet="Alerts" />
+    </AssociationSet>
   </EntityContainer>
   <ComplexType Name="assetGetInformation_Result">
     <Property Type="Int32" Name="as_id" Nullable="false" />
@@ -419,6 +430,47 @@
       </Principal>
       <Dependent Role="Phase">
         <PropertyRef Name="ph_caid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Alert">
+    <Key>
+      <PropertyRef Name="ar_id" />
+    </Key>
+    <Property Name="ar_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ar_type" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ar_asid" Type="Int32" />
+    <Property Name="ar_usid" Type="Int32" />
+    <Property Name="ar_priority" Type="Boolean" />
+    <Property Name="ar_recid" Type="Int32" />
+    <Property Name="ar_date" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="ar_viewed" Type="Boolean" Nullable="false" />
+    <Property Name="ar_projectwide" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="Asset" Relationship="Model.FK_Alert_Asset" FromRole="Alert" ToRole="Asset" />
+    <NavigationProperty Name="User" Relationship="Model.FK_Alert_User" FromRole="Alert" ToRole="User" />
+    <Property Name="ar_content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <Association Name="FK_Alert_Asset">
+    <End Type="Model.Asset" Role="Asset" Multiplicity="0..1" />
+    <End Type="Model.Alert" Role="Alert" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Asset">
+        <PropertyRef Name="as_id" />
+      </Principal>
+      <Dependent Role="Alert">
+        <PropertyRef Name="ar_asid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Alert_User">
+    <End Type="Model.User" Role="User" Multiplicity="0..1" />
+    <End Type="Model.Alert" Role="Alert" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="us_id" />
+      </Principal>
+      <Dependent Role="Alert">
+        <PropertyRef Name="ar_usid" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

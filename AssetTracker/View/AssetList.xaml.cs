@@ -33,19 +33,24 @@ namespace AssetTracker.View
         private void AssetList_Unloaded(object sender, RoutedEventArgs e)
         {
             vm.Dispose();
-        }
-
-        private void AddItem_Click(object sender, RoutedEventArgs e)
-        {
-            AssetCreateControl.Visibility = Visibility.Visible;
-            // Make everything else not interactable
-        }
+        }      
 
         private void ListViewItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             Asset ast = MainGrid.SelectedItem as Asset;
             AssetDetail assetDetail = new AssetDetail(ast);
             NavigationService.Navigate(assetDetail);
+        }
+
+        private void AddAsset_Click(object sender, MouseButtonEventArgs e)
+        {
+            AssetCreateControl.Visibility = Visibility.Visible;
+            // Make everything else not interactable
+        }
+
+        private void RemoveAsset_Click(object sender, MouseButtonEventArgs e)
+        {           
+            // Prompt user to verify deletion
         }
     }
 }

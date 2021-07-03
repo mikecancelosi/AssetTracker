@@ -4,12 +4,12 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="107d3d1a1b2c4ef2b0e8ce767ff0ee8d" Name="Diagram1" ZoomLevel="91">
+      <Diagram DiagramId="107d3d1a1b2c4ef2b0e8ce767ff0ee8d" Name="Diagram1" ZoomLevel="68">
         <EntityTypeShape EntityType="Model.Asset" Width="1.5" PointX="6.125" PointY="10.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.AssetCategory" Width="1.5" PointX="1.5" PointY="14.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.AssetCategory" Width="1.5" PointX="9.125" PointY="14.125" IsExpanded="true" />
         <EntityTypeShape EntityType="Model.AssetLink" Width="1.5" PointX="9.375" PointY="10.375" IsExpanded="true" />
         <EntityTypeShape EntityType="Model.AssetLinkType" Width="1.5" PointX="9.5" PointY="8.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.Phase" Width="1.5" PointX="1.5" PointY="17.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.Phase" Width="1.5" PointX="9" PointY="17.25" IsExpanded="true" />
         <EntityTypeShape EntityType="Model.SecPermission" Width="1.5" PointX="5.25" PointY="6.625" IsExpanded="true" />
         <EntityTypeShape EntityType="Model.SecPermission2" Width="1.5" PointX="7.125" PointY="6.75" IsExpanded="true" />
         <EntityTypeShape EntityType="Model.SecPermission3" Width="1.5" PointX="3.125" PointY="6.375" IsExpanded="true" />
@@ -27,13 +27,16 @@
         <AssociationConnector Association="Model.FK_secpermission3_secrole" ManuallyRouted="false" />
         <AssociationConnector Association="Model.FK_user_secrole" ManuallyRouted="false" />
         <EntityTypeShape EntityType="Model.Change" Width="1.5" PointX="5" PointY="2.375" />
-        <EntityTypeShape EntityType="Model.Discussion" Width="1.5" PointX="4.125" PointY="14.125" />
+        <EntityTypeShape EntityType="Model.Discussion" Width="1.5" PointX="4.125" PointY="13.25" />
         <AssociationConnector Association="Model.FK_discussion_asset" />
         <AssociationConnector Association="Model.FK_discussion_discussion" />
         <AssociationConnector Association="Model.FK_Asset_Parent" />
         <EntityTypeShape EntityType="Model.Metadata" Width="1.5" PointX="7" PointY="2.625" />
         <AssociationConnector Association="Model.FK_Discussion_User" />
         <AssociationConnector Association="Model.FK_Phase_AssetCategory1" />
+        <EntityTypeShape EntityType="Model.Alert" Width="1.5" PointX="5.25" PointY="16.25" />
+        <AssociationConnector Association="Model.FK_Alert_Asset" />
+        <AssociationConnector Association="Model.FK_Alert_User" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

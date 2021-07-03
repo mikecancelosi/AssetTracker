@@ -1,4 +1,10 @@
-C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\MainWindow.g.cs
+C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\bin\Debug\AssetTracker.exe.config
+C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\bin\Debug\AssetTracker.exe
+C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\bin\Debug\AssetTracker.pdb
+C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\bin\Debug\EntityFramework.dll
+C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\bin\Debug\EntityFramework.xml
+C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\bin\Debug\EntityFramework.SqlServer.xml
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\View\AssetCreate.g.cs
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\View\AssetDetail.g.cs
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\View\AssetList.g.cs
@@ -11,14 +17,6 @@ C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\As
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\GeneratedInternalTypeHelper.g.cs
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\AssetTracker_MarkupCompile.cache
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\AssetTracker_MarkupCompile.lref
-C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\bin\Debug\AssetTracker.exe.config
-C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\bin\Debug\AssetTracker.exe
-C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\bin\Debug\AssetTracker.pdb
-C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\bin\Debug\EntityFramework.dll
-C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\bin\Debug\EntityFramework.SqlServer.dll
-C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\bin\Debug\EntityFramework.xml
-C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\bin\Debug\EntityFramework.SqlServer.xml
-C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\MainWindow.baml
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\View\AssetCreate.baml
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\View\AssetDetail.baml
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\View\AssetList.baml
@@ -36,3 +34,7 @@ C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\As
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\AssetTracker.exe
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\AssetTracker.pdb
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\AssetTracker.csprojAssemblyReference.cache
+C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\View\UserDashboard.g.cs
+C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\View\UserDashboard.baml
+C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\View\MainWindow.g.cs
+C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\View\MainWindow.baml

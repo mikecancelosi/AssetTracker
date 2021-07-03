@@ -5,8 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AssetTracker"
         xmlns:View="clr-namespace:AssetTracker.View"
+        xmlns:viewmodel="clr-namespace:AssetTracker.ViewModel"
         mc:Ignorable="d"
         Title="MainWindow" Height="1080" Width="1920">
+    <Window.DataContext>
+        <viewmodel:MainViewModel />
+    </Window.DataContext>
     <Grid Background="White">
         <Grid.Resources>
             <Style x:Key="NavText"
@@ -24,25 +28,26 @@
 
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="8*" />
+            <RowDefinition Height="60px" />
+            <RowDefinition  />
         </Grid.RowDefinitions>
 
         <Grid x:Name="Header"
               Grid.Row="0"
               Margin="5">
+            <Button Click="NavigateToDashboard"
+                    Width="75"
+                    Grid.Column="0"
+                    HorizontalAlignment="Left">
+              <Image x:Name="AppLogo"
+                   Source="//Images/Placeholder.jpg"/>
+            </Button>
 
-            <StackPanel Orientation="Horizontal">
-                <Image x:Name="AppLogo"
-                       Source="Images/Placeholder.jpg"
-                       Grid.Column="0"
-                       Width="150"
-                       HorizontalAlignment="Left" />
-
-                <StackPanel x:Name="Nav"
+            <StackPanel x:Name="Nav"
                             Orientation="Horizontal"
                             Margin="50,0"
-                            VerticalAlignment="Center">
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center">
                     <StackPanel.Resources>
                         <Style BasedOn="{StaticResource NavText}"
                                TargetType="Button">
@@ -50,20 +55,25 @@
                     </StackPanel.Resources>
                     <Button Content="Asset List"
                             Click="NavigateToAssetList" />
+                
                     <Button Content="Project Status" 
-                            Click="NavigateToProjectStatus" />
-                    <Button Content="Settings" Click="NavigateToSettings" />
-                </StackPanel>
+                            Click="NavigateToProjectStatus" IsEnabled="False"/>
+
+                <Button Content="Configuration"
+                        Click="NavigateToProjectConfig" />
+                
             </StackPanel>
 
             <StackPanel Orientation="Horizontal"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Right">
 
-                <TextBlock Text="First Name Last Name"
-                           FontSize="14"
+                <TextBlock FontSize="14"
                            HorizontalAlignment="Center"
-                           VerticalAlignment="Center" />
+                           VerticalAlignment="Center" Text="hello">
+                    <Run Text="{Binding CurrentUser.us_fname }" />
+                    <Run Text="{Binding CurrentUser.us_lname }" />
+                </TextBlock>
 
                 <Image x:Name="UserLogo"
                        Source="Images/Placeholder.jpg"
@@ -79,7 +89,7 @@
 
         </Grid>
 
-        <Frame x:Name="ContentFrame" Grid.Row="1" Margin="200,0" NavigationUIVisibility="Hidden">
+        <Frame x:Name="ContentFrame" Grid.Row="1" NavigationUIVisibility="Hidden">
             
         </Frame>
         

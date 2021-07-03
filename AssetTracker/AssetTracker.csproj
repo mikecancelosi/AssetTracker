@@ -68,6 +68,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Alert.cs">
+      <DependentUpon>DBO.tt</DependentUpon>
+    </Compile>
     <Compile Include="Asset.cs">
       <DependentUpon>DBO.tt</DependentUpon>
     </Compile>
@@ -146,8 +149,10 @@
     <Compile Include="ViewModel\AssetCreateViewModel.cs" />
     <Compile Include="ViewModel\AssetDetailViewModel.cs" />
     <Compile Include="ViewModel\AssetListViewModel.cs" />
+    <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ProjectSettingsViewModel.cs" />
     <Compile Include="ViewModel\SearchBoxViewModel.cs" />
+    <Compile Include="ViewModel\UserDashboardViewModel.cs" />
     <Compile Include="View\AssetCreate.xaml.cs">
       <DependentUpon>AssetCreate.xaml</DependentUpon>
     </Compile>
@@ -179,7 +184,10 @@
     <Compile Include="View\Searchbox.xaml.cs">
       <DependentUpon>Searchbox.xaml</DependentUpon>
     </Compile>
-    <Page Include="MainWindow.xaml">
+    <Compile Include="View\UserDashboard.xaml.cs">
+      <DependentUpon>UserDashboard.xaml</DependentUpon>
+    </Compile>
+    <Page Include="View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -187,7 +195,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
@@ -224,6 +232,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Searchbox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\UserDashboard.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

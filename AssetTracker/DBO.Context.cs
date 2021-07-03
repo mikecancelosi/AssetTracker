@@ -41,6 +41,7 @@ namespace AssetTracker.Model
         public virtual DbSet<Change> Changes { get; set; }
         public virtual DbSet<Discussion> Discussions { get; set; }
         public virtual DbSet<Metadata> Metadata { get; set; }
+        public virtual DbSet<Alert> Alerts { get; set; }
     
         public virtual ObjectResult<assetGetInformation_Result> assetGetInformation()
         {

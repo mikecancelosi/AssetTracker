@@ -19,6 +19,7 @@ namespace AssetTracker.Model
         {
             this.Discussions = new HashSet<Discussion>();
             this.Children = new HashSet<Asset>();
+            this.Alerts = new HashSet<Alert>();
         }
     
         public int as_id { get; set; }
@@ -38,5 +39,7 @@ namespace AssetTracker.Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Asset> Children { get; set; }
         public virtual Asset Parent { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Alert> Alerts { get; set; }
     }
 }

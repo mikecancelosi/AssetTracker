@@ -12,7 +12,6 @@
       d:DesignHeight="800">
     <Page.DataContext>
         <viewmodel:AssetDetailViewModel />
-
     </Page.DataContext>
     <Page.Resources>
         <ResourceDictionary>
@@ -26,407 +25,331 @@
                 <ResourceDictionary x:Name="TimelineDictionary"
                                     Source="Resources/AssetTimelineResourceDictionary.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
+
         </ResourceDictionary>
+
     </Page.Resources>
 
-    <Grid Background="Gray">
+    <Grid  Margin="50,10">
+        <Grid.Resources>
+            <Style TargetType="TextBox"
+                   x:Key="EditableText">
+                <Setter Property="FontSize"
+                        Value="24" />
+                <Setter Property="BorderThickness"
+                        Value="0" />
+                <Setter Property="Padding"
+                        Value="0,0,20,0" />
 
+                <Style.Triggers>
+                    <Trigger Property="IsReadOnly"
+                             Value="False">
+                        <Setter Property="Background"
+                                Value="#999" />
+                        <Setter Property="BorderThickness"
+                                Value="1" />
+                        <Setter Property="BorderBrush"
+                                Value="#222" />
+                    </Trigger>
+                    <Trigger Property="IsReadOnly"
+                             Value="True">
+                        <Setter Property="Background"
+                                Value="Transparent" />
+                        <Setter Property="BorderThickness"
+                                Value="1" />
+                        <Setter Property="BorderBrush"
+                                Value="Transparent" />
+                    </Trigger>
+                    <Trigger Property="IsFocused"
+                             Value="False">
+                        <Setter Property="IsReadOnly"
+                                Value="False" />
+                    </Trigger>
+                    <Trigger Property="IsMouseOver"
+                             Value="True">
+                        <Setter Property="BorderThickness"
+                                Value="0" />
+                    </Trigger>
+                    <Trigger Property="IsMouseOver"
+                             Value="False">
+                        <Setter Property="BorderThickness"
+                                Value="0" />
+                    </Trigger>
+                    <Trigger Property="IsMouseDirectlyOver"
+                             Value="True">
+                        <Setter Property="BorderThickness"
+                                Value="0" />
+                    </Trigger>
+                    <Trigger Property="IsMouseDirectlyOver"
+                             Value="False">
+                        <Setter Property="BorderThickness"
+                                Value="0" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </Grid.Resources>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*"
                               MaxWidth="250" />
             <ColumnDefinition Width="5*" />
         </Grid.ColumnDefinitions>
 
-        <Grid  x:Name="LeftPanel"
-               Grid.Column="0">
+        <StackPanel  x:Name="LeftPanel"
+                     Background="Gray"
+                     Grid.Column="0">
 
-            <StackPanel Orientation="Vertical">
-                <Image Source="../Images/Placeholder.jpg"
-                       Height="100"
-                       Width="100"
-                       Stretch="Fill"
-                       Margin="0,50,0,10"
-                       HorizontalAlignment="Center" />
-                <StackPanel Orientation="Horizontal"
-                            Margin="10,0"
-                            HorizontalAlignment="Center">
-                    <Image Source="../Images/Placeholder.jpg"
-                           Height="50"
-                           Width="50"
-                           Stretch="Fill"
-                           Margin="5,0" />
-                    <Image Source="../Images/Placeholder.jpg"
-                           Height="50"
-                           Width="50"
-                           Stretch="Fill"
-                           Margin="5,0" />
-                    <Image Source="../Images/Placeholder.jpg"
-                           Height="50"
-                           Width="50"
-                           Stretch="Fill"
-                           Margin="5,0" />
-                </StackPanel>
+            <Border Name="ControlButtons"
+                    Padding="20"
+                    HorizontalAlignment="Stretch"
+                    BorderThickness="0,0,0,5"
+                    BorderBrush="#555">
 
-                <StackPanel x:Name="Metadata"
-                            Orientation="Vertical"
-                            Margin="20,20">
+                <StackPanel  Orientation="Horizontal"
+                             HorizontalAlignment="Center">
+                    <StackPanel.Resources>
+                        <Style TargetType="Button">
+                            <Setter Property="Height"
+                                    Value="36" />
+                            <Setter Property="Background"
+                                    Value="#aaa" />
 
-                    <TextBlock FontSize="14"
-                               TextWrapping="Wrap"
-                               Foreground="Black"
-                               FontStyle="Italic"
-                               Text="{Binding Metadata}" />
+                        </Style>
+                    </StackPanel.Resources>
+
+                    <Button>
+                        <Image Source="/Images/MaterialDesign/baseline_save_white_48dp.png" />
+                    </Button>
+
+                    <Button Margin="30,0">
+                        <Image Source="/Images/MaterialDesign/baseline_list_white_48dp.png" />
+                    </Button>
+
+                    <Button>
+                        <Image Source="/Images/MaterialDesign/baseline_delete_white_48dp.png" />
+                    </Button>
 
                 </StackPanel>
+            </Border>
 
+            <Grid x:Name="AssetTitle"
+                  VerticalAlignment="Top"
+                  Margin="10,50"
+                  HorizontalAlignment="Stretch">
 
-                <ItemsControl ItemsSource="{Binding Hierarchy}"
-                              Margin="40,0,0,0">
+                <TextBox   x:Name="DisplayName"
+                           Text="{Binding myAsset.as_displayname}"
+                           Style="{StaticResource EditableText}" />
 
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Button Content="{Binding asset.as_displayname}"
-                                    Foreground="Black"
-                                    BorderThickness="0"
-                                    Background="Transparent"
-                                    FontSize="14"
-                                    Click="HierarchyObjectClicked"
-                                    Margin="{Binding marginFactor}"
-                                    Padding="5"
-                                    HorizontalContentAlignment="Left" />
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel  Orientation="Vertical"
-                                         HorizontalAlignment="Left" />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <!--TODO Set current asset as bold -->
-                </ItemsControl>
+                <Border CornerRadius="15"
+                        BorderThickness="2"
+                        BorderBrush="#fff"
+                        Padding="3"
+                        Height="30"
+                        Width="30"
+                        VerticalAlignment="Top"
+                        HorizontalAlignment="Right"
+                        Margin="-10">
 
-            </StackPanel>
+                    <Border.Visibility>
+                        <MultiBinding Converter="{StaticResource multiBoolToVisConvert}">
+                            <Binding ElementName="DisplayName"
+                                     Path="IsFocused" />
+                            <Binding ElementName="DisplayName"
+                                     Path="IsMouseOver" />
+                            <Binding ElementName="DisplayName"
+                                     Path="IsKeyboardFocused" />
+                        </MultiBinding>
+                    </Border.Visibility>
 
+                    <Image Source="../Images/MaterialDesign/baseline_edit_white_24dp.png" />
+                </Border>
+            </Grid>
+            <!--#region Description-->
             <StackPanel Orientation="Horizontal"
-                        VerticalAlignment="Bottom"
-                        HorizontalAlignment="Center">
-                <StackPanel.Resources>
-                    <Style TargetType="Button">
-                        <Setter Property="Margin"
-                                Value="5,25" />
-                        <Setter Property="Height"
-                                Value="64" />
-                        <Setter Property="Width"
-                                Value="64" />
-                        <Setter Property="BorderThickness"
-                                Value="0" />
-                        <Setter Property="Background"
-                                Value="Transparent" />
-                    </Style>
-                </StackPanel.Resources>
-                <Button x:Name="SaveButton"
-                        Click="OnSaveClicked">
-                    <Image Source="../Images/MaterialDesign/baseline_save_white_48dp.png" />
-                </Button>
-                <Button x:Name="DeleteButton"
-                        Click="OnDeleteClicked">
-                    <Image Source="../Images/MaterialDesign/baseline_delete_white_48dp.png" />
-                </Button>
-                <Button x:Name="ChangelogButton"
-                        Click="OnChangelogClicked">
-                    <Image Source="../Images/MaterialDesign/baseline_list_white_48dp.png" />
-                </Button>
-            </StackPanel>
-
-        </Grid>
-
-        <ScrollViewer Grid.Column="1"
-                      x:Name="RightPanel"
-                      Margin="10">
-
-            <ScrollViewer.Resources>
-
-                <Style TargetType="TextBox"
-                       x:Key="EditableText">
-                    <Setter Property="FontSize"
-                            Value="50" />
-                    <Setter Property="BorderThickness"
-                            Value="0" />
-                    <Setter Property="Padding"
-                            Value="0,0,20,0" />
-                    <Style.Triggers>
-                        <Trigger Property="IsReadOnly"
-                                 Value="False">
-                            <Setter Property="Background"
-                                    Value="#999" />
-                            <Setter Property="BorderThickness"
-                                    Value="1" />
-                            <Setter Property="BorderBrush"
-                                    Value="#222" />
-                        </Trigger>
-                        <Trigger Property="IsReadOnly"
-                                 Value="True">
-                            <Setter Property="Background"
-                                    Value="Transparent" />
-                            <Setter Property="BorderThickness"
-                                    Value="1" />
-                            <Setter Property="BorderBrush"
-                                    Value="Transparent" />
-                        </Trigger>
-                        <Trigger Property="IsFocused"
-                                 Value="False">
-                            <Setter Property="IsReadOnly"
-                                    Value="False" />
-                        </Trigger>
-                        <Trigger Property="IsMouseOver"
-                                 Value="True">
-                            <Setter Property="BorderThickness"
-                                    Value="0" />
-                        </Trigger>
-                        <Trigger Property="IsMouseOver"
-                                 Value="False">
-                            <Setter Property="BorderThickness"
-                                    Value="0" />
-                        </Trigger>
-                        <Trigger Property="IsMouseDirectlyOver"
-                                 Value="True">
-                            <Setter Property="BorderThickness"
-                                    Value="0" />
-                        </Trigger>
-                        <Trigger Property="IsMouseDirectlyOver"
-                                 Value="False">
-                            <Setter Property="BorderThickness"
-                                    Value="0" />
-                        </Trigger>
-
-
-
-                    </Style.Triggers>
-                </Style>
-            </ScrollViewer.Resources>
-            <Grid>
-
-                <StackPanel>
-
-                    <StackPanel x:Name="Header"
-                                Orientation="Vertical"
-                                Grid.Column="1"
-                                Margin="0,40">
-                        <StackPanel Orientation="Horizontal"
-                                    Name="AssetTitle">
-                            <Grid>
-
-                                <TextBox   x:Name="DisplayName"
-                                           Text="{Binding myAsset.as_displayname}"
-                                           Style="{StaticResource EditableText}" />
-
+                        Margin="20,0">
+                <Grid>
+                    <TextBox Text="{Binding myAsset.as_description}"
+                             FontSize="16"
+                             Margin="0,0,0,30"
+                             Style="{StaticResource EditableText}"
+                             x:Name="Description"
+                             ToolTipService.ShowDuration="7000"
+                             IsReadOnly="{Binding ElementName=EditDescriptionTgl, Path=IsChecked, Converter={StaticResource inverseBooleanConverter}}">
+                        <TextBox.ToolTip>
+                            <ToolTip  Background="Transparent"
+                                      BorderThickness="0"
+                                      Placement="Right"
+                                      VerticalOffset="-5"
+                                      HorizontalOffset="-30">
                                 <Border CornerRadius="15"
                                         BorderThickness="2"
                                         BorderBrush="#FF4F4F4F"
                                         Padding="3"
                                         Height="30"
-                                        Width="30"
-                                        VerticalAlignment="Top"
-                                        HorizontalAlignment="Right"
-                                        Margin="-10">
-
-                                    <Border.Visibility>
-                                        <MultiBinding Converter="{StaticResource multiBoolToVisConvert}">
-                                            <Binding ElementName="DisplayName"
-                                                     Path="IsFocused" />
-                                            <Binding ElementName="DisplayName"
-                                                     Path="IsMouseOver" />
-                                            <Binding ElementName="DisplayName"
-                                                     Path="IsKeyboardFocused" />
-                                        </MultiBinding>
-                                    </Border.Visibility>
-
+                                        Width="30">
                                     <Image Source="../Images/MaterialDesign/baseline_edit_white_24dp.png" />
                                 </Border>
-                            </Grid>
-                            <TextBlock x:Name="AssetID"
-                                       FontSize="16"
-                                       Margin="10,0,0,0"
-                                       VerticalAlignment="Center"
-                                       HorizontalAlignment="Left">                        
-                            <Run Text="#" />
-                            <Run Text="{Binding myAsset.as_id}" />
-                            </TextBlock>
-                        </StackPanel>
-                        <StackPanel x:Name="AssigningGrp"
-                                    Orientation="Horizontal">
-                            <TextBlock Text="Assigned To:"
-                                       FontSize="16"
-                                       VerticalAlignment="Center" />
-                            <local:Searchbox x:Name="Searchbox_AssignedTo"
-                                             Margin="5"
-                                             Width="300" />
-                        </StackPanel>
-
-                        <StackPanel x:Name="CurrentStatus"
-                                    Orientation="Horizontal">
-                            <TextBlock Text="Current Status:"
-                                       FontSize="16"
-                                       VerticalAlignment="Center" />
-                            <local:Searchbox x:Name="Searchbox_Phase"
-                                             Margin="5"
-                                             Width="300" />
-                        </StackPanel>
-
-                        <TextBlock Text="{Binding GetLatestAssetLink}"
-                                   Foreground="Aquamarine"
-                                   HorizontalAlignment="Left"
-                                   FontSize="16"
-                                   FontWeight="SemiBold" />
-
-                    </StackPanel>
-
-                    <StackPanel Orientation="Vertical"
-                                Name="Body"
-                                Margin="50,0">
-
-                        <!--#region Description-->
-                        <StackPanel Orientation="Horizontal">
-                            <Grid>
-                                <TextBox Text="{Binding myAsset.as_description}"
-                                         FontSize="16"
-                                         Margin="0,0,0,30"
-                                         Style="{StaticResource EditableText}"
-                                         x:Name="Description"
-                                         ToolTipService.ShowDuration="7000"
-                                         IsReadOnly="{Binding ElementName=EditDescriptionTgl, Path=IsChecked, Converter={StaticResource inverseBooleanConverter}}">
-                                    <TextBox.ToolTip>
-                                        <ToolTip  Background="Transparent"
-                                                  BorderThickness="0"
-                                                  Placement="Right"
-                                                  VerticalOffset="-5"
-                                                  HorizontalOffset="-30">
-                                            <Border CornerRadius="15"
-                                                    BorderThickness="2"
-                                                    BorderBrush="#FF4F4F4F"
-                                                    Padding="3"
-                                                    Height="30"
-                                                    Width="30">
-                                                <Image Source="../Images/MaterialDesign/baseline_edit_white_24dp.png" />
-                                            </Border>
-                                        </ToolTip>
-                                    </TextBox.ToolTip>
-                                </TextBox>
+                            </ToolTip>
+                        </TextBox.ToolTip>
+                    </TextBox>
 
 
-                            </Grid>
-                        </StackPanel>
-                        <!--#endregion-->
-
-                        <!--#region Timeline-->
-                        <TextBlock Text="Timeline"
-                                   FontSize="24"
-                                   Foreground="White"
-                                   Margin="0,5" />
-
-                        <Canvas Width="1000"
-                                Height="300"
-                                Background="White"
-                                ClipToBounds="True"
-                                x:Name="TimelineCanvas"
-                                MouseLeftButtonDown="scrollViewer_PreviewMouseLeftButtonDown"
-                                MouseLeftButtonUp="scrollViewer_PreviewMouseLeftButtonUp"
-                                MouseMove="scrollViewer_PreviewMouseMove">
-
-                            <Canvas x:Name="PhaseChunksParent"/>
-
-                        </Canvas>
-                        <!--#endregion-->
-
-
-                        <!--#region Discussion-->
-                        <TextBlock Text="Discussion"
-                                   FontSize="24"
-                                   Foreground="White"
-                                   Margin="0,5" />
-
-                        <StackPanel Orientation="Vertical"
-                                    x:Name="DiscussionBoardPanel">
-                            <ItemsControl ItemsSource="{Binding DiscussionBoard}"
-                                          ItemTemplate="{StaticResource ResourceKey=DiscussionItem}"
-                                          Margin="10" />
-                            <Control Template="{StaticResource ResourceKey=NewDiscussion}"
-                                     prop:DBOPropertyExtension.IDSource="0" />
-                        </StackPanel>
-                        <!--#endregion-->
-
-                    </StackPanel>
-
-                </StackPanel>
-
-                <!--#region Changelog-->
-                <Grid Name="Changelog"
-                      Background="Black"
-                      Margin="40"
-                      Visibility="Collapsed">
-
-                    <Button Height="30"
-                            Width="30"
-                            VerticalAlignment="Top"
-                            HorizontalAlignment="Right"
-                            Background="DarkRed"
-                            Click="OnChangelogExited">
-                        <Image Source="../Images/MaterialDesign/baseline_close_white_48dp.png" />
-                    </Button>
-
-                    <StackPanel Orientation="Vertical"
-                                Margin="10">
-
-                        <!--TODO Changelog should be moved to a button click.-->
-                        <TextBlock Text="Changelog"
-                                   FontSize="24"
-                                   Foreground="White"
-                                   Margin="0,5" />
-                        <ListView VerticalAlignment="Top"
-                                  ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                                  ItemsSource="{Binding Changelog}">
-                            <ListView.Resources>
-                                <Style TargetType="{x:Type GridViewColumnHeader}">
-                                    <Setter Property="HorizontalContentAlignment"
-                                            Value="Left" />
-                                    <Setter Property="Padding"
-                                            Value="6,0" />
-                                    <Setter Property="FontSize"
-                                            Value="14" />
-                                    <Setter Property="FontWeight"
-                                            Value="Medium" />
-                                </Style>
-
-                            </ListView.Resources>
-
-                            <ListView.View>
-                                <GridView>
-                                    <GridViewColumn Header="Date"
-                                                    Width="100"
-                                                    DisplayMemberBinding="{Binding ch_datetime}" />
-                                    <GridViewColumn Header="Description"
-                                                    Width="200"
-                                                    DisplayMemberBinding="{Binding ch_description}" />
-                                    <GridViewColumn Header="Completed by"
-                                                    Width="200"
-                                                    DisplayMemberBinding="{Binding ch_usid}" />
-                                    <GridViewColumn Header="Old Value"
-                                                    Width="200"
-                                                    DisplayMemberBinding="{Binding ch_oldvalue}" />
-                                    <GridViewColumn Header="New value"
-                                                    Width="200"
-                                                    DisplayMemberBinding="{Binding ch_newvalue}" />
-                                </GridView>
-
-                            </ListView.View>
-                        </ListView>
-                    </StackPanel>
                 </Grid>
+            </StackPanel>
+            <!--#endregion-->
 
-                <!--#endregion-->
+        </StackPanel>
 
+        <Grid x:Name="RightPanel"
+              Grid.Column="1"
+              Margin="40,0"
+              Background="Gray">
+
+
+            <!--#region Changelog-->
+            <Grid Name="Changelog"
+                  Background="Black"
+                  Margin="40"
+                  Visibility="Collapsed">
+
+                <Button Height="30"
+                        Width="30"
+                        VerticalAlignment="Top"
+                        HorizontalAlignment="Right"
+                        Background="DarkRed"
+                        Click="OnChangelogExited">
+                    <Image Source="../Images/MaterialDesign/baseline_close_white_48dp.png" />
+                </Button>
+
+                <StackPanel Orientation="Vertical"
+                            Margin="10">
+
+                    <!--TODO Changelog should be moved to a button click.-->
+                    <TextBlock Text="Changelog"
+                               FontSize="24"
+                               Foreground="White"
+                               Margin="0,5" />
+                    <ListView VerticalAlignment="Top"
+                              ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                              ItemsSource="{Binding Changelog}">
+                        <ListView.Resources>
+                            <Style TargetType="{x:Type GridViewColumnHeader}">
+                                <Setter Property="HorizontalContentAlignment"
+                                        Value="Left" />
+                                <Setter Property="Padding"
+                                        Value="6,0" />
+                                <Setter Property="FontSize"
+                                        Value="14" />
+                                <Setter Property="FontWeight"
+                                        Value="Medium" />
+                            </Style>
+
+                        </ListView.Resources>
+
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Date"
+                                                Width="100"
+                                                DisplayMemberBinding="{Binding ch_datetime}" />
+                                <GridViewColumn Header="Description"
+                                                Width="200"
+                                                DisplayMemberBinding="{Binding ch_description}" />
+                                <GridViewColumn Header="Completed by"
+                                                Width="200"
+                                                DisplayMemberBinding="{Binding ch_usid}" />
+                                <GridViewColumn Header="Old Value"
+                                                Width="200"
+                                                DisplayMemberBinding="{Binding ch_oldvalue}" />
+                                <GridViewColumn Header="New value"
+                                                Width="200"
+                                                DisplayMemberBinding="{Binding ch_newvalue}" />
+                            </GridView>
+
+                        </ListView.View>
+                    </ListView>
+                </StackPanel>
             </Grid>
-        </ScrollViewer>
+
+            <!--#endregion-->
+
+
+            <ScrollViewer Padding="40,0"
+                          Name="Content">
+
+                <Border Padding="30">
+                    <Grid>
+                        <StackPanel x:Name="HighlightInfo"
+                                    HorizontalAlignment="Right">
+                            <StackPanel.Resources>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Foreground"
+                                            Value="#ccc" />
+                                    <Setter Property="FontWeight" Value="SemiBold" />
+                                </Style>
+                            </StackPanel.Resources>
+
+                            <TextBlock Text="{Binding myAsset.as_id}">
+                                <Run Text="#" />
+                            </TextBlock>
+
+                            <TextBlock Text="{Binding myAsset.AssetLink.li_location}" />
+                        </StackPanel>
+                        
+                        <StackPanel>
+                            <StackPanel x:Name="AssigningGrp"
+                                            Orientation="Horizontal">
+                                    <TextBlock Text="Assigned To:"
+                                               FontSize="16"
+                                               VerticalAlignment="Center" />
+                                    <local:Searchbox x:Name="Searchbox_AssignedTo"
+                                                     Margin="5"
+                                                     Width="300" />
+                                </StackPanel>
+                        
+                            <StackPanel x:Name="CurrentStatus"
+                                            Orientation="Horizontal">
+                                    <TextBlock Text="Current Status:"
+                                               FontSize="16"
+                                               VerticalAlignment="Center" />
+                                    <local:Searchbox x:Name="Searchbox_Phase"
+                                                     Margin="5"
+                                                     Width="300" />
+                                </StackPanel>
+                        
+                            <TextBlock Text="{Binding GetLatestAssetLink}"
+                                           Foreground="Aquamarine"
+                                           HorizontalAlignment="Left"
+                                           FontSize="16"
+                                           FontWeight="SemiBold" />
+                        
+                            <!--#region Phases-->
+                                <!--#endregion-->
+                        
+                            <!--#region Discussion-->
+                                <TextBlock Text="Discussion"
+                                           FontSize="24"
+                                           Foreground="White"
+                                           Margin="0,5" />
+                        
+                                <StackPanel Orientation="Vertical"
+                                            x:Name="DiscussionBoardPanel">
+                                    <ItemsControl ItemsSource="{Binding DiscussionBoard}"
+                                                  ItemTemplate="{StaticResource ResourceKey=DiscussionItem}"
+                                                  Margin="10" />
+                                    <Control Template="{StaticResource ResourceKey=NewDiscussion}"
+                                             prop:DBOPropertyExtension.IDSource="0" />
+                                </StackPanel>
+                                <!--#endregion-->                    
+                        
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+            </ScrollViewer>
+        </Grid>
+
+
     </Grid>
 
 </Page>

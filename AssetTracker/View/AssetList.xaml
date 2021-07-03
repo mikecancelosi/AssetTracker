@@ -12,14 +12,33 @@
 
     <Grid Background="Black">
 
-        <Grid x:Name="AssetList_Content">
-            <Grid.DataContext>
+        <StackPanel x:Name="AssetList_Content" Margin="100,50,100,10">
+            <StackPanel.DataContext>
                 <viewmodel:AssetListViewModel />
-            </Grid.DataContext>
+            </StackPanel.DataContext>
+            <Grid Margin="0,20">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                    <StackPanel Orientation="Vertical" Margin="0,0,15,0" MouseLeftButtonUp="AddAsset_Click">
+                        <Image Source="../Images/MaterialDesign/baseline_add_white_48dp.png" Height="40" />
+                        <TextBlock Text="Add" Foreground="White" HorizontalAlignment="Center" FontSize="14" FontWeight="Bold"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical"
+                                MouseLeftButtonUp="RemoveAsset_Click">
+                        <Image Source="../Images/MaterialDesign/baseline_close_white_48dp.png"
+                               Height="40" />
+                        <TextBlock Text="Delete"
+                                   Foreground="White"
+                                   HorizontalAlignment="Center"
+                                   FontSize="14"
+                                   FontWeight="Bold" />
+                    </StackPanel>
+                </StackPanel>
+                <local:Searchbox HorizontalAlignment="Right" Width="400" Height="24" VerticalAlignment="Center"/>
+            </Grid>
             <ListView Name="MainGrid"
                       VerticalAlignment="Top"
                       ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                      ItemsSource="{Binding Assets}">
+                      ItemsSource="{Binding Assets}" BorderThickness="0">
                 <ListView.Resources>
                     <Style TargetType="{x:Type GridViewColumnHeader}">
                         <Setter Property="HorizontalContentAlignment"
@@ -30,11 +49,46 @@
                                 Value="14" />
                         <Setter Property="FontWeight"
                                 Value="Medium" />
+                        <Setter Property="Background"
+                                Value="White" />
+                        <Setter Property="BorderBrush"
+                                Value="Black" />
+                        <Setter Property="BorderThickness"
+                                Value="0,0,0,5" />
+                        <Setter Property="Height"
+                                Value="50" />
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background"
+                                        Value="White" />
+                                <Setter Property="BorderBrush"
+                                        Value="Black" />
+                            </Trigger>
+                        </Style.Triggers>
                     </Style>
 
                     <Style TargetType="{x:Type ListViewItem}">
                         <EventSetter Event="MouseDoubleClick"
                                      Handler="ListViewItem_MouseDoubleClick" />
+                        <Setter Property="BorderThickness"
+                                Value="0,0,0,2" />
+                        <Setter Property="BorderBrush"
+                                Value="Black" />
+                        <Setter Property="Height"
+                                Value="50" />
+                        <Setter Property="FontWeight"
+                                Value="SemiBold" />
+                        <Setter Property="FontSize"
+                                Value="14" />
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+                                <Setter Property="Background"
+                                        Value="White" />
+                                <Setter Property="BorderBrush"
+                                        Value="Black" />
+                            </Trigger>
+                        </Style.Triggers>
                     </Style>
                 </ListView.Resources>
 
@@ -58,15 +112,8 @@
                     </GridView>
 
                 </ListView.View>
-            </ListView>
-            <Button VerticalAlignment="Bottom"
-                    HorizontalAlignment="Right"
-                    Margin="20"
-                    Height="50"
-                    Width="100"
-                    Content="Add Item"
-                    Click="AddItem_Click" />
-        </Grid>
+            </ListView>            
+        </StackPanel>
         
         <local:AssetCreate x:Name="AssetCreateControl"
                                Visibility="Hidden"

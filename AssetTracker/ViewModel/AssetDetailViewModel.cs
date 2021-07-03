@@ -235,11 +235,17 @@ namespace AssetTracker.ViewModel
                         if (int.TryParse(change.ch_newvalue, out parsedId))
                         {
                             Phase newPhase = context.Phases.Find(parsedId);
+                            User phaseUser;
+                            if (change.ch_usid > 0)
+                            {
+                                phaseUser = context.Users.Find(change.ch_usid);
+                            }
                             PhaseTimelineObject phaseTimelineObjectInst = new PhaseTimelineObject()
                             {
                                 PhaseName = newPhase.ph_name,
                                 StartDate = startDate,
-                                EndDate = change.ch_datetime
+                                EndDate = change.ch_datetime,
+                                UserName = phaseUser?.Name ?? ""
                             };
                             startDate = change.ch_datetime;
                             phaseTimelineObjects.Add(phaseTimelineObjectInst);
@@ -256,7 +262,7 @@ namespace AssetTracker.ViewModel
         
         public DateTime GetCreationDate()
         {
-            return Changelog.FirstOrDefault(x => x.ch_description == ChangeType.CreatedAsset).ch_datetime;
+            return Changelog.FirstOrDefault(x => x.ch_description == ChangeType.CreatedAsset)?.ch_datetime ?? DateTime.MinValue;
         }
 
         public struct AssetHierarchyObject
@@ -272,6 +278,8 @@ namespace AssetTracker.ViewModel
             public string PhaseName { get; set; }
             public DateTime StartDate { get; set; }
             public DateTime EndDate { get; set; }
+            public string UserName { get; set; }
+
         }
     }
 }

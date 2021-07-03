@@ -154,5 +154,21 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="Alerts">
+      <EntityTypeMapping TypeName="Model.Alert">
+        <MappingFragment StoreEntitySet="Alert">
+          <ScalarProperty Name="ar_content" ColumnName="ar_content" />
+          <ScalarProperty Name="ar_projectwide" ColumnName="ar_projectwide" />
+          <ScalarProperty Name="ar_viewed" ColumnName="ar_viewed" />
+          <ScalarProperty Name="ar_date" ColumnName="ar_date" />
+          <ScalarProperty Name="ar_recid" ColumnName="ar_recid" />
+          <ScalarProperty Name="ar_priority" ColumnName="ar_priority" />
+          <ScalarProperty Name="ar_usid" ColumnName="ar_usid" />
+          <ScalarProperty Name="ar_asid" ColumnName="ar_asid" />
+          <ScalarProperty Name="ar_type" ColumnName="ar_type" />
+          <ScalarProperty Name="ar_id" ColumnName="ar_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

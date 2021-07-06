@@ -13,25 +13,28 @@
         <viewmodel:SearchBoxViewModel />
     </UserControl.DataContext>
 
-    <Grid x:Name="FieldGrid" MinHeight="24">
+    <Grid x:Name="FieldGrid" Height="24">
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
             <ColumnDefinition Width="{Binding Path=ActualHeight, ElementName=FieldGrid}" />
         </Grid.ColumnDefinitions>
+
         <Border BorderThickness="2"
-                BorderBrush="AntiqueWhite" />
+                BorderBrush="AntiqueWhite"
+                CornerRadius="12" />
 
         <Label x:Name="Value_Label"
                Content="{Binding CurrentlySelectedObject.Name}"
                Grid.Column="0"
                HorizontalAlignment="Left"
-               FontSize="14"
-               FontWeight="SemiBold" />
+               FontSize="12"
+               FontWeight="SemiBold"  Margin="5,0"/>
+
         <Button Height="{Binding ActualHeight, ElementName=FieldGrid}"
                 HorizontalAlignment="Right"
                 Click="Button_Click"
-                Grid.Column="2" Background="Transparent">
+                Grid.Column="2" Background="Transparent" BorderThickness="0">
             <Image Source="../Images/MaterialDesign/baseline_search_white_24dp.png" />
         </Button>
 

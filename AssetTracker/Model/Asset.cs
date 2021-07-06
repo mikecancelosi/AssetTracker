@@ -1,4 +1,6 @@
-﻿using System;
+﻿using AssetTracker.Enums;
+using AssetTracker.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity.Validation;
 using System.Linq;
@@ -37,6 +39,27 @@ namespace AssetTracker.Model
         {
             base.IsValid(out violations);
             return violations.Count() == 0;
-        }      
+        }
+
+        public override List<Change> GetChanges(DatabaseBackedObject beforeObject)
+        {
+            List<Change> output = base.GetChanges(beforeObject);
+            Asset beforeAsset = ((Asset)beforeObject);
+            if (this.as_usid != beforeAsset.as_usid)
+            {
+                output.Add(new Change()
+                {
+                     ch_description = ChangeType.UserAssigned,
+                     ch_datetime = DateTime.Now,
+                     ch_oldvalue = beforeAsset.as_usid.ToString(),
+                     ch_newvalue = as_usid.ToString(),
+                     ch_field =  "as_usid",
+                     ch_recid = ID,
+                     ch_usid = MainViewModel.Instance.CurrentUser.ID
+
+                });
+            }
+            return output;
+        }
     }
 }

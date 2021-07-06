@@ -21,13 +21,14 @@ namespace AssetTracker.View
     /// <summary>
     /// Interaction logic for Searchbox.xaml
     /// </summary>
-    public partial class Searchbox : UserControl, INotifyPropertyChanged
+    public partial class Searchbox : UserControl
     {
         private Type dboType;
         private SearchBoxViewModel vm;
-
-        public event PropertyChangedEventHandler PropertyChanged;
         public DatabaseBackedObject CurrentSelection => vm.CurrentlySelectedObject;
+
+        public delegate void NotifyOfChange();
+        public event NotifyOfChange OnSelectionChanged;
 
         public Searchbox()
         {
@@ -38,12 +39,6 @@ namespace AssetTracker.View
         {
             vm = new SearchBoxViewModel(dboType);
             DataContext = vm;
-            vm.PropertyChanged += Vm_PropertyChanged;
-        }
-
-        private void Vm_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            PropertyChanged?.Invoke(sender, e);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -68,6 +63,24 @@ namespace AssetTracker.View
         public void SetCurrentSelectedObject(int objectID)
         {
             vm.SelectionChanged(objectID);
+        }
+
+        public void SetFilter(string filter)
+        {
+            vm.Filter = filter;
+        }
+
+        public void Refresh()
+        {
+            vm.Refresh();
+        }
+
+        public void ClearInvocationList()
+        {
+            foreach (Delegate d in OnSelectionChanged.GetInvocationList())
+            {
+                OnSelectionChanged -= (NotifyOfChange)d;
+            }
         }
     }
 }

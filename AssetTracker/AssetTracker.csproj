@@ -153,6 +153,7 @@
     <Compile Include="ViewModel\ProjectSettingsViewModel.cs" />
     <Compile Include="ViewModel\SearchBoxViewModel.cs" />
     <Compile Include="ViewModel\UserDashboardViewModel.cs" />
+    <Compile Include="ViewModel\ViewModel.cs" />
     <Compile Include="View\AssetCreate.xaml.cs">
       <DependentUpon>AssetCreate.xaml</DependentUpon>
     </Compile>

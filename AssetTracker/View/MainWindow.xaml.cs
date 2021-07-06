@@ -28,9 +28,9 @@ namespace AssetTracker
 
         public MainWindow()
         {
-            InitializeComponent();
-            vm = new MainViewModel();
-            DataContext =vm;                  
+            vm = MainViewModel.Instance;
+            DataContext = vm;
+            InitializeComponent();                 
             NavigateToDashboard(null,null);           
         }
 

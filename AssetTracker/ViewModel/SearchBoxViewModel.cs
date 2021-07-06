@@ -8,10 +8,8 @@ using System.Text;
 
 namespace AssetTracker.ViewModel
 {
-    public class SearchBoxViewModel : INotifyPropertyChanged
+    public class SearchBoxViewModel : ViewModel
     {
-        private TrackerContext context = new TrackerContext();
-
         private List<DatabaseBackedObject> items;
         public List<DatabaseBackedObject> Items
         {
@@ -22,6 +20,7 @@ namespace AssetTracker.ViewModel
                     items = new List<DatabaseBackedObject>();
                     foreach(var x in context.Set(DboType))
                     {
+
                         items.Add((DatabaseBackedObject)x);
                     }
                                
@@ -45,10 +44,10 @@ namespace AssetTracker.ViewModel
             }
         }
 
+        //TODO: Applying a filter to searchbox results
         public string Filter;
         private Type DboType;
 
-        public event PropertyChangedEventHandler PropertyChanged;
         public SearchBoxViewModel()
         {
 
@@ -61,20 +60,17 @@ namespace AssetTracker.ViewModel
             currentlySelectedObject = Activator.CreateInstance(dbotype) as DatabaseBackedObject;
         }
 
-        protected void NotifyPropertyChanged(String info)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(info));
-            }
-        }
-
       
         public void SelectionChanged(int id)
         {
             DatabaseBackedObject copyFrom = context.Set(DboType).Find(id) as DatabaseBackedObject;
             DatabaseBackedObject.CopyProperties(copyFrom, CurrentlySelectedObject);
             NotifyPropertyChanged("CurrentlySelectedObject");
+        }
+
+        public void Refresh()
+        {
+
         }
          
     }

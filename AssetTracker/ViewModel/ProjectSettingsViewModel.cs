@@ -154,9 +154,12 @@ namespace AssetTracker.ViewModel
 
         public void OnSaveCategory()
         {
-            context.SaveChanges();
-            NotifyPropertyChanged("Categories");
-            CurrentCategoryInst = new AssetCategory();
+            if (CurrentCategoryInst.Phases.Count > 0)
+            {
+                context.SaveChanges();
+                NotifyPropertyChanged("Categories");
+                CurrentCategoryInst = new AssetCategory();
+            }
         }
 
         public void OnExitCategory()

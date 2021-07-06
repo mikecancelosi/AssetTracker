@@ -9,20 +9,10 @@ using System.Windows;
 
 namespace AssetTracker.ViewModel
 {
-    public class MainViewModel : INotifyPropertyChanged
+    public class MainViewModel : ViewModel
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void NotifyPropertyChanged(String info)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(info));
-            }
-        }
 
-        private TrackerContext context = new TrackerContext();
-
-        public User CurrentUser;
+        public User CurrentUser { get; set; }
 
         private static MainViewModel instance;
         public static MainViewModel Instance
@@ -40,10 +30,6 @@ namespace AssetTracker.ViewModel
 
         public MainViewModel()
         {
-            if(instance == null)
-            {
-                instance = this;
-            }
             CurrentUser = context.Users.Find(1);
             NotifyPropertyChanged("CurrentUser");
             

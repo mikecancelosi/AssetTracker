@@ -11,5 +11,6 @@ namespace AssetTracker.Enums
         public static string CreatedAsset => "Asset Created";
         public static string ChangedPhase => "Phase Changed";
         public static string NameChange => "Name Changed";
+        public static string UserAssigned => "User Assign";
     }
 }

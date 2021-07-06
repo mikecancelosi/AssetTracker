@@ -31,9 +31,9 @@ namespace AssetTracker.View
             Value_ParentID.SetType(typeof(Asset));
             Value_AssignedTo.SetType(typeof(User));
 
-            Value_Category.PropertyChanged += (s,e) => { viewmodel.OnCategoryChanged(Value_Category.CurrentSelection); };
-            Value_ParentID.PropertyChanged += (s, e) => { viewmodel.OnParentAssetChanged(Value_ParentID.CurrentSelection); };
-            Value_AssignedTo.PropertyChanged += (s, e) => { viewmodel.OnUserChanged(Value_AssignedTo.CurrentSelection); };
+            Value_Category.OnSelectionChanged += () => { viewmodel.OnCategoryChanged(Value_Category.CurrentSelection); };
+            Value_ParentID.OnSelectionChanged += () => { viewmodel.OnParentAssetChanged(Value_ParentID.CurrentSelection); };
+            Value_AssignedTo.OnSelectionChanged += () => { viewmodel.OnUserChanged(Value_AssignedTo.CurrentSelection); };
 
         }
 

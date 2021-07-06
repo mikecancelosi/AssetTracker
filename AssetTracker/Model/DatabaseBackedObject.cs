@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AssetTracker.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Validation;
@@ -105,7 +106,7 @@ namespace AssetTracker.Model
             // TODO: Add changes automatically, using long names from db + "Changed" e.g 'as_usid Changed'
 
             List<Change> output = new List<Change>();
-            int UserId = 0;
+            int UserId = MainViewModel.Instance.CurrentUser.ID;
 
 
             if (ID != beforeObject.ID)

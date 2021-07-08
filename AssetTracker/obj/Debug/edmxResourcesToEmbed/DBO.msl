@@ -53,6 +53,7 @@
     <EntitySetMapping Name="SecPermissions">
       <EntityTypeMapping TypeName="Model.SecPermission">
         <MappingFragment StoreEntitySet="SecPermission">
+          <ScalarProperty Name="pr_p4id" ColumnName="pr_p4id" />
           <ScalarProperty Name="pr_id" ColumnName="pr_id" />
           <ScalarProperty Name="pr_name" ColumnName="pr_name" />
         </MappingFragment>
@@ -167,6 +168,14 @@
           <ScalarProperty Name="ar_asid" ColumnName="ar_asid" />
           <ScalarProperty Name="ar_type" ColumnName="ar_type" />
           <ScalarProperty Name="ar_id" ColumnName="ar_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SecPermission4">
+      <EntityTypeMapping TypeName="Model.SecPermission4">
+        <MappingFragment StoreEntitySet="SecPermission4">
+          <ScalarProperty Name="p4_name" ColumnName="p4_name" />
+          <ScalarProperty Name="p4_id" ColumnName="p4_id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

@@ -1,27 +1,18 @@
 ﻿using AssetTracker.Extensions;
 using AssetTracker.Model;
+using AssetTracker.View;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Navigation;
 
 namespace AssetTracker.ViewModel
 {
-    public class ProjectSettingsViewModel : INotifyPropertyChanged
+    public class ProjectSettingsViewModel : ViewModel
     {
-        private TrackerContext context = new TrackerContext();
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void NotifyPropertyChanged(String info)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(info));
-            }
-        }
-
         private List<User> users;
         public List<User> Users
         {
@@ -174,6 +165,7 @@ namespace AssetTracker.ViewModel
             NotifyPropertyChanged("CurrentCategoryInst");
             NotifyPropertyChanged("CurrentPhases");
         }
+
        
     }
 }

@@ -156,6 +156,8 @@ namespace AssetTracker.ViewModel
                 {
                     change.Save(context, out violations);
                 }
+                NotifyPropertyChanged("Savable");
+                NotifyPropertyChanged("Changelog");
                 return true;
             }
             return false;
@@ -342,6 +344,7 @@ namespace AssetTracker.ViewModel
 
                             string username = "";
 
+                            //TODO: Allow user to be assigned to phases individually.
                             if (phaseChanges.Any(c => c.ch_description == ChangeType.UserAssigned))
                             {
                                 Change userAssignChange = phaseChanges.Last(c => c.ch_description == ChangeType.UserAssigned);

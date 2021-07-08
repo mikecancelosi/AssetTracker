@@ -23,12 +23,14 @@ namespace AssetTracker.View
     public partial class ProjectSettings : Page
     {
         public ProjectSettingsViewModel vm;
+        private Coordinator myCoordinator;
 
-        public ProjectSettings()
+        public ProjectSettings(Coordinator coordinator)
         {
             InitializeComponent();
             vm = new ProjectSettingsViewModel();
             DataContext = vm;
+            myCoordinator = coordinator;
         }
 
         private void AddCategoryClicked(object sender, RoutedEventArgs e)
@@ -80,6 +82,19 @@ namespace AssetTracker.View
             AddCategoryControl.Visibility = Visibility.Visible;
             CategoryEditorHeaderText.Text = "Edit Category";
             vm.OnCategorySelectedForEdit(selectedCategory.ca_id);
+        }
+
+        private void EditUserClicked(object sender, RoutedEventArgs e)
+        {
+            Button selectedItem = sender as Button;
+            User selectedUser = selectedItem.DataContext as User;
+            myCoordinator.NavigateToUserEdit(selectedUser);
+        }
+
+        private void EditRoleClicked(object sender, RoutedEventArgs e)
+        {
+            Button selectedItem = sender as Button;
+            SecRole selectedRole = selectedItem.DataContext as SecRole;
         }
     }
 }

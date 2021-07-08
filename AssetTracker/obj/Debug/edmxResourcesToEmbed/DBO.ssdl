@@ -97,6 +97,7 @@
     </Key>
     <Property Name="pr_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="pr_name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="pr_p4id" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="SecPermission2">
     <Key>
@@ -115,6 +116,13 @@
     <Property Name="p3_roid" Type="int" Nullable="false" />
     <Property Name="p3_prid" Type="int" Nullable="false" />
     <Property Name="p3_allow" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="SecPermission4">
+    <Key>
+      <PropertyRef Name="p4_id" />
+    </Key>
+    <Property Name="p4_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="p4_name" Type="nvarchar" MaxLength="50" Nullable="false" />
   </EntityType>
   <EntityType Name="SecRole">
     <Key>
@@ -285,6 +293,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_SecPermission_SecPermission4">
+    <End Role="SecPermission4" Type="Self.SecPermission4" Multiplicity="1" />
+    <End Role="SecPermission" Type="Self.SecPermission" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SecPermission4">
+        <PropertyRef Name="p4_id" />
+      </Principal>
+      <Dependent Role="SecPermission">
+        <PropertyRef Name="pr_p4id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_secpermission2_secpermission">
     <End Role="SecPermission" Type="Self.SecPermission" Multiplicity="1" />
     <End Role="SecPermission2" Type="Self.SecPermission2" Multiplicity="*" />
@@ -359,6 +379,7 @@
     <EntitySet Name="SecPermission" EntityType="Self.SecPermission" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SecPermission2" EntityType="Self.SecPermission2" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SecPermission3" EntityType="Self.SecPermission3" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SecPermission4" EntityType="Self.SecPermission4" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SecRole" EntityType="Self.SecRole" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Setting" EntityType="Self.Setting" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
@@ -409,6 +430,10 @@
     <AssociationSet Name="FK_Phase_AssetCategory" Association="Self.FK_Phase_AssetCategory">
       <End Role="AssetCategory" EntitySet="AssetCategory" />
       <End Role="Phase" EntitySet="Phase" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SecPermission_SecPermission4" Association="Self.FK_SecPermission_SecPermission4">
+      <End Role="SecPermission4" EntitySet="SecPermission4" />
+      <End Role="SecPermission" EntitySet="SecPermission" />
     </AssociationSet>
     <AssociationSet Name="FK_secpermission2_secpermission" Association="Self.FK_secpermission2_secpermission">
       <End Role="SecPermission" EntitySet="SecPermission" />

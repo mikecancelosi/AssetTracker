@@ -12,23 +12,18 @@ namespace AssetTracker.Model
     using System;
     using System.Collections.Generic;
     
-    public partial class SecPermission
+    public partial class SecPermission4
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public SecPermission()
+        public SecPermission4()
         {
-            this.UserPermissions = new HashSet<SecPermission2>();
-            this.RolePermissions = new HashSet<SecPermission3>();
+            this.SecPermissions = new HashSet<SecPermission>();
         }
     
-        public int pr_id { get; set; }
-        public string pr_name { get; set; }
-        public int pr_p4id { get; set; }
+        public int p4_id { get; set; }
+        public string p4_name { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SecPermission2> UserPermissions { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SecPermission3> RolePermissions { get; set; }
-        public virtual SecPermission4 PermissionHeader { get; set; }
+        public virtual ICollection<SecPermission> SecPermissions { get; set; }
     }
 }

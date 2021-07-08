@@ -25,33 +25,34 @@ namespace AssetTracker
     public partial class MainWindow : Window
     {
         public MainViewModel vm;
-
+        private Coordinator myCoordinator;
         public MainWindow()
         {
             vm = MainViewModel.Instance;
             DataContext = vm;
-            InitializeComponent();                 
-            NavigateToDashboard(null,null);           
+            InitializeComponent();
+            myCoordinator = new Coordinator(ContentFrame.NavigationService);
+            myCoordinator.NavigateToUserDashboard();       
         }
 
         public void NavigateToAssetList(object sender, RoutedEventArgs e)
         {
-            ContentFrame.Navigate(new AssetList());
+            myCoordinator.NavigateToAssetList();
         }
 
         public void NavigateToProjectStatus(object sender, RoutedEventArgs e)
         {
-            ContentFrame.Navigate(new ProjectStatus());
+            
         }
 
         private void NavigateToProjectConfig(object sender, RoutedEventArgs e)
         {
-            ContentFrame.Navigate(new ProjectSettings());
+            myCoordinator.NavigateToProjectSettings();
         }
 
         private void NavigateToDashboard(object sender, RoutedEventArgs e)
         {
-            ContentFrame.Navigate(new UserDashboard());
+            myCoordinator.NavigateToUserDashboard();
         }
 
         #region DatabaseSetup

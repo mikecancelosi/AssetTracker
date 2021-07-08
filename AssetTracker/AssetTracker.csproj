@@ -89,6 +89,7 @@
     <Compile Include="Change.cs">
       <DependentUpon>DBO.tt</DependentUpon>
     </Compile>
+    <Compile Include="Coordinator.cs" />
     <Compile Include="DBO.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -134,6 +135,9 @@
     <Compile Include="SecPermission3.cs">
       <DependentUpon>DBO.tt</DependentUpon>
     </Compile>
+    <Compile Include="SecPermission4.cs">
+      <DependentUpon>DBO.tt</DependentUpon>
+    </Compile>
     <Compile Include="SecRole.cs">
       <DependentUpon>DBO.tt</DependentUpon>
     </Compile>
@@ -153,6 +157,7 @@
     <Compile Include="ViewModel\ProjectSettingsViewModel.cs" />
     <Compile Include="ViewModel\SearchBoxViewModel.cs" />
     <Compile Include="ViewModel\UserDashboardViewModel.cs" />
+    <Compile Include="ViewModel\UserEditViewModel.cs" />
     <Compile Include="ViewModel\ViewModel.cs" />
     <Compile Include="View\AssetCreate.xaml.cs">
       <DependentUpon>AssetCreate.xaml</DependentUpon>
@@ -172,6 +177,7 @@
     <Compile Include="View\Converters\IsNullToBorderConverter.cs" />
     <Compile Include="View\Converters\IsNullToThicknessConverter.cs" />
     <Compile Include="View\Converters\IsNullToVisibilityConverter.cs" />
+    <Compile Include="View\Converters\MatchesUserIDToVisConverter.cs" />
     <Compile Include="View\Converters\MultiBooleanToVisibilityConverter.cs" />
     <Compile Include="View\Converters\MultiValueConverter.cs" />
     <Compile Include="View\ProjectSettings.xaml.cs">
@@ -187,6 +193,9 @@
     </Compile>
     <Compile Include="View\UserDashboard.xaml.cs">
       <DependentUpon>UserDashboard.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\UserEdit.xaml.cs">
+      <DependentUpon>UserEdit.xaml</DependentUpon>
     </Compile>
     <Page Include="View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -232,6 +241,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\Resources\ProjectSettingsResourceDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\Searchbox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -239,6 +252,10 @@
     <Page Include="View\UserDashboard.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\UserEdit.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -296,6 +313,7 @@
       <LastGenOutput>DBO.cs</LastGenOutput>
       <CustomToolNamespace>AssetTracker.Model</CustomToolNamespace>
     </Content>
+    <Resource Include="Images\MaterialDesign\outline_content_copy_white_48dp.png" />
     <Resource Include="Images\MaterialDesign\baseline_arrow_downward_white_48dp.png" />
     <Resource Include="Images\MaterialDesign\baseline_arrow_upward_white_48dp.png" />
     <Resource Include="Images\MaterialDesign\baseline_drag_indicator_white_48dp.png" />

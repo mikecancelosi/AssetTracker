@@ -1,4 +1,5 @@
-﻿using AssetTracker.ViewModel;
+﻿using AssetTracker.Model;
+using AssetTracker.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,16 +18,18 @@ using System.Windows.Shapes;
 namespace AssetTracker.View
 {
     /// <summary>
-    /// Interaction logic for UserDashboard.xaml
+    /// Interaction logic for UserEdit.xaml
     /// </summary>
-    public partial class UserDashboard : Page
+    public partial class UserEdit : Page
     {
-        public UserDashboardViewModel vm;
-        public UserDashboard()
+        public UserEditViewModel vm;
+
+        public UserEdit(User user)
         {
-            InitializeComponent();
-            vm = new UserDashboardViewModel();
+            vm = new UserEditViewModel();
+            vm.CurrentUser = user;
             DataContext = vm;
+            InitializeComponent();
         }
     }
 }

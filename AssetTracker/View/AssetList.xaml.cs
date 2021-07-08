@@ -23,11 +23,13 @@ namespace AssetTracker.View
     public partial class AssetList : Page
     {
         private AssetListViewModel vm;
-        public AssetList()
+        private Coordinator myCoordinator;
+        public AssetList(Coordinator coordinator)
         {
             InitializeComponent();
             vm = new AssetListViewModel();
             this.Unloaded += AssetList_Unloaded;
+            myCoordinator = coordinator;
         }
 
         private void AssetList_Unloaded(object sender, RoutedEventArgs e)
@@ -38,8 +40,7 @@ namespace AssetTracker.View
         private void ListViewItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             Asset ast = MainGrid.SelectedItem as Asset;
-            AssetDetail assetDetail = new AssetDetail(ast);
-            NavigationService.Navigate(assetDetail);
+            myCoordinator.NavigateToAssetDetail(ast);
         }
 
         private void AddAsset_Click(object sender, MouseButtonEventArgs e)

@@ -52,6 +52,7 @@ namespace AssetTracker.View
             DatabaseBackedObject dbo = MainGrid.SelectedItem as DatabaseBackedObject;
 
             vm.SelectionChanged(dbo.ID);
+            OnSelectionChanged?.Invoke();
             CloseClicked(sender, e);
         }
 
@@ -63,16 +64,12 @@ namespace AssetTracker.View
         public void SetCurrentSelectedObject(int objectID)
         {
             vm.SelectionChanged(objectID);
+            OnSelectionChanged?.Invoke();
         }
 
         public void SetFilter(string filter)
         {
             vm.Filter = filter;
-        }
-
-        public void Refresh()
-        {
-            vm.Refresh();
         }
 
         public void ClearInvocationList()

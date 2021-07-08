@@ -84,15 +84,15 @@
                             </Style>
                         </StackPanel.Resources>
 
-                        <Button IsEnabled="{Binding Savable}">
+                        <Button IsEnabled="{Binding Savable}" Click="OnSaveClicked">
                             <Image Source="/Images/MaterialDesign/baseline_save_white_48dp.png" />
                         </Button>
 
-                        <Button Margin="30,0">
+                        <Button Margin="30,0" Click="OnChangelogClicked">
                             <Image Source="/Images/MaterialDesign/baseline_list_white_48dp.png" />
                         </Button>
 
-                        <Button>
+                        <Button Click="OnDeleteClicked">
                             <Image Source="/Images/MaterialDesign/baseline_delete_white_48dp.png" />
                         </Button>
 
@@ -149,16 +149,34 @@
                             <Border x:Name="HierarchyBorder"
                                     Padding="{Binding marginFactor}"
                                     MouseLeftButtonUp="OnHierarchyAssetSelected_Clicked"
-                                    Tag="{Binding asset.as_id}">
+                                    Tag="{Binding asset.as_id}"
+                                    Cursor="Hand">
 
                                 <Grid>
+                                   
                                     <TextBlock x:Name="HierarchyLabel"
                                                Text="{Binding asset.Name}"
                                                FontSize="14" />
                                     <TextBlock x:Name="NavigateToVisual"
                                                Text=">"
-                                               HorizontalAlignment="Right"
-                                               Visibility="Collapsed" />
+                                               HorizontalAlignment="Right">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsMouseDirectlyOver, ElementName=HierarchyLabel}"
+                                                                 Value="True">
+                                                        <Setter Property="Visibility"
+                                                                Value="Visible" />
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding IsMouseDirectlyOver, ElementName=HierarchyLabel}"
+                                                                 Value="False">
+                                                        <Setter Property="Visibility"
+                                                                Value="Collapsed" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
                                 </Grid>
                             </Border>
                             <DataTemplate.Triggers>
@@ -528,11 +546,11 @@
                                 Padding="5"
                                 Width="100"
                                 Margin="0,0,30,0"
-                                Click="ConfirmSave_Clicked" />
+                                Click="RefuseSave_Clicked" />
                         <Button Content="Yes"
                                 Padding="5"
                                 Width="100"
-                                Click="RefuseSave_Clicked" />
+                                Click="ConfirmSave_Clicked" />
                     </StackPanel>
                 </StackPanel>
             </Border>

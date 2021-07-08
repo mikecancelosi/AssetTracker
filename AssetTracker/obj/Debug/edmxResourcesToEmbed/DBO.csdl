@@ -65,8 +65,10 @@
     </Key>
     <Property Name="pr_id" Type="Int32" Nullable="false" />
     <Property Name="pr_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-    <NavigationProperty Name="SecPermission2" Relationship="Self.FK_secpermission2_secpermission" FromRole="SecPermission" ToRole="SecPermission2" />
-    <NavigationProperty Name="SecPermission3" Relationship="Self.FK_secpermission3_secpermission" FromRole="SecPermission" ToRole="SecPermission3" />
+    <NavigationProperty Name="UserPermissions" Relationship="Self.FK_secpermission2_secpermission" FromRole="SecPermission" ToRole="SecPermission2" />
+    <NavigationProperty Name="RolePermissions" Relationship="Self.FK_secpermission3_secpermission" FromRole="SecPermission" ToRole="SecPermission3" />
+    <Property Name="pr_p4id" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="PermissionHeader" Relationship="Model.FK_SecPermission_SecPermission4" FromRole="SecPermission" ToRole="SecPermission4" />
   </EntityType>
   <EntityType Name="SecPermission2">
     <Key>
@@ -327,6 +329,11 @@
       <End Role="User" EntitySet="Users" />
       <End Role="Alert" EntitySet="Alerts" />
     </AssociationSet>
+    <EntitySet Name="SecPermission4" EntityType="Model.SecPermission4" />
+    <AssociationSet Name="FK_SecPermission_SecPermission4" Association="Model.FK_SecPermission_SecPermission4">
+      <End Role="SecPermission4" EntitySet="SecPermission4" />
+      <End Role="SecPermission" EntitySet="SecPermissions" />
+    </AssociationSet>
   </EntityContainer>
   <ComplexType Name="assetGetInformation_Result">
     <Property Type="Int32" Name="as_id" Nullable="false" />
@@ -471,6 +478,26 @@
       </Principal>
       <Dependent Role="Alert">
         <PropertyRef Name="ar_usid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="SecPermission4">
+    <Key>
+      <PropertyRef Name="p4_id" />
+    </Key>
+    <Property Name="p4_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="p4_name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="SecPermissions" Relationship="Model.FK_SecPermission_SecPermission4" FromRole="SecPermission4" ToRole="SecPermission" />
+  </EntityType>
+  <Association Name="FK_SecPermission_SecPermission4">
+    <End Type="Model.SecPermission4" Role="SecPermission4" Multiplicity="1" />
+    <End Type="Model.SecPermission" Role="SecPermission" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SecPermission4">
+        <PropertyRef Name="p4_id" />
+      </Principal>
+      <Dependent Role="SecPermission">
+        <PropertyRef Name="pr_p4id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

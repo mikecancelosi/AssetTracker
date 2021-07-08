@@ -115,10 +115,13 @@ namespace AssetTracker.View
             else
             {
                 OnSaveComplete?.Invoke();
-                foreach (Delegate d in OnSaveComplete.GetInvocationList())
+                if (OnSaveComplete != null)
                 {
-                    OnSaveComplete -= (SaveDelegate)d;
-                }
+                    foreach (Delegate d in OnSaveComplete.GetInvocationList())
+                    {
+                        OnSaveComplete -= (SaveDelegate)d;
+                    }
+                }                
             }
         }
 
@@ -199,7 +202,7 @@ namespace AssetTracker.View
         }
         private void OnModifyTitleCancel_Clicked(object sender, RoutedEventArgs e)
         {
-            ModifyTitlePanel.Visibility = Visibility.Visible;
+            ModifyTitlePanel.Visibility = Visibility.Collapsed;
             EditTitle_Value.Text = "";
             EditDescription_Value.Text = "";
         }
@@ -207,22 +210,10 @@ namespace AssetTracker.View
         private void ConfirmSave_Clicked(object sender, RoutedEventArgs e)
         {
             PromptSavePanel.Visibility = Visibility.Collapsed;
-            List<Violation> violations = new List<Violation>();
-            if (!vm.OnSave(out violations))
-            {
-
-            }
-            else
-            {
-                OnSaveComplete?.Invoke();
-                foreach(Delegate d in OnSaveComplete.GetInvocationList())
-                {
-                    OnSaveComplete -= (SaveDelegate)d;
-                }
-            }
+            OnSaveClicked(sender, e);
         }
 
-        private void RefuseSave_Clicked(object sender, RoutedEventArgs e)
+        public void RefuseSave_Clicked(object sender, RoutedEventArgs e)
         {
             PromptSavePanel.Visibility = Visibility.Collapsed;
             OnSaveRefused?.Invoke();

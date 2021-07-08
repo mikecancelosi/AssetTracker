@@ -33,8 +33,11 @@ C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\As
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\AssetTracker.csproj.CopyComplete
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\AssetTracker.exe
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\AssetTracker.pdb
-C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\AssetTracker.csprojAssemblyReference.cache
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\View\UserDashboard.g.cs
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\View\UserDashboard.baml
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\View\MainWindow.g.cs
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\View\MainWindow.baml
+C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\View\UserEdit.g.cs
+C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\View\UserEdit.baml
+C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\View\Resources\ProjectSettingsResourceDictionary.baml
+C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\AssetTracker.csprojAssemblyReference.cache

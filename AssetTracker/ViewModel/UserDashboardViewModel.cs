@@ -9,12 +9,8 @@ using System.Windows;
 
 namespace AssetTracker.ViewModel
 {
-    public class UserDashboardViewModel : INotifyPropertyChanged
-    {
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private TrackerContext context = new TrackerContext();
-
+    public class UserDashboardViewModel : ViewModel
+    {     
         private User myuser;
         public User myUser
         {

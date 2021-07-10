@@ -98,6 +98,7 @@
     <Property Name="pr_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="pr_name" Type="nvarchar" MaxLength="50" Nullable="false" />
     <Property Name="pr_p4id" Type="int" Nullable="false" />
+    <Property Name="pr_default" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="SecPermission2">
     <Key>

@@ -53,6 +53,7 @@
     <EntitySetMapping Name="SecPermissions">
       <EntityTypeMapping TypeName="Model.SecPermission">
         <MappingFragment StoreEntitySet="SecPermission">
+          <ScalarProperty Name="pr_default" ColumnName="pr_default" />
           <ScalarProperty Name="pr_p4id" ColumnName="pr_p4id" />
           <ScalarProperty Name="pr_id" ColumnName="pr_id" />
           <ScalarProperty Name="pr_name" ColumnName="pr_name" />

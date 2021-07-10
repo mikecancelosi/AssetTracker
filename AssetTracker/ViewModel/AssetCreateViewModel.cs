@@ -10,14 +10,10 @@ using System.Linq;
 
 namespace AssetTracker.ViewModel
 {
-    public class AssetCreateViewModel : INotifyPropertyChanged
+    public class AssetCreateViewModel : ViewModel
     {
-        private TrackerContext context = new TrackerContext();
-
         private Asset assetToCreate;
         public Asset AssetToCreate { get { return assetToCreate; } set { assetToCreate = value; } }
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
 
         public AssetCreateViewModel()

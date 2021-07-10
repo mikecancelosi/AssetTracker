@@ -38,7 +38,8 @@ namespace AssetTracker
 
         public void NavigateToRoleEdit(SecRole roleToEdit)
         {
-            
+            RoleEdit roleEdit = new RoleEdit(roleToEdit);
+            nav.Navigate(roleEdit);
         }
 
         public void NavigateToProjectSettings()

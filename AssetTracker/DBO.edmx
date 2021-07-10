@@ -103,6 +103,7 @@
           <Property Name="pr_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="pr_name" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="pr_p4id" Type="int" Nullable="false" />
+          <Property Name="pr_default" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="SecPermission2">
           <Key>
@@ -534,6 +535,7 @@
           <NavigationProperty Name="RolePermissions" Relationship="Self.FK_secpermission3_secpermission" FromRole="SecPermission" ToRole="SecPermission3" />
           <Property Name="pr_p4id" Type="Int32" Nullable="false" />
           <NavigationProperty Name="PermissionHeader" Relationship="Model.FK_SecPermission_SecPermission4" FromRole="SecPermission" ToRole="SecPermission4" />
+          <Property Name="pr_default" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="SecPermission2">
           <Key>
@@ -1024,6 +1026,7 @@
           <EntitySetMapping Name="SecPermissions">
             <EntityTypeMapping TypeName="Model.SecPermission">
               <MappingFragment StoreEntitySet="SecPermission">
+                <ScalarProperty Name="pr_default" ColumnName="pr_default" />
                 <ScalarProperty Name="pr_p4id" ColumnName="pr_p4id" />
                 <ScalarProperty Name="pr_id" ColumnName="pr_id" />
                 <ScalarProperty Name="pr_name" ColumnName="pr_name" />

@@ -203,7 +203,8 @@
                                                                Width="24px" />
                                                     </Button>
                                                     <Button Background="Black"
-                                                            Margin="10,0">
+                                                            Margin="10,0" 
+                                                            Click="EditRoleClicked">
                                                         <Image Source="../Images/MaterialDesign/baseline_edit_white_48dp.png"
                                                                Width="24px" />
                                                     </Button>

@@ -24,6 +24,7 @@ namespace AssetTracker.Model
         public int pr_id { get; set; }
         public string pr_name { get; set; }
         public int pr_p4id { get; set; }
+        public bool pr_default { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SecPermission2> UserPermissions { get; set; }

@@ -95,6 +95,7 @@ namespace AssetTracker.View
         {
             Button selectedItem = sender as Button;
             SecRole selectedRole = selectedItem.DataContext as SecRole;
+            myCoordinator.NavigateToRoleEdit(selectedRole);
         }
     }
 }

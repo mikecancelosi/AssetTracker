@@ -22,14 +22,98 @@ namespace AssetTracker.View
     /// </summary>
     public partial class UserEdit : Page
     {
-        public UserEditViewModel vm;
+        public UserEditViewModel VM;
+        private Coordinator coordinator;
 
-        public UserEdit(User user)
+        public UserEdit(Coordinator coord)
         {
-            vm = new UserEditViewModel();
-            vm.CurrentUser = user;
-            DataContext = vm;
             InitializeComponent();
+            VM = new UserEditViewModel();
+            DataContext = VM;
+            coordinator = coord;
+            Searchbox_Role.SetType(typeof(SecRole));
+            Searchbox_Role.SetCurrentSelectedObject(VM.CurrentUser.us_roid);
         }
+
+        public UserEdit(User user, Coordinator coord)
+        {
+            InitializeComponent();
+            VM = new UserEditViewModel(user);
+            DataContext = VM;
+            coordinator = coord;
+
+            Searchbox_Role.SetType(typeof(SecRole));
+            Searchbox_Role.SetCurrentSelectedObject(VM.CurrentUser.us_roid);
+        }
+
+        public void OnSaveClicked(object sender, RoutedEventArgs e)
+        {
+            List<Violation> violations = new List<Violation>();
+            if (!VM.OnSave(out violations))
+            {
+
+            }
+            else
+            {
+
+            }
+        }
+
+        private void OnDeleteClicked(object sender, RoutedEventArgs e)
+        {
+            VM.OnDelete();
+            coordinator.NavigateToProjectSettings();
+        }
+
+        private void FirstName_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox nameTextBox = sender as TextBox;
+            VM.OnFirstNameChanged(nameTextBox.Text);
+        }
+
+        private void LastName_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox nameTextBox = sender as TextBox;
+            VM.OnLastNameChanged(nameTextBox.Text);
+        }
+
+        private void DisplayName_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox nameTextBox = sender as TextBox;
+            VM.OnDisplayNameChanged(nameTextBox.Text);
+        }
+
+        private void Email_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox emailTextBox = sender as TextBox;
+            VM.OnEmailChanged(emailTextBox.Text);
+        }
+
+        private void Role_OnSelectionChanged()
+        {
+            VM.OnRoleChanged(Searchbox_Role.CurrentSelection.ID);
+        }
+
+        public void OnActivateAllClicked(object sender, RoutedEventArgs e)
+        {
+            VM.ActivateAllPermissions();
+        }
+
+        public void OnDeactivateAllClicked(object sender, RoutedEventArgs e)
+        {
+            VM.DeactivateAllPermissions();
+        }
+
+        public void NavigateToProjectSettings(object sender, RoutedEventArgs e)
+        {
+            coordinator.NavigateToProjectSettings();
+        }
+
+        public void PermissionAllowance_Clicked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+
     }
 }

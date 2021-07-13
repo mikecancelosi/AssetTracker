@@ -99,6 +99,27 @@ namespace AssetTracker.Model
             return false;
         }
 
+        public virtual void Delete(TrackerContext context)
+        {
+            try
+            {
+                context.Set(GetType()).Remove(this);
+                context.SaveChanges();
+            }
+            catch (DbEntityValidationException e)
+            {
+                throw;
+            }
+        }
+
+        //TODO: Upgrade to .NET 5 for covariant return type support
+        public virtual DatabaseBackedObject Clone()
+        {
+            object instance = Activator.CreateInstance(this.GetType());
+            ((DatabaseBackedObject)instance).Name = Name;
+            return (DatabaseBackedObject)instance;
+        }
+
 
         public virtual List<Change> GetChanges(DatabaseBackedObject beforeObject)
         {

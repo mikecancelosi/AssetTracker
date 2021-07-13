@@ -61,5 +61,34 @@ namespace AssetTracker.Model
             }
             return output;
         }
+
+        public override void Delete(TrackerContext context)
+        {
+            if(this.AssetLink != null)
+            {
+                AssetLink.Delete(context);
+            }
+            if(this.as_usid > 0)
+            {
+                context.Entry(this).Property(x => x.as_usid).CurrentValue = 0;
+            }
+
+            base.Delete(context);
+        }
+
+        public override DatabaseBackedObject Clone()
+        {
+            //TODO : Copy with children
+            Asset copy = new Asset()
+            {
+                as_caid = this.as_caid,
+                as_description = this.as_description,
+                as_displayname = this.as_displayname,
+                as_parentid = this.as_parentid,
+                as_usid = this.as_usid,
+                as_phid = this.as_phid
+            };
+            return copy;
+        }
     }
 }

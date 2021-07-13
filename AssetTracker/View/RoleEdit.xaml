@@ -6,6 +6,7 @@
       xmlns:local="clr-namespace:AssetTracker.View"
       xmlns:viewmodel="clr-namespace:AssetTracker.ViewModel"
       xmlns:mi="clr-namespace:MaterialIcons;assembly=MaterialIcons"
+      xmlns:extensions="clr-namespace:AssetTracker.View.Extensions"
       mc:Ignorable="d"
       d:DesignHeight="900"
       d:DesignWidth="1600"
@@ -14,6 +15,14 @@
     <Page.DataContext>
         <viewmodel:RoleEditViewModel />
     </Page.DataContext>
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary x:Name="PermissionsDictionary"
+                                    Source="Resources/PermissionsResourceDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Page.Resources>
     <Grid Margin="100,30">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*"
@@ -86,193 +95,12 @@
             <Grid>
 
                 <StackPanel Margin="15,50">
-                    <StackPanel.Resources>
-                        <Style x:Key="PermissionStyle"
-                               TargetType="ListViewItem">
-                            <Setter Property="SnapsToDevicePixels"
-                                    Value="true" />
-                            <Setter Property="OverridesDefaultStyle"
-                                    Value="true" />
-                            
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="ListBoxItem">
-                                        <Border Name="BorderPer" Padding="0,5"
-                                                SnapsToDevicePixels="true"
-                                                HorizontalAlignment="Stretch">
-                                            <Grid>
-                                                <Grid.Resources>
-                                                    <Style TargetType="{x:Type CheckBox}">
-                                                        <Setter Property="Foreground"
-                                                                Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" />
-                                                        <Setter Property="Background"
-                                                                Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" />
-                                                        <Setter Property="Template">
-                                                            <Setter.Value>
-                                                                <ControlTemplate TargetType="{x:Type CheckBox}">
-                                                                    <ControlTemplate.Resources>
-                                                                        <Storyboard x:Key="OnChecking">
-                                                                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00"
-                                                                                                           Storyboard.TargetName="slider"
-                                                                                                           Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)">
-                                                                                <SplineDoubleKeyFrame KeyTime="00:00:00.3000000"
-                                                                                                      Value="25" />
-                                                                            </DoubleAnimationUsingKeyFrames>
-                                                                        </Storyboard>
-                                                                        <Storyboard x:Key="OnUnchecking">
-                                                                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00"
-                                                                                                           Storyboard.TargetName="slider"
-                                                                                                           Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)">
-                                                                                <SplineDoubleKeyFrame KeyTime="00:00:00.3000000"
-                                                                                                      Value="0" />
-                                                                            </DoubleAnimationUsingKeyFrames>
-                                                                            <ThicknessAnimationUsingKeyFrames BeginTime="00:00:00"
-                                                                                                              Storyboard.TargetName="slider"
-                                                                                                              Storyboard.TargetProperty="(FrameworkElement.Margin)">
-                                                                                <SplineThicknessKeyFrame KeyTime="00:00:00.3000000"
-                                                                                                         Value="1,1,1,1" />
-                                                                            </ThicknessAnimationUsingKeyFrames>
-                                                                        </Storyboard>
-                                                                    </ControlTemplate.Resources>
-
-                                                                    <DockPanel x:Name="dockPanel">
-                                                                        <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                                                                                          Content="{TemplateBinding Content}"
-                                                                                          ContentStringFormat="{TemplateBinding ContentStringFormat}"
-                                                                                          ContentTemplate="{TemplateBinding ContentTemplate}"
-                                                                                          RecognizesAccessKey="True"
-                                                                                          VerticalAlignment="Center" />
-
-                                                                        <Border Margin="5,5,0,5"
-                                                                                Width="50"
-                                                                                Background="#FFC0CCD9"
-                                                                                x:Name="SliderBck"
-                                                                                CornerRadius="5"
-                                                                                Padding="2">
-                                                                            <Border HorizontalAlignment="Left"
-                                                                                    x:Name="slider"
-                                                                                    Width="20"
-                                                                                    Height="20"
-                                                                                    BorderThickness="1"
-                                                                                    CornerRadius="5"
-                                                                                    RenderTransformOrigin="0.5,0.5"
-                                                                                    Margin="1,1,1,1"
-                                                                                    Background="White">
-                                                                                <Border.RenderTransform>
-                                                                                    <TransformGroup>
-                                                                                        <ScaleTransform ScaleX="1"
-                                                                                                        ScaleY="1" />
-                                                                                        <SkewTransform AngleX="0"
-                                                                                                       AngleY="0" />
-                                                                                        <RotateTransform Angle="0" />
-                                                                                        <TranslateTransform X="0"
-                                                                                                            Y="0" />
-                                                                                    </TransformGroup>
-                                                                                </Border.RenderTransform>
-
-                                                                            </Border>
-                                                                        </Border>
-
-                                                                    </DockPanel>
-
-                                                                    <ControlTemplate.Triggers>
-                                                                        <Trigger Property="IsChecked"
-                                                                                 Value="True">
-                                                                            <Trigger.ExitActions>
-                                                                                <BeginStoryboard Storyboard="{StaticResource OnUnchecking}"
-                                                                                                 x:Name="OnUnchecking_BeginStoryboard" />
-                                                                            </Trigger.ExitActions>
-                                                                            <Trigger.EnterActions>
-                                                                                <BeginStoryboard Storyboard="{StaticResource OnChecking}"
-                                                                                                 x:Name="OnChecking_BeginStoryboard" />
-                                                                            </Trigger.EnterActions>
-                                                                            <Setter Property="Background"
-                                                                                    TargetName="SliderBck"
-                                                                                    Value="#3a5" />
-                                                                        </Trigger>
-                                                                        <Trigger Property="IsEnabled"
-                                                                                 Value="False">
-                                                                            <Setter Property="Foreground"
-                                                                                    Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
-                                                                        </Trigger>
-                                                                    </ControlTemplate.Triggers>
-                                                                </ControlTemplate>
-                                                            </Setter.Value>
-                                                        </Setter>
-                                                    </Style>
-                                                </Grid.Resources>
-                                                <TextBlock Text="{Binding Path=Permission.pr_name }"
-                                                           Margin="0,0,10,0"
-                                                           FontSize="14"
-                                                           FontWeight="SemiBold" Foreground="White" VerticalAlignment="Center" />
-                                                <CheckBox IsChecked="{Binding Path=Allowed}"
-                                                          HorizontalAlignment="Right">
-
-                                                </CheckBox>
-                                            </Grid>
-                                        </Border>
-                                        <ControlTemplate.Triggers>
-                                            <Trigger Property="IsSelected"
-                                                     Value="true">
-                                                <Setter TargetName="BorderPer"
-                                                        Property="Background"
-                                                        Value="Transparent" />
-                                            </Trigger>
-                                            <Trigger Property="IsEnabled"
-                                                     Value="false">
-                                                <Setter Property="Foreground"
-                                                        Value="Transparent" />
-                                            </Trigger>
-                                        </ControlTemplate.Triggers>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-
-                        <Style x:Key="PermissionGrpStyle"
-                               TargetType="ListViewItem">
-                            <Setter Property="SnapsToDevicePixels"
-                                    Value="true" />
-                            <Setter Property="OverridesDefaultStyle"
-                                    Value="true" />
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="ListBoxItem">
-                                        <Grid Name="Border"
-                                               
-                                                SnapsToDevicePixels="true"
-                                                Margin="0,0,100,20" Width="300" Background="Blue" VerticalAlignment="Top">
-                                            <StackPanel Orientation="Vertical"
-                                                       VerticalAlignment="Top">
-                                                <TextBlock Text="{Binding Path=Name }"
-                                                           FontSize="20"
-                                                           Margin="0,0,0,10"
-                                                           Foreground="white"
-                                                           Typography.Capitals="AllSmallCaps" />
-                                                <ListView ItemsSource="{Binding Path=Permissions}"
-                                                          ItemContainerStyle="{StaticResource PermissionStyle}"
-                                                          BorderThickness="0"
-                                                          Background="Transparent" />
-                                            </StackPanel>
-                                        </Grid>
-                                        <ControlTemplate.Triggers>
-                                            <Trigger Property="IsSelected"
-                                                     Value="true">
-                                                <Setter TargetName="Border"
-                                                        Property="Background"
-                                                        Value="Transparent" />
-                                            </Trigger>
-                                            <Trigger Property="IsEnabled"
-                                                     Value="false">
-                                                <Setter Property="Foreground"
-                                                        Value="Transparent" />
-                                            </Trigger>
-                                        </ControlTemplate.Triggers>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </StackPanel.Resources>
+                    <StackPanel x:Name="Breadcrumbs"
+                                Orientation="Horizontal">
+                        <Button Content="Configuration" />
+                        <TextBlock Text=">" />
+                        <Button Content="Role Edit" />
+                    </StackPanel>
                     <TextBlock Text="Modify Role Permissions"
                                FontSize="20"
                                FontWeight="SemiBold" />
@@ -287,20 +115,10 @@
                                    FontWeight="SemiBold" />
                     </StackPanel>
 
-                    
-                    
-                    <ListView x:Name="PermissionsList"
-                                ItemsSource="{Binding PermissionGroups}"
-                              ItemContainerStyle="{StaticResource PermissionGrpStyle}"
-                              BorderThickness="0"
-                              Background="Transparent"
-                              HorizontalAlignment="Left" Loaded="Permissions_Loaded" LayoutUpdated="PermissionsList_LayoutUpdated" >
-                        <ListView.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <WrapPanel Width="800" Orientation="Horizontal" />
-                            </ItemsPanelTemplate>
-                        </ListView.ItemsPanel>
-                    </ListView>
+
+                    <ItemsControl ItemsSource="{Binding PermissionGroups}"
+                                  Style="{StaticResource  PermissionsList}" />
+
 
                 </StackPanel>
             </Grid>

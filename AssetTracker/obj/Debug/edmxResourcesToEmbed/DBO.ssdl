@@ -71,7 +71,7 @@
     <Property Name="di_contents" Type="nvarchar" MaxLength="500" Nullable="false" />
     <Property Name="di_asid" Type="int" Nullable="false" />
     <Property Name="di_parentid" Type="int" />
-    <Property Name="di_usid" Type="int" Nullable="false" />
+    <Property Name="di_usid" Type="int" />
     <Property Name="di_date" Type="datetime" Nullable="false" />
   </EntityType>
   <EntityType Name="Metadata">
@@ -271,7 +271,7 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_Discussion_User">
-    <End Role="User" Type="Self.User" Multiplicity="1" />
+    <End Role="User" Type="Self.User" Multiplicity="0..1" />
     <End Role="Discussion" Type="Self.Discussion" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="User">

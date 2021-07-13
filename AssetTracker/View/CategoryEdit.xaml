@@ -1,0 +1,108 @@
+﻿<Page x:Class="AssetTracker.View.CategoryEdit"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:AssetTracker.View"
+      xmlns:viewmodel="clr-namespace:AssetTracker.ViewModel"
+      xmlns:mi="clr-namespace:MaterialIcons;assembly=MaterialIcons"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="CategoryEdit">
+    <Page.DataContext>
+        <viewmodel:CategoryEditViewModel />
+    </Page.DataContext>
+    <Page.Resources>
+        <ResourceDictionary>
+            <BooleanToVisibilityConverter x:Key="BoolToVis" />
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary x:Name="ProjectSettingsDictionary"
+                                    Source="Resources/ProjectSettingsResourceDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+
+        </ResourceDictionary>
+
+    </Page.Resources>
+
+    <Grid Margin="100,30">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"
+                              MaxWidth="300" />
+            <ColumnDefinition Width="5*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid x:Name="LeftPanel"
+              Background="Gray">
+            <StackPanel Margin="20">
+                <Border Name="ControlButtons"
+                        Padding="20,10,20,20"
+                        HorizontalAlignment="Stretch"
+                        BorderThickness="0,0,0,5"
+                        BorderBrush="#555">
+
+                    <StackPanel  Orientation="Horizontal"
+                                 HorizontalAlignment="Center">
+                        <StackPanel.Resources>
+                            <Style TargetType="Button">
+                                <Setter Property="Height"
+                                        Value="36" />
+                                <Setter Property="Background"
+                                        Value="#aaa" />
+                                <Setter Property="BorderThickness"
+                                        Value="0" />
+
+                            </Style>
+                        </StackPanel.Resources>
+
+                        <Button IsEnabled="{Binding Savable}"
+                                Click="OnSaveClicked"
+                                Margin="0,0,30,0">
+                            <mi:MaterialIcon Icon="ic_save"
+                                             Width="36"
+                                             Height="36"
+                                             Foreground="White" />
+                        </Button>
+
+                        <Button Click="OnDeleteClicked">
+                            <mi:MaterialIcon Icon="ic_delete"
+                                             Width="36"
+                                             Height="36"
+                                             Foreground="White" />
+                        </Button>
+
+                    </StackPanel>
+                </Border>
+
+              
+                <Grid>
+                    <TextBlock Text="Category Edit"
+                               Foreground="Black"
+                               FontSize="24"
+                               FontWeight="Bold"
+                               Margin="0,10" />
+                    <TextBlock Text="#1302"
+                               Foreground="LightGray" VerticalAlignment="Center" HorizontalAlignment="Right" />
+                </Grid>
+            </StackPanel>
+            <StackPanel Margin="20,250">
+                <RadioButton x:Name="UserSetupNav"
+                             Content="Phases "
+                             GroupName="SubNav"
+                             Style="{StaticResource SubNavRadio}"
+                             IsChecked="True" />
+                <RadioButton x:Name="PermissionsNav"
+                             Content="Permissions"
+                             GroupName="SubNav"
+                             Style="{StaticResource SubNavRadio}"
+                             Margin="0,10" />
+            </StackPanel>
+        </Grid>
+        <Grid x:Name="RightPanel"
+              Grid.Column="1"
+              Margin="50,0"
+              Background="Gray">
+          
+        </Grid>
+    </Grid>
+</Page>

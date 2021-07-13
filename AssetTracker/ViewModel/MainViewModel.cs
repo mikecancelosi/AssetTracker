@@ -30,7 +30,7 @@ namespace AssetTracker.ViewModel
 
         public MainViewModel()
         {
-            CurrentUser = context.Users.Find(2);
+            CurrentUser = context.Users.FirstOrDefault();
             NotifyPropertyChanged("CurrentUser");
         }
     }

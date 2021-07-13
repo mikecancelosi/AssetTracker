@@ -31,71 +31,72 @@ namespace AssetTracker.View
             vm = new ProjectSettingsViewModel();
             DataContext = vm;
             myCoordinator = coordinator;
-        }
+        }     
 
-        private void AddCategoryClicked(object sender, RoutedEventArgs e)
+        private void AddUserClicked(object sender, RoutedEventArgs e)
         {
-            AddCategoryControl.Visibility = Visibility.Visible;
-            CategoryEditorHeaderText.Text = "Create Category";
-            vm.OnNewCategoryClicked();
-            DataContext = vm;
+            myCoordinator.NavigateToCreateUser();
         }
-
-        private void AddPhaseClicked(object sender, RoutedEventArgs e)
-        {
-            vm.OnNewPhaseClicked();
-        }
-
-        private void PhaseMoveUpClicked(object sender, RoutedEventArgs e)
-        {
-            int index = (int)((Button)sender).CommandParameter;
-            vm.OnPhaseUpClicked(index);
-        }
-
-        private void PhaseMoveDownClicked(object sender, RoutedEventArgs e)
-        {
-            int index = (int)((Button)sender).CommandParameter;
-            vm.OnPhaseDownClicked(index);
-        }
-
-        private void DeletePhaseClicked(object sender, RoutedEventArgs e)
-        {
-            int index = (int)((Button)sender).CommandParameter;
-            vm.OnPhaseDelete(index);
-        }
-        private void SaveCategoryClicked(object sender, RoutedEventArgs e)
-        {
-            vm.OnSaveCategory();
-            AddCategoryControl.Visibility = Visibility.Collapsed;
-        }
-
-        private void ExitCategoryClicked(object sender, RoutedEventArgs e)
-        {
-            AddCategoryControl.Visibility = Visibility.Collapsed;
-            vm.OnExitCategory();
-        }
-
-        private void CategoryListItem_Clicked(object sender, MouseButtonEventArgs e)
-        {
-            ListViewItem selectedItem = sender as ListViewItem;
-            AssetCategory selectedCategory = selectedItem.DataContext as AssetCategory;
-            AddCategoryControl.Visibility = Visibility.Visible;
-            CategoryEditorHeaderText.Text = "Edit Category";
-            vm.OnCategorySelectedForEdit(selectedCategory.ca_id);
-        }
-
         private void EditUserClicked(object sender, RoutedEventArgs e)
         {
             Button selectedItem = sender as Button;
             User selectedUser = selectedItem.DataContext as User;
-            myCoordinator.NavigateToUserEdit(selectedUser);
+            myCoordinator.NavigateToModifyUser(selectedUser);
+        }
+        private void DeleteUserClicked(object sender, RoutedEventArgs e)
+        {
+            Button selectedItem = sender as Button;
+            User selectedUser = selectedItem.DataContext as User;
+            vm.DeleteUser(selectedUser.us_id);
+        }
+        private void CopyUserClicked(object sender, RoutedEventArgs e)
+        {
+            Button selectedItem = sender as Button;
+            User selectedUser = selectedItem.DataContext as User;
+            User copiedUser = vm.CopyUser(selectedUser.us_id);
+            myCoordinator.NavigateToModifyUser(copiedUser);
         }
 
+        private void AddRoleClicked(object sender, RoutedEventArgs e)
+        {
+            myCoordinator.NavigateToCreateUser();
+        }
         private void EditRoleClicked(object sender, RoutedEventArgs e)
         {
             Button selectedItem = sender as Button;
             SecRole selectedRole = selectedItem.DataContext as SecRole;
             myCoordinator.NavigateToRoleEdit(selectedRole);
+        }
+        private void DeleteRoleClicked(object sender, RoutedEventArgs e)
+        {
+            Button selectedItem = sender as Button;
+            SecRole selectedRole = selectedItem.DataContext as SecRole;
+            vm.DeleteRole(selectedRole.ro_id);
+        }
+        private void CopyRoleClicked(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void AddCategoryClicked(object sender, RoutedEventArgs e)
+        {
+            myCoordinator.NavigateToCreateUser();
+        }
+        private void EditCategoryClicked(object sender, RoutedEventArgs e)
+        {
+            Button selectedItem = sender as Button;
+            AssetCategory selectedCategory = selectedItem.DataContext as AssetCategory;
+            myCoordinator.NavigatetoCategoryEdit(selectedCategory);
+        }
+        private void DeleteCategoryClicked(object sender, RoutedEventArgs e)
+        {
+            Button selectedItem = sender as Button;
+            AssetCategory selectedCat = selectedItem.DataContext as AssetCategory;
+            vm.DeleteCategory(selectedCat.ca_id);
+        }
+        private void CopyCategoryClicked(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
         }
     }
 }

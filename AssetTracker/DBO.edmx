@@ -76,7 +76,7 @@
           <Property Name="di_contents" Type="nvarchar" MaxLength="500" Nullable="false" />
           <Property Name="di_asid" Type="int" Nullable="false" />
           <Property Name="di_parentid" Type="int" />
-          <Property Name="di_usid" Type="int" Nullable="false" />
+          <Property Name="di_usid" Type="int" />
           <Property Name="di_date" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="Metadata">
@@ -276,7 +276,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Discussion_User">
-          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
           <End Role="Discussion" Type="Self.Discussion" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">
@@ -832,7 +832,7 @@
           <Property Name="di_contents" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="di_asid" Type="Int32" Nullable="false" />
           <Property Name="di_parentid" Type="Int32" />
-          <Property Name="di_usid" Type="Int32" Nullable="false" />
+          <Property Name="di_usid" Type="Int32" />
           <Property Name="di_date" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="Asset" Relationship="Model.FK_discussion_asset" FromRole="Discussion1" ToRole="Asset" />
           <NavigationProperty Name="Children" Relationship="Model.FK_discussion_discussion" FromRole="Discussion1" ToRole="Discussion11" />
@@ -884,7 +884,7 @@
           <Property Name="md_recid" Type="Int32" Nullable="false" />
         </EntityType>
         <Association Name="FK_Discussion_User">
-          <End Type="Model.User" Role="User" Multiplicity="1" />
+          <End Type="Model.User" Role="User" Multiplicity="0..1" />
           <End Type="Model.Discussion" Role="Discussion" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">

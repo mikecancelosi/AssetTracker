@@ -31,7 +31,15 @@ namespace AssetTracker.Model
                 ca_name = value;
             }
         }
-        
+
+        public override DatabaseBackedObject Clone()
+        {
+            return new AssetCategory()
+            {
+                ca_name = ca_name
+            };
+        }
+
         public override bool IsValid(out List<Violation> violations)
         {
             violations = new List<Violation>();

@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static AssetTracker.Model.SecPermission;
 
 namespace AssetTracker.ViewModel
 {
@@ -25,7 +26,7 @@ namespace AssetTracker.ViewModel
                     var Grps = new List<PermissionGroup>();
                     foreach (SecPermission4 grp in permissionGroups)
                     {
-                        List<PermissionItem> items = new List<PermissionItem>();
+                        ObservableCollection<PermissionItem> items = new ObservableCollection<PermissionItem>();
                         foreach (var permission in grp.SecPermissions)
                         {
                             bool allowed = permission.pr_default;
@@ -45,6 +46,7 @@ namespace AssetTracker.ViewModel
                         Grps.Add(new PermissionGroup()
                         {
                             Name = grp.p4_name,
+                            Height = 100 *( new Random().NextDouble()),
                             Permissions = items
                         });
                     }
@@ -96,19 +98,53 @@ namespace AssetTracker.ViewModel
             overridePermission.p3_allow = newValue;
         }
 
-
-        public struct PermissionGroup
+        public void DeactivateAllPermissions()
         {
-            public string Name { get; set; }
+            for (int i = 0; i < PermissionGroups.Count; i++)
+            {
+                for (int j = 0; j < PermissionGroups[i].Permissions.Count; j++)
+                {
+                    PermissionItem item = PermissionGroups[i].Permissions[j];
+                    item.Allowed = false;
+                    PermissionGroups[i].Permissions[j] = item;
 
-            public List<PermissionItem> Permissions { get; set; }
+                    SecPermission3 overridePermission = GetRoleOverride(item.Permission.ID);
+                    overridePermission.p3_allow = false;
+                }
+            }
         }
 
-        public struct PermissionItem
+        public void ActivateAllPermissions()
         {
-            public SecPermission Permission { get; set; }
-         
-            public bool Allowed { get; set; }
-        }        
+            for (int i = 0; i < PermissionGroups.Count; i++)
+            {
+                for (int j = 0; j < PermissionGroups[i].Permissions.Count; j++)
+                {
+                    PermissionItem item = PermissionGroups[i].Permissions[j];
+                    item.Allowed = true;
+                    PermissionGroups[i].Permissions[j] = item;
+
+                    SecPermission3 overridePermission = GetRoleOverride(item.Permission.ID);
+                    overridePermission.p3_allow = true;
+                }
+            }
+        }
+
+        public SecPermission3 GetRoleOverride(int prid)
+        {
+            SecPermission3 overridePer = (from p in context.SecPermission3
+                                          where p.p3_prid == prid
+                                          && p.p3_roid ==  Role.ID
+                                          select p).FirstOrDefault();
+            if (overridePer == null)
+            {
+                overridePer = context.SecPermission3.Create();
+                overridePer.p3_prid = prid;
+                overridePer.p3_roid = Role.ID;
+                overridePer.p3_allow = true;
+            }
+
+            return overridePer;
+        }
     }
 }

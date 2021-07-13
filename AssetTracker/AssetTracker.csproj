@@ -119,10 +119,12 @@
     </Compile>
     <Compile Include="Model\Asset.cs" />
     <Compile Include="Model\AssetCategory.cs" />
+    <Compile Include="Model\AssetLink.cs" />
     <Compile Include="Model\Change.cs" />
     <Compile Include="Model\DatabaseBackedObject.cs" />
     <Compile Include="Model\Discussion.cs" />
     <Compile Include="Model\Phase.cs" />
+    <Compile Include="Model\SecPermission.cs" />
     <Compile Include="Model\SecRole.cs" />
     <Compile Include="Model\User.cs" />
     <Compile Include="Model\Violation.cs" />
@@ -156,6 +158,7 @@
     <Compile Include="ViewModel\AssetCreateViewModel.cs" />
     <Compile Include="ViewModel\AssetDetailViewModel.cs" />
     <Compile Include="ViewModel\AssetListViewModel.cs" />
+    <Compile Include="ViewModel\CategoryEditViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ProjectSettingsViewModel.cs" />
     <Compile Include="ViewModel\RoleEditViewModel.cs" />
@@ -172,6 +175,9 @@
     <Compile Include="View\AssetList.xaml.cs">
       <DependentUpon>AssetList.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\CategoryEdit.xaml.cs">
+      <DependentUpon>CategoryEdit.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Changelog.xaml.cs">
       <DependentUpon>Changelog.xaml</DependentUpon>
     </Compile>
@@ -184,6 +190,8 @@
     <Compile Include="View\Converters\MatchesUserIDToVisConverter.cs" />
     <Compile Include="View\Converters\MultiBooleanToVisibilityConverter.cs" />
     <Compile Include="View\Converters\MultiValueConverter.cs" />
+    <Compile Include="View\Converters\ValueConverterGroup.cs" />
+    <Compile Include="View\Extensions\TilePanel.cs" />
     <Compile Include="View\ProjectSettings.xaml.cs">
       <DependentUpon>ProjectSettings.xaml</DependentUpon>
     </Compile>
@@ -204,6 +212,10 @@
     <Compile Include="View\UserEdit.xaml.cs">
       <DependentUpon>UserEdit.xaml</DependentUpon>
     </Compile>
+    <Page Include="View\CategoryEdit.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -245,6 +257,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Resources\DiscussionBoardResourceDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Resources\PermissionsResourceDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

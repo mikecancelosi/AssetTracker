@@ -111,7 +111,7 @@
 
                 <Grid Margin="0,40">                    
                     <TextBox Text="Search.." Width="300" HorizontalAlignment="Left" />
-                    <Button Content="+ Add User" Style="{StaticResource AddButtonStyle}" />
+                    <Button Content="+ Add User" Style="{StaticResource AddButtonStyle}" Click="AddUserClicked" />
                 </Grid>
                 
                 <ListView VerticalAlignment="Top"
@@ -138,7 +138,7 @@
                                     <DataTemplate>
                                         <Grid Margin="30,0" >
                                             <StackPanel Orientation="Horizontal">
-                                                <Button Background="Black" >
+                                                <Button Background="Black" Click="CopyUserClicked">
                                                     <Image Source="../Images/MaterialDesign/outline_content_copy_white_48dp.png"
                                                            Width="24px" />
                                                 </Button>
@@ -148,9 +148,9 @@
                                                     <Image Source="../Images/MaterialDesign/baseline_edit_white_48dp.png"
                                                            Width="24px" />
                                                 </Button>
-                                                <Button Background="Black">
+                                                <Button Background="Black" Click="DeleteUserClicked">
                                                     <Image Source="../Images/MaterialDesign/baseline_delete_white_48dp.png"
-                                                           Width="24px" />
+                                                           Width="24px"  />
                                                 </Button>
                                             </StackPanel>
                                         </Grid>
@@ -176,7 +176,7 @@
                              Width="300"
                              HorizontalAlignment="Left" />
                     <Button Content="+ Add Role"
-                            Style="{StaticResource AddButtonStyle}" />
+                            Style="{StaticResource AddButtonStyle}" Click="AddRoleClicked" />
                 </Grid>
 
                 <Grid x:Name="RolesList">
@@ -198,7 +198,7 @@
                                         <DataTemplate>
                                             <Grid Margin="30,0">
                                                 <StackPanel Orientation="Horizontal">
-                                                    <Button Background="Black">
+                                                    <Button Background="Black" Click="CopyRoleClicked">
                                                         <Image Source="../Images/MaterialDesign/outline_content_copy_white_48dp.png"
                                                                Width="24px" />
                                                     </Button>
@@ -208,7 +208,7 @@
                                                         <Image Source="../Images/MaterialDesign/baseline_edit_white_48dp.png"
                                                                Width="24px" />
                                                     </Button>
-                                                    <Button Background="Black">
+                                                    <Button Background="Black" Click="DeleteRoleClicked">
                                                         <Image Source="../Images/MaterialDesign/baseline_delete_white_48dp.png"
                                                                Width="24px" />
                                                     </Button>
@@ -260,16 +260,16 @@
                                         <DataTemplate>
                                             <Grid Margin="30,0">
                                                 <StackPanel Orientation="Horizontal">
-                                                    <Button Background="Black">
+                                                    <Button Background="Black" Click="CopyCategoryClicked">
                                                         <Image Source="../Images/MaterialDesign/outline_content_copy_white_48dp.png"
                                                                Width="24px" />
                                                     </Button>
                                                     <Button Background="Black"
-                                                            Margin="10,0">
+                                                            Margin="10,0" Click="EditCategoryClicked">
                                                         <Image Source="../Images/MaterialDesign/baseline_edit_white_48dp.png"
                                                                Width="24px" />
                                                     </Button>
-                                                    <Button Background="Black">
+                                                    <Button Background="Black" Click="DeleteCategoryClicked">
                                                         <Image Source="../Images/MaterialDesign/baseline_delete_white_48dp.png"
                                                                Width="24px" />
                                                     </Button>
@@ -286,91 +286,7 @@
                 </Grid>
 
             </StackPanel>
-
-            <Border  x:Name="AddCategoryControl" 
-                     Padding="10"
-                    Background="Gray"                   
-                    Visibility="Collapsed">
-                <StackPanel Orientation="Vertical">
-
-                    <TextBlock x:Name="CategoryEditorHeaderText"
-                               Text="New Category"
-                               FontSize="24"
-                               Margin="0,0,0,10" />
-
-                    <StackPanel Orientation="Horizontal"
-                                Margin="0,0,0,10">
-                        <TextBlock Text="Category Name" />
-                        <TextBox Width="300"
-                                 Text="{Binding CurrentCategoryInst.ca_name}" />
-                    </StackPanel>
-
-                    <TextBlock Text="Phases"
-                               FontSize="20"
-                               Margin="0,0,0,10" />
-
-                    <ItemsControl ItemsSource="{Binding CurrentPhases}"
-                                  x:Name="PhaseListControl">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel Orientation="Vertical"
-                                            Margin="10" />
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal"
-                                            Grid.Column="1"
-                                            Margin="0,0,0,5">
-                                    <StackPanel.Resources>
-                                        <Style TargetType="Button">
-                                            <Setter Property="Width"
-                                                    Value="20" />
-                                            <Setter Property="Height"
-                                                    Value="20" />
-                                        </Style>
-                                    </StackPanel.Resources>
-
-                                    <TextBlock Margin="0,0,5,0"
-                                               VerticalAlignment="Center">
-                                        <Run Text="{Binding ph_step}" />
-                                        <Run Text="." />
-                                    </TextBlock>
-                                    <TextBox Text="{Binding ph_name}"
-                                             MinWidth="200" />
-                                    <Button Click="PhaseMoveUpClicked"
-                                            CommandParameter="{Binding ph_step}">
-                                        <Image Source="/Images/MaterialDesign/baseline_arrow_upward_white_48dp.png" />
-                                    </Button>
-                                    <Button Click="PhaseMoveDownClicked"
-                                            CommandParameter="{Binding ph_step}">
-                                        <Image Source="/Images/MaterialDesign/baseline_arrow_downward_white_48dp.png" />
-                                    </Button>
-                                    <Button Click="DeletePhaseClicked"
-                                            CommandParameter="{Binding ph_step}">
-                                        <Image Source="/Images/MaterialDesign/baseline_delete_white_48dp.png" />
-                                    </Button>
-
-                                </StackPanel>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-
-                    </ItemsControl>
-                    <StackPanel Orientation="Horizontal">
-                        <Image Source="/Images/MaterialDesign/baseline_add_white_48dp.png"
-                               Width="20" />
-                        <Button Content="Add Phase"
-                                Click="AddPhaseClicked" />
-                    </StackPanel>
-
-                    <Button Content="Save"
-                            Click="SaveCategoryClicked" />
-
-                    <Button Content="Cancel"
-                            Click="ExitCategoryClicked" />
-
-                </StackPanel>
-            </Border>
+           
 
         </Grid>
 

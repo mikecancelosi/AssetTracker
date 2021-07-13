@@ -24,7 +24,7 @@ namespace AssetTracker.Model
         public string di_contents { get; set; }
         public int di_asid { get; set; }
         public Nullable<int> di_parentid { get; set; }
-        public int di_usid { get; set; }
+        public Nullable<int> di_usid { get; set; }
         public System.DateTime di_date { get; set; }
     
         public virtual Asset Asset { get; set; }

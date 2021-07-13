@@ -366,7 +366,7 @@
     <Property Name="di_contents" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
     <Property Name="di_asid" Type="Int32" Nullable="false" />
     <Property Name="di_parentid" Type="Int32" />
-    <Property Name="di_usid" Type="Int32" Nullable="false" />
+    <Property Name="di_usid" Type="Int32" />
     <Property Name="di_date" Type="DateTime" Nullable="false" Precision="3" />
     <NavigationProperty Name="Asset" Relationship="Model.FK_discussion_asset" FromRole="Discussion1" ToRole="Asset" />
     <NavigationProperty Name="Children" Relationship="Model.FK_discussion_discussion" FromRole="Discussion1" ToRole="Discussion11" />
@@ -418,7 +418,7 @@
     <Property Name="md_recid" Type="Int32" Nullable="false" />
   </EntityType>
   <Association Name="FK_Discussion_User">
-    <End Type="Model.User" Role="User" Multiplicity="1" />
+    <End Type="Model.User" Role="User" Multiplicity="0..1" />
     <End Type="Model.Discussion" Role="Discussion" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="User">

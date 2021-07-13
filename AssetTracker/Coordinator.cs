@@ -18,9 +18,14 @@ namespace AssetTracker
             nav = navigationService;
         }
 
-        public void NavigateToUserEdit(User userToEdit)
+        public void NavigateToCreateUser()
         {
-            UserEdit userEdit = new UserEdit(userToEdit);
+            UserEdit userEdit = new UserEdit(this);
+            nav.Navigate(userEdit);
+        }
+        public void NavigateToModifyUser(User userToEdit)
+        {
+            UserEdit userEdit = new UserEdit(userToEdit, this);
             nav.Navigate(userEdit);
         }
 
@@ -53,6 +58,12 @@ namespace AssetTracker
         {
             AssetList assetList = new AssetList(this);
             nav.Navigate(assetList);
+        }
+
+        public void NavigatetoCategoryEdit(AssetCategory cat)
+        {
+            CategoryEdit catEdit = new CategoryEdit(cat);
+            nav.Navigate(catEdit);
         }
     }
 }

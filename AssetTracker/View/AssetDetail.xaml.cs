@@ -144,6 +144,7 @@ namespace AssetTracker.View
 
         #region Discussion
 
+        //TODO: Account for discussion made by users who have since been deleted
         public ICommand DiscussionReplyClicked => new IDReceiverCmd((arr) => OnDiscussionReplyClicked(arr), (arr) => { return true; });
         public void OnDiscussionReplyClicked(object input)
         {

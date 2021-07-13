@@ -18,18 +18,16 @@ using System.Windows.Shapes;
 namespace AssetTracker.View
 {
     /// <summary>
-    /// Interaction logic for RoleEdit.xaml
+    /// Interaction logic for CategoryEdit.xaml
     /// </summary>
-    public partial class RoleEdit : Page
+    public partial class CategoryEdit : Page
     {
-        public RoleEditViewModel VM;
+        public CategoryEditViewModel VM;      
 
-        public bool Savable { get; set; }
-
-        public RoleEdit(SecRole role)
+        public CategoryEdit(AssetCategory cat)
         {
             InitializeComponent();
-            VM = new RoleEditViewModel(role);
+            VM = new CategoryEditViewModel(cat);       
         }
 
         public override void EndInit()
@@ -38,22 +36,15 @@ namespace AssetTracker.View
             DataContext = VM;
         }
 
+
         public void OnSaveClicked(object sender, RoutedEventArgs e)
         {
-            List<Violation> violations = new List<Violation>();
-            if (!VM.OnSave(out violations))
-            {
-
-            }
-            else
-            {
-                
-            }
+            throw new NotImplementedException();
         }
 
-        private void OnDeleteClicked(object sender, RoutedEventArgs e)
+        public void OnDeleteClicked(object sender, RoutedEventArgs e)
         {
-            
+            throw new NotImplementedException();
         }
     }
 }

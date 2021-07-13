@@ -5,8 +5,10 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:AssetTracker.View"
       xmlns:viewmodel="clr-namespace:AssetTracker.ViewModel"
-      mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      xmlns:mi="clr-namespace:MaterialIcons;assembly=MaterialIcons"
+      xmlns:converters="clr-namespace:AssetTracker.View.Converters"
+      mc:Ignorable="d"
+      d:DesignHeight="1080" d:DesignWidth="1920"
       Title="UserEdit">
 
     <Page.DataContext>
@@ -15,10 +17,18 @@
     <Page.Resources>
         <ResourceDictionary>
             <BooleanToVisibilityConverter x:Key="BoolToVis" />
+            <converters:InverseBooleanConverter x:Key="InvBool" />
+            <converters:ValueConverterGroup x:Key="InvertAndVisibilitate">
+                <converters:InverseBooleanConverter />
+                <BooleanToVisibilityConverter />
+            </converters:ValueConverterGroup>
             <ResourceDictionary.MergedDictionaries>              
+                
                 <ResourceDictionary x:Name="ProjectSettingsDictionary"
                                     Source="Resources/ProjectSettingsResourceDictionary.xaml" />
-            </ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary x:Name="PermissionsDictionary"
+                                    Source="Resources/PermissionsResourceDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>         
 
 
         </ResourceDictionary>
@@ -32,18 +42,61 @@
         </Grid.ColumnDefinitions>
 
         <Grid x:Name="LeftPanel" Background="Gray">
-            <StackPanel Margin="20,50">
-            <TextBlock Text="User Edit"
+            <StackPanel Margin="20">
+                <Border Name="ControlButtons"
+                        Padding="20,10,20,20"
+                        HorizontalAlignment="Stretch"
+                        BorderThickness="0,0,0,5"
+                        BorderBrush="#555">
+
+                    <StackPanel  Orientation="Horizontal"
+                                 HorizontalAlignment="Center">
+                        <StackPanel.Resources>
+                            <Style TargetType="Button">
+                                <Setter Property="Height"
+                                        Value="36" />
+                                <Setter Property="Background"
+                                        Value="#aaa" />
+                                <Setter Property="BorderThickness"
+                                        Value="0" />
+
+                            </Style>
+                        </StackPanel.Resources>
+
+                        <Button IsEnabled="{Binding Savable}"
+                                Click="OnSaveClicked"
+                                Margin="0,0,30,0">
+                            <mi:MaterialIcon Icon="ic_save"
+                                             Width="36"
+                                             Height="36"
+                                             Foreground="White" />
+                        </Button>
+
+                        <Button Click="OnDeleteClicked">
+                            <mi:MaterialIcon Icon="ic_delete"
+                                             Width="36"
+                                             Height="36"
+                                             Foreground="White" />
+                        </Button>
+
+                    </StackPanel>
+                </Border>
+
+                <TextBlock  x:Name="HeadingText"
+                       Text="{Binding HeadingContext}"
                        Foreground="Black"
                        FontSize="24"
-                       FontWeight="Bold" />
+                       FontWeight="Bold" Margin="0,10"/>
+               
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Mike Cancelosi" Margin="0,0,10,0" />
-                    <TextBlock Text="#1302"
-                               Foreground="LightGray" />
+                    <TextBlock Text="{Binding CurrentUser.Name}" Margin="0,0,10,0" />
+                    <TextBlock Foreground="LightGray" Visibility="{Binding Creating, Converter={StaticResource InvertAndVisibilitate}}">
+                        <Run Text="#" />
+                        <Run Text="{Binding CurrentUser.ID}" />
+                    </TextBlock>
                 </StackPanel>
             </StackPanel>
-            <StackPanel Margin="20,150">
+            <StackPanel Margin="20,250">
                 <RadioButton x:Name="UserSetupNav"
                              Content="User Setup"
                              GroupName="SubNav" Style="{StaticResource SubNavRadio}" IsChecked="True" />
@@ -54,9 +107,17 @@
             </StackPanel>
         </Grid>
         <Grid x:Name="RightPanel" Grid.Column="1" Margin="50,0" Background="Gray">
+            <StackPanel Margin="50">
 
+            <StackPanel x:Name="Breadcrumbs" Orientation="Horizontal" >
+                <Button Content="Project Settings" Click="NavigateToProjectSettings" />
+                <TextBlock Text=">" />
+                <TextBlock Text="{Binding HeadingContext}" />
+
+            </StackPanel>
+                
             <Grid x:Name="UserSetup"
-                  Margin="50"
+                  Margin="0,10"
                   Visibility="{Binding ElementName=UserSetupNav, Path=IsChecked,Converter={StaticResource BoolToVis}}">
                 <Grid.Resources>
                     <Style TargetType="TextBox">
@@ -68,39 +129,59 @@
                                 Value="Left" />
                     </Style>
                 </Grid.Resources>
+                
                 <TextBlock Text="Setup information"
                            FontSize="16" FontWeight="SemiBold" />
-                <WrapPanel Margin="0,40"  Orientation="Vertical">
+                
+                <WrapPanel Margin="0,80"  Orientation="Vertical">
                     <StackPanel Margin="0,0,10,10">
                         <TextBlock Text="First Name" />
-                        <TextBox Text="{Binding CurrentUser.us_fname}"/>
+                        <TextBox Text="{Binding CurrentUser.us_fname}" TextChanged="FirstName_TextChanged"/>
                     </StackPanel>
                     <StackPanel Margin="0,0,10,10">
                         <TextBlock Text="Last Name" />
-                        <TextBox Text="{Binding CurrentUser.us_lname}" />
+                        <TextBox Text="{Binding CurrentUser.us_lname}" TextChanged="LastName_TextChanged" />
                     </StackPanel>
                     <StackPanel Margin="0,0,10,10">
                         <TextBlock Text="Display Name" />
-                        <TextBox Text="{Binding CurrentUser.us_displayname}" />
+                        <TextBox Text="{Binding CurrentUser.us_displayname}" TextChanged="DisplayName_TextChanged" />
                     </StackPanel>
                     <StackPanel Margin="0,0,10,10">
                         <TextBlock Text="Email" />
-                        <TextBox Text="{Binding CurrentUser.us_email}" />
+                        <TextBox Text="{Binding CurrentUser.us_email}" TextChanged="Email_TextChanged" />
                     </StackPanel>
                     <StackPanel Margin="0,0,10,10">
                         <TextBlock Text="Role" />
-                        <local:Searchbox Width="300"/>
+                        <local:Searchbox x:Name="Searchbox_Role" Width="300" OnSelectionChanged="Role_OnSelectionChanged"/>
                     </StackPanel>
                 </WrapPanel>
 
             </Grid>
-            <Grid x:Name="Permissions"
-                  Margin="50"
-                  Visibility="{Binding ElementName=PermissionsNav, Path=IsChecked,Converter={StaticResource BoolToVis}}">
+            <StackPanel x:Name="Permissions"
+                  Margin="0,10"
+                  Visibility="{Binding ElementName=PermissionsNav, Path=IsChecked,Converter={StaticResource BoolToVis}}">                
                 <TextBlock Text="Modify Permissions"
                            FontSize="16"
                            FontWeight="SemiBold" />
-            </Grid>
+
+                <StackPanel Orientation="Horizontal"
+                            Margin="0,80,0,30" VerticalAlignment="Top">
+                    <Button Content="Activate All"
+                               FontSize="16"
+                               FontWeight="SemiBold" Padding="5" Click="OnActivateAllClicked"/>
+                    <Button Content="Deactivate All"
+                               Margin="10,0"
+                               FontSize="16"
+                            FontWeight="SemiBold"
+                            Padding="5" Click="OnDeactivateAllClicked" />
+                </StackPanel>
+
+                    <ItemsControl ItemsSource="{Binding PermissionGroups}"
+                                  Style="{StaticResource  PermissionsList}" />
+
+
+                </StackPanel>
+            </StackPanel>
         </Grid>
     </Grid>
 </Page>

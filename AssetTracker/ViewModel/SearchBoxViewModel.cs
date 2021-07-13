@@ -63,9 +63,12 @@ namespace AssetTracker.ViewModel
       
         public void SelectionChanged(int id)
         {
-            DatabaseBackedObject copyFrom = context.Set(DboType).Find(id) as DatabaseBackedObject;
-            DatabaseBackedObject.CopyProperties(copyFrom, CurrentlySelectedObject);
-            NotifyPropertyChanged("CurrentlySelectedObject");
+            if (id > 0)
+            {
+                DatabaseBackedObject copyFrom = context.Set(DboType).Find(id) as DatabaseBackedObject;
+                DatabaseBackedObject.CopyProperties(copyFrom, CurrentlySelectedObject);
+                NotifyPropertyChanged("CurrentlySelectedObject");
+            }
         }         
     }
 }

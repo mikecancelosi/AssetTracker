@@ -116,7 +116,7 @@ namespace AssetTracker.Model
         public virtual DatabaseBackedObject Clone()
         {
             object instance = Activator.CreateInstance(this.GetType());
-            ((DatabaseBackedObject)instance).Name = Name;
+            ((DatabaseBackedObject)instance).Name = Name + "Clone";
             return (DatabaseBackedObject)instance;
         }
 

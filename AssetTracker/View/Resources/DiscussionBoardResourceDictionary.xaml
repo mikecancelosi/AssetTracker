@@ -2,7 +2,8 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:model="clr-namespace:AssetTracker.Model"
                     xmlns:prop="clr-namespace:AssetTracker.View.Properties"
-                    xmlns:conv="clr-namespace:AssetTracker.View.Converters">
+                    xmlns:conv="clr-namespace:AssetTracker.View.Converters"
+                    xmlns:mi="clr-namespace:MaterialIcons;assembly=MaterialIcons">
     <ControlTemplate x:Key="NewDiscussion"
                      TargetType="Control">
         <ControlTemplate.Resources>
@@ -17,10 +18,11 @@
                     <ColumnDefinition Width="1*" />
                     <ColumnDefinition Width="12*" />
                 </Grid.ColumnDefinitions>
-                <Image Source="\Images\MaterialDesign\baseline_account_circle_white_48dp.png"
-                       Height="40"
-                       Margin="0,15"
-                       VerticalAlignment="Center" />
+
+                <mi:MaterialIcon Icon="ic_account_circle"
+                                 Width="40"
+                                 Height="40"
+                                 Foreground="White" VerticalAlignment="Center" Margin="0,15"/>               
                 <TextBox x:Name="NewDiscussionReply"
                          Text="Start a new discussion.."
                          Margin="0,20,60,20"
@@ -50,7 +52,7 @@
                         </MultiBinding>
 
                     </Button.CommandParameter>
-                    <Image Source="\Images\MaterialDesign\baseline_send_white_48dp.png" />
+                    <mi:MaterialIcon Icon="ic_send" />
                 </Button>
             </Grid>
         </Border>
@@ -94,7 +96,7 @@
                         </MultiBinding>
 
                     </Button.CommandParameter>
-                    <Image Source="\Images\MaterialDesign\baseline_send_white_48dp.png" />
+                    <mi:MaterialIcon Icon="ic_send" />
                 </Button>
             </Grid>
         </Border>

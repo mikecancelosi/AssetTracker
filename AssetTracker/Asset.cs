@@ -26,7 +26,7 @@ namespace AssetTracker.Model
         public string as_displayname { get; set; }
         public string as_description { get; set; }
         public Nullable<int> as_parentid { get; set; }
-        public int as_caid { get; set; }
+        public Nullable<int> as_caid { get; set; }
         public Nullable<int> as_usid { get; set; }
         public Nullable<int> as_phid { get; set; }
     

@@ -22,29 +22,77 @@ namespace AssetTracker.View
     /// </summary>
     public partial class CategoryEdit : Page
     {
-        public CategoryEditViewModel VM;      
+        public CategoryEditViewModel VM;
+        private Coordinator coordinator;
 
-        public CategoryEdit(AssetCategory cat)
+        public CategoryEdit(AssetCategory cat, Coordinator coord)
         {
             InitializeComponent();
-            VM = new CategoryEditViewModel(cat);       
-        }
-
-        public override void EndInit()
-        {
-            base.EndInit();
+            VM = new CategoryEditViewModel(cat);
             DataContext = VM;
+            coordinator = coord;
         }
 
+        public CategoryEdit(Coordinator coord)
+        {
+            InitializeComponent();
+            VM = new CategoryEditViewModel();
+            DataContext = VM;
+            coordinator = coord;
+        }
 
         public void OnSaveClicked(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            VM.OnSave();
         }
 
         public void OnDeleteClicked(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            VM.OnDelete();
+            coordinator.NavigateToProjectSettings();
+        }
+
+        public void NavigateToProjectSettings(object sender, RoutedEventArgs e)
+        {
+            coordinator.NavigateToProjectSettings();
+        }
+
+        private void OnPhaseUp(object sender, RoutedEventArgs e)
+        {
+            Button senderBtn = sender as Button;
+            Phase senderPhase = senderBtn.DataContext as Phase;
+            VM.OnPhaseUpClicked(senderPhase.ph_id);
+        }
+
+        private void OnPhaseDown(object sender, RoutedEventArgs e)
+        {
+            Button senderBtn = sender as Button;
+            Phase senderPhase = senderBtn.DataContext as Phase;
+            VM.OnPhaseDownClicked(senderPhase.ph_id);
+        }
+        private void OnPhaseDelete(object sender, RoutedEventArgs e)
+        {
+            Button senderBtn = sender as Button;
+            Phase senderPhase = senderBtn.DataContext as Phase;
+            VM.OnPhaseDelete(senderPhase.ph_id);
+        }
+        private void OnPhaseAdd(object sender, RoutedEventArgs e)
+        {
+            VM.OnNewPhaseClicked();
+        }
+       
+
+        private void PhaseName_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox senderText = sender as TextBox;
+            Phase senderPhase = senderText.DataContext as Phase;
+            VM.OnPhaseNameChange(senderPhase.ph_step, senderText.Text);
+        }
+
+        private void CategoryName_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox senderText = sender as TextBox;            
+            VM.OnCategoryNameChanged(senderText.Text);
         }
     }
 }

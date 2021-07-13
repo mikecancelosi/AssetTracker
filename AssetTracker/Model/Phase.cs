@@ -16,5 +16,15 @@ namespace AssetTracker.Model
             base.IsValid(out violations);
             return violations.Count() == 0;
         }
+
+        public override void Delete(TrackerContext context)
+        {
+            foreach(var asset in AssetsInPhase.ToList())
+            {
+                context.Entry(asset).Property(x=>x.as_phid).CurrentValue = null;
+            }
+
+            base.Delete(context);
+        }
     }
 }

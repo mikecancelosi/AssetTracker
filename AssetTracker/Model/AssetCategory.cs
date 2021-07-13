@@ -36,7 +36,7 @@ namespace AssetTracker.Model
         {
             return new AssetCategory()
             {
-                ca_name = ca_name
+                ca_name = ca_name + "(Clone)"
             };
         }
 
@@ -45,6 +45,20 @@ namespace AssetTracker.Model
             violations = new List<Violation>();
             base.IsValid(out violations);
             return violations.Count() == 0;
+        }
+
+        public override void Delete(TrackerContext context)
+        {
+            foreach(var asset in AssetsInCategory.ToList())
+            {
+                context.Entry(asset).Property(x => x.as_caid).CurrentValue = null; 
+            }
+            foreach(var phase in Phases.ToList())
+            {
+                phase.Delete(context);
+            }
+
+            base.Delete(context);
         }
     }
 }

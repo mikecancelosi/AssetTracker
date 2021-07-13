@@ -108,6 +108,7 @@ namespace AssetTracker.ViewModel
         {
             Role = context.SecRoles.Create();
             Creating = true;
+            context.SecRoles.Add(Role);
         }
 
         public bool OnSave(out List<Violation> violations)

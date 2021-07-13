@@ -59,7 +59,7 @@ namespace AssetTracker.View
 
         private void AddRoleClicked(object sender, RoutedEventArgs e)
         {
-            myCoordinator.NavigateToCreateUser();
+            myCoordinator.NavigateToCreateRole();
         }
         private void EditRoleClicked(object sender, RoutedEventArgs e)
         {
@@ -83,7 +83,7 @@ namespace AssetTracker.View
 
         private void AddCategoryClicked(object sender, RoutedEventArgs e)
         {
-            myCoordinator.NavigateToCreateUser();
+            myCoordinator.NavigateToCreateCategory();
         }
         private void EditCategoryClicked(object sender, RoutedEventArgs e)
         {

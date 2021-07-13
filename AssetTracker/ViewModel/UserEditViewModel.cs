@@ -115,6 +115,7 @@ namespace AssetTracker.ViewModel
         {
             CurrentUser = context.Users.Create();
             Creating = true;
+            context.Users.Add(CurrentUser);
         }
 
         public bool OnSave(out List<Violation> violations)

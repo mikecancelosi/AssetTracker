@@ -6,7 +6,7 @@
     <edmx:Diagrams>
       <Diagram DiagramId="107d3d1a1b2c4ef2b0e8ce767ff0ee8d" Name="Diagram1" ZoomLevel="68">
         <EntityTypeShape EntityType="Model.Asset" Width="1.5" PointX="6.375" PointY="10.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.AssetCategory" Width="1.5" PointX="9.5" PointY="13.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.AssetCategory" Width="1.5" PointX="10.75" PointY="13.625" IsExpanded="true" />
         <EntityTypeShape EntityType="Model.AssetLink" Width="1.5" PointX="9.375" PointY="10.375" IsExpanded="true" />
         <EntityTypeShape EntityType="Model.AssetLinkType" Width="1.5" PointX="9.5" PointY="8.25" IsExpanded="true" />
         <EntityTypeShape EntityType="Model.Phase" Width="1.5" PointX="9" PointY="17.25" IsExpanded="true" />

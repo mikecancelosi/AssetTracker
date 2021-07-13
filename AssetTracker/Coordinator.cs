@@ -41,6 +41,11 @@ namespace AssetTracker
             nav.Navigate(dashboard);
         }
 
+        public void NavigateToCreateRole()
+        {
+            RoleEdit roleEdit = new RoleEdit(this);
+            nav.Navigate(roleEdit);
+        }
         public void NavigateToRoleEdit(SecRole roleToEdit)
         {
             RoleEdit roleEdit = new RoleEdit(roleToEdit,this);
@@ -60,9 +65,14 @@ namespace AssetTracker
             nav.Navigate(assetList);
         }
 
+        public void NavigateToCreateCategory()
+        {
+            CategoryEdit catEdit = new CategoryEdit(this);
+            nav.Navigate(catEdit);
+        }
         public void NavigatetoCategoryEdit(AssetCategory cat)
         {
-            CategoryEdit catEdit = new CategoryEdit(cat);
+            CategoryEdit catEdit = new CategoryEdit(cat,this);
             nav.Navigate(catEdit);
         }
     }

@@ -41,7 +41,7 @@ namespace AssetTracker.View
         {
             Button selectedItem = sender as Button;
             User selectedUser = selectedItem.DataContext as User;
-            myCoordinator.NavigateToModifyUser(selectedUser);
+            myCoordinator.NavigateToUserEdit(selectedUser);
         }
         private void DeleteUserClicked(object sender, RoutedEventArgs e)
         {
@@ -54,7 +54,7 @@ namespace AssetTracker.View
             Button selectedItem = sender as Button;
             User selectedUser = selectedItem.DataContext as User;
             User copiedUser = vm.CopyUser(selectedUser.us_id);
-            myCoordinator.NavigateToModifyUser(copiedUser);
+            myCoordinator.NavigateToUserEdit(copiedUser);
         }
 
         private void AddRoleClicked(object sender, RoutedEventArgs e)
@@ -75,7 +75,10 @@ namespace AssetTracker.View
         }
         private void CopyRoleClicked(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            Button selectedItem = sender as Button;
+            SecRole selectedRole = selectedItem.DataContext as SecRole;
+            SecRole copiedRole = vm.CopyRole(selectedRole.ro_id);
+            myCoordinator.NavigateToRoleEdit(copiedRole);
         }
 
         private void AddCategoryClicked(object sender, RoutedEventArgs e)
@@ -96,7 +99,10 @@ namespace AssetTracker.View
         }
         private void CopyCategoryClicked(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            Button selectedItem = sender as Button;
+            AssetCategory selectedCategory = selectedItem.DataContext as AssetCategory;
+            AssetCategory copiedCategory = vm.CopyCategory(selectedCategory.ca_id);
+            myCoordinator.NavigatetoCategoryEdit(copiedCategory);
         }
     }
 }

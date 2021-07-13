@@ -94,25 +94,36 @@
                       Background="Gray">
             <Grid>
 
-                <StackPanel Margin="15,50">
+                <StackPanel Margin="50">
                     <StackPanel x:Name="Breadcrumbs"
                                 Orientation="Horizontal">
-                        <Button Content="Configuration" />
+                        <Button Content="Configuration"
+                                Click="NavigateToProjectSettings" />
                         <TextBlock Text=">" />
-                        <Button Content="Role Edit" />
+                        <TextBlock Text="Role Edit" />
                     </StackPanel>
                     <TextBlock Text="Modify Role Permissions"
                                FontSize="20"
-                               FontWeight="SemiBold" />
+                               FontWeight="SemiBold"
+                               Margin="0,10" />
+
                     <StackPanel Orientation="Horizontal"
-                                Margin="0,20">
-                        <TextBlock Text="Activate All"
-                                   FontSize="18"
-                                   FontWeight="SemiBold" />
-                        <TextBlock Text="Deactivate All"
-                                   Margin="10,0"
-                                   FontSize="18"
-                                   FontWeight="SemiBold" />
+                                Margin="0,80,0,30">
+
+                        <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="0,0,100,0">
+                            <TextBlock Text="Role Name" FontWeight="SemiBold" />
+                            <TextBox Text="{Binding Role.ro_name}" Width="200" Height="25" FontSize="16" TextChanged="RoleName_TextChanged"/>
+                        </StackPanel>
+                        <Button Content="Activate All"
+                                FontSize="18"
+                                FontWeight="SemiBold"
+                                Click="OnActivateAllClicked" Padding="5"/>
+                        <Button Content="Deactivate All"
+                                Margin="10,0"
+                                FontSize="18"
+                                FontWeight="SemiBold"
+                                Click="OnDeactivateAllClicked"
+                                Padding="5" />
                     </StackPanel>
 
 

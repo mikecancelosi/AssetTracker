@@ -25,19 +25,22 @@ namespace AssetTracker.View
         public RoleEditViewModel VM;
 
         public bool Savable { get; set; }
+        private Coordinator coordinator;
 
-        public RoleEdit(SecRole role)
+        public RoleEdit(Coordinator coord)
+        {           
+            VM = new RoleEditViewModel();
+            DataContext = VM;
+            coordinator = coord;
+        }
+
+        public RoleEdit(SecRole role, Coordinator coord)
         {
             InitializeComponent();
             VM = new RoleEditViewModel(role);
-        }
-
-        public override void EndInit()
-        {
-            base.EndInit();
             DataContext = VM;
+            coordinator = coord;
         }
-
         public void OnSaveClicked(object sender, RoutedEventArgs e)
         {
             List<Violation> violations = new List<Violation>();
@@ -53,7 +56,30 @@ namespace AssetTracker.View
 
         private void OnDeleteClicked(object sender, RoutedEventArgs e)
         {
-            
+            VM.OnDelete();
+            coordinator.NavigateToProjectSettings();
+        }
+
+        public void NavigateToProjectSettings(object sender, RoutedEventArgs e)
+        {
+            coordinator.NavigateToProjectSettings();
+        }
+
+        public void OnActivateAllClicked(object sender, RoutedEventArgs e)
+        {
+            VM.ActivateAllPermissions();
+        }
+
+        public void OnDeactivateAllClicked(object sender, RoutedEventArgs e)
+        {
+            VM.DeactivateAllPermissions();
+        }
+
+        private void RoleName_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+            TextBox nameTextBox = sender as TextBox;
+            VM.OnRoleNameChanged(nameTextBox.Text);
         }
     }
 }

@@ -53,11 +53,22 @@ namespace AssetTracker.ViewModel
             NotifyPropertyChanged("Users");
         }
 
+        public AssetCategory CopyCategory(int id)
+        {
+            AssetCategory cat = context.AssetCategories.Find(id);
+            return cat.Clone() as AssetCategory;
+        }
         public void DeleteCategory(int id)
         {
             AssetCategory cat = context.AssetCategories.Find(id);
             cat.Delete(context);
             NotifyPropertyChanged("Categories");
+        }
+
+        public SecRole CopyRole(int id)
+        {
+            SecRole role = context.SecRoles.Find(id);
+            return role.Clone() as SecRole;
         }
 
         public void DeleteRole(int id)

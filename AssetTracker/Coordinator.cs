@@ -23,7 +23,7 @@ namespace AssetTracker
             UserEdit userEdit = new UserEdit(this);
             nav.Navigate(userEdit);
         }
-        public void NavigateToModifyUser(User userToEdit)
+        public void NavigateToUserEdit(User userToEdit)
         {
             UserEdit userEdit = new UserEdit(userToEdit, this);
             nav.Navigate(userEdit);
@@ -43,7 +43,7 @@ namespace AssetTracker
 
         public void NavigateToRoleEdit(SecRole roleToEdit)
         {
-            RoleEdit roleEdit = new RoleEdit(roleToEdit);
+            RoleEdit roleEdit = new RoleEdit(roleToEdit,this);
             nav.Navigate(roleEdit);
         }
 

@@ -17,5 +17,15 @@ namespace AssetTracker.Model
             base.IsValid(out violations);
             return violations.Count() == 0;
         }
+
+        public override void Delete(TrackerContext context)
+        {
+            foreach(SecPermission3 overridePer in SecPermission3.ToList())
+            {
+                overridePer.Delete(context);
+            }
+
+            base.Delete(context);
+        }
     }
 }

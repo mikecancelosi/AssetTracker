@@ -13,7 +13,7 @@
     <Page.DataContext>
         <viewmodel:ProjectSettingsViewModel />
     </Page.DataContext>
-    <Page.Resources>       
+    <Page.Resources>
         <ResourceDictionary>
             <BooleanToVisibilityConverter x:Key="BoolToVis" />
             <ResourceDictionary.MergedDictionaries>
@@ -28,18 +28,24 @@
 
     <Grid Margin="100,30">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*" MaxWidth="300" />
+            <ColumnDefinition Width="2*"
+                              MaxWidth="300" />
             <ColumnDefinition Width="5*" />
         </Grid.ColumnDefinitions>
 
-        <Grid x:Name="LeftPanel" Grid.Column="0" Background="Gray">
-            <TextBlock Text="Settings" FontSize="20" FontWeight="Bold" Margin="30"/>
+        <Grid x:Name="LeftPanel"
+              Grid.Column="0"
+              Background="Gray">
+            <TextBlock Text="Settings"
+                       FontSize="20"
+                       FontWeight="Bold"
+                       Margin="30" />
             <StackPanel Margin="30,100">
                 <StackPanel.Resources>
                     <Style TargetType="Image">
                         <Setter Property="Width"
                                 Value="24" />
-                    </Style>                    
+                    </Style>
 
                 </StackPanel.Resources>
 
@@ -49,7 +55,7 @@
                              IsChecked="True"
                              Style="{StaticResource SubNavRadio}" />
 
-                <RadioButton x:Name="RolesBtn" 
+                <RadioButton x:Name="RolesBtn"
                              Content="Roles"
                              GroupName="Navigation"
                              Margin="0,20"
@@ -63,9 +69,10 @@
         </Grid>
 
         <Grid Grid.Column="1"
-              Margin="50,0" Background="Gray">
-            <Grid.Resources>                
-                <Style TargetType="ListViewItem">                   
+              Margin="50,0"
+              Background="Gray">
+            <Grid.Resources>
+                <Style TargetType="ListViewItem">
                     <Setter Property="Height"
                             Value="50" />
                 </Style>
@@ -74,13 +81,14 @@
                     <Setter Property="FontSize"
                             Value="14" />
                     <Setter Property="FontWeight"
-                            Value="SemiBold" />                    
+                            Value="SemiBold" />
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="GridViewColumnHeader">
-                                <Grid Background="DimGray" >
+                                <Grid Background="DimGray">
                                     <DockPanel HorizontalAlignment="Left"
-                                               VerticalAlignment="Center" Margin="0,10">
+                                               VerticalAlignment="Center"
+                                               Margin="0,10">
                                         <TextBlock Text="{TemplateBinding Content}"
                                                    FontSize="16"
                                                    Foreground="DarkBlue" />
@@ -92,7 +100,7 @@
                 </Style>
 
                 <Style TargetType="Button"
-                       x:Key="AddButtonStyle" >
+                       x:Key="AddButtonStyle">
                     <Setter Property="HorizontalAlignment"
                             Value="Right" />
                     <Setter Property="Padding"
@@ -104,19 +112,28 @@
 
             <StackPanel x:Name="Users"
                         Orientation="Vertical"
-                        Visibility="{Binding ElementName=UsersBtn, Path=IsChecked,Converter={StaticResource BoolToVis}}" Margin="50">
+                        Visibility="{Binding ElementName=UsersBtn, Path=IsChecked,Converter={StaticResource BoolToVis}}"
+                        Margin="50">
 
                 <TextBlock Text="Users"
-                           FontSize="24" FontWeight="SemiBold" />
+                           FontSize="24"
+                           FontWeight="SemiBold" />
 
-                <Grid Margin="0,40">                    
-                    <TextBox Text="Search.." Width="300" HorizontalAlignment="Left" />
-                    <Button Content="+ Add User" Style="{StaticResource AddButtonStyle}" Click="AddUserClicked" />
+                <Grid Margin="0,40">
+                    <TextBox Text="Search.."
+                             Width="300"
+                             HorizontalAlignment="Left" />
+                    <Button Content="+ Add User"
+                            Style="{StaticResource AddButtonStyle}"
+                            Click="AddUserClicked" />
                 </Grid>
-                
+
                 <ListView VerticalAlignment="Top"
                           ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                          ItemsSource="{Binding Users}" BorderBrush="Transparent" BorderThickness="0" Padding="0"> 
+                          ItemsSource="{Binding Users}"
+                          BorderBrush="Transparent"
+                          BorderThickness="0"
+                          Padding="0">
 
                     <ListView.View>
                         <GridView>
@@ -136,9 +153,10 @@
                                             Width="200">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Grid Margin="30,0" >
+                                        <Grid Margin="30,0">
                                             <StackPanel Orientation="Horizontal">
-                                                <Button Background="Black" Click="CopyUserClicked">
+                                                <Button Background="Black"
+                                                        Click="CopyUserClicked">
                                                     <Image Source="../Images/MaterialDesign/outline_content_copy_white_48dp.png"
                                                            Width="24px" />
                                                 </Button>
@@ -148,9 +166,10 @@
                                                     <Image Source="../Images/MaterialDesign/baseline_edit_white_48dp.png"
                                                            Width="24px" />
                                                 </Button>
-                                                <Button Background="Black" Click="DeleteUserClicked">
+                                                <Button Background="Black"
+                                                        Click="DeleteUserClicked">
                                                     <Image Source="../Images/MaterialDesign/baseline_delete_white_48dp.png"
-                                                           Width="24px"  />
+                                                           Width="24px" />
                                                 </Button>
                                             </StackPanel>
                                         </Grid>
@@ -165,7 +184,8 @@
             </StackPanel>
             <StackPanel x:Name="Roles"
                         Orientation="Vertical"
-                        Visibility="{Binding ElementName=RolesBtn, Path=IsChecked,Converter={StaticResource BoolToVis}}" Margin="50">
+                        Visibility="{Binding ElementName=RolesBtn, Path=IsChecked,Converter={StaticResource BoolToVis}}"
+                        Margin="50">
 
                 <TextBlock Text="Roles"
                            FontSize="24"
@@ -176,13 +196,14 @@
                              Width="300"
                              HorizontalAlignment="Left" />
                     <Button Content="+ Add Role"
-                            Style="{StaticResource AddButtonStyle}" Click="AddRoleClicked" />
+                            Style="{StaticResource AddButtonStyle}"
+                            Click="AddRoleClicked" />
                 </Grid>
 
                 <Grid x:Name="RolesList">
                     <ListView VerticalAlignment="Top"
                               ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                              ItemsSource="{Binding Roles}">                     
+                              ItemsSource="{Binding Roles}">
 
                         <ListView.View>
                             <GridView>
@@ -198,17 +219,19 @@
                                         <DataTemplate>
                                             <Grid Margin="30,0">
                                                 <StackPanel Orientation="Horizontal">
-                                                    <Button Background="Black" Click="CopyRoleClicked">
+                                                    <Button Background="Black"
+                                                            Click="CopyRoleClicked">
                                                         <Image Source="../Images/MaterialDesign/outline_content_copy_white_48dp.png"
                                                                Width="24px" />
                                                     </Button>
                                                     <Button Background="Black"
-                                                            Margin="10,0" 
+                                                            Margin="10,0"
                                                             Click="EditRoleClicked">
                                                         <Image Source="../Images/MaterialDesign/baseline_edit_white_48dp.png"
                                                                Width="24px" />
                                                     </Button>
-                                                    <Button Background="Black" Click="DeleteRoleClicked">
+                                                    <Button Background="Black"
+                                                            Click="DeleteRoleClicked">
                                                         <Image Source="../Images/MaterialDesign/baseline_delete_white_48dp.png"
                                                                Width="24px" />
                                                     </Button>
@@ -227,7 +250,8 @@
             </StackPanel>
             <StackPanel x:Name="Category"
                         Orientation="Vertical"
-                        Visibility="{Binding ElementName=CategoriesBtn, Path=IsChecked,Converter={StaticResource BoolToVis}}" Margin="50">
+                        Visibility="{Binding ElementName=CategoriesBtn, Path=IsChecked,Converter={StaticResource BoolToVis}}"
+                        Margin="50">
 
                 <TextBlock Text="Categories"
                            FontSize="24"
@@ -245,7 +269,7 @@
                 <Grid x:Name="CategoryList">
                     <ListView VerticalAlignment="Top"
                               ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                              ItemsSource="{Binding Categories}">                       
+                              ItemsSource="{Binding Categories}">
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn Header="ID"
@@ -260,16 +284,19 @@
                                         <DataTemplate>
                                             <Grid Margin="30,0">
                                                 <StackPanel Orientation="Horizontal">
-                                                    <Button Background="Black" Click="CopyCategoryClicked">
+                                                    <Button Background="Black"
+                                                            Click="CopyCategoryClicked">
                                                         <Image Source="../Images/MaterialDesign/outline_content_copy_white_48dp.png"
                                                                Width="24px" />
                                                     </Button>
                                                     <Button Background="Black"
-                                                            Margin="10,0" Click="EditCategoryClicked">
+                                                            Margin="10,0"
+                                                            Click="EditCategoryClicked">
                                                         <Image Source="../Images/MaterialDesign/baseline_edit_white_48dp.png"
                                                                Width="24px" />
                                                     </Button>
-                                                    <Button Background="Black" Click="DeleteCategoryClicked">
+                                                    <Button Background="Black"
+                                                            Click="DeleteCategoryClicked">
                                                         <Image Source="../Images/MaterialDesign/baseline_delete_white_48dp.png"
                                                                Width="24px" />
                                                     </Button>
@@ -286,7 +313,7 @@
                 </Grid>
 
             </StackPanel>
-           
+
 
         </Grid>
 

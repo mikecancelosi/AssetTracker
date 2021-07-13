@@ -37,11 +37,13 @@ namespace AssetTracker.ViewModel
                                                                     select p)?.FirstOrDefault() ?? null;                          
 
                             allowed = permissionOverride?.p3_allow ?? allowed;
-                            items.Add(new PermissionItem()
+                            PermissionItem item = new PermissionItem()
                             {
                                 Permission = permission,
                                 Allowed = allowed,
-                            });
+                            };
+                            item.AllowedChanged += (prid, allow) => OnPermissionChanged(prid, allow);
+                            items.Add(item); ;
                         }
                         Grps.Add(new PermissionGroup()
                         {
@@ -57,45 +59,90 @@ namespace AssetTracker.ViewModel
                 return permissionGrps;
             }
         }
-        public bool Savable { get; set; }
+        public bool Savable
+        {
+            get
+            {
+                return context.ChangeTracker.HasChanges();
+            }
+        }
+        public bool Creating { get; set; }
+        public bool Cloning { get; set; }
+        public string HeadingContext
+        {
+            get
+            {
+                if (Creating)
+                {
+                    return "Create Role";
+                }
+                else if (Cloning)
+                {
+                    return "Clone Role";
+                }
+                else
+                {
+                    return "Modify Role";
+                }
+            }
+        }
 
         public RoleEditViewModel(SecRole role)
         {
-            Role = role;
+            if (role.ro_id > 0)
+            {
+                Role = context.SecRoles.Find(role.ro_id);
+                Creating = false;
+            }
+            else
+            {
+                Role = context.SecRoles.Attach(role);
+                Creating = false;
+                Cloning = true;
+            }
+            NotifyPropertyChanged("Role");
+            NotifyPropertyChanged("HeadingContext");
         }
 
         public RoleEditViewModel()
         {
-            Role = context.SecRoles.Find(1);
+            Role = context.SecRoles.Create();
+            Creating = true;
         }
 
         public bool OnSave(out List<Violation> violations)
         {
             // Saving Role also saves role permissions changes         
             if (Role.Save(context, out violations))
-            {               
+            {
+                context.SaveChanges();
                 NotifyPropertyChanged("Savable");
+                NotifyPropertyChanged("Role");
+                Creating = false;
+                Cloning = false;
+                NotifyPropertyChanged("HeadingContext");
                 return true;
             }
 
             return false;
         }
 
-        public void OnPermissionChange(bool newValue, int permissionId)
+        public void OnDelete()
         {
-            SecPermission permission = context.SecPermissions.Find(permissionId);
-            SecPermission3 overridePermission = (from p in context.SecPermission3
-                                                 where p.p3_prid == permissionId
-                                                 && p.p3_roid == Role.ID
-                                                 select p).FirstOrDefault();
-            if(overridePermission == null)
-            {
-                overridePermission = context.SecPermission3.Create();                
-                overridePermission.p3_prid = permission.pr_id;
-                overridePermission.p3_roid = Role.ID;
-            }
+            Role.Delete(context);
+        }
 
+        public void OnRoleNameChanged(string newValue)
+        {
+            context.Entry(Role).Property(x => x.ro_name).CurrentValue = newValue;
+            NotifyPropertyChanged("Savable");
+        }
+
+        public void OnPermissionChanged(int permissionId, bool newValue)
+        {
+            SecPermission3 overridePermission = GetRoleOverride(permissionId);
             overridePermission.p3_allow = newValue;
+            NotifyPropertyChanged("Savable");
         }
 
         public void DeactivateAllPermissions()
@@ -142,6 +189,7 @@ namespace AssetTracker.ViewModel
                 overridePer.p3_prid = prid;
                 overridePer.p3_roid = Role.ID;
                 overridePer.p3_allow = true;
+                context.SecPermission3.Add(overridePer);
             }
 
             return overridePer;

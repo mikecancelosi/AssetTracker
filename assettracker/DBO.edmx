@@ -76,7 +76,7 @@
           <Property Name="di_contents" Type="nvarchar" MaxLength="500" Nullable="false" />
           <Property Name="di_asid" Type="int" Nullable="false" />
           <Property Name="di_parentid" Type="int" />
-          <Property Name="di_usid" Type="int" Nullable="false" />
+          <Property Name="di_usid" Type="int" />
           <Property Name="di_date" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="Metadata">
@@ -102,6 +102,8 @@
           </Key>
           <Property Name="pr_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="pr_name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="pr_p4id" Type="int" Nullable="false" />
+          <Property Name="pr_default" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="SecPermission2">
           <Key>
@@ -120,6 +122,13 @@
           <Property Name="p3_roid" Type="int" Nullable="false" />
           <Property Name="p3_prid" Type="int" Nullable="false" />
           <Property Name="p3_allow" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SecPermission4">
+          <Key>
+            <PropertyRef Name="p4_id" />
+          </Key>
+          <Property Name="p4_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="p4_name" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="SecRole">
           <Key>
@@ -267,7 +276,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Discussion_User">
-          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
           <End Role="Discussion" Type="Self.Discussion" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">
@@ -287,6 +296,18 @@
             </Principal>
             <Dependent Role="Phase">
               <PropertyRef Name="ph_caid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SecPermission_SecPermission4">
+          <End Role="SecPermission4" Type="Self.SecPermission4" Multiplicity="1" />
+          <End Role="SecPermission" Type="Self.SecPermission" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SecPermission4">
+              <PropertyRef Name="p4_id" />
+            </Principal>
+            <Dependent Role="SecPermission">
+              <PropertyRef Name="pr_p4id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -364,6 +385,7 @@
           <EntitySet Name="SecPermission" EntityType="Self.SecPermission" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SecPermission2" EntityType="Self.SecPermission2" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SecPermission3" EntityType="Self.SecPermission3" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SecPermission4" EntityType="Self.SecPermission4" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SecRole" EntityType="Self.SecRole" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Setting" EntityType="Self.Setting" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
@@ -414,6 +436,10 @@
           <AssociationSet Name="FK_Phase_AssetCategory" Association="Self.FK_Phase_AssetCategory">
             <End Role="AssetCategory" EntitySet="AssetCategory" />
             <End Role="Phase" EntitySet="Phase" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SecPermission_SecPermission4" Association="Self.FK_SecPermission_SecPermission4">
+            <End Role="SecPermission4" EntitySet="SecPermission4" />
+            <End Role="SecPermission" EntitySet="SecPermission" />
           </AssociationSet>
           <AssociationSet Name="FK_secpermission2_secpermission" Association="Self.FK_secpermission2_secpermission">
             <End Role="SecPermission" EntitySet="SecPermission" />
@@ -505,8 +531,11 @@
           </Key>
           <Property Name="pr_id" Type="Int32" Nullable="false" />
           <Property Name="pr_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="SecPermission2" Relationship="Self.FK_secpermission2_secpermission" FromRole="SecPermission" ToRole="SecPermission2" />
-          <NavigationProperty Name="SecPermission3" Relationship="Self.FK_secpermission3_secpermission" FromRole="SecPermission" ToRole="SecPermission3" />
+          <NavigationProperty Name="UserPermissions" Relationship="Self.FK_secpermission2_secpermission" FromRole="SecPermission" ToRole="SecPermission2" />
+          <NavigationProperty Name="RolePermissions" Relationship="Self.FK_secpermission3_secpermission" FromRole="SecPermission" ToRole="SecPermission3" />
+          <Property Name="pr_p4id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="PermissionHeader" Relationship="Model.FK_SecPermission_SecPermission4" FromRole="SecPermission" ToRole="SecPermission4" />
+          <Property Name="pr_default" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="SecPermission2">
           <Key>
@@ -767,6 +796,11 @@
             <End Role="User" EntitySet="Users" />
             <End Role="Alert" EntitySet="Alerts" />
           </AssociationSet>
+          <EntitySet Name="SecPermission4" EntityType="Model.SecPermission4" />
+          <AssociationSet Name="FK_SecPermission_SecPermission4" Association="Model.FK_SecPermission_SecPermission4">
+            <End Role="SecPermission4" EntitySet="SecPermission4" />
+            <End Role="SecPermission" EntitySet="SecPermissions" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="assetGetInformation_Result">
           <Property Type="Int32" Name="as_id" Nullable="false" />
@@ -798,7 +832,7 @@
           <Property Name="di_contents" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="di_asid" Type="Int32" Nullable="false" />
           <Property Name="di_parentid" Type="Int32" />
-          <Property Name="di_usid" Type="Int32" Nullable="false" />
+          <Property Name="di_usid" Type="Int32" />
           <Property Name="di_date" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="Asset" Relationship="Model.FK_discussion_asset" FromRole="Discussion1" ToRole="Asset" />
           <NavigationProperty Name="Children" Relationship="Model.FK_discussion_discussion" FromRole="Discussion1" ToRole="Discussion11" />
@@ -850,7 +884,7 @@
           <Property Name="md_recid" Type="Int32" Nullable="false" />
         </EntityType>
         <Association Name="FK_Discussion_User">
-          <End Type="Model.User" Role="User" Multiplicity="1" />
+          <End Type="Model.User" Role="User" Multiplicity="0..1" />
           <End Type="Model.Discussion" Role="Discussion" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">
@@ -914,6 +948,26 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="SecPermission4">
+          <Key>
+            <PropertyRef Name="p4_id" />
+          </Key>
+          <Property Name="p4_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="p4_name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="SecPermissions" Relationship="Model.FK_SecPermission_SecPermission4" FromRole="SecPermission4" ToRole="SecPermission" />
+        </EntityType>
+        <Association Name="FK_SecPermission_SecPermission4">
+          <End Type="Model.SecPermission4" Role="SecPermission4" Multiplicity="1" />
+          <End Type="Model.SecPermission" Role="SecPermission" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SecPermission4">
+              <PropertyRef Name="p4_id" />
+            </Principal>
+            <Dependent Role="SecPermission">
+              <PropertyRef Name="pr_p4id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -972,6 +1026,8 @@
           <EntitySetMapping Name="SecPermissions">
             <EntityTypeMapping TypeName="Model.SecPermission">
               <MappingFragment StoreEntitySet="SecPermission">
+                <ScalarProperty Name="pr_default" ColumnName="pr_default" />
+                <ScalarProperty Name="pr_p4id" ColumnName="pr_p4id" />
                 <ScalarProperty Name="pr_id" ColumnName="pr_id" />
                 <ScalarProperty Name="pr_name" ColumnName="pr_name" />
               </MappingFragment>
@@ -1086,6 +1142,14 @@
                 <ScalarProperty Name="ar_asid" ColumnName="ar_asid" />
                 <ScalarProperty Name="ar_type" ColumnName="ar_type" />
                 <ScalarProperty Name="ar_id" ColumnName="ar_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SecPermission4">
+            <EntityTypeMapping TypeName="Model.SecPermission4">
+              <MappingFragment StoreEntitySet="SecPermission4">
+                <ScalarProperty Name="p4_name" ColumnName="p4_name" />
+                <ScalarProperty Name="p4_id" ColumnName="p4_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

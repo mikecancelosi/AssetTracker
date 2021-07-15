@@ -10,15 +10,15 @@ using System.Windows.Data;
 namespace AssetTracker.View.Converters
 {
     [ValueConversion(typeof(int), typeof(System.Windows.Visibility))]
-    public class MatchesUserIDToVisConverter : IValueConverter
+    public class MatchesUserIDConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value != null)
             {
-                return (int)value == MainViewModel.Instance.CurrentUser.ID ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
+                return (int)value == MainViewModel.Instance.CurrentUser.ID;
             }
-            return System.Windows.Visibility.Collapsed;
+            return false;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

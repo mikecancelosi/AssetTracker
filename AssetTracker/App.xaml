@@ -4,6 +4,13 @@
              xmlns:local="clr-namespace:AssetTracker"
              StartupUri="View/MainWindow.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>               
+                <ResourceDictionary x:Name="ColorScheme"
+                                    Source="View/Resources/ColorSchemeResourceDictionary.xaml" />
+                <ResourceDictionary x:Name="Common"
+                                    Source="View/Resources/CommonResourceDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

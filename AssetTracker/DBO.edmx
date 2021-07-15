@@ -28,7 +28,7 @@
           <Property Name="as_displayname" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="as_description" Type="nvarchar" MaxLength="50" />
           <Property Name="as_parentid" Type="int" />
-          <Property Name="as_caid" Type="int" Nullable="false" />
+          <Property Name="as_caid" Type="int" />
           <Property Name="as_usid" Type="int" />
           <Property Name="as_phid" Type="int" />
         </EntityType>
@@ -180,7 +180,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_asset_assetcategory">
-          <End Role="AssetCategory" Type="Self.AssetCategory" Multiplicity="1" />
+          <End Role="AssetCategory" Type="Self.AssetCategory" Multiplicity="0..1" />
           <End Role="Asset" Type="Self.Asset" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="AssetCategory">
@@ -474,7 +474,7 @@
           <Property Name="as_displayname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="as_description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="as_parentid" Type="Int32" />
-          <Property Name="as_caid" Type="Int32" Nullable="false" />
+          <Property Name="as_caid" Type="Int32" />
           <Property Name="as_usid" Type="Int32" />
           <Property Name="as_phid" Type="Int32" />
           <NavigationProperty Name="AssetCategory" Relationship="Self.FK_asset_assetcategory" FromRole="Asset" ToRole="AssetCategory" />
@@ -592,7 +592,7 @@
           <NavigationProperty Name="Alerts" Relationship="Model.FK_Alert_User" FromRole="User" ToRole="Alert" />
         </EntityType>
         <Association Name="FK_asset_assetcategory">
-          <End Role="AssetCategory" Type="Self.AssetCategory" Multiplicity="1" />
+          <End Role="AssetCategory" Type="Self.AssetCategory" Multiplicity="0..1" />
           <End Role="Asset" Type="Self.Asset" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="AssetCategory">

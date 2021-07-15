@@ -47,3 +47,6 @@ C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\bin\Debug\Ma
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\View\Resources\PermissionsResourceDictionary.baml
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\View\CategoryEdit.g.cs
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\View\CategoryEdit.baml
+C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\View\Resources\ColorSchemeResourceDictionary.baml
+C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\App.baml
+C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\View\Resources\CommonResourceDictionary.baml

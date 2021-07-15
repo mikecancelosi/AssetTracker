@@ -1,0 +1,12 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Brush x:Key="BackgroundColor_Dark">#111</Brush>
+    <Brush x:Key="Layer1_Dark">#222</Brush>
+    <Brush x:Key="Layer2_Dark">#444</Brush>
+    <Brush x:Key="Layer3_Dark">#666</Brush>
+    <Brush x:Key="Text_Dark">#ddd</Brush>
+    <Brush x:Key="Accent_Dark">#DC7B23</Brush>
+    
+    
+</ResourceDictionary>

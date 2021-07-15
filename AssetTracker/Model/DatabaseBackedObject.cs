@@ -122,8 +122,7 @@ namespace AssetTracker.Model
 
 
         public virtual List<Change> GetChanges(DatabaseBackedObject beforeObject)
-        {
-            // TODO: Load user id from current session
+        {          
             // TODO: Add changes automatically, using long names from db + "Changed" e.g 'as_usid Changed'
 
             List<Change> output = new List<Change>();

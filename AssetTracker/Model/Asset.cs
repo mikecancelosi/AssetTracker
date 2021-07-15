@@ -62,6 +62,27 @@ namespace AssetTracker.Model
             return output;
         }
 
+        public List<Alert> GetAlerts(Asset beforeObject)
+        {
+            List<Alert> output = new List<Alert>();
+            if(this.as_usid != beforeObject.as_usid)
+            {
+                output.Add(new Alert()
+                {
+                     ar_asid = as_id,
+                     ar_date = DateTime.Now,
+                     ar_projectwide = false,
+                     ar_viewed = false,
+                     ar_usid = as_usid,
+                     ar_priority = false,
+                     ar_content = Phase.ph_name + " | " + as_displayname,
+                     ar_recid = MainViewModel.Instance.CurrentUser.ID,
+                     ar_type = "Assign"
+                });
+            }
+            return output;
+        }
+
         public override void Delete(TrackerContext context)
         {
             if(this.AssetLink != null)

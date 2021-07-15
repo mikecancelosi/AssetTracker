@@ -139,22 +139,28 @@ namespace AssetTracker.ViewModel
         {
             get
             {
-                return context.Entry(myAsset).State != System.Data.Entity.EntityState.Unchanged;
+                return context.ChangeTracker.HasChanges();
             }
         }
         public bool OnSave(out List<Violation> violations)
         {
             List<Change> changes = new List<Change>();
+            List<Alert> alerts = new List<Alert>();
             if (context.Entry(myAsset).State == System.Data.Entity.EntityState.Modified)
             {
                 Asset beforeAsset = context.Entry(myAsset).GetDatabaseValues().ToObject() as Asset;
                 changes = myAsset.GetChanges(beforeAsset);
+                alerts = myAsset.GetAlerts(beforeAsset);
             }
             if (myAsset.Save(context, out violations))
             {
                 foreach (Change change in changes)
                 {
                     change.Save(context, out violations);
+                }
+                foreach(Alert alert in alerts)
+                {
+                    //alert.Save(context);
                 }
                 NotifyPropertyChanged("Savable");
                 NotifyPropertyChanged("Changelog");

@@ -100,12 +100,12 @@ namespace AssetTracker.View
             
         }
 
-        private void OnDeleteClicked(object sender, RoutedEventArgs e)
+        private void OnDeleteClicked(object sender, MouseButtonEventArgs e)
         {
 
         }
 
-        private void OnSaveClicked(object sender, RoutedEventArgs e)
+        private void OnSaveClicked(object sender, MouseButtonEventArgs e)
         {
             List<Violation> violations = new List<Violation>();
             if (!vm.OnSave(out violations))
@@ -125,7 +125,7 @@ namespace AssetTracker.View
             }
         }
 
-        private void OnChangelogClicked(object sender, RoutedEventArgs e)
+        private void OnChangelogClicked(object sender, MouseButtonEventArgs e)
         {
             if (Changelog.Visibility == Visibility.Visible)
             {
@@ -208,7 +208,7 @@ namespace AssetTracker.View
             EditDescription_Value.Text = "";
         }
 
-        private void ConfirmSave_Clicked(object sender, RoutedEventArgs e)
+        private void ConfirmSave_Clicked(object sender, MouseButtonEventArgs e)
         {
             PromptSavePanel.Visibility = Visibility.Collapsed;
             OnSaveClicked(sender, e);

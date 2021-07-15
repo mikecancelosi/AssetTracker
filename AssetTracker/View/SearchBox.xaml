@@ -21,7 +21,7 @@
         </Grid.ColumnDefinitions>
 
         <Border BorderThickness="2"
-                BorderBrush="AntiqueWhite"
+                BorderBrush="{StaticResource Text_Dark}"
                 CornerRadius="12" />
 
         <Label x:Name="Value_Label"
@@ -29,7 +29,9 @@
                Grid.Column="0"
                HorizontalAlignment="Left"
                FontSize="12"
-               FontWeight="SemiBold"  Margin="5,0"/>
+               FontWeight="SemiBold"
+               Margin="5,0"
+               Foreground="{StaticResource Text_Dark}"/>
 
         <Button Height="{Binding ActualHeight, ElementName=FieldGrid}"
                 HorizontalAlignment="Right"

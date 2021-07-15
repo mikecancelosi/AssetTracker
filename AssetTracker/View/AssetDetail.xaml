@@ -7,6 +7,7 @@
       xmlns:viewmodel="clr-namespace:AssetTracker.ViewModel"
       xmlns:converters="clr-namespace:AssetTracker.View.Converters"
       xmlns:prop="clr-namespace:AssetTracker.View.Properties"
+      xmlns:materialicons="clr-namespace:MaterialIcons;assembly=MaterialIcons"
       mc:Ignorable="d"
       d:DesignWidth="1200"
       d:DesignHeight="800">
@@ -31,10 +32,14 @@
 
     </Page.Resources>
 
-    <Grid  Margin="50,10">
+    <Grid  Margin="50,0">
         <Grid.Resources>
             <Style TargetType="TextBlock"
                    x:Key="EditableText">
+                <EventSetter Event="MouseLeftButtonUp"
+                             Handler="OnModifyTitleOpen_Clicked" />
+                <Setter Property="Foreground"
+                        Value="{StaticResource Text_Dark}" />
                 <Style.Triggers>
                     <Trigger Property="IsMouseOver"
                              Value="True">
@@ -48,8 +53,11 @@
                     </Trigger>
 
                 </Style.Triggers>
-                <EventSetter Event="MouseLeftButtonUp"
-                             Handler="OnModifyTitleOpen_Clicked" />
+                
+            </Style>
+            <Style TargetType="TextBlock">
+                <Setter Property="Foreground"
+                        Value="{StaticResource Text_Dark}" />
             </Style>
         </Grid.Resources>
         <Grid.ColumnDefinitions>
@@ -59,7 +67,7 @@
         </Grid.ColumnDefinitions>
 
         <Border x:Name="LeftPanel"
-                Background="Gray"
+                Background="{StaticResource Layer1_Dark}"
                 Grid.Column="0"
                 Padding="20">
             <StackPanel>
@@ -67,34 +75,31 @@
                 <Border Name="ControlButtons"
                         Padding="20,10,20,20"
                         HorizontalAlignment="Stretch"
-                        BorderThickness="0,0,0,5"
-                        BorderBrush="#555">
+                        BorderThickness="0,0,0,3"
+                        BorderBrush="{StaticResource  BackgroundColor_Dark}">
 
                     <StackPanel  Orientation="Horizontal"
                                  HorizontalAlignment="Center">
-                        <StackPanel.Resources>
-                            <Style TargetType="Button">
-                                <Setter Property="Height"
-                                        Value="36" />
-                                <Setter Property="Background"
-                                        Value="#aaa" />
-                                <Setter Property="BorderThickness"
-                                        Value="0" />
+                                           
 
-                            </Style>
-                        </StackPanel.Resources>
+                        <Border IsEnabled="{Binding Savable}" MouseUp="OnSaveClicked" Style="{StaticResource HoverBtn}" Height="30">
+                            <materialicons:MaterialIcon Icon="ic_save" Style="{StaticResource HoverBtn_Content}"/>
+                        </Border>
 
-                        <Button IsEnabled="{Binding Savable}" Click="OnSaveClicked">
-                            <Image Source="/Images/MaterialDesign/baseline_save_white_48dp.png" />
-                        </Button>
+                        <Border Margin="30,0"
+                                MouseUp="OnChangelogClicked"
+                                Style="{StaticResource HoverBtn}"
+                                Height="30">
+                            <materialicons:MaterialIcon Icon="ic_list"
+                                                        Style="{StaticResource HoverBtn_Content}" />
+                        </Border>
 
-                        <Button Margin="30,0" Click="OnChangelogClicked">
-                            <Image Source="/Images/MaterialDesign/baseline_list_white_48dp.png" />
-                        </Button>
-
-                        <Button Click="OnDeleteClicked">
-                            <Image Source="/Images/MaterialDesign/baseline_delete_white_48dp.png" />
-                        </Button>
+                        <Border MouseUp="OnDeleteClicked"
+                                Style="{StaticResource HoverBtn}"
+                                Height="30">
+                            <materialicons:MaterialIcon Icon="ic_delete"
+                                                        Style="{StaticResource HoverBtn_Content}" />
+                        </Border>
 
                     </StackPanel>
                 </Border>
@@ -134,7 +139,7 @@
                 </ItemsControl>
                 <!--#endregion-->
                 <TextBlock Text="{Binding myAsset.as_description}"
-                           Style="{StaticResource EditableText}" />
+                           Style="{StaticResource EditableText}" Foreground="White"/>
 
                 <!--#region Hierarchy-->
                 <ItemsControl ItemsSource="{Binding Hierarchy}"
@@ -156,10 +161,10 @@
                                    
                                     <TextBlock x:Name="HierarchyLabel"
                                                Text="{Binding asset.Name}"
-                                               FontSize="14" />
+                                               FontSize="14" Foreground="White"/>
                                     <TextBlock x:Name="NavigateToVisual"
                                                Text=">"
-                                               HorizontalAlignment="Right">
+                                               HorizontalAlignment="Right" Foreground="LightGray">
                                         <TextBlock.Style>
                                             <Style TargetType="TextBlock">
                                                 <Style.Triggers>
@@ -205,7 +210,7 @@
         <Grid x:Name="RightPanel"
               Grid.Column="1"
               Margin="40,0"
-              Background="Gray">
+              Background="{StaticResource Layer1_Dark}">
 
 
 
@@ -289,18 +294,20 @@
                                 </StackPanel.Resources>
 
                                 <StackPanel Orientation="Vertical">
-                                    <TextBlock Text="Assigned To:" />
+                                    <TextBlock Text="Assigned To:" Foreground="White" />
                                     <local:Searchbox x:Name="Searchbox_AssignedTo" />
                                 </StackPanel>
 
                                 <StackPanel  Orientation="Vertical"
                                              Margin="100,0">
-                                    <TextBlock Text="Current Status:" />
+                                    <TextBlock Text="Current Status:"
+                                               Foreground="White" />
                                     <local:Searchbox x:Name="Searchbox_Phase" />
                                 </StackPanel>
 
                                 <StackPanel  Orientation="Vertical">
-                                    <TextBlock Text="Category:" />
+                                    <TextBlock Text="Category:"
+                                               Foreground="White" />
                                     <local:Searchbox x:Name="Searchbox_Category" />
                                 </StackPanel>
                             </StackPanel>
@@ -549,8 +556,7 @@
                                 Click="RefuseSave_Clicked" />
                         <Button Content="Yes"
                                 Padding="5"
-                                Width="100"
-                                Click="ConfirmSave_Clicked" />
+                                Width="100" />
                     </StackPanel>
                 </StackPanel>
             </Border>

@@ -6,12 +6,15 @@
         xmlns:local="clr-namespace:AssetTracker"
         xmlns:View="clr-namespace:AssetTracker.View"
         xmlns:viewmodel="clr-namespace:AssetTracker.ViewModel"
+        xmlns:materialicons="clr-namespace:MaterialIcons;assembly=MaterialIcons"
         mc:Ignorable="d"
-        Title="MainWindow" Height="1080" Width="1920">
+        Title="MainWindow"
+        Height="1080"
+        Width="1920">
     <Window.DataContext>
         <viewmodel:MainViewModel />
     </Window.DataContext>
-    <Grid Background="White">
+    <Grid Background="{StaticResource ResourceKey=BackgroundColor_Dark}">
         <Grid.Resources>
             <Style x:Key="NavText"
                    TargetType="{x:Type Button}">
@@ -29,70 +32,78 @@
 
         <Grid.RowDefinitions>
             <RowDefinition Height="60px" />
-            <RowDefinition  />
+            <RowDefinition />
         </Grid.RowDefinitions>
 
-        <Grid x:Name="Header"
+        <Grid x:Name="NavBar"
               Grid.Row="0"
               Margin="5">
-            <Button Click="NavigateToDashboard"
-                    Width="75"
-                    Grid.Column="0"
-                    HorizontalAlignment="Left">
-              <Image x:Name="AppLogo"
-                   Source="//Images/Placeholder.jpg"/>
-            </Button>
+            <Grid Margin="20,0">
+                <Button Click="NavigateToDashboard"
+                        Width="75"
+                        Grid.Column="0"
+                        HorizontalAlignment="Left">
+                    <Image x:Name="AppLogo"
+                           Source="//Images/Placeholder.jpg" />
+                </Button>
 
-            <StackPanel x:Name="Nav"
+                <StackPanel x:Name="Nav"
                             Orientation="Horizontal"
                             Margin="50,0"
                             VerticalAlignment="Center"
                             HorizontalAlignment="Center">
-                    <StackPanel.Resources>
-                        <Style BasedOn="{StaticResource NavText}"
-                               TargetType="Button">
-                        </Style>
-                    </StackPanel.Resources>
-                    <Button Content="Asset List"
-                            Click="NavigateToAssetList" />
-                
-                    <Button Content="Project Status" 
-                            Click="NavigateToProjectStatus" IsEnabled="False"/>
+                   
+                    <Border MouseUp="NavigateToAssetList" Style="{StaticResource HoverBtn}">
+                        <materialicons:MaterialIcon Icon="ic_list"
+                                                    Style="{StaticResource HoverBtn_Content}" />
+                    </Border>
 
-                <Button Content="Configuration"
-                        Click="NavigateToProjectConfig" />
-                
-            </StackPanel>
+                    <Border MouseUp="NavigateToProjectStatus"
+                            IsEnabled="False"
+                            Margin="50,0" Style="{StaticResource HoverBtn}">
+                        <materialicons:MaterialIcon Icon="ic_equalizer" Style="{StaticResource HoverBtn_Content}" />
+                    </Border>
 
-            <StackPanel Orientation="Horizontal"
-                        VerticalAlignment="Center"
-                        HorizontalAlignment="Right">
+                    <Border MouseUp="NavigateToProjectConfig" Style="{StaticResource HoverBtn}">
+                        <materialicons:MaterialIcon Icon="ic_settings" Style="{StaticResource HoverBtn_Content}"/>
+                    </Border>
 
-                <TextBlock FontSize="14"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center">
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Right">
+
+                    <TextBlock FontSize="14"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Margin="10,0"
+                               Foreground="White">
                     <Run Text="{Binding CurrentUser.us_fname }" />
                     <Run Text="{Binding CurrentUser.us_lname }" />
-                </TextBlock>
+                    </TextBlock>
 
-                <Image x:Name="UserLogo"
-                       Source="/Images/Placeholder.jpg"
-                       Grid.Column="0"
-                       Width="25"
-                       Height="25"
-                       Stretch="Fill"
-                       Margin="10,0" />
+                    <Button Background="Transparent"
+                            Click="NavigateToUserEdit">
+                        <materialicons:MaterialIcon Icon="ic_person"
+                                                    Width="25"
+                                                    Height="25"
+                                                    Foreground="White" />
+
+                    </Button>
 
 
 
-            </StackPanel>
-
+                </StackPanel>
+            </Grid>
         </Grid>
 
-        <Frame x:Name="ContentFrame" Grid.Row="1" NavigationUIVisibility="Hidden">
-            
+        <Frame x:Name="ContentFrame"
+               Grid.Row="1"
+               NavigationUIVisibility="Hidden">
+
         </Frame>
-        
+
 
     </Grid>
 </Window>

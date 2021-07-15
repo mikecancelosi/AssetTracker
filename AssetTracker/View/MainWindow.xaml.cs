@@ -35,17 +35,17 @@ namespace AssetTracker
             myCoordinator.NavigateToUserDashboard();       
         }
 
-        public void NavigateToAssetList(object sender, RoutedEventArgs e)
+        public void NavigateToAssetList(object sender, MouseEventArgs e)
         {
             myCoordinator.NavigateToAssetList();
         }
 
-        public void NavigateToProjectStatus(object sender, RoutedEventArgs e)
+        public void NavigateToProjectStatus(object sender, MouseEventArgs e)
         {
             
         }
 
-        private void NavigateToProjectConfig(object sender, RoutedEventArgs e)
+        private void NavigateToProjectConfig(object sender, MouseEventArgs e)
         {
             myCoordinator.NavigateToProjectSettings();
         }
@@ -53,6 +53,11 @@ namespace AssetTracker
         private void NavigateToDashboard(object sender, RoutedEventArgs e)
         {
             myCoordinator.NavigateToUserDashboard();
+        }
+
+        private void NavigateToUserEdit(object sender, RoutedEventArgs e)
+        {
+            myCoordinator.NavigateToUserEdit(vm.CurrentUser);
         }
 
         #region DatabaseSetup

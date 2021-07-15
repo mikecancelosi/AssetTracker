@@ -183,11 +183,13 @@
       <DependentUpon>Changelog.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Commands\IDReceiverCmd.cs" />
+    <Compile Include="View\Converters\BooleanToVizConverter.cs" />
     <Compile Include="View\Converters\DatetimeToTimeElapsedConverter.cs" />
     <Compile Include="View\Converters\InverseBooleanConverter.cs" />
     <Compile Include="View\Converters\IsNullToBorderConverter.cs" />
     <Compile Include="View\Converters\IsNullToThicknessConverter.cs" />
     <Compile Include="View\Converters\IsNullToVisibilityConverter.cs" />
+    <Compile Include="View\Converters\MatchesUserIDConverter.cs" />
     <Compile Include="View\Converters\MatchesUserIDToVisConverter.cs" />
     <Compile Include="View\Converters\MultiBooleanToVisibilityConverter.cs" />
     <Compile Include="View\Converters\MultiValueConverter.cs" />
@@ -254,6 +256,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Resources\AssetTimelineResourceDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Resources\ColorSchemeResourceDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Resources\CommonResourceDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

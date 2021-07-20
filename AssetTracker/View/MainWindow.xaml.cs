@@ -24,12 +24,15 @@ namespace AssetTracker
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainViewModel vm;
+        public MainViewModel VM
+        {
+            get { return (MainViewModel)DataContext; }
+            set { DataContext = value; }
+        }
         private Coordinator myCoordinator;
         public MainWindow()
         {
-            vm = MainViewModel.Instance;
-            DataContext = vm;
+            VM = MainViewModel.Instance;
             InitializeComponent();
             myCoordinator = new Coordinator(ContentFrame.NavigationService);
             myCoordinator.NavigateToUserDashboard();       
@@ -57,26 +60,7 @@ namespace AssetTracker
 
         private void NavigateToUserEdit(object sender, RoutedEventArgs e)
         {
-            myCoordinator.NavigateToUserEdit(vm.CurrentUser);
+            myCoordinator.NavigateToUserEdit(VM.CurrentUser);
         }
-
-        #region DatabaseSetup
-        private void FillDatabase()
-        {
-            List<DatabaseBackedObject> objectsToAdd = DefaultRepositoryData.BuildTestData();
-            TrackerContext context = new TrackerContext();
-            objectsToAdd.ForEach(x => context.Set(x.GetType()).Add(x));
-            context.SaveChanges();
-        }
-
-        private void UpdateDatabase()
-        {
-            List<DatabaseBackedObject> objectsToAdd = DefaultRepositoryData.BuildTestData();
-            TrackerContext context = new TrackerContext();
-            objectsToAdd.ForEach(x => context.Entry(x).State = System.Data.Entity.EntityState.Modified);
-            context.SaveChanges();
-        }
-        #endregion
-
     }
 }

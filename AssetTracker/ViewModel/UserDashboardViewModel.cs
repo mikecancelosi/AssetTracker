@@ -1,4 +1,5 @@
-﻿using AssetTracker.Model;
+﻿using AssetTracker.Enums;
+using AssetTracker.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -66,7 +67,7 @@ namespace AssetTracker.ViewModel
         {
             get
             {
-                return 3;
+                return UserAlerts.Where(x=>x.ar_type == AlertType.DiscussionReply).Count();
             }
         }
 
@@ -74,7 +75,7 @@ namespace AssetTracker.ViewModel
         {
             get
             {
-                return 3;
+                return UserAlerts.Where(x => x.ar_type == AlertType.AssetAssigned).Count();
             }
         }
 
@@ -82,7 +83,7 @@ namespace AssetTracker.ViewModel
         {
             get
             {
-                return 3;
+                return UserAlerts.Where(x => x.ar_type == AlertType.ReviewAssigned).Count();
             }
         }
 
@@ -93,6 +94,5 @@ namespace AssetTracker.ViewModel
                 return UserAlerts.Count == 0;
             }
         }
-
     }
 }

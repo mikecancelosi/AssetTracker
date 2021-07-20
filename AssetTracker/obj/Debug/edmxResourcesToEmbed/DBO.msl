@@ -150,7 +150,7 @@
     <EntitySetMapping Name="Metadata">
       <EntityTypeMapping TypeName="Model.Metadata">
         <MappingFragment StoreEntitySet="Metadata">
-          <ScalarProperty Name="md_recid" ColumnName="md_recid" />
+          <ScalarProperty Name="md_asid" ColumnName="md_asid" />
           <ScalarProperty Name="md_value" ColumnName="md_value" />
           <ScalarProperty Name="md_id" ColumnName="md_id" />
         </MappingFragment>
@@ -159,6 +159,7 @@
     <EntitySetMapping Name="Alerts">
       <EntityTypeMapping TypeName="Model.Alert">
         <MappingFragment StoreEntitySet="Alert">
+          <ScalarProperty Name="ar_header" ColumnName="ar_header" />
           <ScalarProperty Name="ar_content" ColumnName="ar_content" />
           <ScalarProperty Name="ar_projectwide" ColumnName="ar_projectwide" />
           <ScalarProperty Name="ar_viewed" ColumnName="ar_viewed" />

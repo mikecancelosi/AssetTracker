@@ -111,7 +111,7 @@ namespace AssetTracker.ViewModel
             context.SecRoles.Add(Role);
         }
 
-        public bool OnSave(out List<Violation> violations)
+        public bool Save(out List<Violation> violations)
         {
             // Saving Role also saves role permissions changes         
             if (Role.Save(context, out violations))

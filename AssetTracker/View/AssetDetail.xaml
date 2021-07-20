@@ -10,7 +10,8 @@
       xmlns:materialicons="clr-namespace:MaterialIcons;assembly=MaterialIcons"
       mc:Ignorable="d"
       d:DesignWidth="1200"
-      d:DesignHeight="800">
+      d:DesignHeight="800" 
+      Loaded="Page_Loaded">
     <Page.DataContext>
         <viewmodel:AssetDetailViewModel />
     </Page.DataContext>
@@ -20,6 +21,8 @@
             <converters:InverseBooleanConverter x:Key="inverseBooleanConverter" />
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
             <converters:MultiBooleanToVisibilityConverter x:Key="multiBoolToVisConvert" />
+            <converters:AlternationEqualityConverter x:Key="alternationConverter" />
+            <converters:IsNullToVisibilityConverter x:Key="nullToVizConverter" />
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary x:Name="DiscussDictionary"
                                     Source="Resources/DiscussionBoardResourceDictionary.xaml" />
@@ -32,7 +35,7 @@
 
     </Page.Resources>
 
-    <Grid  Margin="50,0">
+    <Grid  Margin="100,0">
         <Grid.Resources>
             <Style TargetType="TextBlock"
                    x:Key="EditableText">
@@ -53,7 +56,7 @@
                     </Trigger>
 
                 </Style.Triggers>
-                
+
             </Style>
             <Style TargetType="TextBlock">
                 <Setter Property="Foreground"
@@ -67,23 +70,23 @@
         </Grid.ColumnDefinitions>
 
         <Border x:Name="LeftPanel"
-                Background="{StaticResource Layer1_Dark}"
                 Grid.Column="0"
-                Padding="20">
+                Style="{StaticResource LeftPanel}">
             <StackPanel>
 
                 <Border Name="ControlButtons"
-                        Padding="20,10,20,20"
-                        HorizontalAlignment="Stretch"
-                        BorderThickness="0,0,0,3"
-                        BorderBrush="{StaticResource  BackgroundColor_Dark}">
+                        Style="{StaticResource ControlBtns}">
 
                     <StackPanel  Orientation="Horizontal"
                                  HorizontalAlignment="Center">
-                                           
 
-                        <Border IsEnabled="{Binding Savable}" MouseUp="OnSaveClicked" Style="{StaticResource HoverBtn}" Height="30">
-                            <materialicons:MaterialIcon Icon="ic_save" Style="{StaticResource HoverBtn_Content}"/>
+
+                        <Border IsEnabled="{Binding Savable}"
+                                MouseUp="OnSaveClicked"
+                                Style="{StaticResource HoverBtn}"
+                                Height="30">
+                            <materialicons:MaterialIcon Icon="ic_save"
+                                                        Style="{StaticResource HoverBtn_Content}" />
                         </Border>
 
                         <Border Margin="30,0"
@@ -107,13 +110,15 @@
                 <TextBlock   x:Name="DisplayName"
                              Text="{Binding myAsset.as_displayname}"
                              Style="{StaticResource EditableText}"
-                             Margin="0,40"
+                             Margin="0,40,0,10"
                              FontSize="24"
                              FontWeight="Bold" />
 
 
                 <!--#region Metadata -->
-                <ItemsControl ItemsSource="{Binding myMetadata}">
+                <ItemsControl ItemsSource="{Binding Tags}"
+                              Margin="0,0,0,10"
+                              AlternationCount="{Binding RelativeSource={RelativeSource Self}, Path=ItemsSource.Count}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <WrapPanel Orientation="Horizontal" />
@@ -121,25 +126,106 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Border BorderBrush="Black"
-                                    BorderThickness="1"
-                                    CornerRadius="5">
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{Binding md_value }"
-                                               HorizontalAlignment="Left"
-                                               Margin="0,0,10,0" />
-                                    <Button Content="x"
-                                            HorizontalAlignment="Right"
-                                            Click="OnMetadataDelete_Clicked"
-                                            Tag="{Binding md_id}" />
-                                </StackPanel>
-                            </Border>
+                            <StackPanel Orientation="Horizontal"
+                                        Margin="0,5,5,0">
+                                <Border x:Name="TagView"
+                                        BorderBrush="{StaticResource Text_Dark}"
+                                        BorderThickness="2"
+                                        CornerRadius="5"
+                                        Padding="5"
+                                        VerticalAlignment="Center">
+
+                                    <StackPanel  Orientation="Horizontal">
+                                        <TextBlock Text="{Binding md_value }"
+                                                   HorizontalAlignment="Left"
+                                                   Margin="0,0,10,0"
+                                                   Foreground="{StaticResource Text_Dark}"
+                                                   VerticalAlignment="Center" />
+                                        <Border VerticalAlignment="Stretch"
+                                                MouseUp="OnMetadataDelete_Clicked"
+                                                Tag="{Binding md_id}"
+                                                Style="{StaticResource HoverBtn}">
+                                            <materialicons:MaterialIcon Icon="ic_close"
+                                                                        Foreground="{StaticResource Text_Dark}"
+                                                                        Height="14" />
+                                        </Border>
+
+                                    </StackPanel>
+
+
+
+                                </Border>
+                                <Border x:Name="AddTagControl"
+                                        Padding="5"
+                                        BorderThickness="2"
+                                        BorderBrush="{StaticResource Text_Dark}"
+                                        HorizontalAlignment="Left"
+                                        CornerRadius="5"
+                                        VerticalAlignment="Center"
+                                        MouseUp="OnMetadataAdd_Clicked"
+                                        Visibility="Collapsed"
+                                        Style="{StaticResource HoverBtn}" Margin="5,0,0,0">
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialicons:MaterialIcon Icon="ic_add"
+                                                                    Foreground="{StaticResource Text_Dark}"
+                                                                    Height="14"
+                                                                    Margin="0,0,5,0" />
+                                        <TextBlock Text="Add Tag"
+                                                   VerticalAlignment="Center"
+                                                   Foreground="{StaticResource Text_Dark}" />
+
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+
+                            <DataTemplate.Triggers>
+                                <DataTrigger Value="True">
+                                    <DataTrigger.Binding>
+                                        <MultiBinding Converter="{StaticResource alternationConverter}">
+                                            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}"
+                                                     Path="Items.Count" />
+                                            <Binding RelativeSource="{RelativeSource Self}"
+                                                     Path="(ItemsControl.AlternationIndex)" />
+                                        </MultiBinding>
+                                    </DataTrigger.Binding>
+                                    <Setter Property="Visibility"
+                                            Value="Visible"
+                                            TargetName="AddTagControl" />
+                                </DataTrigger>
+                            </DataTemplate.Triggers>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
+
+                <Border x:Name="AddTagControl_null"
+                        Padding="5"
+                        BorderThickness="2"
+                        BorderBrush="{StaticResource Text_Dark}"
+                        HorizontalAlignment="Left"
+                        CornerRadius="5"
+                        VerticalAlignment="Center"
+                        MouseUp="OnMetadataAdd_Clicked"
+                        Visibility="{Binding Tags.Count, Converter={StaticResource nullToVizConverter}}"
+                        Style="{StaticResource HoverBtn}"
+                        Margin="5,0,0,0">
+                    <StackPanel Orientation="Horizontal">
+                        <materialicons:MaterialIcon Icon="ic_add"
+                                                    Foreground="{StaticResource Text_Dark}"
+                                                    Height="14"
+                                                    Margin="0,0,5,0" />
+                        <TextBlock Text="Add Tag"
+                                   VerticalAlignment="Center"
+                                   Foreground="{StaticResource Text_Dark}" />
+
+                    </StackPanel>
+                </Border>
+
+
                 <!--#endregion-->
                 <TextBlock Text="{Binding myAsset.as_description}"
-                           Style="{StaticResource EditableText}" Foreground="White"/>
+                           Style="{StaticResource EditableText}"
+                           Foreground="White"
+                           Margin="0,20" />
 
                 <!--#region Hierarchy-->
                 <ItemsControl ItemsSource="{Binding Hierarchy}"
@@ -158,13 +244,15 @@
                                     Cursor="Hand">
 
                                 <Grid>
-                                   
+
                                     <TextBlock x:Name="HierarchyLabel"
                                                Text="{Binding asset.Name}"
-                                               FontSize="14" Foreground="White"/>
+                                               FontSize="14"
+                                               Foreground="White" />
                                     <TextBlock x:Name="NavigateToVisual"
                                                Text=">"
-                                               HorizontalAlignment="Right" Foreground="LightGray">
+                                               HorizontalAlignment="Right"
+                                               Foreground="LightGray">
                                         <TextBlock.Style>
                                             <Style TargetType="TextBlock">
                                                 <Style.Triggers>
@@ -209,13 +297,11 @@
         </Border>
         <Grid x:Name="RightPanel"
               Grid.Column="1"
-              Margin="40,0"
+              Margin="50,0,0,0"
               Background="{StaticResource Layer1_Dark}">
 
-
-
             <ScrollViewer Padding="40,0"
-                          Name="Content">
+                          Name="RightPanel_Content">
 
                 <Border Padding="30">
                     <Grid>
@@ -294,7 +380,8 @@
                                 </StackPanel.Resources>
 
                                 <StackPanel Orientation="Vertical">
-                                    <TextBlock Text="Assigned To:" Foreground="White" />
+                                    <TextBlock Text="Assigned To:"
+                                               Foreground="White" />
                                     <local:Searchbox x:Name="Searchbox_AssignedTo" />
                                 </StackPanel>
 
@@ -399,30 +486,30 @@
 
             <!--#region Changelog-->
             <Grid Name="Changelog"
-                  Background="Black"
+                  Background="{StaticResource Overlay}"
                   Margin="40"
                   Visibility="Collapsed">
 
-                <Button Height="30"
+                <Border Height="30"
                         Width="30"
                         VerticalAlignment="Top"
                         HorizontalAlignment="Right"
-                        Background="DarkRed"
-                        Click="OnChangelogExited">
-                    <Image Source="../Images/MaterialDesign/baseline_close_white_48dp.png" />
-                </Button>
+                        Background="{StaticResource RejectOverlay_Dark}"
+                        MouseUp="OnChangelogExited" Style="{StaticResource HoverBtn}">
+                    <materialicons:MaterialIcon Icon="ic_close"
+                                                 Style="{StaticResource HoverBtn_Content}" />
+                </Border>
 
                 <StackPanel Orientation="Vertical"
                             Margin="10">
-
-                    <!--TODO Changelog should be moved to a button click.-->
+                    
                     <TextBlock Text="Changelog"
                                FontSize="24"
-                               Foreground="White"
+                               Foreground="{StaticResource TextOverlay_Dark}"
                                Margin="0,5" />
                     <ListView VerticalAlignment="Top"
-                              ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                              ItemsSource="{Binding Changelog}">
+                              ScrollViewer.HorizontalScrollBarVisibility="Hidden" Background="Transparent" BorderThickness="0"
+                              ItemsSource="{Binding Changelog}" ItemContainerStyle="{StaticResource AssetList_ListViewItem}">
                         <ListView.Resources>
                             <Style TargetType="{x:Type GridViewColumnHeader}">
                                 <Setter Property="HorizontalContentAlignment"
@@ -438,7 +525,7 @@
                         </ListView.Resources>
 
                         <ListView.View>
-                            <GridView>
+                            <GridView ColumnHeaderContainerStyle="{StaticResource AssetList_GridViewColumnHeader}">
                                 <GridViewColumn Header="Date"
                                                 Width="100"
                                                 DisplayMemberBinding="{Binding ch_datetime}" />
@@ -532,32 +619,76 @@
             </Border>
             <!--#endregion-->
 
-            <!--#region PromptSave-->
-            <Border  x:Name="PromptSavePanel"
-                     Background="Gray"
-                     VerticalAlignment="Center"
-                     HorizontalAlignment="Center"
-                     Width="300"
-                     Height="100"
-                     BorderBrush="Black"
-                     BorderThickness="1" Visibility="Collapsed">
+            <Control x:Name="PromptSavePanel" Style="{StaticResource  PromptSave}" Visibility="Collapsed"/>
+
+            <!--#region AddMetatag -->
+            <Border x:Name="TagAdd_Window"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Background="{StaticResource Overlay}"
+                    Padding="10"
+                    Width="700"
+                    Visibility="Collapsed">
                 <StackPanel>
-                    <TextBlock Text="Would you like to save before exiting?"
-                               Margin="20"
-                               HorizontalAlignment="Center" />
                     <StackPanel Orientation="Horizontal"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Bottom"
-                                Margin="0,0,0,10">
-                        <Button Content="No"
-                                Padding="5"
-                                Width="100"
-                                Margin="0,0,30,0"
-                                Click="RefuseSave_Clicked" />
-                        <Button Content="Yes"
-                                Padding="5"
-                                Width="100" />
+                                Margin="0,0,0,10"
+                                Grid.Row="0">
+                        <materialicons:MaterialIcon Icon="ic_label"
+                                                    Foreground="{StaticResource TextOverlay_Dark}"
+                                                    Width="24"
+                                                    Margin="0,0,5,0" />
+                        <TextBlock Text="Add tag"
+                                   Foreground="{StaticResource TextOverlay_Dark}"
+                                   VerticalAlignment="Center"
+                                   FontSize="16"
+                                   FontWeight="SemiBold" />
                     </StackPanel>
+
+                    <Border Grid.Row="1">
+                        <TextBox x:Name="TagAdd_Content"
+                                 Height="30"
+                                 Margin="50,0"
+                                 VerticalContentAlignment="Center"
+                                 FontSize="16"
+                                 Background="{StaticResource Layer3_Dark}"
+                                 Foreground="{StaticResource Text_Dark}" />
+                    </Border>
+
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Center">
+                        <Border Margin="0,10,20,0"
+                                Style="{StaticResource HoverBtn}"
+                                Padding="5"
+                                BorderThickness="5"
+                                BorderBrush="{StaticResource ConfirmOverlay_Dark}"
+                                MouseUp="AddTagConfirm_Clicked"
+                                Width="150">
+                            <TextBlock Text="Confirm"
+                                       Style="{StaticResource HoverBtn_TextContent}"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"
+                                       Foreground="{StaticResource TextOverlay_Dark}"
+                                       FontWeight="SemiBold"
+                                       FontSize="14" />
+                        </Border>
+                        <Border  Margin="0,10,20,0"
+                                 Width="150"
+                                 Style="{StaticResource HoverBtn}"
+                                 Padding="5"
+                                 BorderThickness="5"
+                                 BorderBrush="{StaticResource RejectOverlay_Dark}"
+                                 MouseUp="AddTagCancel_Clicked">
+                            <TextBlock Text="Cancel"
+                                       Style="{StaticResource HoverBtn_TextContent}"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Foreground="{StaticResource TextOverlay_Dark}"
+                                       FontWeight="SemiBold"
+                                       FontSize="14" />
+                        </Border>
+
+                    </StackPanel>
+
                 </StackPanel>
             </Border>
             <!--#endregion-->

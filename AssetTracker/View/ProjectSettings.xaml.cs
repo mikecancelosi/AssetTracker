@@ -22,14 +22,17 @@ namespace AssetTracker.View
     /// </summary>
     public partial class ProjectSettings : Page
     {
-        public ProjectSettingsViewModel vm;
+        public ProjectSettingsViewModel VM
+        {
+            get { return (ProjectSettingsViewModel)DataContext; }
+            set { DataContext = value; }
+        }
         private Coordinator myCoordinator;
 
         public ProjectSettings(Coordinator coordinator)
         {
             InitializeComponent();
-            vm = new ProjectSettingsViewModel();
-            DataContext = vm;
+            VM = new ProjectSettingsViewModel();
             myCoordinator = coordinator;
         }     
 
@@ -37,72 +40,96 @@ namespace AssetTracker.View
         {
             myCoordinator.NavigateToCreateUser();
         }
-        private void EditUserClicked(object sender, RoutedEventArgs e)
-        {
-            Button selectedItem = sender as Button;
-            User selectedUser = selectedItem.DataContext as User;
-            myCoordinator.NavigateToUserEdit(selectedUser);
-        }
-        private void DeleteUserClicked(object sender, RoutedEventArgs e)
-        {
-            Button selectedItem = sender as Button;
-            User selectedUser = selectedItem.DataContext as User;
-            vm.DeleteUser(selectedUser.us_id);
-        }
-        private void CopyUserClicked(object sender, RoutedEventArgs e)
-        {
-            Button selectedItem = sender as Button;
-            User selectedUser = selectedItem.DataContext as User;
-            User copiedUser = vm.CopyUser(selectedUser.us_id);
-            myCoordinator.NavigateToUserEdit(copiedUser);
-        }
-
+       
         private void AddRoleClicked(object sender, RoutedEventArgs e)
         {
             myCoordinator.NavigateToCreateRole();
-        }
-        private void EditRoleClicked(object sender, RoutedEventArgs e)
-        {
-            Button selectedItem = sender as Button;
-            SecRole selectedRole = selectedItem.DataContext as SecRole;
-            myCoordinator.NavigateToRoleEdit(selectedRole);
-        }
-        private void DeleteRoleClicked(object sender, RoutedEventArgs e)
-        {
-            Button selectedItem = sender as Button;
-            SecRole selectedRole = selectedItem.DataContext as SecRole;
-            vm.DeleteRole(selectedRole.ro_id);
-        }
-        private void CopyRoleClicked(object sender, RoutedEventArgs e)
-        {
-            Button selectedItem = sender as Button;
-            SecRole selectedRole = selectedItem.DataContext as SecRole;
-            SecRole copiedRole = vm.CopyRole(selectedRole.ro_id);
-            myCoordinator.NavigateToRoleEdit(copiedRole);
         }
 
         private void AddCategoryClicked(object sender, RoutedEventArgs e)
         {
             myCoordinator.NavigateToCreateCategory();
         }
-        private void EditCategoryClicked(object sender, RoutedEventArgs e)
+
+        private void OnOperationClicked(object sender, MouseButtonEventArgs e)
         {
-            Button selectedItem = sender as Button;
-            AssetCategory selectedCategory = selectedItem.DataContext as AssetCategory;
-            myCoordinator.NavigatetoCategoryEdit(selectedCategory);
+            Border selectedItem = sender as Border;
+            string tag = selectedItem.Tag.ToString();
+            switch(selectedItem.DataContext.GetType().BaseType.Name)
+            {
+                case "User":
+                    User selectedUser = selectedItem.DataContext as User;
+                    OnUserOperationClicked(selectedUser, tag);
+                    break;
+                case "AssetCategory":
+                    AssetCategory selectedCategory = selectedItem.DataContext as AssetCategory;
+                    OnCategoryOperationClicked(selectedCategory, tag);
+                    break;
+                case "SecRole":
+                    SecRole selectedRole = selectedItem.DataContext as SecRole;
+                    OnRoleOperationClicked(selectedRole, tag);
+                    break;
+
+            }
         }
-        private void DeleteCategoryClicked(object sender, RoutedEventArgs e)
+
+        private void OnUserOperationClicked(User selectedUser,string tag)
         {
-            Button selectedItem = sender as Button;
-            AssetCategory selectedCat = selectedItem.DataContext as AssetCategory;
-            vm.DeleteCategory(selectedCat.ca_id);
+            switch(tag)
+            {
+                case "copy":
+                    User copiedUser = VM.CopyUser(selectedUser.us_id);
+                    myCoordinator.NavigateToUserEdit(copiedUser);
+                    break;
+                case "edit":
+                    myCoordinator.NavigateToUserEdit(selectedUser);
+                    break;
+                case "delete":
+                    VM.DeleteUser(selectedUser.us_id);
+                    break;
+            }
+                
         }
-        private void CopyCategoryClicked(object sender, RoutedEventArgs e)
+
+        private void OnRoleOperationClicked(SecRole selectedRole, string tag)
         {
-            Button selectedItem = sender as Button;
-            AssetCategory selectedCategory = selectedItem.DataContext as AssetCategory;
-            AssetCategory copiedCategory = vm.CopyCategory(selectedCategory.ca_id);
-            myCoordinator.NavigatetoCategoryEdit(copiedCategory);
+            switch (tag)
+            {
+                case "copy":
+                    SecRole copiedRole = VM.CopyRole(selectedRole.ro_id);
+                    myCoordinator.NavigateToRoleEdit(copiedRole);
+                    break;
+                case "edit":
+                    myCoordinator.NavigateToRoleEdit(selectedRole);
+                    break;
+                case "delete":
+                    VM.DeleteRole(selectedRole.ro_id);
+                    break;
+            }
+
+        }
+
+        private void OnCategoryOperationClicked(AssetCategory selectedCategory, string tag)
+        {
+            switch (tag)
+            {
+                case "copy":
+                    AssetCategory copiedCategory = VM.CopyCategory(selectedCategory.ca_id);
+                    myCoordinator.NavigatetoCategoryEdit(copiedCategory);
+                    break;
+                case "edit":
+                    myCoordinator.NavigatetoCategoryEdit(selectedCategory);
+                    break;
+                case "delete":
+                    VM.DeleteCategory(selectedCategory.ca_id);
+                    break;
+            }
+
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            VM.Reload();
         }
     }
 }

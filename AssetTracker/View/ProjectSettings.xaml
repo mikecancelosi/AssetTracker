@@ -5,11 +5,12 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:AssetTracker.View"
       xmlns:viewmodel="clr-namespace:AssetTracker.ViewModel"
+      xmlns:materialicons="clr-namespace:MaterialIcons;assembly=MaterialIcons"
       mc:Ignorable="d"
       d:DesignHeight="900"
       d:DesignWidth="1500"
       Title="ProjectSettings"
-      ShowsNavigationUI="False">
+      ShowsNavigationUI="False" Loaded="Page_Loaded">
     <Page.DataContext>
         <viewmodel:ProjectSettingsViewModel />
     </Page.DataContext>
@@ -26,184 +27,193 @@
 
     </Page.Resources>
 
-    <Grid Margin="100,30">
+    <Grid Margin="100,0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*"
                               MaxWidth="300" />
             <ColumnDefinition Width="5*" />
         </Grid.ColumnDefinitions>
 
-        <Grid x:Name="LeftPanel"
-              Grid.Column="0"
-              Background="Gray">
-            <TextBlock Text="Settings"
-                       FontSize="20"
-                       FontWeight="Bold"
-                       Margin="30" />
-            <StackPanel Margin="30,100">
-                <StackPanel.Resources>
-                    <Style TargetType="Image">
-                        <Setter Property="Width"
-                                Value="24" />
+        <Border x:Name="LeftPanel"
+                Grid.Column="0"
+                Style="{StaticResource LeftPanel}">
+            <Grid>
+                <TextBlock Text="Settings"
+                           Style="{StaticResource LeftPanel_Header}"
+                           Foreground="{StaticResource Text_Dark}" />
+                <StackPanel Margin="0,100">
+
+                    <RadioButton x:Name="UsersBtn"
+                                 Content="Users"
+                                 GroupName="Navigation"
+                                 IsChecked="True"
+                                 Style="{StaticResource SubNavRadio}" />
+
+                    <RadioButton x:Name="RolesBtn"
+                                 Content="Roles"
+                                 GroupName="Navigation"
+                                 Margin="0,20"
+                                 Style="{StaticResource SubNavRadio}" />
+
+                    <RadioButton x:Name="CategoriesBtn"
+                                 Content="Categories"
+                                 GroupName="Navigation"
+                                 Style="{StaticResource SubNavRadio}" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Border Grid.Column="1"
+                Style="{StaticResource RightPanel}">
+            <Grid>
+                <Grid.Resources>
+                    <Style TargetType="ListView">
+                        <Setter Property="Background"
+                                Value="Transparent" />
+                        <Setter Property="BorderThickness"
+                                Value="0" />
+
+                    </Style>
+                    <Style TargetType="ListViewItem"
+                           BasedOn="{StaticResource AssetList_ListViewItem}">
+                        <Setter Property="Height"
+                                Value="50" />
+                        <Setter Property="BorderThickness"
+                                Value="0" />
+                       
                     </Style>
 
-                </StackPanel.Resources>
+                    <Style TargetType="GridViewColumnHeader">
+                        <Setter Property="FontSize"
+                                Value="14" />
+                        <Setter Property="FontWeight"
+                                Value="SemiBold" />
+                        <Setter Property="BorderThickness"
+                                Value="0" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="GridViewColumnHeader">
+                                    <Grid Background="{StaticResource Layer2_Dark}"
+                                          Margin="-2,0">
+                                        <DockPanel HorizontalAlignment="Left"
+                                                   VerticalAlignment="Center"
+                                                   Margin="0,10">
+                                            <TextBlock Text="{TemplateBinding Content}"
+                                                       FontSize="16"
+                                                       Margin="5,0"
+                                                       Foreground="{StaticResource Text_Dark}" />
+                                        </DockPanel>
+                                    </Grid>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
 
-                <RadioButton x:Name="UsersBtn"
-                             Content="Users"
-                             GroupName="Navigation"
-                             IsChecked="True"
-                             Style="{StaticResource SubNavRadio}" />
+                    <Style TargetType="Button"
+                           x:Key="AddButtonStyle">
+                        <Setter Property="HorizontalAlignment"
+                                Value="Right" />
+                        <Setter Property="Padding"
+                                Value="5" />
+                        <Setter Property="Width"
+                                Value="200" />
+                    </Style>
 
-                <RadioButton x:Name="RolesBtn"
-                             Content="Roles"
-                             GroupName="Navigation"
-                             Margin="0,20"
-                             Style="{StaticResource SubNavRadio}" />
+                    <DataTemplate x:Key="OperationsTemplate">
+                        <Grid Margin="30,0">
+                            <Grid.Resources>
+                                <Style TargetType="materialicons:MaterialIcon"
+                                       BasedOn="{StaticResource HoverBtn_Content}">
+                                    <Setter Property="Foreground"
+                                            Value="{StaticResource Layer2_Dark}" />
+                                </Style>
+                            </Grid.Resources>
+                            <StackPanel Orientation="Horizontal">
+                                <Border Style="{StaticResource HoverBtn }"
+                                        Tag="copy"
+                                        MouseUp="OnOperationClicked"
+                                        Width="24">
+                                    <materialicons:MaterialIcon Icon="ic_content_copy"/>
+                                </Border>
+                                <Border Style="{StaticResource HoverBtn}"
+                                        Margin="10,0"
+                                        MouseUp="OnOperationClicked"
+                                        Tag="edit"
+                                        Width="24">
+                                    <materialicons:MaterialIcon Icon="ic_edit"/>
+                                </Border>
+                                <Border Style="{StaticResource HoverBtn}"
+                                        MouseUp="OnOperationClicked"
+                                        Tag="delete"
+                                        Width="24">
+                                    <materialicons:MaterialIcon Icon="ic_delete"/>
+                                </Border>
+                            </StackPanel>
+                        </Grid>
+                    </DataTemplate>
+                </Grid.Resources>
 
-                <RadioButton x:Name="CategoriesBtn"
-                             Content="Categories"
-                             GroupName="Navigation"
-                             Style="{StaticResource SubNavRadio}" />
-            </StackPanel>
-        </Grid>
+                <StackPanel x:Name="Users"
+                            Orientation="Vertical"
+                            Visibility="{Binding ElementName=UsersBtn, Path=IsChecked,Converter={StaticResource BoolToVis}}"
+                            Margin="50">
 
-        <Grid Grid.Column="1"
-              Margin="50,0"
-              Background="Gray">
-            <Grid.Resources>
-                <Style TargetType="ListViewItem">
-                    <Setter Property="Height"
-                            Value="50" />
-                </Style>
+                    <TextBlock Text="Users"
+                               Style="{StaticResource RightPanel_Header}" />
 
-                <Style TargetType="GridViewColumnHeader">
-                    <Setter Property="FontSize"
-                            Value="14" />
-                    <Setter Property="FontWeight"
-                            Value="SemiBold" />
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="GridViewColumnHeader">
-                                <Grid Background="DimGray">
-                                    <DockPanel HorizontalAlignment="Left"
-                                               VerticalAlignment="Center"
-                                               Margin="0,10">
-                                        <TextBlock Text="{TemplateBinding Content}"
-                                                   FontSize="16"
-                                                   Foreground="DarkBlue" />
-                                    </DockPanel>
-                                </Grid>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
+                    <Grid Margin="0,40">
+                        <TextBox Text="Search.."
+                                 Width="300"
+                                 HorizontalAlignment="Left" />
+                        <Button Content="+ Add User"
+                                Style="{StaticResource AddButtonStyle}"
+                                Click="AddUserClicked" />
+                    </Grid>
 
-                <Style TargetType="Button"
-                       x:Key="AddButtonStyle">
-                    <Setter Property="HorizontalAlignment"
-                            Value="Right" />
-                    <Setter Property="Padding"
-                            Value="5" />
-                    <Setter Property="Width"
-                            Value="200" />
-                </Style>
-            </Grid.Resources>
+                    <ListView ItemsSource="{Binding Users}">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="ID"
+                                                Width="100"
+                                                DisplayMemberBinding="{Binding us_id}" />
+                                <GridViewColumn Header="Name"
+                                                Width="300"
+                                                DisplayMemberBinding="{Binding us_displayname}" />
+                                <GridViewColumn Header="Role"
+                                                Width="200"
+                                                DisplayMemberBinding="{Binding SecRole.ro_name}" />
+                                <GridViewColumn Header="Email"
+                                                Width="200"
+                                                DisplayMemberBinding="{Binding us_email}" />
+                                <GridViewColumn Header=""
+                                                Width="200"
+                                                CellTemplate="{StaticResource OperationsTemplate}" />
 
-            <StackPanel x:Name="Users"
-                        Orientation="Vertical"
-                        Visibility="{Binding ElementName=UsersBtn, Path=IsChecked,Converter={StaticResource BoolToVis}}"
-                        Margin="50">
 
-                <TextBlock Text="Users"
-                           FontSize="24"
-                           FontWeight="SemiBold" />
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </StackPanel>
 
-                <Grid Margin="0,40">
-                    <TextBox Text="Search.."
-                             Width="300"
-                             HorizontalAlignment="Left" />
-                    <Button Content="+ Add User"
-                            Style="{StaticResource AddButtonStyle}"
-                            Click="AddUserClicked" />
-                </Grid>
+                <StackPanel x:Name="Roles"
+                            Orientation="Vertical"
+                            Visibility="{Binding ElementName=RolesBtn, Path=IsChecked,Converter={StaticResource BoolToVis}}"
+                            Margin="50">
 
-                <ListView VerticalAlignment="Top"
-                          ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                          ItemsSource="{Binding Users}"
-                          BorderBrush="Transparent"
-                          BorderThickness="0"
-                          Padding="0">
+                    <TextBlock Text="Roles"
+                               Style="{StaticResource RightPanel_Header}" />
 
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Header="ID"
-                                            Width="100"
-                                            DisplayMemberBinding="{Binding us_id}" />
-                            <GridViewColumn Header="Name"
-                                            Width="300"
-                                            DisplayMemberBinding="{Binding us_displayname}" />
-                            <GridViewColumn Header="Role"
-                                            Width="200"
-                                            DisplayMemberBinding="{Binding SecRole.ro_name}" />
-                            <GridViewColumn Header="Email"
-                                            Width="200"
-                                            DisplayMemberBinding="{Binding us_email}" />
-                            <GridViewColumn Header="Operation"
-                                            Width="200">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Grid Margin="30,0">
-                                            <StackPanel Orientation="Horizontal">
-                                                <Button Background="Black"
-                                                        Click="CopyUserClicked">
-                                                    <Image Source="../Images/MaterialDesign/outline_content_copy_white_48dp.png"
-                                                           Width="24px" />
-                                                </Button>
-                                                <Button Background="Black"
-                                                        Margin="10,0"
-                                                        Click="EditUserClicked">
-                                                    <Image Source="../Images/MaterialDesign/baseline_edit_white_48dp.png"
-                                                           Width="24px" />
-                                                </Button>
-                                                <Button Background="Black"
-                                                        Click="DeleteUserClicked">
-                                                    <Image Source="../Images/MaterialDesign/baseline_delete_white_48dp.png"
-                                                           Width="24px" />
-                                                </Button>
-                                            </StackPanel>
-                                        </Grid>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
+                    <Grid Margin="0,40">
+                        <TextBox Text="Search.."
+                                 Width="300"
+                                 HorizontalAlignment="Left" />
+                        <Button Content="+ Add Role"
+                                Style="{StaticResource AddButtonStyle}"
+                                Click="AddRoleClicked" />
+                    </Grid>
 
-                        </GridView>
-                    </ListView.View>
-                </ListView>
 
-            </StackPanel>
-            <StackPanel x:Name="Roles"
-                        Orientation="Vertical"
-                        Visibility="{Binding ElementName=RolesBtn, Path=IsChecked,Converter={StaticResource BoolToVis}}"
-                        Margin="50">
-
-                <TextBlock Text="Roles"
-                           FontSize="24"
-                           FontWeight="SemiBold" />
-
-                <Grid Margin="0,40">
-                    <TextBox Text="Search.."
-                             Width="300"
-                             HorizontalAlignment="Left" />
-                    <Button Content="+ Add Role"
-                            Style="{StaticResource AddButtonStyle}"
-                            Click="AddRoleClicked" />
-                </Grid>
-
-                <Grid x:Name="RolesList">
-                    <ListView VerticalAlignment="Top"
-                              ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                              ItemsSource="{Binding Roles}">
+                    <ListView ItemsSource="{Binding Roles}" >
 
                         <ListView.View>
                             <GridView>
@@ -214,62 +224,37 @@
                                                 Width="300"
                                                 DisplayMemberBinding="{Binding ro_name}" />
                                 <GridViewColumn Header="Operation"
-                                                Width="200">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <Grid Margin="30,0">
-                                                <StackPanel Orientation="Horizontal">
-                                                    <Button Background="Black"
-                                                            Click="CopyRoleClicked">
-                                                        <Image Source="../Images/MaterialDesign/outline_content_copy_white_48dp.png"
-                                                               Width="24px" />
-                                                    </Button>
-                                                    <Button Background="Black"
-                                                            Margin="10,0"
-                                                            Click="EditRoleClicked">
-                                                        <Image Source="../Images/MaterialDesign/baseline_edit_white_48dp.png"
-                                                               Width="24px" />
-                                                    </Button>
-                                                    <Button Background="Black"
-                                                            Click="DeleteRoleClicked">
-                                                        <Image Source="../Images/MaterialDesign/baseline_delete_white_48dp.png"
-                                                               Width="24px" />
-                                                    </Button>
-                                                </StackPanel>
-                                            </Grid>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
+                                                Width="200"
+                                                CellTemplate="{StaticResource OperationsTemplate}" />
+
+
 
                             </GridView>
                         </ListView.View>
 
                     </ListView>
-                </Grid>
 
-            </StackPanel>
-            <StackPanel x:Name="Category"
-                        Orientation="Vertical"
-                        Visibility="{Binding ElementName=CategoriesBtn, Path=IsChecked,Converter={StaticResource BoolToVis}}"
-                        Margin="50">
+                </StackPanel>
 
-                <TextBlock Text="Categories"
-                           FontSize="24"
-                           FontWeight="SemiBold" />
+                <StackPanel x:Name="Category"
+                            Orientation="Vertical"
+                            Visibility="{Binding ElementName=CategoriesBtn, Path=IsChecked,Converter={StaticResource BoolToVis}}"
+                            Margin="50">
 
-                <Grid Margin="0,40">
-                    <TextBox Text="Search.."
-                             Width="300"
-                             HorizontalAlignment="Left" />
-                    <Button Content="+ Add Category"
-                            Click="AddCategoryClicked"
-                            Style="{StaticResource AddButtonStyle}" />
-                </Grid>
+                    <TextBlock Text="Categories"
+                               Style="{StaticResource RightPanel_Header}" />
 
-                <Grid x:Name="CategoryList">
-                    <ListView VerticalAlignment="Top"
-                              ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                              ItemsSource="{Binding Categories}">
+                    <Grid Margin="0,40">
+                        <TextBox Text="Search.."
+                                 Width="300"
+                                 HorizontalAlignment="Left" />
+                        <Button Content="+ Add Category"
+                                Click="AddCategoryClicked"
+                                Style="{StaticResource AddButtonStyle}" />
+                    </Grid>
+
+
+                    <ListView ItemsSource="{Binding Categories}">
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn Header="ID"
@@ -279,43 +264,21 @@
                                                 Width="300"
                                                 DisplayMemberBinding="{Binding ca_name}" />
                                 <GridViewColumn Header="Operation"
-                                                Width="200">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <Grid Margin="30,0">
-                                                <StackPanel Orientation="Horizontal">
-                                                    <Button Background="Black"
-                                                            Click="CopyCategoryClicked">
-                                                        <Image Source="../Images/MaterialDesign/outline_content_copy_white_48dp.png"
-                                                               Width="24px" />
-                                                    </Button>
-                                                    <Button Background="Black"
-                                                            Margin="10,0"
-                                                            Click="EditCategoryClicked">
-                                                        <Image Source="../Images/MaterialDesign/baseline_edit_white_48dp.png"
-                                                               Width="24px" />
-                                                    </Button>
-                                                    <Button Background="Black"
-                                                            Click="DeleteCategoryClicked">
-                                                        <Image Source="../Images/MaterialDesign/baseline_delete_white_48dp.png"
-                                                               Width="24px" />
-                                                    </Button>
-                                                </StackPanel>
-                                            </Grid>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
+                                                Width="200"
+                                                CellTemplate="{StaticResource OperationsTemplate}" />
+
+
+
 
                             </GridView>
                         </ListView.View>
 
                     </ListView>
-                </Grid>
 
-            </StackPanel>
+                </StackPanel>
 
 
-        </Grid>
-
+            </Grid>
+        </Border>
     </Grid>
 </Page>

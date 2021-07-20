@@ -75,11 +75,13 @@ namespace AssetTracker.Model
                      ar_viewed = false,
                      ar_usid = as_usid,
                      ar_priority = false,
+                     ar_header = "You've been assigned to #" + as_id,
                      ar_content = Phase.ph_name + " | " + as_displayname,
                      ar_recid = MainViewModel.Instance.CurrentUser.ID,
-                     ar_type = "Assign"
+                     ar_type = AlertType.AssetAssigned
                 });
             }
+            
             return output;
         }
 

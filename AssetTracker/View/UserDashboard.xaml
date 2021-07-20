@@ -5,60 +5,61 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:AssetTracker.View"
       xmlns:viewmodel="clr-namespace:AssetTracker.ViewModel"
+      xmlns:materialicons="clr-namespace:MaterialIcons;assembly=MaterialIcons"
+      d:DataContext="{d:DesignInstance Type=viewmodel:UserDashboardViewModel}"
       mc:Ignorable="d"
-      d:DesignHeight="450"
-      d:DesignWidth="800"
       Title="UserDashboard">
-    <Page.DataContext>
-        <viewmodel:UserDashboardViewModel />
-    </Page.DataContext>
     <Page.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
     </Page.Resources>
-    <Grid Margin="50,0"
-          Background="Black">
+    <Grid Margin="50,0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" />
             <ColumnDefinition Width="4*" />
         </Grid.ColumnDefinitions>
 
-        <StackPanel Grid.Column="0"
-                    Name="SubMenu">
-            <ListView ItemsSource="{Binding ProjectUpdateAlerts}">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <Grid>
-                            <TextBlock Text="{Binding ar_content}" />
-                        </Grid>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-            <ListView Margin="0,20,0,0"
-                      ItemsSource="{Binding ProjectWideAlerts}">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Vertical">
-                            <TextBlock Text="{Binding ar_content}" />
-                            <TextBlock Text="{Binding ar_usid}"
-                                       HorizontalAlignment="Right" />
-                            <TextBlock Text="{Binding ar_date}"
-                                       HorizontalAlignment="Right" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-        </StackPanel>
+        <Border  Grid.Column="0"
+                 Name="LeftPanel"
+                 Style="{StaticResource LeftPanel }">
+            <StackPanel>
+                <ListView ItemsSource="{Binding ProjectUpdateAlerts}" Height="300" Background="{StaticResource Layer2_Dark}" BorderThickness="0">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <TextBlock Text="{Binding ar_content}" />
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <ListView Margin="0,20,0,0"
+                          ItemsSource="{Binding ProjectWideAlerts}"
+                          Height="500"
+                          Background="{StaticResource Layer2_Dark}"
+                          BorderThickness="0">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Text="{Binding ar_content}" />
+                                <TextBlock Text="{Binding ar_usid}"
+                                           HorizontalAlignment="Right" />
+                                <TextBlock Text="{Binding ar_date}"
+                                           HorizontalAlignment="Right" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackPanel>
+        </Border>
 
-        <Border Name="Content"
+        <Border Name="RightPanel"
                 Grid.Column="1"
-                Margin="25,0,0,0">
-            <StackPanel Margin="10">
+                Style="{StaticResource RightPanel}" Padding="50">
+            <StackPanel>
 
                 <StackPanel Name="Content_Header"
-                            Orientation="Horizontal"
-                            Margin="0,30,0,0">
-                    <Image Source="baseline_account_circle_white_48dp.png"
-                           Height="96px" />
+                            Orientation="Horizontal">
+                    <materialicons:MaterialIcon Icon="ic_account_circle"
+                                                Height="96" Foreground="{StaticResource Text_Dark}" />
                     <Grid Margin="10,0,0,0">
                         <Grid.Resources>
                             <Style TargetType="TextBlock">
@@ -96,8 +97,8 @@
                 </StackPanel>
 
                 <Border x:Name="Content_Title"
-                        BorderBrush="White"
-                        BorderThickness="0,0,0,2"
+                        BorderBrush="{StaticResource Text_Dark}"
+                        BorderThickness="0,0,0,3"
                         Margin="0,0,0,5">
                     <TextBlock Text="DASHBOARD"
                                Foreground="WHITE"
@@ -116,23 +117,27 @@
                             <Setter Property="Foreground"
                                     Value="White" />
                         </Style>
-                        <Style TargetType="Image">
+                        <Style TargetType="materialicons:MaterialIcon">
                             <Setter Property="Height"
                                     Value="30" />
+                            <Setter Property="Foreground"
+                                    Value="{StaticResource Text_Dark}" />
                         </Style>
                     </StackPanel.Resources>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{Binding DiscussionAlertCount}" />
-                        <Image Source="baseline_edit_white_24dp.png" />
+                        <materialicons:MaterialIcon Icon="ic_chat" Margin="10,0,0,0"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal"
                                 Margin="100,0">
                         <TextBlock Text="{Binding AssetAlertCount}" />
-                        <Image Source="baseline_edit_white_24dp.png" />
+                        <materialicons:MaterialIcon Icon="ic_3d_rotation"
+                                                    Margin="10,0,0,0" />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{Binding ReviewAlertCount}" />
-                        <Image Source="baseline_edit_white_24dp.png" />
+                        <materialicons:MaterialIcon Icon="ic_view_list"
+                                                    Margin="10,0,0,0" />
                     </StackPanel>
                 </StackPanel>
 
@@ -142,33 +147,55 @@
                                Foreground="White" />
                 </Grid>
 
-                <ListView ItemsSource="{Binding UserAlerts}">
+                <ListView ItemsSource="{Binding UserAlerts}" Background="Transparent" BorderThickness="0">
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical" />
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment"
+                                    Value="Stretch" />
+                        </Style>
+                    </ListView.ItemContainerStyle>
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <Grid Margin="10">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="1*" />
-                                    <ColumnDefinition Width="4*" />
-                                    <ColumnDefinition Width="1*" />
-                                    <ColumnDefinition Width="2*" />
-                                </Grid.ColumnDefinitions>
-                                <Image Grid.Column="0"
-                                       Source="baseline_add_reaction_white_24dp.png" />
-                                <StackPanel Grid.Column="1"
-                                            Orientation="Vertical">
-                                    <TextBlock Text="Subject header" />
-                                    <TextBlock Text="Detail text" />
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal">
-                                    <Button Content="!" />
-                                    <Button Content="A" />
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal"
-                                            HorizontalAlignment="Right">
-                                    <TextBlock Text="{Binding ar_date}" />
-                                    <TextBlock Text=">" />
-                                </StackPanel>
-                            </Grid>
+                            <Border Padding="10" Background="{StaticResource Layer2_Dark}">
+                                 <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="1*" MaxWidth="50" />
+                                        <ColumnDefinition Width="4*" />
+                                        <ColumnDefinition Width="2*" />
+                                        <ColumnDefinition Width="2*" />
+                                    </Grid.ColumnDefinitions>
+                                     <materialicons:MaterialIcon Grid.Column="0"
+                                                                 Icon="ic_face"
+                                                                 Foreground="{StaticResource Text_Dark}" Height="40" HorizontalAlignment="Left"/>
+                                     <StackPanel Grid.Column="1"
+                                                Orientation="Vertical"
+                                                Width="300"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding ar_header}" />
+                                        <TextBlock Text="{Binding ar_content}" />
+                                     </StackPanel>
+                                     <StackPanel Orientation="Horizontal" Grid.Column="2" >
+                                        <Border Style="{StaticResource HoverBtn }">
+                                            <materialicons:MaterialIcon Icon="ic_priority_high"
+                                                                        Style="{StaticResource HoverBtn_Content}" />
+                                        </Border>
+                                        <Border Style="{StaticResource HoverBtn }">
+                                            <materialicons:MaterialIcon Icon="ic_archive"
+                                                                        Style="{StaticResource HoverBtn_Content}" />
+                                        </Border>
+                                    </StackPanel>
+                                        <TextBlock Text="{Binding ar_date}"
+                                                   HorizontalAlignment="Right"
+                                                   Grid.Column="3"
+                                                   VerticalAlignment="Center" />
+                                 </Grid>
+                            </Border>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>

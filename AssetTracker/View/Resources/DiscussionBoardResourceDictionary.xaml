@@ -121,6 +121,9 @@
                 <conv:IsNullToThicknessConverter x:Key="IsNullToThick" />
                 <conv:DatetimeToTimeElapsedConverter x:Key="TimeDisplayConv" />
                 <conv:MatchesUserIDToVisConverter x:Key="MatchUserConv" />
+                <BooleanToVisibilityConverter x:Key="BoolToVis" />
+                <conv:InverseBooleanConverter x:Key="InvBool" />
+                <conv:MatchesUserIDConverter x:Key="MatchUser" />
 
 
 
@@ -146,10 +149,7 @@
             </Border.BorderThickness>
             <StackPanel Orientation="Vertical">
                 <StackPanel.Resources>
-                    <ResourceDictionary>
-                        <BooleanToVisibilityConverter x:Key="BoolToVis" />
-                        <conv:InverseBooleanConverter x:Key="InvBool" />
-                        <conv:MatchesUserIDConverter x:Key="MatchUser" />
+                    <ResourceDictionary>                     
 
                         <conv:ValueConverterGroup x:Key="MatchUserInvertAndVisibilitate">
                             <conv:MatchesUserIDConverter />

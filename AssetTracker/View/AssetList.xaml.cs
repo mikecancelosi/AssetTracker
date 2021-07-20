@@ -22,24 +22,28 @@ namespace AssetTracker.View
     /// </summary>
     public partial class AssetList : Page
     {
-        private AssetListViewModel vm;
+        public AssetListViewModel VM
+        {
+            get { return (AssetListViewModel)DataContext; }
+            set { DataContext = value; }
+        }
         private Coordinator myCoordinator;
         public AssetList(Coordinator coordinator)
         {
             InitializeComponent();
-            vm = new AssetListViewModel();
+            VM = new AssetListViewModel();
             this.Unloaded += AssetList_Unloaded;
             myCoordinator = coordinator;
         }
 
         private void AssetList_Unloaded(object sender, RoutedEventArgs e)
         {
-            vm.Dispose();
+            VM.Dispose();
         }      
 
         private void ListViewItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            Asset ast = MainGrid.SelectedItem as Asset;
+            Asset ast = ((ListView)sender).SelectedItem as Asset;
             myCoordinator.NavigateToAssetDetail(ast);
         }
 

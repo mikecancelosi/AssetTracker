@@ -21,12 +21,15 @@ namespace AssetTracker.View
     /// </summary>
     public partial class UserDashboard : Page
     {
-        public UserDashboardViewModel vm;
+        public UserDashboardViewModel VM
+        {
+            get { return (UserDashboardViewModel)DataContext; }
+            set { DataContext = value; }
+        }
         public UserDashboard()
         {
             InitializeComponent();
-            vm = new UserDashboardViewModel();
-            DataContext = vm;
+            VM = new UserDashboardViewModel();
         }
     }
 }

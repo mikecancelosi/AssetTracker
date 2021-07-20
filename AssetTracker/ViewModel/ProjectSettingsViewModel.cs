@@ -77,5 +77,13 @@ namespace AssetTracker.ViewModel
             role.Delete(context);
             NotifyPropertyChanged("Roles");
         }
+
+        public void Reload()
+        {
+            context = new TrackerContext();
+            NotifyPropertyChanged("Users");
+            NotifyPropertyChanged("Roles");
+            NotifyPropertyChanged("Categories");
+        }
     }
 }

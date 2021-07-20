@@ -111,12 +111,14 @@
     <Compile Include="Discussion.cs">
       <DependentUpon>DBO.tt</DependentUpon>
     </Compile>
+    <Compile Include="Enums\AlertType.cs" />
     <Compile Include="Enums\ChangeType.cs" />
     <Compile Include="Extensions\DBContextExtensions.cs" />
     <Compile Include="Extensions\ObservableCollectionExtensions.cs" />
     <Compile Include="Metadata.cs">
       <DependentUpon>DBO.tt</DependentUpon>
     </Compile>
+    <Compile Include="Model\Alert.cs" />
     <Compile Include="Model\Asset.cs" />
     <Compile Include="Model\AssetCategory.cs" />
     <Compile Include="Model\AssetLink.cs" />
@@ -179,10 +181,8 @@
     <Compile Include="View\CategoryEdit.xaml.cs">
       <DependentUpon>CategoryEdit.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Changelog.xaml.cs">
-      <DependentUpon>Changelog.xaml</DependentUpon>
-    </Compile>
     <Compile Include="View\Commands\IDReceiverCmd.cs" />
+    <Compile Include="View\Converters\AlternationEqualityConverter.cs" />
     <Compile Include="View\Converters\BooleanToVizConverter.cs" />
     <Compile Include="View\Converters\DatetimeToTimeElapsedConverter.cs" />
     <Compile Include="View\Converters\InverseBooleanConverter.cs" />
@@ -195,6 +195,7 @@
     <Compile Include="View\Converters\MultiValueConverter.cs" />
     <Compile Include="View\Converters\ValueConverterGroup.cs" />
     <Compile Include="View\Extensions\TilePanel.cs" />
+    <Compile Include="View\ISavable.cs" />
     <Compile Include="View\ProjectSettings.xaml.cs">
       <DependentUpon>ProjectSettings.xaml</DependentUpon>
     </Compile>
@@ -242,10 +243,6 @@
     <Page Include="View\AssetList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Changelog.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="View\ProjectSettings.xaml">
       <SubType>Designer</SubType>

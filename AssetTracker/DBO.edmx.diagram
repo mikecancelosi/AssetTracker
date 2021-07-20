@@ -31,7 +31,7 @@
         <AssociationConnector Association="Model.FK_discussion_asset" />
         <AssociationConnector Association="Model.FK_discussion_discussion" />
         <AssociationConnector Association="Model.FK_Asset_Parent" />
-        <EntityTypeShape EntityType="Model.Metadata" Width="1.5" PointX="6.5" PointY="1.125" />
+        <EntityTypeShape EntityType="Model.Metadata" Width="1.5" PointX="7.125" PointY="16.875" />
         <AssociationConnector Association="Model.FK_Discussion_User" />
         <AssociationConnector Association="Model.FK_Phase_AssetCategory1" />
         <EntityTypeShape EntityType="Model.Alert" Width="1.5" PointX="5.25" PointY="16.875" />
@@ -39,6 +39,7 @@
         <AssociationConnector Association="Model.FK_Alert_User" />
         <EntityTypeShape EntityType="Model.SecPermission4" Width="1.5" PointX="5.125" PointY="4.625" />
         <AssociationConnector Association="Model.FK_SecPermission_SecPermission4" />
+        <AssociationConnector Association="Model.FK_Metadata_Asset" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

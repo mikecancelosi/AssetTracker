@@ -49,25 +49,14 @@ namespace AssetTracker.ViewModel
             }
         }
 
-        public List<Metadata> metadata { get; set; }
-        public List<Metadata> myMetadata
+        public List<Metadata> Tags
         {
             get
             {
-                if (metadata == null)
-                {
-                    metadata = (from m in context.Metadata
-                                where m.md_recid == myAsset.ID
-                                select m).ToList();
-                }
-                return metadata;
-            }
-            set
-            {
-                metadata = value;
-                NotifyPropertyChanged("myMetadata");
+                return myAsset.Metadata.Count > 0 ? myAsset.Metadata.ToList() : null;
             }
         }
+
         public List<Change> Changelog { get; set; }
         public ObservableCollection<AssetHierarchyObject> Hierarchy { get; set; }
 
@@ -85,7 +74,6 @@ namespace AssetTracker.ViewModel
                 DiscussionBoard = value;
                 NotifyPropertyChanged("DiscussionBoard");
             }
-
         }
 
 
@@ -99,6 +87,7 @@ namespace AssetTracker.ViewModel
             NotifyPropertyChanged("Changelog");
             NotifyPropertyChanged("DiscussionBoard");
             NotifyPropertyChanged("myAsset.Category");
+            NotifyPropertyChanged("Tags");
             SetHierarchy();
         }
 
@@ -142,7 +131,7 @@ namespace AssetTracker.ViewModel
                 return context.ChangeTracker.HasChanges();
             }
         }
-        public bool OnSave(out List<Violation> violations)
+        public bool Save(out List<Violation> violations)
         {
             List<Change> changes = new List<Change>();
             List<Alert> alerts = new List<Alert>();
@@ -158,7 +147,7 @@ namespace AssetTracker.ViewModel
                 {
                     change.Save(context, out violations);
                 }
-                foreach(Alert alert in alerts)
+                foreach (Alert alert in alerts)
                 {
                     //alert.Save(context);
                 }
@@ -187,14 +176,29 @@ namespace AssetTracker.ViewModel
 
         #endregion
 
-        public void OnMetadataDelete_Clicked(int id)
+        public void DeleteAsset()
         {
-
+            myAsset.Delete(context);
         }
 
-        public void OnMetadataAdd_Clicked()
+        public void DeleteTag(int id)
         {
+            Metadata data = context.Metadata.Find(id);
+            myAsset.Metadata.Remove(data);
+            context.Metadata.Remove(data);
+            NotifyPropertyChanged("Savable");
+            NotifyPropertyChanged("Tags");
+        }
 
+        public void AddMetadata(string text)
+        {
+            Metadata dataInst = context.Metadata.Create();
+            dataInst.md_asid = myAsset.as_id;
+            dataInst.md_value = text;
+            myAsset.Metadata.Add(dataInst);
+            context.Metadata.Add(dataInst);
+            NotifyPropertyChanged("Savable");
+            NotifyPropertyChanged("Tags");
         }
 
         #region Hierarchy
@@ -214,7 +218,7 @@ namespace AssetTracker.ViewModel
                 Hierarchy = new ObservableCollection<AssetHierarchyObject>();
             }
 
-            Hierarchy.Clear();            
+            Hierarchy.Clear();
 
             Asset parentAsset = myAsset;
             while (parentAsset.Parent != null)
@@ -224,7 +228,7 @@ namespace AssetTracker.ViewModel
 
             if (parentAsset.Children.Count > 0)
             {
-                CreateHierarchyFromParent(parentAsset, 0).ForEach(x=>Hierarchy.Add(x));
+                CreateHierarchyFromParent(parentAsset, 0).ForEach(x => Hierarchy.Add(x));
             }
             NotifyPropertyChanged("Hierarchy");
         }
@@ -390,12 +394,31 @@ namespace AssetTracker.ViewModel
             if (parentID > 0)
             {
                 newDiscussion.di_parentid = parentID;
+
+                Discussion parentDiscussion = context.Discussions.Find(parentID);
+                int parentUserId = parentDiscussion.di_usid ?? 0;
+                if (parentUserId > 0 &&
+                    parentUserId != MainViewModel.Instance.CurrentUser.us_id)
+                {
+                    //TODO: Create an alert for all users that have replied on the discussion
+                    User parentUser = context.Users.Find(parentUserId);
+                    Alert newAlert = context.Alerts.Create();
+                    newAlert.ar_usid = parentDiscussion.di_usid;
+                    newAlert.ar_projectwide = false;
+                    newAlert.ar_asid = myAsset.as_id;
+                    newAlert.ar_date = DateTime.Now;
+                    newAlert.ar_type = AlertType.DiscussionReply;
+                    newAlert.ar_header = parentUser.us_displayname + " continued the conversation on #" + myAsset.as_id;
+                    newAlert.ar_content = content.Substring(0,47) + "...";
+
+                    context.Alerts.Add(newAlert);
+                }
             }
 
             context.Discussions.Add(newDiscussion);
             context.SaveChanges();
             NotifyPropertyChanged("DiscussionBoard");
-        }
+        }       
 
     }
 }

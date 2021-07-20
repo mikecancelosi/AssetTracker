@@ -49,4 +49,195 @@
         </Style.Triggers>
     </Style>
 
+    <Style TargetType="TextBlock"
+           x:Key="HoverBtn_TextContent">
+        <Style.Triggers>
+            <Trigger Property="IsEnabled"
+                     Value="True">
+                <Setter Property="Foreground"
+                        Value="{StaticResource Text_Dark}" />
+            </Trigger>
+            <Trigger Property="IsEnabled"
+                     Value="False">
+
+                <Setter Property="Foreground"
+                        Value="{StaticResource Layer3_Dark}" />
+            </Trigger>
+
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Border, AncestorLevel=1}, Path=IsMouseOver}"
+                         Value="True">
+                <Setter Property="Foreground"
+                        Value="{StaticResource Accent_Dark}" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <!--#region Layout Styles-->
+    <Style TargetType="TextBlock"
+           x:Key="LeftPanel_Header">
+        <Setter Property="Foreground"
+                Value="{StaticResource Text_Dark}" />
+        <Setter Property="FontSize"
+                Value="18" />
+        <Setter Property="FontWeight"
+                Value="Bold" />
+    </Style>
+
+    <Style TargetType="Border"
+           x:Key="LeftPanel">
+        <Setter Property="Padding"
+                Value="20" />
+        <Setter Property="Background"
+                Value="{StaticResource Layer1_Dark}" />
+    </Style>
+
+    <Style TargetType="Border"
+           x:Key="ControlBtns">
+        <Setter Property="Padding"
+                Value="20,10,20,20" />
+        <Setter Property="HorizontalAlignment"
+                Value="Stretch" />
+        <Setter Property="BorderThickness"
+                Value="0,0,0,3" />
+        <Setter Property="BorderBrush"
+                Value="{StaticResource BackgroundColor_Dark}" />
+
+    </Style>
+    <Style TargetType="Border"
+           BasedOn="{StaticResource HoverBtn}"
+           x:Key="ControlBtn">
+        <Setter Property="Height"
+                Value="30" />
+        <Setter Property="Width"
+                Value="30" />
+    </Style> 
+
+    <Style TargetType="Border"
+           x:Key="RightPanel">
+        <Setter Property="Margin"
+                Value="50,0,0,0" />
+        <Setter Property="Background"
+                Value="{StaticResource Layer1_Dark}" />
+    </Style>
+
+    <Style TargetType="TextBlock"
+           x:Key="RightPanel_Header">
+        <Setter Property="Foreground"
+                Value="{StaticResource Text_Dark}" />
+        <Setter Property="FontSize"
+                Value="18" />
+        <Setter Property="FontWeight"
+                Value="Bold" />
+    </Style>  
+    <!--#endregion-->
+    
+    <Style x:Key="AssetList_ListViewItem" TargetType="ListViewItem">
+        <Setter Property="Background"
+                Value="{StaticResource Layer3_Dark}" />
+        <Setter Property="Height"
+                Value="50" />
+        <Setter Property="FontWeight"
+                Value="SemiBold" />
+        <Setter Property="Margin"
+                Value="0,10,0,0" />
+        <Setter Property="BorderThickness"
+                Value="0" />
+        <Setter Property="FontSize"
+                Value="14" />
+        <Setter Property="Foreground"
+                Value="{StaticResource Text_Dark}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListViewItem}">
+                    <Border Background="{StaticResource Layer3_Dark}">
+                        <GridViewRowPresenter />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+            <Style.Triggers>
+            <Trigger Property="IsMouseOver"
+                     Value="True">
+                <Setter Property="Background"
+                        Value="{StaticResource Text_Dark}" />
+                <Setter Property="Foreground"
+                        Value="{StaticResource Layer1_Dark}" />
+            </Trigger>
+            <Trigger Property="IsSelected"
+                     Value="True">
+                <Setter Property="Background"
+                        Value="{StaticResource Text_Dark}" />
+                <Setter Property="Padding"
+                        Value="0" />
+                <Setter Property="Foreground"
+                        Value="{StaticResource  Accent_Dark}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="AssetList_GridViewColumnHeader" TargetType="GridViewColumnHeader">
+        <Setter Property="FontSize"
+                Value="14" />
+        <Setter Property="FontWeight"
+                Value="SemiBold" />
+        <Setter Property="BorderThickness"
+                Value="0" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="GridViewColumnHeader">
+                    <Grid Background="{StaticResource Layer2_Dark}"
+                          Margin="-2,0">
+                        <DockPanel HorizontalAlignment="Left"
+                                   VerticalAlignment="Center"
+                                   Margin="0,10">
+                            <TextBlock Text="{TemplateBinding Content}"
+                                       FontSize="16"
+                                       Margin="5,0"
+                                       Foreground="{StaticResource Text_Dark}" />
+                        </DockPanel>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="PromptSave"
+           TargetType="Control">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Border  Background="Gray"
+                             VerticalAlignment="Center"
+                             HorizontalAlignment="Center"
+                             Width="300"
+                             Height="100"
+                             BorderBrush="Black"
+                             BorderThickness="1"
+                            >
+                        <StackPanel>
+                            <TextBlock Text="Would you like to save before exiting?"
+                                       Margin="20"
+                                       HorizontalAlignment="Center" />
+                            <StackPanel Orientation="Horizontal"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Bottom"
+                                        Margin="0,0,0,10">
+                                <Button Content="No"
+                                        Padding="5"
+                                        Width="100"
+                                        Margin="0,0,30,0"
+                                        Command="{Binding RefuseSave_Clicked, RelativeSource={RelativeSource AncestorLevel=1, AncestorType=Page}}"
+                                        />
+                                <Button Content="Yes"
+                                        Padding="5"
+                                        Width="100"
+                                        Command="{Binding ConfirmSave_Clicked, RelativeSource={RelativeSource AncestorLevel=1, AncestorType=Page}}" />
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
 </ResourceDictionary>

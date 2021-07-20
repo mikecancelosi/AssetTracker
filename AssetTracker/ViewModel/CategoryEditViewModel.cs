@@ -147,9 +147,9 @@ namespace AssetTracker.ViewModel
             NotifyPropertyChanged("Savable");
         }
 
-        public void OnSave()
+        public bool Save(out List<Violation> violations)
         {
-            List<Violation> violations = new List<Violation>();
+            violations = new List<Violation>();
             foreach(var phase in phasesToDelete)
             {
                 phase.Delete(context);
@@ -163,11 +163,11 @@ namespace AssetTracker.ViewModel
                 NotifyPropertyChanged("HeadingContent");
                 NotifyPropertyChanged("CurrentPhases");
                 NotifyPropertyChanged("Category");
-                Category = new AssetCategory();
+                return true;
             }
             else
             {
-
+                return false;
             }
         }
 

@@ -1,4 +1,5 @@
 ﻿using AssetTracker.Model;
+using AssetTracker.View.Commands;
 using AssetTracker.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -20,17 +21,18 @@ namespace AssetTracker.View
     /// <summary>
     /// Interaction logic for RoleEdit.xaml
     /// </summary>
-    public partial class RoleEdit : Page
+    public partial class RoleEdit : Page, ISavable
     {
-        public RoleEditViewModel VM;
-
-        public bool Savable { get; set; }
-        private Coordinator coordinator;
+        public RoleEditViewModel VM
+        {
+            get { return (RoleEditViewModel)DataContext; }
+            set { DataContext = value; }
+        }
+        private Coordinator coordinator;       
 
         public RoleEdit(Coordinator coord)
         {           
             VM = new RoleEditViewModel();
-            DataContext = VM;
             coordinator = coord;
         }
 
@@ -38,21 +40,61 @@ namespace AssetTracker.View
         {
             InitializeComponent();
             VM = new RoleEditViewModel(role);
-            DataContext = VM;
             coordinator = coord;
+        }
+
+        #region ISavableSetup
+        public event EventHandler OnSaveComplete;
+        public event EventHandler OnSaveRefused;
+        public void CheckForPromptSave(Action methodToCall)
+        {
+            if (VM.Savable)
+            {
+                PromptSavePanel.Visibility = Visibility.Visible;
+                OnSaveComplete += (s, e) => methodToCall();
+                OnSaveRefused += (s, e) => methodToCall();
+            }
+            else
+            {
+                methodToCall();
+            }
+        }
+        public void OnNavigatingAway()
+        {
+            CheckForPromptSave(() => coordinator.NavigateToQueued());
+        }
+
+        public ICommand ConfirmSave_Clicked => new IDReceiverCmd((arr) => OnConfirmSave(), (arr) => { return true; });
+        public ICommand RefuseSave_Clicked => new IDReceiverCmd((arr) => OnRefuseSave(), (arr) => { return true; });
+
+        private void OnConfirmSave()
+        {
+            PromptSavePanel.Visibility = Visibility.Collapsed;
+            OnSaveClicked(this, null);
+        }
+
+        public void OnRefuseSave()
+        {
+            PromptSavePanel.Visibility = Visibility.Collapsed;
+            OnSaveRefused?.Invoke(this, null);
+            OnSaveRefused = delegate { };
         }
         public void OnSaveClicked(object sender, RoutedEventArgs e)
         {
             List<Violation> violations = new List<Violation>();
-            if (!VM.OnSave(out violations))
+            if (!VM.Save(out violations))
             {
 
             }
             else
             {
-                
+                OnSaveComplete?.Invoke(sender, null);
+                OnSaveComplete = delegate { };
             }
         }
+
+        #endregion
+
 
         private void OnDeleteClicked(object sender, RoutedEventArgs e)
         {
@@ -80,6 +122,11 @@ namespace AssetTracker.View
 
             TextBox nameTextBox = sender as TextBox;
             VM.OnRoleNameChanged(nameTextBox.Text);
+        }
+
+        public void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            coordinator.OnNavigateSelected += () => OnNavigatingAway();
         }
     }
 }

@@ -19,6 +19,7 @@
           <Property Name="ar_viewed" Type="bit" Nullable="false" />
           <Property Name="ar_projectwide" Type="bit" Nullable="false" />
           <Property Name="ar_content" Type="nvarchar(max)" />
+          <Property Name="ar_header" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Asset">
           <Key>
@@ -85,7 +86,7 @@
           </Key>
           <Property Name="md_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="md_value" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="md_recid" Type="int" Nullable="false" />
+          <Property Name="md_asid" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Phase">
           <Key>
@@ -287,6 +288,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Metadata_Asset">
+          <End Role="Asset" Type="Self.Asset" Multiplicity="1" />
+          <End Role="Metadata" Type="Self.Metadata" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Asset">
+              <PropertyRef Name="as_id" />
+            </Principal>
+            <Dependent Role="Metadata">
+              <PropertyRef Name="md_asid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Phase_AssetCategory">
           <End Role="AssetCategory" Type="Self.AssetCategory" Multiplicity="1" />
           <End Role="Phase" Type="Self.Phase" Multiplicity="*" />
@@ -433,6 +446,10 @@
             <End Role="User" EntitySet="User" />
             <End Role="Discussion" EntitySet="Discussion" />
           </AssociationSet>
+          <AssociationSet Name="FK_Metadata_Asset" Association="Self.FK_Metadata_Asset">
+            <End Role="Asset" EntitySet="Asset" />
+            <End Role="Metadata" EntitySet="Metadata" />
+          </AssociationSet>
           <AssociationSet Name="FK_Phase_AssetCategory" Association="Self.FK_Phase_AssetCategory">
             <End Role="AssetCategory" EntitySet="AssetCategory" />
             <End Role="Phase" EntitySet="Phase" />
@@ -485,6 +502,7 @@
           <NavigationProperty Name="Children" Relationship="Model.FK_Asset_Parent" FromRole="Asset" ToRole="Asset1" />
           <NavigationProperty Name="Parent" Relationship="Model.FK_Asset_Parent" FromRole="Asset1" ToRole="Asset" />
           <NavigationProperty Name="Alerts" Relationship="Model.FK_Alert_Asset" FromRole="Asset" ToRole="Alert" />
+          <NavigationProperty Name="Metadata" Relationship="Model.FK_Metadata_Asset" FromRole="Asset" ToRole="Metadata" />
         </EntityType>
         <EntityType Name="AssetCategory">
           <Key>
@@ -801,6 +819,10 @@
             <End Role="SecPermission4" EntitySet="SecPermission4" />
             <End Role="SecPermission" EntitySet="SecPermissions" />
           </AssociationSet>
+          <AssociationSet Name="FK_Metadata_Asset" Association="Model.FK_Metadata_Asset">
+            <End Role="Asset" EntitySet="Assets" />
+            <End Role="Metadata" EntitySet="Metadata" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="assetGetInformation_Result">
           <Property Type="Int32" Name="as_id" Nullable="false" />
@@ -881,7 +903,8 @@
           </Key>
           <Property Name="md_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="md_value" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="md_recid" Type="Int32" Nullable="false" />
+          <Property Name="md_asid" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Asset" Relationship="Model.FK_Metadata_Asset" FromRole="Metadata" ToRole="Asset" />
         </EntityType>
         <Association Name="FK_Discussion_User">
           <End Type="Model.User" Role="User" Multiplicity="0..1" />
@@ -923,6 +946,7 @@
           <NavigationProperty Name="Asset" Relationship="Model.FK_Alert_Asset" FromRole="Alert" ToRole="Asset" />
           <NavigationProperty Name="User" Relationship="Model.FK_Alert_User" FromRole="Alert" ToRole="User" />
           <Property Name="ar_content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ar_header" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_Alert_Asset">
           <End Type="Model.Asset" Role="Asset" Multiplicity="0..1" />
@@ -965,6 +989,18 @@
             </Principal>
             <Dependent Role="SecPermission">
               <PropertyRef Name="pr_p4id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Metadata_Asset">
+          <End Type="Model.Asset" Role="Asset" Multiplicity="1" />
+          <End Type="Model.Metadata" Role="Metadata" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Asset">
+              <PropertyRef Name="as_id" />
+            </Principal>
+            <Dependent Role="Metadata">
+              <PropertyRef Name="md_asid" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1123,7 +1159,7 @@
           <EntitySetMapping Name="Metadata">
             <EntityTypeMapping TypeName="Model.Metadata">
               <MappingFragment StoreEntitySet="Metadata">
-                <ScalarProperty Name="md_recid" ColumnName="md_recid" />
+                <ScalarProperty Name="md_asid" ColumnName="md_asid" />
                 <ScalarProperty Name="md_value" ColumnName="md_value" />
                 <ScalarProperty Name="md_id" ColumnName="md_id" />
               </MappingFragment>
@@ -1132,6 +1168,7 @@
           <EntitySetMapping Name="Alerts">
             <EntityTypeMapping TypeName="Model.Alert">
               <MappingFragment StoreEntitySet="Alert">
+                <ScalarProperty Name="ar_header" ColumnName="ar_header" />
                 <ScalarProperty Name="ar_content" ColumnName="ar_content" />
                 <ScalarProperty Name="ar_projectwide" ColumnName="ar_projectwide" />
                 <ScalarProperty Name="ar_viewed" ColumnName="ar_viewed" />

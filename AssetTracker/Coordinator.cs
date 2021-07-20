@@ -12,68 +12,98 @@ namespace AssetTracker
     public class Coordinator
     {
         private NavigationService nav;
+        public delegate void NullDelegate();
+        public event NullDelegate OnNavigateSelected;
+        private object queuedPage;
+        private bool AnyListeners => OnNavigateSelected.GetInvocationList().Count() > 1;
 
         public Coordinator(NavigationService navigationService)
         {
             nav = navigationService;
+            OnNavigateSelected = delegate { };
+        }
+
+        private void NavigateTo(object page)
+        {
+            if (!AnyListeners)
+            {
+                nav.Navigate(page);
+                OnNavigateSelected = delegate { };
+            }
+            else
+            {
+                queuedPage = page;
+                OnNavigateSelected?.Invoke();
+                OnNavigateSelected = delegate { };
+            }
+        }
+
+        public void NavigateToQueued()
+        {
+            OnNavigateSelected = delegate { };
+            NavigateTo(queuedPage);
         }
 
         public void NavigateToCreateUser()
         {
             UserEdit userEdit = new UserEdit(this);
-            nav.Navigate(userEdit);
+            NavigateTo(userEdit);
+
         }
         public void NavigateToUserEdit(User userToEdit)
         {
             UserEdit userEdit = new UserEdit(userToEdit, this);
-            nav.Navigate(userEdit);
+            NavigateTo(userEdit);
+
         }
 
         public void NavigateToAssetDetail(Asset asset)
         {
-            AssetDetail assetDetail = new AssetDetail(asset);
-            nav.Navigate(assetDetail);
+            AssetDetail assetDetail = new AssetDetail(asset, this);
+            NavigateTo(assetDetail);
         }
 
         public void NavigateToUserDashboard()
         {
             UserDashboard dashboard = new UserDashboard();
-            nav.Navigate(dashboard);
+            NavigateTo(dashboard);
         }
 
         public void NavigateToCreateRole()
         {
             RoleEdit roleEdit = new RoleEdit(this);
-            nav.Navigate(roleEdit);
+            NavigateTo(roleEdit);
         }
         public void NavigateToRoleEdit(SecRole roleToEdit)
         {
-            RoleEdit roleEdit = new RoleEdit(roleToEdit,this);
-            nav.Navigate(roleEdit);
+            RoleEdit roleEdit = new RoleEdit(roleToEdit, this);
+            NavigateTo(roleEdit);
         }
 
         public void NavigateToProjectSettings()
         {
             ProjectSettings projectSettings = new ProjectSettings(this);
-            nav.Navigate(projectSettings);
-        
+            NavigateTo(projectSettings);
+
         }
 
         public void NavigateToAssetList()
         {
             AssetList assetList = new AssetList(this);
-            nav.Navigate(assetList);
+            NavigateTo(assetList);
         }
 
         public void NavigateToCreateCategory()
         {
             CategoryEdit catEdit = new CategoryEdit(this);
-            nav.Navigate(catEdit);
+            NavigateTo(catEdit);
         }
         public void NavigatetoCategoryEdit(AssetCategory cat)
         {
-            CategoryEdit catEdit = new CategoryEdit(cat,this);
-            nav.Navigate(catEdit);
+            CategoryEdit catEdit = new CategoryEdit(cat, this);
+            NavigateTo(catEdit);
         }
+
+        
     }
 }

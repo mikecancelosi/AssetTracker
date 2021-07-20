@@ -24,8 +24,12 @@ namespace AssetTracker.View
     public partial class Searchbox : UserControl
     {
         private Type dboType;
-        private SearchBoxViewModel vm;
-        public DatabaseBackedObject CurrentSelection => vm.CurrentlySelectedObject;
+        private SearchBoxViewModel VM
+        {
+            get { return (SearchBoxViewModel)DataContext; }
+            set { DataContext = value; }
+        }
+        public DatabaseBackedObject CurrentSelection => VM.CurrentlySelectedObject;
 
         public delegate void NotifyOfChange();
         public event NotifyOfChange OnSelectionChanged;
@@ -37,8 +41,7 @@ namespace AssetTracker.View
 
         public void SetType(Type dboType)
         {
-            vm = new SearchBoxViewModel(dboType);
-            DataContext = vm;
+            VM = new SearchBoxViewModel(dboType);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -51,7 +54,7 @@ namespace AssetTracker.View
         {
             DatabaseBackedObject dbo = MainGrid.SelectedItem as DatabaseBackedObject;
 
-            vm.SelectionChanged(dbo.ID);
+            VM.SelectionChanged(dbo.ID);
             OnSelectionChanged?.Invoke();
             CloseClicked(sender, e);
         }
@@ -63,13 +66,13 @@ namespace AssetTracker.View
 
         public void SetCurrentSelectedObject(int objectID)
         {
-            vm.SelectionChanged(objectID);
+            VM.SelectionChanged(objectID);
             OnSelectionChanged?.Invoke();
         }
 
         public void SetFilter(string filter)
         {
-            vm.Filter = filter;
+            VM.Filter = filter;
         }
 
         public void ClearInvocationList()

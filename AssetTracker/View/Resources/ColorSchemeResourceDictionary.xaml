@@ -5,8 +5,14 @@
     <Brush x:Key="Layer1_Dark">#222</Brush>
     <Brush x:Key="Layer2_Dark">#444</Brush>
     <Brush x:Key="Layer3_Dark">#666</Brush>
+    <Brush x:Key="Overlay">#999</Brush>
     <Brush x:Key="Text_Dark">#ddd</Brush>
+    <Brush x:Key="TextOverlay_Dark">#222</Brush>
     <Brush x:Key="Accent_Dark">#DC7B23</Brush>
+    <Brush x:Key="Confirm_Dark">#93C8BA</Brush>
+    <Brush x:Key="ConfirmOverlay_Dark">#519E8A</Brush>
+    <Brush x:Key="Reject_Dark">#E17A94</Brush>
+    <Brush x:Key="RejectOverlay_Dark">#B72A4D</Brush>
     
     
 </ResourceDictionary>

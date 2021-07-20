@@ -19,6 +19,7 @@
     <NavigationProperty Name="Children" Relationship="Model.FK_Asset_Parent" FromRole="Asset" ToRole="Asset1" />
     <NavigationProperty Name="Parent" Relationship="Model.FK_Asset_Parent" FromRole="Asset1" ToRole="Asset" />
     <NavigationProperty Name="Alerts" Relationship="Model.FK_Alert_Asset" FromRole="Asset" ToRole="Alert" />
+    <NavigationProperty Name="Metadata" Relationship="Model.FK_Metadata_Asset" FromRole="Asset" ToRole="Metadata" />
   </EntityType>
   <EntityType Name="AssetCategory">
     <Key>
@@ -335,6 +336,10 @@
       <End Role="SecPermission4" EntitySet="SecPermission4" />
       <End Role="SecPermission" EntitySet="SecPermissions" />
     </AssociationSet>
+    <AssociationSet Name="FK_Metadata_Asset" Association="Model.FK_Metadata_Asset">
+      <End Role="Asset" EntitySet="Assets" />
+      <End Role="Metadata" EntitySet="Metadata" />
+    </AssociationSet>
   </EntityContainer>
   <ComplexType Name="assetGetInformation_Result">
     <Property Type="Int32" Name="as_id" Nullable="false" />
@@ -415,7 +420,8 @@
     </Key>
     <Property Name="md_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="md_value" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="md_recid" Type="Int32" Nullable="false" />
+    <Property Name="md_asid" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Asset" Relationship="Model.FK_Metadata_Asset" FromRole="Metadata" ToRole="Asset" />
   </EntityType>
   <Association Name="FK_Discussion_User">
     <End Type="Model.User" Role="User" Multiplicity="0..1" />
@@ -457,6 +463,7 @@
     <NavigationProperty Name="Asset" Relationship="Model.FK_Alert_Asset" FromRole="Alert" ToRole="Asset" />
     <NavigationProperty Name="User" Relationship="Model.FK_Alert_User" FromRole="Alert" ToRole="User" />
     <Property Name="ar_content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="ar_header" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
   </EntityType>
   <Association Name="FK_Alert_Asset">
     <End Type="Model.Asset" Role="Asset" Multiplicity="0..1" />
@@ -499,6 +506,18 @@
       </Principal>
       <Dependent Role="SecPermission">
         <PropertyRef Name="pr_p4id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Metadata_Asset">
+    <End Type="Model.Asset" Role="Asset" Multiplicity="1" />
+    <End Type="Model.Metadata" Role="Metadata" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Asset">
+        <PropertyRef Name="as_id" />
+      </Principal>
+      <Dependent Role="Metadata">
+        <PropertyRef Name="md_asid" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

@@ -24,28 +24,29 @@ namespace AssetTracker.View
     /// <summary>
     /// Interaction logic for AssetDetail.xaml
     /// </summary>
-    public partial class AssetDetail : Page
+    public partial class AssetDetail : Page, ISavable
     {
-        public AssetDetailViewModel vm;
-
-        //TODO: Introduce a more robust event system (invoke once)
-        private delegate void SaveDelegate();
-        private event SaveDelegate OnSaveComplete;
-        private event SaveDelegate OnSaveRefused;
-        private event SaveDelegate OnSaveCanceled;
-
-        public AssetDetail()
+        public AssetDetailViewModel VM
         {
-            InitializeComponent();
+            get { return (AssetDetailViewModel)DataContext; }
+            set { DataContext = value; }
         }
 
-        public AssetDetail(Asset model)
+       
+        private Coordinator coordinator;
+
+        public AssetDetail(Coordinator coord)
         {
             InitializeComponent();
-            vm = new AssetDetailViewModel();
-            vm.myAsset = model;
-            DataContext = vm;
+            coordinator = coord;            
+        }
 
+        public AssetDetail(Asset model, Coordinator coord)
+        {
+            InitializeComponent();
+            VM = new AssetDetailViewModel();
+            VM.myAsset = model;
+            coordinator = coord;            
             #region SearchboxSetup
             Searchbox_AssignedTo.SetType(typeof(User));
             Searchbox_Phase.SetType(typeof(Phase));
@@ -54,35 +55,79 @@ namespace AssetTracker.View
             SubscribeToSearchboxes();
             #endregion
 
-            vm.PropertyChanged += (s, e) =>
+            VM.PropertyChanged += (s, e) =>
              {
                  if (e.PropertyName == "myAsset")
                  {
                      OnModelChanged();
                  }
              };
-        }       
+        }
+
+        public void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            coordinator.OnNavigateSelected += () => OnNavigatingAway();
+        }
+
+        #region ISavableSetup
+        public event EventHandler OnSaveComplete;
+        public event EventHandler OnSaveRefused;
+        public void CheckForPromptSave(Action methodToCall)
+        {
+            if (VM.Savable)
+            {
+                PromptSavePanel.Visibility = Visibility.Visible;
+                OnSaveComplete += (s, e) => methodToCall();
+                OnSaveRefused += (s, e) => methodToCall();
+            }
+            else
+            {
+                methodToCall();
+            }
+        }
+
+        public void OnNavigatingAway()
+        {
+            CheckForPromptSave(() => coordinator.NavigateToQueued());         
+        }
+
+        public ICommand ConfirmSave_Clicked => new IDReceiverCmd((arr) => OnConfirmSave(), (arr) => { return true; });
+        public ICommand RefuseSave_Clicked => new IDReceiverCmd((arr) => OnRefuseSave(), (arr) => { return true; });
+
+        private void OnConfirmSave()
+        {
+            PromptSavePanel.Visibility = Visibility.Collapsed;
+            OnSaveClicked(this, null);
+        }
+
+        public void OnRefuseSave()
+        {
+            PromptSavePanel.Visibility = Visibility.Collapsed;
+            OnSaveRefused?.Invoke(this, null);
+            OnSaveRefused = delegate { };
+        }
+        #endregion
 
         private void AssignSearchboxValues()
         {
-            if (vm.myAsset.AssignedToUser != null)
+            if (VM.myAsset.AssignedToUser != null)
             {
-                Searchbox_AssignedTo.SetCurrentSelectedObject(vm.myAsset.AssignedToUser.ID);
+                Searchbox_AssignedTo.SetCurrentSelectedObject(VM.myAsset.AssignedToUser.ID);
             }
-            if (vm.myAsset.Phase != null)
+            if (VM.myAsset.Phase != null)
             {
-                Searchbox_Phase.SetCurrentSelectedObject(vm.myAsset.Phase.ID);
+                Searchbox_Phase.SetCurrentSelectedObject(VM.myAsset.Phase.ID);
             }
-            if (vm.myAsset.AssetCategory != null)
+            if (VM.myAsset.AssetCategory != null)
             {
-                Searchbox_Category.SetCurrentSelectedObject(vm.myAsset.AssetCategory.ca_id);
+                Searchbox_Category.SetCurrentSelectedObject(VM.myAsset.AssetCategory.ca_id);
             }
         }
         private void SubscribeToSearchboxes()
         {
-            Searchbox_AssignedTo.OnSelectionChanged += () => { vm.OnAssignedUserChange(Searchbox_AssignedTo.CurrentSelection.ID); };
-            Searchbox_Phase.OnSelectionChanged += () => { vm.OnPhaseChanged(Searchbox_Phase.CurrentSelection.ID); };
-            Searchbox_Category.OnSelectionChanged += () => { vm.OnCategoryChanged(Searchbox_Category.CurrentSelection.ID); };
+            Searchbox_AssignedTo.OnSelectionChanged += () => { VM.OnAssignedUserChange(Searchbox_AssignedTo.CurrentSelection.ID); };
+            Searchbox_Phase.OnSelectionChanged += () => { VM.OnPhaseChanged(Searchbox_Phase.CurrentSelection.ID); };
+            Searchbox_Category.OnSelectionChanged += () => { VM.OnCategoryChanged(Searchbox_Category.CurrentSelection.ID); };
         }
 
         private void OnModelChanged()
@@ -95,33 +140,23 @@ namespace AssetTracker.View
 
         }
 
-        private void OnClose()
-        {
-            
-        }
-
         private void OnDeleteClicked(object sender, MouseButtonEventArgs e)
         {
-
+            VM.DeleteAsset();
+            coordinator.NavigateToAssetList();
         }
 
         private void OnSaveClicked(object sender, MouseButtonEventArgs e)
         {
             List<Violation> violations = new List<Violation>();
-            if (!vm.OnSave(out violations))
+            if (!VM.Save(out violations))
             {
 
             }
             else
             {
-                OnSaveComplete?.Invoke();
-                if (OnSaveComplete != null)
-                {
-                    foreach (Delegate d in OnSaveComplete.GetInvocationList())
-                    {
-                        OnSaveComplete -= (SaveDelegate)d;
-                    }
-                }                
+                OnSaveComplete?.Invoke(sender,null);
+                OnSaveComplete = delegate { };
             }
         }
 
@@ -144,7 +179,6 @@ namespace AssetTracker.View
 
         #region Discussion
 
-        //TODO: Account for discussion made by users who have since been deleted
         public ICommand DiscussionReplyClicked => new IDReceiverCmd((arr) => OnDiscussionReplyClicked(arr), (arr) => { return true; });
         public void OnDiscussionReplyClicked(object input)
         {
@@ -154,7 +188,7 @@ namespace AssetTracker.View
             string content = values[1] as string;
             if (content != defaultText)
             {
-                vm.CreateNewDiscussion(parentID, content);
+                VM.CreateNewDiscussion(parentID, content);
             }
 
         }
@@ -163,65 +197,56 @@ namespace AssetTracker.View
         private async void OnHierarchyAssetSelected_Clicked(object sender, MouseButtonEventArgs e)
         {
             int senderId = (int)((Border)sender).Tag;
-            if (vm.myAsset.ID != senderId)
+            if (VM.myAsset.ID != senderId)
             {
-                if (vm.Savable)
-                {
-                    PromptSavePanel.Visibility = Visibility.Visible;
-                    OnSaveComplete += () => vm.OnHierarchyAssetSelected(senderId);
-                    OnSaveRefused += () => vm.OnHierarchyAssetSelected(senderId);
-                }
-                else
-                {
-                    vm.OnHierarchyAssetSelected(senderId);
-                }
+                CheckForPromptSave(() => VM.OnHierarchyAssetSelected(senderId));
             }
         }
 
-        private void OnMetadataDelete_Clicked(object sender, RoutedEventArgs e)
+        #region Tags
+        private void OnMetadataAdd_Clicked(object sender, MouseButtonEventArgs e)
         {
-            int id = (int)((Button)sender).Tag;
-            vm.OnMetadataDelete_Clicked(id);
+            TagAdd_Window.Visibility = Visibility.Visible;
         }
-        private void OnMetadataAdd_Clicked(object sender, RoutedEventArgs e)
+
+        private void OnMetadataDelete_Clicked(object sender, MouseButtonEventArgs e)
         {
-            vm.OnMetadataAdd_Clicked();
+            int id = (int)((Border)sender).Tag;
+            VM.DeleteTag(id);
         }
+
+        private void AddTagConfirm_Clicked(object sender, MouseButtonEventArgs e)
+        {
+            VM.AddMetadata(TagAdd_Content.Text);
+            TagAdd_Content.Text = "";
+            TagAdd_Window.Visibility = Visibility.Collapsed;
+        }
+
+        private void AddTagCancel_Clicked(object sender, MouseButtonEventArgs e)
+        {
+            TagAdd_Content.Text = "";
+            TagAdd_Window.Visibility = Visibility.Collapsed;
+        }
+        #endregion
 
         private void OnModifyTitleOpen_Clicked(object sender, MouseButtonEventArgs e)
         {
             ModifyTitlePanel.Visibility = Visibility.Visible;
-            EditTitle_Value.Text = vm.myAsset.Name;
-            EditDescription_Value.Text = vm.myAsset.as_description;
+            EditTitle_Value.Text = VM.myAsset.Name;
+            EditDescription_Value.Text = VM.myAsset.as_description;
         }
 
         private void OnModifyTitleSave_Clicked(object sender, RoutedEventArgs e)
         {
             ModifyTitlePanel.Visibility = Visibility.Collapsed;
-            vm.ModifyAssetName(EditTitle_Value.Text);
-            vm.ModifyDescription(EditDescription_Value.Text);
+            VM.ModifyAssetName(EditTitle_Value.Text);
+            VM.ModifyDescription(EditDescription_Value.Text);
         }
         private void OnModifyTitleCancel_Clicked(object sender, RoutedEventArgs e)
         {
             ModifyTitlePanel.Visibility = Visibility.Collapsed;
             EditTitle_Value.Text = "";
             EditDescription_Value.Text = "";
-        }
-
-        private void ConfirmSave_Clicked(object sender, MouseButtonEventArgs e)
-        {
-            PromptSavePanel.Visibility = Visibility.Collapsed;
-            OnSaveClicked(sender, e);
-        }
-
-        public void RefuseSave_Clicked(object sender, RoutedEventArgs e)
-        {
-            PromptSavePanel.Visibility = Visibility.Collapsed;
-            OnSaveRefused?.Invoke();
-            foreach (Delegate d in OnSaveRefused.GetInvocationList())
-            {
-                OnSaveRefused -= (SaveDelegate)d;
-            }
         }
     }
 }

@@ -24,6 +24,7 @@ namespace AssetTracker.Model
         public bool ar_viewed { get; set; }
         public bool ar_projectwide { get; set; }
         public string ar_content { get; set; }
+        public string ar_header { get; set; }
     
         public virtual Asset Asset { get; set; }
         public virtual User User { get; set; }

@@ -14,6 +14,7 @@
     <Property Name="ar_viewed" Type="bit" Nullable="false" />
     <Property Name="ar_projectwide" Type="bit" Nullable="false" />
     <Property Name="ar_content" Type="nvarchar(max)" />
+    <Property Name="ar_header" Type="nvarchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="Asset">
     <Key>
@@ -80,7 +81,7 @@
     </Key>
     <Property Name="md_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="md_value" Type="nvarchar" MaxLength="50" Nullable="false" />
-    <Property Name="md_recid" Type="int" Nullable="false" />
+    <Property Name="md_asid" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="Phase">
     <Key>
@@ -282,6 +283,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_Metadata_Asset">
+    <End Role="Asset" Type="Self.Asset" Multiplicity="1" />
+    <End Role="Metadata" Type="Self.Metadata" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Asset">
+        <PropertyRef Name="as_id" />
+      </Principal>
+      <Dependent Role="Metadata">
+        <PropertyRef Name="md_asid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_Phase_AssetCategory">
     <End Role="AssetCategory" Type="Self.AssetCategory" Multiplicity="1" />
     <End Role="Phase" Type="Self.Phase" Multiplicity="*" />
@@ -427,6 +440,10 @@
     <AssociationSet Name="FK_Discussion_User" Association="Self.FK_Discussion_User">
       <End Role="User" EntitySet="User" />
       <End Role="Discussion" EntitySet="Discussion" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Metadata_Asset" Association="Self.FK_Metadata_Asset">
+      <End Role="Asset" EntitySet="Asset" />
+      <End Role="Metadata" EntitySet="Metadata" />
     </AssociationSet>
     <AssociationSet Name="FK_Phase_AssetCategory" Association="Self.FK_Phase_AssetCategory">
       <End Role="AssetCategory" EntitySet="AssetCategory" />

@@ -20,27 +20,30 @@ namespace AssetTracker.View
     /// </summary>
     public partial class AssetCreate : UserControl
     {
-        private AssetCreateViewModel viewmodel;
+        private AssetCreateViewModel VM
+        {
+            get { return (AssetCreateViewModel)DataContext; }
+            set { DataContext = value; }
+        }
 
         public AssetCreate()
         {
             InitializeComponent();
-            viewmodel = new AssetCreateViewModel();
-            DataContext = viewmodel;
+            VM = new AssetCreateViewModel();
             Value_Category.SetType(typeof(AssetCategory));
             Value_ParentID.SetType(typeof(Asset));
             Value_AssignedTo.SetType(typeof(User));
 
-            Value_Category.OnSelectionChanged += () => { viewmodel.OnCategoryChanged(Value_Category.CurrentSelection); };
-            Value_ParentID.OnSelectionChanged += () => { viewmodel.OnParentAssetChanged(Value_ParentID.CurrentSelection); };
-            Value_AssignedTo.OnSelectionChanged += () => { viewmodel.OnUserChanged(Value_AssignedTo.CurrentSelection); };
+            Value_Category.OnSelectionChanged += () => { VM.OnCategoryChanged(Value_Category.CurrentSelection); };
+            Value_ParentID.OnSelectionChanged += () => { VM.OnParentAssetChanged(Value_ParentID.CurrentSelection); };
+            Value_AssignedTo.OnSelectionChanged += () => { VM.OnUserChanged(Value_AssignedTo.CurrentSelection); };
 
         }
 
         public void OnSaveClicked(object sender, RoutedEventArgs e)
         {
             List<Violation> violations;
-            if (viewmodel.CreateAsset(out violations))
+            if (VM.CreateAsset(out violations))
             {
                 this.Visibility = Visibility.Hidden;
                 ResetDisplay();

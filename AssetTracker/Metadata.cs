@@ -16,6 +16,8 @@ namespace AssetTracker.Model
     {
         public int md_id { get; set; }
         public string md_value { get; set; }
-        public int md_recid { get; set; }
+        public int md_asid { get; set; }
+    
+        public virtual Asset Asset { get; set; }
     }
 }

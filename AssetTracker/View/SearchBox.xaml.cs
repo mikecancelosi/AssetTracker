@@ -22,8 +22,7 @@ namespace AssetTracker.View
     /// Interaction logic for Searchbox.xaml
     /// </summary>
     public partial class Searchbox : UserControl
-    {
-        private Type dboType;
+    {        
         private SearchBoxViewModel VM
         {
             get { return (SearchBoxViewModel)DataContext; }
@@ -33,6 +32,7 @@ namespace AssetTracker.View
 
         public delegate void NotifyOfChange();
         public event NotifyOfChange OnSelectionChanged;
+        private bool SettingFilter = false;
 
         public Searchbox()
         {
@@ -42,37 +42,34 @@ namespace AssetTracker.View
         public void SetType(Type dboType)
         {
             VM = new SearchBoxViewModel(dboType);
+            Results.IsOpen = false;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        public async void SetFilter(string filter)
         {
-            //Open Searchbox with initialized type
-            searchbox.IsOpen = true;
+            if (!SettingFilter)
+            {
+                SettingFilter = true;
+                await VM.SetBaseFilter(filter);
+                SettingFilter = false;
+            }
         }
 
-        private void ItemDoubleClicked(object sender, MouseButtonEventArgs e)
+        private void ItemClicked(object sender, MouseButtonEventArgs e)
         {
             DatabaseBackedObject dbo = MainGrid.SelectedItem as DatabaseBackedObject;
-
-            VM.SelectionChanged(dbo.ID);
-            OnSelectionChanged?.Invoke();
-            CloseClicked(sender, e);
-        }
-
-        private void CloseClicked(object sender, MouseButtonEventArgs e)
-        {
-            searchbox.IsOpen = false;
-        }
+            if (dbo != null)
+            {
+                VM.SelectionChanged(dbo.ID);
+                OnSelectionChanged?.Invoke();
+                Results.IsOpen = false;
+            }
+        }       
 
         public void SetCurrentSelectedObject(int objectID)
         {
             VM.SelectionChanged(objectID);
             OnSelectionChanged?.Invoke();
-        }
-
-        public void SetFilter(string filter)
-        {
-            VM.Filter = filter;
         }
 
         public void ClearInvocationList()
@@ -81,6 +78,52 @@ namespace AssetTracker.View
             {
                 OnSelectionChanged -= (NotifyOfChange)d;
             }
+        }
+
+        private void InputText_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (IsLoaded)
+            {
+                Results.IsOpen = true;
+                VM.SetUserFilter(InputText.Text);
+            }
+        }       
+
+        private void InputText_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            if (IsLoaded)
+            {
+                Results.IsOpen = true;
+            }
+        }
+
+        private void InputText_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            if (IsLoaded)
+            {
+                if (Results.IsOpen)
+                {
+                    Results.IsOpen = false;
+                }
+            }
+        }
+
+        private void MainGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            DatabaseBackedObject dbo = MainGrid.SelectedItem as DatabaseBackedObject;
+            if (dbo != null)
+            {
+                VM.SelectionChanged(dbo.ID);
+                OnSelectionChanged?.Invoke();
+                Results.IsOpen = false;
+            }
+        }
+
+        public void ResetDisplay()
+        {
+            InputText.Text = "";
+            VM.SetUserFilter(InputText.Text);
+            Results.IsOpen = false;
         }
     }
 }

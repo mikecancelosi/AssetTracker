@@ -6,6 +6,7 @@
              xmlns:view="clr-namespace:AssetTracker.View"
              xmlns:viewmodel="clr-namespace:AssetTracker.ViewModel"
              xmlns:model="clr-namespace:AssetTracker.Model"
+             xmlns:materialicons="clr-namespace:MaterialIcons;assembly=MaterialIcons"
              mc:Ignorable="d"
              d:DesignHeight="50"
              d:DesignWidth="400">
@@ -13,91 +14,130 @@
         <viewmodel:SearchBoxViewModel />
     </UserControl.DataContext>
 
-    <Grid x:Name="FieldGrid" Height="24">
+    <Grid x:Name="FieldGrid"
+          Height="24" >
+        <Grid.Resources>
+            <Style TargetType="Popup">
+                <Style.Triggers>                  
+                    <Trigger Property="IsEnabled"
+                                 Value="False">
+                        <Setter Property="Visibility"
+                                Value="Collapsed" />
+                    </Trigger>
+                    <Trigger Property="IsEnabled"
+                             Value="True">
+                        <Setter Property="Visibility"
+                                Value="Visible" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            <Style TargetType="Border">
+                <Style.Triggers>
+                    <Trigger Property="IsEnabled"
+                             Value="False">
+                        <Setter Property="BorderBrush"
+                                Value="{StaticResource Layer2_Dark}" />
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-            <ColumnDefinition Width="{Binding Path=ActualHeight, ElementName=FieldGrid}" />
-        </Grid.ColumnDefinitions>
+                    </Trigger>
+                    <Trigger Property="IsEnabled"
+                             Value="True">
+                        <Setter Property="BorderBrush"
+                                Value="{StaticResource Text_Dark}" />
 
-        <Border BorderThickness="2"
-                BorderBrush="{StaticResource Text_Dark}"
-                CornerRadius="12" />
-
-        <Label x:Name="Value_Label"
-               Content="{Binding CurrentlySelectedObject.Name}"
-               Grid.Column="0"
-               HorizontalAlignment="Left"
-               FontSize="12"
-               FontWeight="SemiBold"
-               Margin="5,0"
-               Foreground="{StaticResource Text_Dark}"/>
-
-        <Button Height="{Binding ActualHeight, ElementName=FieldGrid}"
-                HorizontalAlignment="Right"
-                Click="Button_Click"
-                Grid.Column="2" Background="Transparent" BorderThickness="0">
-            <Image Source="../Images/MaterialDesign/baseline_search_white_24dp.png" />
-        </Button>
-
-        <Popup x:Name="searchbox"
-               Height="600"
-               Width="400"
-               Placement="Center"
-               IsOpen="False">
-            <StackPanel Orientation="Vertical"
-                        Background="White">
-
-                <StackPanel Orientation="Horizontal"
-                            Margin="10,10,10,0"
-                            Height="50">
-
-                    <Button Content="+"
-                            Width="50"
-                            Margin="5,0,5,0" />
-                    <Button Content="Modify"
-                            Width="50"
-                            Margin="5,0" />
-
-                </StackPanel>
-                <TextBox Margin="5" />
-
-                <ListView Name="MainGrid"
-                          VerticalAlignment="Top"
-                          ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                          ItemsSource="{Binding Items}">
-                    <ListView.Resources>
-                        <Style TargetType="{x:Type GridViewColumnHeader}">
-                            <Setter Property="HorizontalContentAlignment"
-                                    Value="Left" />
-                            <Setter Property="Padding"
-                                    Value="6,0" />
-                            <Setter Property="FontSize"
-                                    Value="14" />
-                            <Setter Property="FontWeight"
-                                    Value="Medium" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </Grid.Resources>
+        <Border x:Name="InputField"
+                BorderThickness="2"
+                CornerRadius="5,1,5,1"
+                Padding="5,2">
+            <Grid>
+                <TextBox x:Name="InputText"
+                         Text="{Binding UserFilter}"                        
+                         GotKeyboardFocus="InputText_GotKeyboardFocus"
+                         LostKeyboardFocus="InputText_LostKeyboardFocus"
+                         BorderThickness="0"
+                         Background="Transparent"
+                         Foreground="{StaticResource Text_Dark}"
+                         TextChanged="InputText_TextChanged" />
+                <materialicons:MaterialIcon Icon="ic_search"                                         
+                                            HorizontalAlignment="Right">
+                    <materialicons:MaterialIcon.Resources>
+                        <Style TargetType="materialicons:MaterialIcon">
+                            <Style.Triggers>
+                                <Trigger Property="IsEnabled"
+                                         Value="True">
+                                    <Setter Property="Foreground"
+                                            Value="{StaticResource Text_Dark}" />
+                                </Trigger>
+                                <Trigger Property="IsEnabled"
+                                         Value="False">
+                                    <Setter Property="Foreground"
+                                            Value="{StaticResource Layer3_Dark}" />
+                                </Trigger>
+                            </Style.Triggers>
                         </Style>
+                    </materialicons:MaterialIcon.Resources>
+                </materialicons:MaterialIcon>
+            </Grid>
+        </Border>
 
-                        <Style TargetType="{x:Type ListViewItem}">
-                            <EventSetter Event="MouseDoubleClick"
-                                         Handler="ItemDoubleClicked" />
-                        </Style>
-                    </ListView.Resources>
+        <Popup x:Name="Results"
+               Width="{Binding ActualWidth, ElementName=InputField}"
+               Placement="Bottom"
+               >
 
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Header="ID"
-                                            Width="100"
-                                            DisplayMemberBinding="{Binding ID}" />
-                            <GridViewColumn Header="Name"
-                                            Width="300"
-                                            DisplayMemberBinding="{Binding Name}" />
-                        </GridView>
+            <ListView Name="MainGrid"
+                      VerticalAlignment="Top"
+                      ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                      ItemsSource="{Binding FilteredItems}" 
+                      Background="{StaticResource Layer3_Dark}" 
+                      BorderThickness="0"
+                      Padding="5" SelectionChanged="MainGrid_SelectionChanged">
+                <ListView.Resources>
+                    <Style TargetType="{x:Type GridViewColumnHeader}">
+                        <Setter Property="HorizontalContentAlignment"
+                                Value="Left" />
+                        <Setter Property="Padding"
+                                Value="6,0" />
+                        <Setter Property="FontSize"
+                                Value="14" />
+                        <Setter Property="FontWeight"
+                                Value="Medium" />
+                    </Style>
 
-                    </ListView.View>
-                </ListView>
+                    <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource AssetList_ListViewItem}">
+                        <EventSetter Event="MouseDoubleClick"
+                                     Handler="ItemClicked" />
+                        <EventSetter Event="MouseDown"
+                                     Handler="ItemClicked" />
+                        <Setter Property="Height"
+                                Value="30" />
+                        <Setter Property="Margin"
+                                Value="0" />
 
-            </StackPanel>
+                    </Style>
+                </ListView.Resources>
+
+                <ListView.View>
+                    <GridView>
+                        <GridView.ColumnHeaderContainerStyle>
+                            <Style TargetType="GridViewColumnHeader">
+                                <Setter Property="Visibility"
+                                        Value="Collapsed" />
+                            </Style>
+                        </GridView.ColumnHeaderContainerStyle>
+                        <GridViewColumn Header="ID"
+                                        Width="50"
+                                        DisplayMemberBinding="{Binding ID}" />
+                        <GridViewColumn Header="Name"
+                                        Width="300"
+                                        DisplayMemberBinding="{Binding Name}" />
+                    </GridView>
+
+                </ListView.View>
+            </ListView>
         </Popup>
     </Grid>
 </UserControl>

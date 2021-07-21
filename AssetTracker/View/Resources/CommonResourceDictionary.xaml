@@ -24,7 +24,7 @@
 
             </Trigger>
         </Style.Triggers>
-    </Style>   
+    </Style>
 
     <Style TargetType="materialicons:MaterialIcon"
            x:Key="HoverBtn_Content">

@@ -23,13 +23,13 @@
             <converters:MultiBooleanToVisibilityConverter x:Key="multiBoolToVisConvert" />
             <converters:AlternationEqualityConverter x:Key="alternationConverter" />
             <converters:IsNullToVisibilityConverter x:Key="nullToVizConverter" />
+            <converters:IsNullConverter x:Key="nullConverter" />
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary x:Name="DiscussDictionary"
                                     Source="Resources/DiscussionBoardResourceDictionary.xaml" />
                 <ResourceDictionary x:Name="TimelineDictionary"
                                     Source="Resources/AssetTimelineResourceDictionary.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-
+            </ResourceDictionary.MergedDictionaries>     
 
         </ResourceDictionary>
 
@@ -368,7 +368,20 @@
                                         <Setter Property="FontSize"
                                                 Value="12" />
                                         <Setter Property="VerticalAlignment"
-                                                Value="Center" />
+                                                Value="Center" />                                      
+                                        <Style.Triggers>
+                                            <Trigger Property="IsEnabled"
+                                                     Value="True">
+                                                <Setter Property="Foreground"
+                                                        Value="{StaticResource Text_Dark}" />
+                                            </Trigger>
+
+                                            <Trigger Property="IsEnabled"
+                                                     Value="False">
+                                                <Setter Property="Foreground"
+                                                        Value="{StaticResource Layer3_Dark}" />
+                                            </Trigger>
+                                        </Style.Triggers>
 
                                     </Style>
                                     <Style TargetType="local:Searchbox">
@@ -379,23 +392,30 @@
                                     </Style>
                                 </StackPanel.Resources>
 
-                                <StackPanel Orientation="Vertical">
-                                    <TextBlock Text="Assigned To:"
-                                               Foreground="White" />
+                                <StackPanel Orientation="Vertical">                                    
+                                    <TextBlock Text="Assigned To:"  /> 
                                     <local:Searchbox x:Name="Searchbox_AssignedTo" />
                                 </StackPanel>
 
                                 <StackPanel  Orientation="Vertical"
                                              Margin="100,0">
-                                    <TextBlock Text="Current Status:"
-                                               Foreground="White" />
-                                    <local:Searchbox x:Name="Searchbox_Phase" />
-                                </StackPanel>
-
-                                <StackPanel  Orientation="Vertical">
                                     <TextBlock Text="Category:"
                                                Foreground="White" />
                                     <local:Searchbox x:Name="Searchbox_Category" />
+                                </StackPanel>
+
+                                <StackPanel  Orientation="Vertical">
+                                    <StackPanel.Resources>
+                                        <converters:ValueConverterGroup x:Key="IsNullInverseConverter">
+                                            <converters:IsNullConverter />
+                                            <converters:InverseBooleanConverter />
+                                        </converters:ValueConverterGroup>
+                                    </StackPanel.Resources>
+                                    <TextBlock x:Name="Status_HeaderText"
+                                                Text="Current Status:"
+                                               IsEnabled="{Binding myAsset.AssetCategory, Converter={StaticResource IsNullInverseConverter}}" />
+                                    <local:Searchbox x:Name="Searchbox_Phase"
+                                                     IsEnabled="{Binding ElementName=Status_HeaderText, Path=IsEnabled}" />
                                 </StackPanel>
                             </StackPanel>
 

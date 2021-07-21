@@ -32,14 +32,8 @@ namespace AssetTracker.View
         {
             InitializeComponent();
             VM = new AssetListViewModel();
-            this.Unloaded += AssetList_Unloaded;
             myCoordinator = coordinator;
         }
-
-        private void AssetList_Unloaded(object sender, RoutedEventArgs e)
-        {
-            VM.Dispose();
-        }      
 
         private void ListViewItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
@@ -49,13 +43,21 @@ namespace AssetTracker.View
 
         private void AddAsset_Click(object sender, MouseButtonEventArgs e)
         {
+            VM.CreateAsset();
             AssetCreateControl.Visibility = Visibility.Visible;
-            // Make everything else not interactable
+            //TODO: Make everything else not interactable
         }
 
         private void RemoveAsset_Click(object sender, MouseButtonEventArgs e)
         {           
             // Prompt user to verify deletion
+        }
+
+        private void CreateAsset_Canceled(object sender, MouseButtonEventArgs e)
+        {
+            AssetCreateControl.Visibility = Visibility.Collapsed;
+            VM.ResetNewAsset();
+
         }
     }
 }

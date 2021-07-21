@@ -10,9 +10,6 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="AssetList"
       ShowsNavigationUI="False">
-    <Page.Resources>       
-        
-    </Page.Resources>
     
     <Page.DataContext>
         <viewmodel:AssetListViewModel />
@@ -25,22 +22,39 @@
         <StackPanel>            
             <Grid Margin="0,20">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                    <StackPanel Orientation="Vertical" Margin="0,0,15,0" MouseLeftButtonUp="AddAsset_Click">
-                        <materialicons:MaterialIcon Icon="ic_add" Foreground="{StaticResource Text_Dark}" Height="40" />
-                        <TextBlock Text="Add" Foreground="White" HorizontalAlignment="Center" FontSize="14" FontWeight="Bold"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Vertical"
-                                MouseLeftButtonUp="RemoveAsset_Click">
-                        <materialicons:MaterialIcon Icon="ic_delete" Foreground="{StaticResource Text_Dark}"
-                               Height="40" />
-                        <TextBlock Text="Delete"
-                                   Foreground="White"
-                                   HorizontalAlignment="Center"
-                                   FontSize="14"
-                                   FontWeight="Bold" />
-                    </StackPanel>
-                </StackPanel>
-                <local:Searchbox HorizontalAlignment="Right" Width="400" Height="24" VerticalAlignment="Center"/>
+                        <StackPanel.Resources>
+                            <Style TargetType="TextBlock" BasedOn="{StaticResource HoverBtn_TextContent}">
+                                <Setter Property="Foreground"
+                                        Value="{StaticResource Text_Dark}" />
+                                <Setter Property="FontSize"
+                                        Value="14" />
+                                <Setter Property="HorizontalAlignment"
+                                        Value="Center" />
+                                <Setter Property="FontWeight"
+                                        Value="Bold" />
+                            </Style>
+                            <Style TargetType="materialicons:MaterialIcon" BasedOn="{StaticResource HoverBtn_Content}">
+                                <Setter Property="Height"
+                                        Value="40" />
+                            </Style>
+                        </StackPanel.Resources>
+
+                        <Border Style="{StaticResource HoverBtn}" MouseUp="AddAsset_Click">
+                             <StackPanel Orientation="Vertical" Margin="0,0,15,0" >
+                                 <materialicons:MaterialIcon Icon="ic_add" />
+                                 <TextBlock Text="Add"/>
+                             </StackPanel>
+                        </Border>
+
+                        <Border Style="{StaticResource HoverBtn}" MouseUp="RemoveAsset_Click">
+                            <StackPanel Orientation="Vertical"
+                                        MouseLeftButtonUp="RemoveAsset_Click">
+                                <materialicons:MaterialIcon Icon="ic_delete"/>
+                                <TextBlock Text="Delete"/>
+                            </StackPanel>
+                            
+                        </Border>
+                </StackPanel>        
             </Grid>
             <ListView Name="MainGrid"
                       VerticalAlignment="Top"
@@ -74,10 +88,114 @@
                 </ListView.View>
             </ListView>            
         </StackPanel>
-        
-        <local:AssetCreate x:Name="AssetCreateControl"
-                               Visibility="Hidden"
-                               Width="800" Height="400"/>
+
+            <Border x:Name="AssetCreateControl"
+                    Background="{StaticResource Overlay}"
+                    Padding="20"
+                    Visibility="Hidden" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                        <materialicons:MaterialIcon Icon="ic_create"
+                                                    Foreground="{StaticResource TextOverlay_Dark}" Margin="0,0,10,0" Height="30" VerticalAlignment="Center"/>
+                        <TextBlock Text="Create New Asset" VerticalAlignment="Center" FontWeight="Bold" FontSize="20" Foreground="{StaticResource TextOverlay_Dark}"/>
+                    </StackPanel>
+                <Grid x:Name="SettingsList"                           
+                            HorizontalAlignment="Stretch">
+                        <Grid.Resources>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Margin"
+                                        Value="10" />
+                                <Setter Property="FontSize"
+                                        Value="14" />
+                                <Setter Property="Foreground"
+                                        Value="{StaticResource TextOverlay_Dark}" />
+                                <Setter Property="FontWeight"
+                                        Value="SemiBold" />
+                            </Style>
+                        </Grid.Resources>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*"  />
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200" />
+                            <ColumnDefinition Width="500"/>
+                        </Grid.ColumnDefinitions>
+                   
+                        <TextBlock x:Name="Label_Name"
+                                   Text="Asset Name" />
+                        <TextBox x:Name="Value_Name"
+                                 Text="{Binding AssetToCreate.as_displayname}" Grid.Column="1" VerticalAlignment="Center"/>
+                    
+                        <TextBlock Text="Description" Grid.Row="1"/>
+                        <TextBox x:Name="Value_Description"
+                                 Text="{Binding AssetToCreate.as_description}" Grid.Row="1" Grid.Column="1" Height="100"/>
+
+                        
+                        <TextBlock Text="Category" Grid.Row="2"/>
+                        <local:Searchbox x:Name="Value_Category" Grid.Row="2" Grid.Column="1"/>
+                    
+                        <TextBlock Text="Assigned To"
+                                   Grid.Row="3"/>
+                        <local:Searchbox x:Name="Value_AssignedTo"                                      
+                                       
+                                        Grid.Row="3" Grid.Column="1" />
+                    
+                    
+                        <TextBlock Text="Parent"
+                                   Grid.Row="4" />
+                        <local:Searchbox x:Name="Value_ParentID"
+                                        Grid.Row="4" Grid.Column="1" />
+
+
+
+                </Grid>
+
+                <StackPanel Orientation="Horizontal" Margin="10"
+                      HorizontalAlignment="Center">
+                        <StackPanel.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="Width"
+                                        Value="150" />
+                                <Setter Property="Padding"
+                                        Value="10" />
+                                <Setter Property="Background"
+                                        Value="{StaticResource Layer3_Dark}" />
+                                <Style.Triggers>
+                                <Trigger Property="IsMouseOver"
+                                         Value="True">
+                                    <Setter Property="Cursor"
+                                            Value="Hand" />
+
+                                </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                            
+                        </StackPanel.Resources>
+
+                        <Border Margin="10,0" HorizontalAlignment="Stretch">
+                            <TextBlock Text="Save"
+                                       Style="{StaticResource HoverBtn_TextContent}" HorizontalAlignment="Center"/>
+                        </Border>
+
+                        <Border MouseUp="CreateAsset_Canceled">
+                            <TextBlock Text="Cancel"
+                                       Style="{StaticResource HoverBtn_TextContent}"
+                                       HorizontalAlignment="Center" />
+                        </Border>
+
+
+
+
+                    </StackPanel>
+
+            </StackPanel>
+            </Border>
+
         </Grid>
 
     </Border>

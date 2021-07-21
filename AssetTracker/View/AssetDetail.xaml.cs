@@ -121,13 +121,21 @@ namespace AssetTracker.View
             if (VM.myAsset.AssetCategory != null)
             {
                 Searchbox_Category.SetCurrentSelectedObject(VM.myAsset.AssetCategory.ca_id);
+                Searchbox_Phase.SetFilter(VM.StatusFilter);
             }
         }
         private void SubscribeToSearchboxes()
         {
             Searchbox_AssignedTo.OnSelectionChanged += () => { VM.OnAssignedUserChange(Searchbox_AssignedTo.CurrentSelection.ID); };
             Searchbox_Phase.OnSelectionChanged += () => { VM.OnPhaseChanged(Searchbox_Phase.CurrentSelection.ID); };
-            Searchbox_Category.OnSelectionChanged += () => { VM.OnCategoryChanged(Searchbox_Category.CurrentSelection.ID); };
+            Searchbox_Category.OnSelectionChanged += () => { OnCategoryChanged(Searchbox_Category.CurrentSelection.ID); };
+        }
+
+        private void OnCategoryChanged(int newID)
+        {
+            VM.OnCategoryChanged(newID);
+            Searchbox_Phase.ResetDisplay();
+            Searchbox_Phase.SetFilter(VM.StatusFilter);
         }
 
         private void OnModelChanged()

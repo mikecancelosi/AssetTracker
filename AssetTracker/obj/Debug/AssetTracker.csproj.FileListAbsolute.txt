@@ -5,7 +5,6 @@ C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\bin\Debug\En
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\bin\Debug\EntityFramework.SqlServer.dll
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\bin\Debug\EntityFramework.xml
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\bin\Debug\EntityFramework.SqlServer.xml
-C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\View\AssetCreate.g.cs
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\View\AssetDetail.g.cs
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\View\AssetList.g.cs
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\View\ProjectSettings.g.cs
@@ -16,7 +15,6 @@ C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\As
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\GeneratedInternalTypeHelper.g.cs
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\AssetTracker_MarkupCompile.cache
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\AssetTracker_MarkupCompile.lref
-C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\View\AssetCreate.baml
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\View\AssetDetail.baml
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\View\AssetList.baml
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\View\ProjectSettings.baml

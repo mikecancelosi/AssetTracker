@@ -162,9 +162,6 @@
                                Style="{StaticResource RightPanel_Header}" />
 
                     <Grid Margin="0,40">
-                        <TextBox Text="Search.."
-                                 Width="300"
-                                 HorizontalAlignment="Left" />
                         <Button Content="+ Add User"
                                 Style="{StaticResource AddButtonStyle}"
                                 Click="AddUserClicked" />
@@ -203,10 +200,7 @@
                     <TextBlock Text="Roles"
                                Style="{StaticResource RightPanel_Header}" />
 
-                    <Grid Margin="0,40">
-                        <TextBox Text="Search.."
-                                 Width="300"
-                                 HorizontalAlignment="Left" />
+                    <Grid Margin="0,40">                       
                         <Button Content="+ Add Role"
                                 Style="{StaticResource AddButtonStyle}"
                                 Click="AddRoleClicked" />
@@ -244,10 +238,7 @@
                     <TextBlock Text="Categories"
                                Style="{StaticResource RightPanel_Header}" />
 
-                    <Grid Margin="0,40">
-                        <TextBox Text="Search.."
-                                 Width="300"
-                                 HorizontalAlignment="Left" />
+                    <Grid Margin="0,40">                       
                         <Button Content="+ Add Category"
                                 Click="AddCategoryClicked"
                                 Style="{StaticResource AddButtonStyle}" />

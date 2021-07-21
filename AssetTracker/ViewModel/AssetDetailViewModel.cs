@@ -107,7 +107,21 @@ namespace AssetTracker.ViewModel
         {
             context.Entry(myAsset).Property(x => x.as_caid).CurrentValue = catID;
             NotifyPropertyChanged("Savable");
+            NotifyPropertyChanged("myAsset");
         }
+
+        public string StatusFilter
+        {
+            get
+            {
+                if(myAsset.AssetCategory != null)
+                {
+                    return "select * from Phase where ph_caid = " + myAsset.AssetCategory.ca_id;
+                }
+                return "";
+            }
+        }
+
 
         public void ModifyAssetName(string newName)
         {

@@ -36,17 +36,17 @@ namespace AssetTracker.View
             myCoordinator = coordinator;
         }     
 
-        private void AddUserClicked(object sender, RoutedEventArgs e)
+        private void CreateUser_Clicked(object sender, MouseButtonEventArgs e)
         {
             myCoordinator.NavigateToCreateUser();
         }
        
-        private void AddRoleClicked(object sender, RoutedEventArgs e)
+        private void CreateRole_Clicked(object sender, MouseButtonEventArgs e)
         {
             myCoordinator.NavigateToCreateRole();
         }
 
-        private void AddCategoryClicked(object sender, RoutedEventArgs e)
+        private void CreateCategory_Clicked(object sender, MouseButtonEventArgs e)
         {
             myCoordinator.NavigateToCreateCategory();
         }

@@ -72,7 +72,7 @@
         </Style.Triggers>
     </Style>
 
-    <!--#region Layout Styles-->
+    <!--#region Page Layout Styles-->
     <Style TargetType="TextBlock"
            x:Key="LeftPanel_Header">
         <Setter Property="Foreground"
@@ -212,8 +212,7 @@
                              Width="300"
                              Height="100"
                              BorderBrush="Black"
-                             BorderThickness="1"
-                            >
+                             BorderThickness="1">
                         <StackPanel>
                             <TextBlock Text="Would you like to save before exiting?"
                                        Margin="20"
@@ -226,8 +225,7 @@
                                         Padding="5"
                                         Width="100"
                                         Margin="0,0,30,0"
-                                        Command="{Binding RefuseSave_Clicked, RelativeSource={RelativeSource AncestorLevel=1, AncestorType=Page}}"
-                                        />
+                                        Command="{Binding RefuseSave_Clicked, RelativeSource={RelativeSource AncestorLevel=1, AncestorType=Page}}" />
                                 <Button Content="Yes"
                                         Padding="5"
                                         Width="100"
@@ -238,6 +236,26 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+    </Style>
+
+    <Style  x:Key="ListHeaderBtn_Text" 
+            TargetType="TextBlock"
+            BasedOn="{StaticResource HoverBtn_TextContent}">
+        <Setter Property="Foreground"
+                Value="{StaticResource Text_Dark}" />
+        <Setter Property="FontSize"
+                Value="14" />
+        <Setter Property="HorizontalAlignment"
+                Value="Center" />
+        <Setter Property="FontWeight"
+                Value="Bold" />
+    </Style>
+
+    <Style x:Key="ListHeaderBtn_Image"
+            TargetType="materialicons:MaterialIcon"
+           BasedOn="{StaticResource HoverBtn_Content}">
+        <Setter Property="Height"
+                Value="40" />
     </Style>
 
 </ResourceDictionary>

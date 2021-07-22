@@ -22,48 +22,34 @@
 
         <Grid>
             <StackPanel>
-                <Grid Margin="0,20">
-                    <StackPanel Orientation="Horizontal"
-                                HorizontalAlignment="Left">
-                        <StackPanel.Resources>
-                            <Style TargetType="TextBlock"
-                                   BasedOn="{StaticResource HoverBtn_TextContent}">
-                                <Setter Property="Foreground"
-                                        Value="{StaticResource Text_Dark}" />
-                                <Setter Property="FontSize"
-                                        Value="14" />
-                                <Setter Property="HorizontalAlignment"
-                                        Value="Center" />
-                                <Setter Property="FontWeight"
-                                        Value="Bold" />
-                            </Style>
-                            <Style TargetType="materialicons:MaterialIcon"
-                                   BasedOn="{StaticResource HoverBtn_Content}">
-                                <Setter Property="Height"
-                                        Value="40" />
-                            </Style>
-                        </StackPanel.Resources>
 
-                        <Border Style="{StaticResource HoverBtn}"
-                                MouseUp="CreateAsset_Clicked">
-                            <StackPanel Orientation="Vertical"
-                                        Margin="0,0,15,0">
-                                <materialicons:MaterialIcon Icon="ic_add" />
-                                <TextBlock Text="Add" />
-                            </StackPanel>
-                        </Border>
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Left">
 
-                        <Border Style="{StaticResource HoverBtn}"
-                                MouseUp="DeleteAsset_Clicked">
-                            <StackPanel Orientation="Vertical"
-                                        MouseLeftButtonUp="DeleteAsset_Clicked">
-                                <materialicons:MaterialIcon Icon="ic_delete" />
-                                <TextBlock Text="Delete" />
-                            </StackPanel>
+                    <Border Style="{StaticResource HoverBtn}"
+                            MouseUp="CreateAsset_Clicked"
+                            Margin="0,0,15,10">
+                        <StackPanel Orientation="Vertical">
+                            <materialicons:MaterialIcon Icon="ic_add"
+                                                        Style="{StaticResource ListHeaderBtn_Image}" />
+                            <TextBlock Text="Add"
+                                       Style="{StaticResource ListHeaderBtn_Text}" />
+                        </StackPanel>
+                    </Border>
 
-                        </Border>
-                    </StackPanel>
-                </Grid>
+                    <Border Style="{StaticResource HoverBtn}"
+                            MouseUp="DeleteAsset_Clicked">
+                        <StackPanel Orientation="Vertical"
+                                    MouseLeftButtonUp="DeleteAsset_Clicked">
+                            <materialicons:MaterialIcon Icon="ic_delete"
+                                                        Style="{StaticResource ListHeaderBtn_Image}" />
+                            <TextBlock Text="Delete"
+                                       Style="{StaticResource ListHeaderBtn_Text}" />
+                        </StackPanel>
+
+                    </Border>
+                </StackPanel>
+                
                 <ListView Name="MainGrid"
                           VerticalAlignment="Top"
                           ScrollViewer.HorizontalScrollBarVisibility="Hidden"

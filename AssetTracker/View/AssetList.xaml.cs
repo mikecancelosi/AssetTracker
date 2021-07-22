@@ -91,9 +91,11 @@ namespace AssetTracker.View
 
         private void DeleteAsset_Clicked(object sender, MouseButtonEventArgs e)
         {
-            AssetDeletePrompt.Visibility = Visibility.Visible;
+            if (MainGrid.SelectedItem != null)
+            {
+                AssetDeletePrompt.Visibility = Visibility.Visible;
+            }
         }
-
 
         private void DeleteConfirm_Clicked(object sender, MouseButtonEventArgs e)
         {

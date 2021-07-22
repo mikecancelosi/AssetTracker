@@ -150,14 +150,12 @@
       <DependentUpon>DBO.tt</DependentUpon>
     </Compile>
     <Compile Include="Services\DefaultRepositoryData.cs" />
-    <Compile Include="Services\SQLHelper.cs" />
     <Compile Include="Setting.cs">
       <DependentUpon>DBO.tt</DependentUpon>
     </Compile>
     <Compile Include="User.cs">
       <DependentUpon>DBO.tt</DependentUpon>
     </Compile>
-    <Compile Include="Utilities\Disposable.cs" />
     <Compile Include="ViewModel\AssetDetailViewModel.cs" />
     <Compile Include="ViewModel\AssetListViewModel.cs" />
     <Compile Include="ViewModel\CategoryEditViewModel.cs" />
@@ -320,10 +318,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Placeholder.jpg" />
-    <Resource Include="Images\Search.png" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

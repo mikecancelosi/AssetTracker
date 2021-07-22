@@ -24,13 +24,12 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Page.Resources>
-    <Grid Margin="100,0">
+    <Grid Margin="100,0" >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*"
                               MaxWidth="300" />
             <ColumnDefinition Width="5*" />
         </Grid.ColumnDefinitions>
-
         <Border x:Name="LeftPanel"
               Style="{StaticResource LeftPanel}">
             <StackPanel>
@@ -49,7 +48,7 @@
                                              Style="{StaticResource HoverBtn_Content}"/>
                         </Border>
 
-                        <Border MouseUp="OnDeleteClicked" Style="{StaticResource ControlBtn}">
+                        <Border MouseUp="DeleteRole_Clicked" Style="{StaticResource ControlBtn}">
                             <mi:MaterialIcon Icon="ic_delete"
                                              Width="36"
                                              Height="36"
@@ -59,7 +58,7 @@
                     </StackPanel>
                 </Border>
 
-                <TextBlock Text="Role Edit"
+                <TextBlock Text="{Binding HeadingContext}"
                            Margin="0,10"
                            Style="{StaticResource LeftPanel_Header}" />
 
@@ -92,9 +91,9 @@
                                 <Button Content="Configuration"
                                         Click="NavigateToProjectSettings" />
                                 <TextBlock Text=">" />
-                                <TextBlock Text="Role Edit" />
+                                <TextBlock Text="{Binding HeadingContext}" />
                             </StackPanel>
-                            <TextBlock Text="Modify Role Permissions"
+                            <TextBlock Text="Setup Information"
                                        Style="{StaticResource RightPanel_Header}"
                                        Margin="0,10" />
 
@@ -137,6 +136,71 @@
                 <Control x:Name="PromptSavePanel"
                          Style="{StaticResource  PromptSave}"
                          Visibility="Collapsed" />
+
+                <Border x:Name="DeletePrompt"
+                        Visibility="Collapsed"
+                        Background="{StaticResource Overlay}"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Padding="30">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <mi:MaterialIcon Icon="ic_delete_forever"
+                                             Foreground="{StaticResource TextOverlay_Dark}" />
+                            <TextBlock Text="Delete Asset"
+                                       VerticalAlignment="Center" />
+                        </StackPanel>
+
+                        <TextBlock HorizontalAlignment="Center"
+                                   Margin="0,50"
+                                   FontSize="16">
+                        <Run Text="Are you sure you want to delete" />
+                        <Run Text="{Binding  Role.Name}"
+                             FontWeight="Bold" />
+                        <Run Text="#"
+                             FontWeight="Bold" />
+                        <Run Text="{Binding Role.ID}"
+                             FontWeight="Bold" />
+                        <Run Text="?" />
+                        </TextBlock>
+
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Center">
+                            <Border Margin="0,10,20,0"
+                                    Style="{StaticResource HoverBtn}"
+                                    Padding="5"
+                                    BorderThickness="5"
+                                    BorderBrush="{StaticResource ConfirmOverlay_Dark}"
+                                    MouseUp="DeleteConfirm_Clicked"
+                                    Width="150">
+                                <TextBlock Text="Confirm"
+                                           Style="{StaticResource HoverBtn_TextContent}"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Center"
+                                           Foreground="{StaticResource TextOverlay_Dark}"
+                                           FontWeight="SemiBold"
+                                           FontSize="14" />
+                            </Border>
+                            <Border  Margin="0,10,20,0"
+                                     Width="150"
+                                     Style="{StaticResource HoverBtn}"
+                                     Padding="5"
+                                     BorderThickness="5"
+                                     BorderBrush="{StaticResource RejectOverlay_Dark}"
+                                     MouseUp="DeleteCancel_Clicked">
+                                <TextBlock Text="Cancel"
+                                           Style="{StaticResource HoverBtn_TextContent}"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           Foreground="{StaticResource TextOverlay_Dark}"
+                                           FontWeight="SemiBold"
+                                           FontSize="14" />
+                            </Border>
+
+                        </StackPanel>
+
+                    </StackPanel>
+                </Border>
             </Grid>
 
         </Border>

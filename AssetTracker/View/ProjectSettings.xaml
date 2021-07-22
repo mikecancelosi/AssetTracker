@@ -10,7 +10,8 @@
       d:DesignHeight="900"
       d:DesignWidth="1500"
       Title="ProjectSettings"
-      ShowsNavigationUI="False" Loaded="Page_Loaded">
+      ShowsNavigationUI="False"
+      Loaded="Page_Loaded">
     <Page.DataContext>
         <viewmodel:ProjectSettingsViewModel />
     </Page.DataContext>
@@ -80,7 +81,7 @@
                                 Value="50" />
                         <Setter Property="BorderThickness"
                                 Value="0" />
-                       
+
                     </Style>
 
                     <Style TargetType="GridViewColumnHeader">
@@ -107,7 +108,7 @@
                                 </ControlTemplate>
                             </Setter.Value>
                         </Setter>
-                    </Style>                    
+                    </Style>
 
                     <DataTemplate x:Key="OperationsTemplate">
                         <Grid Margin="30,0">
@@ -123,20 +124,20 @@
                                         Tag="copy"
                                         MouseUp="OnOperationClicked"
                                         Width="24">
-                                    <materialicons:MaterialIcon Icon="ic_content_copy"/>
+                                    <materialicons:MaterialIcon Icon="ic_content_copy" />
                                 </Border>
                                 <Border Style="{StaticResource HoverBtn}"
                                         Margin="10,0"
                                         MouseUp="OnOperationClicked"
                                         Tag="edit"
                                         Width="24">
-                                    <materialicons:MaterialIcon Icon="ic_edit"/>
+                                    <materialicons:MaterialIcon Icon="ic_edit" />
                                 </Border>
                                 <Border Style="{StaticResource HoverBtn}"
                                         MouseUp="OnOperationClicked"
                                         Tag="delete"
                                         Width="24">
-                                    <materialicons:MaterialIcon Icon="ic_delete"/>
+                                    <materialicons:MaterialIcon Icon="ic_delete" />
                                 </Border>
                             </StackPanel>
                         </Grid>
@@ -149,10 +150,12 @@
                             Margin="50">
 
                     <TextBlock Text="Users"
-                               Style="{StaticResource RightPanel_Header}" />                    
+                               Style="{StaticResource RightPanel_Header}" />
 
                     <Border Style="{StaticResource HoverBtn}"
-                            MouseUp="CreateUser_Clicked" HorizontalAlignment="Left" Margin="0,40,0,10">
+                            MouseUp="CreateUser_Clicked"
+                            HorizontalAlignment="Left"
+                            Margin="0,40,0,10">
                         <StackPanel Orientation="Vertical"
                                     Margin="0,0,15,0">
                             <materialicons:MaterialIcon Icon="ic_add"
@@ -210,7 +213,7 @@
                     </Border>
 
 
-                    <ListView ItemsSource="{Binding Roles}" >
+                    <ListView ItemsSource="{Binding Roles}">
 
                         <ListView.View>
                             <GridView>
@@ -278,6 +281,70 @@
 
                 </StackPanel>
 
+                <Border x:Name="AssetDeletePrompt"
+                        Visibility="Collapsed"
+                        Background="{StaticResource Overlay}"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Padding="30">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <materialicons:MaterialIcon Icon="ic_delete_forever"
+                                                        Foreground="{StaticResource TextOverlay_Dark}" />
+                            <TextBlock Text="Delete Asset"
+                                       VerticalAlignment="Center" />
+                        </StackPanel>
+
+                        <TextBlock HorizontalAlignment="Center"
+                                   Margin="0,50"
+                                   FontSize="16">
+                        <Run Text="Are you sure you want to delete" />
+                        <Run Text="{Binding SelectedObject.Name}"
+                             FontWeight="Bold" />
+                        <Run Text="#"
+                             FontWeight="Bold" />
+                        <Run Text="{Binding SelectedObject.ID}"
+                             FontWeight="Bold" />
+                        <Run Text="?" />
+                        </TextBlock>
+
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Center">
+                            <Border Margin="0,10,20,0"
+                                    Style="{StaticResource HoverBtn}"
+                                    Padding="5"
+                                    BorderThickness="5"
+                                    BorderBrush="{StaticResource ConfirmOverlay_Dark}"
+                                    MouseUp="DeleteConfirm_Clicked"
+                                    Width="150">
+                                <TextBlock Text="Confirm"
+                                           Style="{StaticResource HoverBtn_TextContent}"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Center"
+                                           Foreground="{StaticResource TextOverlay_Dark}"
+                                           FontWeight="SemiBold"
+                                           FontSize="14" />
+                            </Border>
+                            <Border  Margin="0,10,20,0"
+                                     Width="150"
+                                     Style="{StaticResource HoverBtn}"
+                                     Padding="5"
+                                     BorderThickness="5"
+                                     BorderBrush="{StaticResource RejectOverlay_Dark}"
+                                     MouseUp="DeleteCancel_Clicked">
+                                <TextBlock Text="Cancel"
+                                           Style="{StaticResource HoverBtn_TextContent}"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           Foreground="{StaticResource TextOverlay_Dark}"
+                                           FontWeight="SemiBold"
+                                           FontSize="14" />
+                            </Border>
+
+                        </StackPanel>
+
+                    </StackPanel>
+                </Border>
 
             </Grid>
         </Border>

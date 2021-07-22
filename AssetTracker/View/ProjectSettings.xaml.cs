@@ -85,7 +85,8 @@ namespace AssetTracker.View
                     myCoordinator.NavigateToUserEdit(selectedUser);
                     break;
                 case "delete":
-                    VM.DeleteUser(selectedUser.us_id);
+                    VM.SetSelectedObject(selectedUser);
+                    AssetDeletePrompt.Visibility = Visibility.Visible;
                     break;
             }
                 
@@ -103,7 +104,8 @@ namespace AssetTracker.View
                     myCoordinator.NavigateToRoleEdit(selectedRole);
                     break;
                 case "delete":
-                    VM.DeleteRole(selectedRole.ro_id);
+                    VM.SetSelectedObject(selectedRole);
+                    AssetDeletePrompt.Visibility = Visibility.Visible;
                     break;
             }
 
@@ -121,7 +123,8 @@ namespace AssetTracker.View
                     myCoordinator.NavigatetoCategoryEdit(selectedCategory);
                     break;
                 case "delete":
-                    VM.DeleteCategory(selectedCategory.ca_id);
+                    VM.SetSelectedObject(selectedCategory);
+                    AssetDeletePrompt.Visibility = Visibility.Visible;
                     break;
             }
 
@@ -131,5 +134,19 @@ namespace AssetTracker.View
         {
             VM.Reload();
         }
+
+        #region Delete Item
+
+        private void DeleteConfirm_Clicked(object sender, MouseButtonEventArgs e)
+        {
+            VM.DeleteSelectedObject();
+            AssetDeletePrompt.Visibility = Visibility.Collapsed;
+        }
+
+        private void DeleteCancel_Clicked(object sender, MouseButtonEventArgs e)
+        {
+            AssetDeletePrompt.Visibility = Visibility.Collapsed;
+        }
+        #endregion
     }
 }

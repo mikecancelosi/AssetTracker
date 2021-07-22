@@ -84,7 +84,6 @@ namespace AssetTracker
         {
             ProjectSettings projectSettings = new ProjectSettings(this);
             NavigateTo(projectSettings);
-
         }
 
         public void NavigateToAssetList()

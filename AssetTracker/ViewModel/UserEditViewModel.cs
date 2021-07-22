@@ -134,7 +134,7 @@ namespace AssetTracker.ViewModel
             return false;
         }
 
-        public void OnDelete()
+        public void DeleteUser()
         {
             CurrentUser.Delete(context);
         }

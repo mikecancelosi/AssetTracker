@@ -148,11 +148,24 @@ namespace AssetTracker.View
 
         }
 
-        private void OnDeleteClicked(object sender, MouseButtonEventArgs e)
+        #region Delete Asset
+
+        private void DeleteAsset_Clicked(object sender, MouseButtonEventArgs e)
+        {            
+             AssetDeletePrompt.Visibility = Visibility.Visible;            
+        }
+
+        private void DeleteConfirm_Clicked(object sender, MouseButtonEventArgs e)
         {
             VM.DeleteAsset();
             coordinator.NavigateToAssetList();
         }
+
+        private void DeleteCancel_Clicked(object sender, MouseButtonEventArgs e)
+        {
+            AssetDeletePrompt.Visibility = Visibility.Collapsed;
+        }
+        #endregion
 
         private void OnSaveClicked(object sender, MouseButtonEventArgs e)
         {

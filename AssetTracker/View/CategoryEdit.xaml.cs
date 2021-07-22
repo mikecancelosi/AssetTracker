@@ -102,11 +102,25 @@ namespace AssetTracker.View
         }
         #endregion
 
-        public void OnDeleteClicked(object sender, RoutedEventArgs e)
+       
+        #region Delete Category
+
+        private void DeleteCategory_Clicked(object sender, MouseButtonEventArgs e)
         {
-            VM.OnDelete();
+            DeletePrompt.Visibility = Visibility.Visible;
+        }
+
+        private void DeleteConfirm_Clicked(object sender, MouseButtonEventArgs e)
+        {
+            VM.DeleteCategory();
             coordinator.NavigateToProjectSettings();
         }
+
+        private void DeleteCancel_Clicked(object sender, MouseButtonEventArgs e)
+        {
+            DeletePrompt.Visibility = Visibility.Collapsed;
+        }
+        #endregion
 
         public void NavigateToProjectSettings(object sender, RoutedEventArgs e)
         {

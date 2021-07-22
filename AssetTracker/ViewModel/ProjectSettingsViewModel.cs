@@ -85,5 +85,42 @@ namespace AssetTracker.ViewModel
             NotifyPropertyChanged("Roles");
             NotifyPropertyChanged("Categories");
         }
+
+        public void SetDeletionObject(DatabaseBackedObject obj)
+        {
+            SelectedObject = obj;
+            NotifyPropertyChanged("SelectedObject");
+        }
+
+        public void DeleteSelectedObject()
+        {
+            if(SelectedObject.GetType().BaseType == typeof(AssetCategory))
+            {
+                DeleteCategory(SelectedObject.ID);
+            } 
+            else if (SelectedObject.GetType().BaseType == typeof(SecRole))
+            {
+                DeleteRole(SelectedObject.ID);
+            }
+            else if (SelectedObject.GetType().BaseType == typeof(User))
+            {
+                DeleteUser(SelectedObject.ID);
+            }
+            else
+            {
+                return;
+            }
+
+            SelectedObject = null;
+            NotifyPropertyChanged("SelectedObject");
+        }
+        
+        public void SetSelectedObject(DatabaseBackedObject dbo)
+        {
+            SelectedObject = dbo;
+            NotifyPropertyChanged("SelectedObject");
+        }
+
+        public DatabaseBackedObject SelectedObject { get; private set; }
     }
 }

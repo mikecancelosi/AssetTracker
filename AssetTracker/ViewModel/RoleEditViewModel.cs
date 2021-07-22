@@ -109,6 +109,8 @@ namespace AssetTracker.ViewModel
             Role = context.SecRoles.Create();
             Creating = true;
             context.SecRoles.Add(Role);
+            NotifyPropertyChanged("Role");
+            NotifyPropertyChanged("HeadingContext");
         }
 
         public bool Save(out List<Violation> violations)
@@ -128,7 +130,7 @@ namespace AssetTracker.ViewModel
             return false;
         }
 
-        public void OnDelete()
+        public void DeleteRole()
         {
             Role.Delete(context);
         }

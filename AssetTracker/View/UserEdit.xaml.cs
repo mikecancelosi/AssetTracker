@@ -107,12 +107,6 @@ namespace AssetTracker.View
         #endregion
 
 
-        private void OnDeleteClicked(object sender, RoutedEventArgs e)
-        {
-            VM.OnDelete();
-            coordinator.NavigateToProjectSettings();
-        }
-
         private void FirstName_TextChanged(object sender, TextChangedEventArgs e)
         {
             TextBox nameTextBox = sender as TextBox;
@@ -157,10 +151,25 @@ namespace AssetTracker.View
             coordinator.NavigateToProjectSettings();
         }
 
-        public void PermissionAllowance_Clicked(object sender, RoutedEventArgs e)
-        {
 
+        #region Delete User
+
+        private void DeleteUser_Clicked(object sender, MouseButtonEventArgs e)
+        {
+            UserDeletePrompt.Visibility = Visibility.Visible;
         }
+
+        private void DeleteConfirm_Clicked(object sender, MouseButtonEventArgs e)
+        {
+            VM.DeleteUser();
+            coordinator.NavigateToProjectSettings();
+        }
+
+        private void DeleteCancel_Clicked(object sender, MouseButtonEventArgs e)
+        {
+            UserDeletePrompt.Visibility = Visibility.Collapsed;
+        }
+        #endregion
 
 
     }

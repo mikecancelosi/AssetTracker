@@ -31,7 +31,8 @@ namespace AssetTracker.View
         private Coordinator coordinator;       
 
         public RoleEdit(Coordinator coord)
-        {           
+        {
+            InitializeComponent();
             VM = new RoleEditViewModel();
             coordinator = coord;
         }
@@ -94,13 +95,25 @@ namespace AssetTracker.View
         }
 
         #endregion
+       
+        #region Delete Role
 
-
-        private void OnDeleteClicked(object sender, RoutedEventArgs e)
+        private void DeleteRole_Clicked(object sender, MouseButtonEventArgs e)
         {
-            VM.OnDelete();
+            DeletePrompt.Visibility = Visibility.Visible;
+        }
+
+        private void DeleteConfirm_Clicked(object sender, MouseButtonEventArgs e)
+        {
+            VM.DeleteRole();
             coordinator.NavigateToProjectSettings();
         }
+
+        private void DeleteCancel_Clicked(object sender, MouseButtonEventArgs e)
+        {
+            DeletePrompt.Visibility = Visibility.Collapsed;
+        }
+        #endregion
 
         public void NavigateToProjectSettings(object sender, RoutedEventArgs e)
         {
@@ -119,7 +132,6 @@ namespace AssetTracker.View
 
         private void RoleName_TextChanged(object sender, TextChangedEventArgs e)
         {
-
             TextBox nameTextBox = sender as TextBox;
             VM.OnRoleNameChanged(nameTextBox.Text);
         }

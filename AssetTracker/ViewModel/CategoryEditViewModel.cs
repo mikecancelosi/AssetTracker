@@ -171,7 +171,7 @@ namespace AssetTracker.ViewModel
             }
         }
 
-        public void OnDelete()
+        public void DeleteCategory()
         {
             Category.Delete(context);
         }

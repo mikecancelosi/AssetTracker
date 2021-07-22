@@ -12,48 +12,49 @@ namespace AssetTracker.ViewModel
 {
     public class AssetListViewModel : ViewModel
     {
-        private List<Asset> assets;
         public List<Asset> Assets
         {
             get
             {
-                if (assets == null)
-                {
-                    assets = new List<Asset>();
-                    var temp = (from a in context.Assets
-                                select a).ToList();
-                    assets = temp;
-                }
-
-                return assets;
+                return (from a in context.Assets
+                        select a).ToList();
             }
-        }        
-              
-        public Asset AssetToCreate { get; set; }       
+        }
 
-        public void OnParentAssetChanged(DatabaseBackedObject newSelection)
+        #region AddAsset
+        public Asset AssetToCreate { get; set; }
+
+        public void OnNameChanged(string newName)
         {
-            Asset parent = (from asset in context.Assets
-                            where asset.as_id == newSelection.ID
-                            select asset).FirstOrDefault();
+            if (newName != "")
+            {
+                context.Entry(AssetToCreate).Property(x => x.as_displayname).CurrentValue = newName;
+            }
+        }
 
+        public void OnDescriptionChanged(string newDescription)
+        {
+            if (newDescription != "")
+            {
+                context.Entry(AssetToCreate).Property(x => x.as_description).CurrentValue = newDescription;
+            }
+        }
+        
+        public void OnParentAssetChanged(int id)
+        {
+            Asset parent = context.Assets.Find(id);
             context.Entry(AssetToCreate).Property(x => x.as_parentid).CurrentValue = (parent.ID);
         }
 
-        public void OnCategoryChanged(DatabaseBackedObject newSelection)
+        public void OnCategoryChanged(int id)
         {
-            AssetCategory category = (from cat in context.AssetCategories
-                                      where cat.ca_id == newSelection.ID
-                                      select cat).FirstOrDefault();
+            AssetCategory category = context.AssetCategories.Find(id);
             context.Entry(AssetToCreate).Property(x => x.as_caid).CurrentValue = category.ID;
         }
 
-        public void OnUserChanged(DatabaseBackedObject newSelection)
+        public void OnUserChanged(int id)
         {
-            User user = (from u in context.Users
-                         where u.us_id == newSelection.ID
-                         select u).FirstOrDefault();
-
+            User user = context.Users.Find(id);
             context.Entry(AssetToCreate).Property(x => x.as_usid).CurrentValue = user.ID;
         }
 
@@ -76,6 +77,9 @@ namespace AssetTracker.ViewModel
 
                 if (change.Save(context, out violations))
                 {
+                    ResetNewAsset();
+                    NotifyPropertyChanged("AssetToCreate");
+                    NotifyPropertyChanged("Assets");
                     return true;
                 }
             }
@@ -87,8 +91,28 @@ namespace AssetTracker.ViewModel
         {
             AssetToCreate = null;
             NotifyPropertyChanged("AssetToCreate");
-            
+
         }
+        #endregion
+
+        #region DeleteAsset
+        public Asset CurrentSelectedAsset { get; set; }
+        public void ChangeSelectedAsset(Asset newAsset)
+        {
+            CurrentSelectedAsset = newAsset;
+            NotifyPropertyChanged("CurrentSelectedAsset");
+        }
+
+
+
+        public void DeleteCurrentlySelectedAsset()
+        {
+            CurrentSelectedAsset.Delete(context);
+            NotifyPropertyChanged("CurrentSelectedAsset");
+            NotifyPropertyChanged("Assets");
+        }
+        #endregion
+
 
     }
 }

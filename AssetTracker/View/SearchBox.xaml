@@ -51,17 +51,19 @@
         <Border x:Name="InputField"
                 BorderThickness="2"
                 CornerRadius="5,1,5,1"
-                Padding="5,2">
+                Padding="5,0" 
+                VerticalAlignment="Center" >
             <Grid>
                 <TextBox x:Name="InputText"
                          Text="{Binding UserFilter}"                        
                          GotKeyboardFocus="InputText_GotKeyboardFocus"
-                         LostKeyboardFocus="InputText_LostKeyboardFocus"
+                         LostKeyboardFocus="InputText_LostKeyboardFocus"                         
                          BorderThickness="0"
+                         VerticalAlignment="Center"
                          Background="Transparent"
                          Foreground="{StaticResource Text_Dark}"
                          TextChanged="InputText_TextChanged" />
-                <materialicons:MaterialIcon Icon="ic_search"                                         
+                    <materialicons:MaterialIcon Icon="ic_search"                                         
                                             HorizontalAlignment="Right">
                     <materialicons:MaterialIcon.Resources>
                         <Style TargetType="materialicons:MaterialIcon">
@@ -85,8 +87,7 @@
 
         <Popup x:Name="Results"
                Width="{Binding ActualWidth, ElementName=InputField}"
-               Placement="Bottom"
-               >
+               Placement="Bottom">
 
             <ListView Name="MainGrid"
                       VerticalAlignment="Top"

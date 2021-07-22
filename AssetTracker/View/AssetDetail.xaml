@@ -389,6 +389,8 @@
                                                 Value="0,5" />
                                         <Setter Property="Width"
                                                 Value="300" />
+                                        <Setter Property="Height"
+                                                Value="30" />
                                     </Style>
                                 </StackPanel.Resources>
 
@@ -504,6 +506,7 @@
 
             </ScrollViewer>
 
+            <!--#region Free Standing Controls-->
             <!--#region Changelog-->
             <Grid Name="Changelog"
                   Background="{StaticResource Overlay}"
@@ -713,6 +716,7 @@
             </Border>
             <!--#endregion-->
 
+            <!--#endregion-->
         </Grid>
 
 

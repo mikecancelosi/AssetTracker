@@ -86,7 +86,7 @@ namespace AssetTracker.ViewModel
                          select s).ToList();
             NotifyPropertyChanged("Changelog");
             NotifyPropertyChanged("DiscussionBoard");
-            NotifyPropertyChanged("myAsset.Category");
+            NotifyPropertyChanged("myAsset");
             NotifyPropertyChanged("Tags");
             SetHierarchy();
         }

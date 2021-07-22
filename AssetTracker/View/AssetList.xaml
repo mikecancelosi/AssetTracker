@@ -1,29 +1,33 @@
 ﻿<Page x:Class="AssetTracker.View.AssetList"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:AssetTracker.View"
       xmlns:viewmodel="clr-namespace:AssetTracker.ViewModel"
       xmlns:materialicons="clr-namespace:MaterialIcons;assembly=MaterialIcons"
-      mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      mc:Ignorable="d"
+      d:DesignHeight="450"
+      d:DesignWidth="800"
       Title="AssetList"
       ShowsNavigationUI="False">
-    
+
     <Page.DataContext>
         <viewmodel:AssetListViewModel />
     </Page.DataContext>
 
     <Border  Margin="100,0"
-             Background="{StaticResource Layer1_Dark}" Padding="50">
+             Background="{StaticResource Layer1_Dark}"
+             Padding="50">
 
         <Grid>
-        <StackPanel>            
-            <Grid Margin="0,20">
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+            <StackPanel>
+                <Grid Margin="0,20">
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Left">
                         <StackPanel.Resources>
-                            <Style TargetType="TextBlock" BasedOn="{StaticResource HoverBtn_TextContent}">
+                            <Style TargetType="TextBlock"
+                                   BasedOn="{StaticResource HoverBtn_TextContent}">
                                 <Setter Property="Foreground"
                                         Value="{StaticResource Text_Dark}" />
                                 <Setter Property="FontSize"
@@ -33,75 +37,93 @@
                                 <Setter Property="FontWeight"
                                         Value="Bold" />
                             </Style>
-                            <Style TargetType="materialicons:MaterialIcon" BasedOn="{StaticResource HoverBtn_Content}">
+                            <Style TargetType="materialicons:MaterialIcon"
+                                   BasedOn="{StaticResource HoverBtn_Content}">
                                 <Setter Property="Height"
                                         Value="40" />
                             </Style>
                         </StackPanel.Resources>
 
-                        <Border Style="{StaticResource HoverBtn}" MouseUp="AddAsset_Click">
-                             <StackPanel Orientation="Vertical" Margin="0,0,15,0" >
-                                 <materialicons:MaterialIcon Icon="ic_add" />
-                                 <TextBlock Text="Add"/>
-                             </StackPanel>
-                        </Border>
-
-                        <Border Style="{StaticResource HoverBtn}" MouseUp="RemoveAsset_Click">
+                        <Border Style="{StaticResource HoverBtn}"
+                                MouseUp="CreateAsset_Clicked">
                             <StackPanel Orientation="Vertical"
-                                        MouseLeftButtonUp="RemoveAsset_Click">
-                                <materialicons:MaterialIcon Icon="ic_delete"/>
-                                <TextBlock Text="Delete"/>
+                                        Margin="0,0,15,0">
+                                <materialicons:MaterialIcon Icon="ic_add" />
+                                <TextBlock Text="Add" />
                             </StackPanel>
-                            
                         </Border>
-                </StackPanel>        
-            </Grid>
-            <ListView Name="MainGrid"
-                      VerticalAlignment="Top"
-                      ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                      ItemsSource="{Binding Assets}"
-                      BorderThickness="0" 
-                      Background="Transparent"
-                      BorderBrush="Transparent" MouseDoubleClick="ListViewItem_MouseDoubleClick" ItemContainerStyle="{StaticResource AssetList_ListViewItem}">
 
-             
-                <ListView.View>
-                    <GridView ColumnHeaderContainerStyle="{StaticResource AssetList_GridViewColumnHeader}">                        
-                        
-                        <GridViewColumn Header="ID"
-                                        Width="50"
-                                        DisplayMemberBinding="{Binding as_id}"/>
-                        <GridViewColumn Header="Name"
-                                        Width="300"
-                                        DisplayMemberBinding="{Binding as_displayname}"/>
-                        <GridViewColumn Header="Description"
-                                        Width="200"
-                                        DisplayMemberBinding="{Binding as_description}"/>
-                        <GridViewColumn Header="Phase"
-                                        Width="200"
-                                        DisplayMemberBinding="{Binding Phase.ph_name}" />
-                        <GridViewColumn Header="Category"
-                                        Width="200"
-                                        DisplayMemberBinding="{Binding AssetCategory.ca_name}" />
-                    </GridView>
+                        <Border Style="{StaticResource HoverBtn}"
+                                MouseUp="DeleteAsset_Clicked">
+                            <StackPanel Orientation="Vertical"
+                                        MouseLeftButtonUp="DeleteAsset_Clicked">
+                                <materialicons:MaterialIcon Icon="ic_delete" />
+                                <TextBlock Text="Delete" />
+                            </StackPanel>
 
-                </ListView.View>
-            </ListView>            
-        </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </Grid>
+                <ListView Name="MainGrid"
+                          VerticalAlignment="Top"
+                          ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                          ItemsSource="{Binding Assets}"
+                          SelectionChanged="MainGrid_SelectionChanged"
+                          BorderThickness="0"
+                          Background="Transparent"
+                          BorderBrush="Transparent"
+                          MouseDoubleClick="ListViewItem_MouseDoubleClick"
+                          ItemContainerStyle="{StaticResource AssetList_ListViewItem}">
 
+
+                    <ListView.View>
+                        <GridView ColumnHeaderContainerStyle="{StaticResource AssetList_GridViewColumnHeader}">
+
+                            <GridViewColumn Header="ID"
+                                            Width="50"
+                                            DisplayMemberBinding="{Binding as_id}" />
+                            <GridViewColumn Header="Name"
+                                            Width="300"
+                                            DisplayMemberBinding="{Binding as_displayname}" />
+                            <GridViewColumn Header="Description"
+                                            Width="200"
+                                            DisplayMemberBinding="{Binding as_description}" />
+                            <GridViewColumn Header="Phase"
+                                            Width="200"
+                                            DisplayMemberBinding="{Binding Phase.ph_name}" />
+                            <GridViewColumn Header="Category"
+                                            Width="200"
+                                            DisplayMemberBinding="{Binding AssetCategory.ca_name}" />
+                        </GridView>
+
+                    </ListView.View>
+                </ListView>
+            </StackPanel>
+
+            <!--#region Free Standing Controls-->
             <Border x:Name="AssetCreateControl"
                     Background="{StaticResource Overlay}"
                     Padding="20"
-                    Visibility="Hidden" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <StackPanel>
+                    Visibility="Hidden"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+                <StackPanel>
 
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                    <StackPanel Orientation="Horizontal"
+                                Margin="0,0,0,20">
                         <materialicons:MaterialIcon Icon="ic_create"
-                                                    Foreground="{StaticResource TextOverlay_Dark}" Margin="0,0,10,0" Height="30" VerticalAlignment="Center"/>
-                        <TextBlock Text="Create New Asset" VerticalAlignment="Center" FontWeight="Bold" FontSize="20" Foreground="{StaticResource TextOverlay_Dark}"/>
+                                                    Foreground="{StaticResource TextOverlay_Dark}"
+                                                    Margin="0,0,10,0"
+                                                    Height="30"
+                                                    VerticalAlignment="Center" />
+                        <TextBlock Text="Create New Asset"
+                                   VerticalAlignment="Center"
+                                   FontWeight="Bold"
+                                   FontSize="20"
+                                   Foreground="{StaticResource TextOverlay_Dark}" />
                     </StackPanel>
-                <Grid x:Name="SettingsList"                           
-                            HorizontalAlignment="Stretch">
+                    <Grid x:Name="SettingsList"
+                          HorizontalAlignment="Stretch">
                         <Grid.Resources>
                             <Style TargetType="TextBlock">
                                 <Setter Property="Margin"
@@ -115,7 +137,7 @@
                             </Style>
                         </Grid.Resources>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="1*"  />
+                            <RowDefinition Height="1*" />
                             <RowDefinition Height="1*" />
                             <RowDefinition Height="1*" />
                             <RowDefinition Height="1*" />
@@ -123,40 +145,51 @@
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="200" />
-                            <ColumnDefinition Width="500"/>
+                            <ColumnDefinition Width="500" />
                         </Grid.ColumnDefinitions>
-                   
+
                         <TextBlock x:Name="Label_Name"
                                    Text="Asset Name" />
                         <TextBox x:Name="Value_Name"
-                                 Text="{Binding AssetToCreate.as_displayname}" Grid.Column="1" VerticalAlignment="Center"/>
-                    
-                        <TextBlock Text="Description" Grid.Row="1"/>
-                        <TextBox x:Name="Value_Description"
-                                 Text="{Binding AssetToCreate.as_description}" Grid.Row="1" Grid.Column="1" Height="100"/>
+                                 Text="{Binding AssetToCreate.as_displayname}"
+                                 Grid.Column="1"
+                                 VerticalAlignment="Center" TextChanged="Value_Name_TextChanged" />
 
-                        
-                        <TextBlock Text="Category" Grid.Row="2"/>
-                        <local:Searchbox x:Name="Value_Category" Grid.Row="2" Grid.Column="1"/>
-                    
+                        <TextBlock Text="Description"
+                                   Grid.Row="1" />
+                        <TextBox x:Name="Value_Description"
+                                 Text="{Binding AssetToCreate.as_description}"
+                                 Grid.Row="1"
+                                 Grid.Column="1"
+                                 Height="100" TextChanged="Value_Description_TextChanged" />
+
+
+                        <TextBlock Text="Category"
+                                   Grid.Row="2" />
+                        <local:Searchbox x:Name="Value_Category"
+                                         Grid.Row="2"
+                                         Grid.Column="1" />
+
                         <TextBlock Text="Assigned To"
-                                   Grid.Row="3"/>
-                        <local:Searchbox x:Name="Value_AssignedTo"                                      
-                                       
-                                        Grid.Row="3" Grid.Column="1" />
-                    
-                    
+                                   Grid.Row="3" />
+                        <local:Searchbox x:Name="Value_AssignedTo"
+                                         Grid.Row="3"
+                                         Grid.Column="1" />
+
+
                         <TextBlock Text="Parent"
                                    Grid.Row="4" />
                         <local:Searchbox x:Name="Value_ParentID"
-                                        Grid.Row="4" Grid.Column="1" />
+                                         Grid.Row="4"
+                                         Grid.Column="1" />
 
 
 
-                </Grid>
+                    </Grid>
 
-                <StackPanel Orientation="Horizontal" Margin="10"
-                      HorizontalAlignment="Center">
+                    <StackPanel Orientation="Horizontal"
+                                Margin="10"
+                                HorizontalAlignment="Center">
                         <StackPanel.Resources>
                             <Style TargetType="Border">
                                 <Setter Property="Width"
@@ -166,23 +199,26 @@
                                 <Setter Property="Background"
                                         Value="{StaticResource Layer3_Dark}" />
                                 <Style.Triggers>
-                                <Trigger Property="IsMouseOver"
-                                         Value="True">
-                                    <Setter Property="Cursor"
-                                            Value="Hand" />
+                                    <Trigger Property="IsMouseOver"
+                                             Value="True">
+                                        <Setter Property="Cursor"
+                                                Value="Hand" />
 
-                                </Trigger>
+                                    </Trigger>
                                 </Style.Triggers>
                             </Style>
-                            
+
                         </StackPanel.Resources>
 
-                        <Border Margin="10,0" HorizontalAlignment="Stretch">
-                            <TextBlock Text="Save"
-                                       Style="{StaticResource HoverBtn_TextContent}" HorizontalAlignment="Center"/>
+                        <Border Margin="10,0"
+                                HorizontalAlignment="Stretch"
+                                MouseUp="CreateConfirm_Clicked">
+                            <TextBlock Text="Save"                                       
+                                       Style="{StaticResource HoverBtn_TextContent}"
+                                       HorizontalAlignment="Center" />
                         </Border>
 
-                        <Border MouseUp="CreateAsset_Canceled">
+                        <Border MouseUp="CreateCancel_Clicked">
                             <TextBlock Text="Cancel"
                                        Style="{StaticResource HoverBtn_TextContent}"
                                        HorizontalAlignment="Center" />
@@ -193,9 +229,74 @@
 
                     </StackPanel>
 
-            </StackPanel>
+                </StackPanel>
             </Border>
 
+            <Border x:Name="AssetDeletePrompt"
+                    Visibility="Collapsed"
+                    Background="{StaticResource Overlay}"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Padding="30">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <materialicons:MaterialIcon Icon="ic_delete_forever"
+                                                    Foreground="{StaticResource TextOverlay_Dark}" />
+                        <TextBlock Text="Delete Asset"
+                                   VerticalAlignment="Center" />
+                    </StackPanel>
+
+                    <TextBlock HorizontalAlignment="Center"
+                               Margin="0,50"
+                               FontSize="16">
+                        <Run Text="Are you sure you want to delete" />
+                        <Run Text="{Binding CurrentSelectedAsset.Name}"
+                             FontWeight="Bold" />
+                        <Run Text="#"
+                             FontWeight="Bold" />
+                        <Run Text="{Binding CurrentSelectedAsset.ID}"
+                             FontWeight="Bold" />
+                        <Run Text="?" />
+                    </TextBlock>
+
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Center">
+                        <Border Margin="0,10,20,0"
+                                Style="{StaticResource HoverBtn}"
+                                Padding="5"
+                                BorderThickness="5"
+                                BorderBrush="{StaticResource ConfirmOverlay_Dark}"
+                                MouseUp="DeleteConfirm_Clicked"
+                                Width="150">
+                            <TextBlock Text="Confirm"
+                                       Style="{StaticResource HoverBtn_TextContent}"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"
+                                       Foreground="{StaticResource TextOverlay_Dark}"
+                                       FontWeight="SemiBold"
+                                       FontSize="14" />
+                        </Border>
+                        <Border  Margin="0,10,20,0"
+                                 Width="150"
+                                 Style="{StaticResource HoverBtn}"
+                                 Padding="5"
+                                 BorderThickness="5"
+                                 BorderBrush="{StaticResource RejectOverlay_Dark}"
+                                 MouseUp="DeleteCancel_Clicked">
+                            <TextBlock Text="Cancel"
+                                       Style="{StaticResource HoverBtn_TextContent}"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Foreground="{StaticResource TextOverlay_Dark}"
+                                       FontWeight="SemiBold"
+                                       FontSize="14" />
+                        </Border>
+
+                    </StackPanel>
+
+                </StackPanel>
+            </Border>
+            <!--#endregion-->
         </Grid>
 
     </Border>

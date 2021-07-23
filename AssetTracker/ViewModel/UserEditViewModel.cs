@@ -163,6 +163,12 @@ namespace AssetTracker.ViewModel
             NotifyPropertyChanged("Savable");
         }
 
+        public void OnPasswordChanged(string newValue)
+        {
+            context.Entry(CurrentUser).Property(x => x.us_password).CurrentValue = newValue;
+            NotifyPropertyChanged("Savable");
+        }
+
         public void OnRoleChanged(int newValue)
         {
             context.Entry(CurrentUser).Property(x => x.us_roid).CurrentValue = newValue;

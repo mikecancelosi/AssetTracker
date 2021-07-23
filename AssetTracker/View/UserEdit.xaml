@@ -169,6 +169,11 @@
                                 <TextBox Text="{Binding CurrentUser.us_email}"
                                          TextChanged="Email_TextChanged" />
                             </StackPanel>
+                            <StackPanel Margin="0,0,10,10">
+                                <TextBlock Text="Password" />
+                                <TextBox Text="{Binding CurrentUser.us_password}"
+                                         TextChanged="Password_TextChanged" />
+                            </StackPanel>
                             <StackPanel >
                                 <TextBlock Text="Role" />
                                 <local:Searchbox x:Name="Searchbox_Role"

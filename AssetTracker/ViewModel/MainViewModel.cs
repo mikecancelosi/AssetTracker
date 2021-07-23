@@ -28,9 +28,15 @@ namespace AssetTracker.ViewModel
             }
         }
 
-        public MainViewModel()
+        public void LoginUser(User user)
         {
-            CurrentUser = context.Users.FirstOrDefault();
+            CurrentUser = user;
+            NotifyPropertyChanged("CurrentUser");
+        }
+
+        public void LogoutUser()
+        {
+            CurrentUser = null;
             NotifyPropertyChanged("CurrentUser");
         }
     }

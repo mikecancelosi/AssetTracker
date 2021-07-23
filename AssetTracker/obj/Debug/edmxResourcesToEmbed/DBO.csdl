@@ -125,6 +125,7 @@
     <NavigationProperty Name="SecRole" Relationship="Self.FK_user_secrole" FromRole="User" ToRole="SecRole" />
     <NavigationProperty Name="Discussions" Relationship="Model.FK_Discussion_User" FromRole="User" ToRole="Discussion" />
     <NavigationProperty Name="Alerts" Relationship="Model.FK_Alert_User" FromRole="User" ToRole="Alert" />
+    <Property Name="us_password" Type="String" Nullable="false" MaxLength="16" FixedLength="false" Unicode="true" />
   </EntityType>
   <Association Name="FK_asset_assetcategory">
     <End Role="AssetCategory" Type="Self.AssetCategory" Multiplicity="0..1" />

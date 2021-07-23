@@ -46,3 +46,9 @@ C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\Vi
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\App.baml
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\View\Resources\CommonResourceDictionary.baml
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\AssetTracker.csprojAssemblyReference.cache
+C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\View\Login.g.cs
+C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\View\Login.baml
+C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\bin\Debug\Castle.Core.dll
+C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\bin\Debug\Castle.Windsor.dll
+C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\bin\Debug\Castle.Core.xml
+C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\bin\Debug\Castle.Windsor.xml

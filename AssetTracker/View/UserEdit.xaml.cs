@@ -125,6 +125,12 @@ namespace AssetTracker.View
             VM.OnDisplayNameChanged(nameTextBox.Text);
         }
 
+        private void  Password_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox passTextBox = sender as TextBox;
+            VM.OnPasswordChanged(passTextBox.Text);
+        }
+
         private void Email_TextChanged(object sender, TextChangedEventArgs e)
         {
             TextBox emailTextBox = sender as TextBox;
@@ -134,6 +140,7 @@ namespace AssetTracker.View
         private void Role_OnSelectionChanged()
         {
             VM.OnRoleChanged(Searchbox_Role.CurrentSelection.ID);
+            //TODO: Adjust permissions.
         }
 
         public void OnActivateAllClicked(object sender, RoutedEventArgs e)

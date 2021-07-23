@@ -99,6 +99,7 @@
     <EntitySetMapping Name="Users">
       <EntityTypeMapping TypeName="Model.User">
         <MappingFragment StoreEntitySet="User">
+          <ScalarProperty Name="us_password" ColumnName="us_password" />
           <ScalarProperty Name="us_id" ColumnName="us_id" />
           <ScalarProperty Name="us_displayname" ColumnName="us_displayname" />
           <ScalarProperty Name="us_roid" ColumnName="us_roid" />

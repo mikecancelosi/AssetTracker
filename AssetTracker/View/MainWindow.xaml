@@ -7,6 +7,7 @@
         xmlns:View="clr-namespace:AssetTracker.View"
         xmlns:viewmodel="clr-namespace:AssetTracker.ViewModel"
         xmlns:materialicons="clr-namespace:MaterialIcons;assembly=MaterialIcons"
+        xmlns:converters="clr-namespace:AssetTracker.View.Converters"
         mc:Ignorable="d"
         Title="MainWindow"
         Height="1080"
@@ -14,6 +15,16 @@
     <Window.DataContext>
         <viewmodel:MainViewModel />
     </Window.DataContext>
+    <Window.Resources>
+        <ResourceDictionary>
+            <converters:ValueConverterGroup x:Key="IsNullInverseConverter">
+                <converters:IsNullConverter />
+                <converters:InverseBooleanConverter />
+                <converters:BooleanToVizConverter />
+            </converters:ValueConverterGroup>
+            <converters:IsNullToVisibilityConverter x:Key="IsNullToViz" />
+        </ResourceDictionary>
+    </Window.Resources>
     <Grid Background="{StaticResource ResourceKey=BackgroundColor_Dark}">
         <Grid.Resources>
             <Style x:Key="NavText"
@@ -37,7 +48,8 @@
 
         <Grid x:Name="NavBar"
               Grid.Row="0"
-              Margin="5">
+              Margin="5"
+              Visibility="{Binding CurrentUser, Converter={StaticResource IsNullInverseConverter }}">
             <Grid Margin="20,0">
                 <Button Click="NavigateToDashboard"
                         Width="75"
@@ -83,8 +95,9 @@
                     <Run Text="{Binding CurrentUser.us_lname }" />
                     </TextBlock>
 
-                    <Button Background="Transparent"
-                            Click="NavigateToUserEdit">
+                    <Button x:Name="ProfileBtn"
+                            Background="Transparent"
+                            Click="ProfileBtn_Click">
                         <materialicons:MaterialIcon Icon="ic_person"
                                                     Width="25"
                                                     Height="25"
@@ -98,11 +111,40 @@
             </Grid>
         </Grid>
 
+        
+
         <Frame x:Name="ContentFrame"
                Grid.Row="1"
                NavigationUIVisibility="Hidden">
 
         </Frame>
+
+        <Popup x:Name="ProfileBtn_Popup"
+               PlacementTarget="{Binding ElementName=ProfileBtn}"              
+               StaysOpen="False"
+               Grid.RowSpan="2"
+               HorizontalOffset="-170" VerticalOffset="10">
+            <Border Background="{StaticResource Layer2_Dark}" Width="200" Padding="20,10" HorizontalAlignment="Left">
+                <Border.Resources>
+                    <Style BasedOn="{StaticResource HoverBtn_TextContent}"
+                           TargetType="TextBlock">
+                        <Setter Property="HorizontalAlignment"
+                                Value="Right" />
+                        <Setter Property="FontSize"
+                                Value="16" />
+                    </Style>
+                </Border.Resources>
+                <StackPanel>
+                    <Border Style="{StaticResource HoverBtn}" MouseUp="OnProfileSettings_MouseUp">
+                        <TextBlock Text="Profile Settings" />
+                    </Border>
+                    <Border Style="{StaticResource HoverBtn}" MouseUp="OnLogout_MouseUp">
+                        <TextBlock Text="Logout" />
+                    </Border>
+                </StackPanel>
+
+            </Border>
+        </Popup>
 
 
     </Grid>

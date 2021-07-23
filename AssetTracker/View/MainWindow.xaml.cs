@@ -32,10 +32,10 @@ namespace AssetTracker
         private Coordinator myCoordinator;
         public MainWindow()
         {
-            VM = MainViewModel.Instance;
             InitializeComponent();
+            VM = MainViewModel.Instance;
             myCoordinator = new Coordinator(ContentFrame.NavigationService);
-            myCoordinator.NavigateToUserDashboard();       
+            myCoordinator.NavigateToLogin();       
         }
 
         public void NavigateToAssetList(object sender, MouseEventArgs e)
@@ -61,6 +61,30 @@ namespace AssetTracker
         private void NavigateToUserEdit(object sender, RoutedEventArgs e)
         {
             myCoordinator.NavigateToUserEdit(VM.CurrentUser);
+        }
+
+        private void OnLogoutUser_Clicked(object sender, MouseEventArgs e)
+        {
+            VM.LogoutUser();
+            myCoordinator.NavigateToLogin();
+        }
+
+        private void ProfileBtn_Click(object sender, RoutedEventArgs e)
+        {
+            ProfileBtn_Popup.IsOpen = true;
+        }
+
+        private void OnProfileSettings_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            myCoordinator.NavigateToUserEdit(VM.CurrentUser);
+        }
+
+        private void OnLogout_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            VM.LogoutUser();
+            ProfileBtn_Popup.IsOpen = false;
+            myCoordinator.NavigateToLogin();
+            
         }
     }
 }

@@ -29,6 +29,7 @@ namespace AssetTracker.Model
         public string us_fname { get; set; }
         public string us_lname { get; set; }
         public string us_email { get; set; }
+        public string us_password { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Asset> AssetsAssigned { get; set; }

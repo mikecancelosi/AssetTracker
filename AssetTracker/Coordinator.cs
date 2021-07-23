@@ -38,10 +38,17 @@ namespace AssetTracker
             }
         }
 
+        
         public void NavigateToQueued()
         {
             OnNavigateSelected = delegate { };
             NavigateTo(queuedPage);
+        }
+
+        public void NavigateToLogin()
+        {
+            Login login = new Login(this);
+            NavigateTo(login);
         }
 
         public void NavigateToCreateUser()

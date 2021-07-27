@@ -5,10 +5,7 @@
                     xmlns:conv="clr-namespace:AssetTracker.View.Converters"
                     xmlns:mi="clr-namespace:MaterialIcons;assembly=MaterialIcons">
     <ControlTemplate x:Key="NewDiscussion"
-                     TargetType="Control">
-        <ControlTemplate.Resources>
-            <conv:MultiBooleanToVisibilityConverter x:Key="MultiConverter" />
-        </ControlTemplate.Resources>
+                     TargetType="Control">      
         <Border BorderThickness="0"
                 CornerRadius="2"
                 Background="{StaticResource Layer2_Dark}"
@@ -69,9 +66,6 @@
 
     <ControlTemplate x:Key="DiscussionReply"
                      TargetType="Control">
-        <ControlTemplate.Resources>
-            <conv:MultiBooleanToVisibilityConverter x:Key="MultiConverter" />
-        </ControlTemplate.Resources>
         <Border BorderThickness="0"
                 CornerRadius="0"
                 Background="{StaticResource Layer3_Dark}">
@@ -88,6 +82,7 @@
                         HorizontalAlignment="Right"
                         Margin="10"
                         BorderThickness="0"
+                        Style="{StaticResource HoverBtn}"
                         Command="{Binding DiscussionReplyClicked, RelativeSource={RelativeSource AncestorLevel=1, AncestorType=Page}}">
                     <Button.CommandParameter>
                         <MultiBinding>
@@ -106,7 +101,7 @@
                     </Button.CommandParameter>
 
                     <mi:MaterialIcon Icon="ic_send"
-                                     Foreground="{StaticResource Text_Dark}" />
+                                     Style="{StaticResource HoverBtn_Content}" />
                 </Button>
             </Grid>
         </Border>
@@ -116,18 +111,6 @@
                   x:Key="DiscussionItem">
         <Border BorderBrush="{StaticResource BackgroundColor_Dark}"
                 Background="{StaticResource Layer2_Dark}">
-            <Border.Resources>
-                <conv:IsNullToVisibilityConverter x:Key="IsNullToVisibility" />
-                <conv:IsNullToThicknessConverter x:Key="IsNullToThick" />
-                <conv:DatetimeToTimeElapsedConverter x:Key="TimeDisplayConv" />
-                <conv:MatchesUserIDToVisConverter x:Key="MatchUserConv" />
-                <BooleanToVisibilityConverter x:Key="BoolToVis" />
-                <conv:InverseBooleanConverter x:Key="InvBool" />
-                <conv:MatchesUserIDConverter x:Key="MatchUser" />
-
-
-
-            </Border.Resources>
             <Border.Margin>
                 <MultiBinding>
                     <MultiBinding.Converter>
@@ -148,22 +131,6 @@
                 </MultiBinding>
             </Border.BorderThickness>
             <StackPanel Orientation="Vertical">
-                <StackPanel.Resources>
-                    <ResourceDictionary>                     
-
-                        <conv:ValueConverterGroup x:Key="MatchUserInvertAndVisibilitate">
-                            <conv:MatchesUserIDConverter />
-                            <conv:InverseBooleanConverter />
-                            <conv:BooleanToVizConverter />
-                        </conv:ValueConverterGroup>
-                        <ResourceDictionary.MergedDictionaries>
-                            <ResourceDictionary x:Name="Common"
-                                                Source="CommonResourceDictionary.xaml" />
-                        </ResourceDictionary.MergedDictionaries>
-
-                    </ResourceDictionary>
-                </StackPanel.Resources>
-
                 <Border Background="Transparent">
                 <Grid Margin="10">
                     <Grid.ColumnDefinitions>
@@ -283,7 +250,7 @@
 
                 <Control Template="{StaticResource ResourceKey=DiscussionReply}"
                          prop:DBOPropertyExtension.IDSource="{Binding  di_id}"
-                         Visibility="{Binding di_parentid, Converter= {StaticResource ResourceKey=IsNullToVisibility} }">
+                         Visibility="{Binding di_parentid, Converter= {StaticResource ResourceKey=nullToVizConverter} }">
                 </Control>
             </StackPanel>
         </Border>

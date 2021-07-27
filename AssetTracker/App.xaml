@@ -2,14 +2,43 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:AssetTracker"
+             xmlns:converters="clr-namespace:AssetTracker.View.Converters"
              StartupUri="View/MainWindow.xaml" Startup="Application_Startup">
     <Application.Resources>
         <ResourceDictionary>
+            <converters:InverseBooleanConverter x:Key="inverseBooleanConverter" />
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <converters:MultiBooleanToVisibilityConverter x:Key="multiBoolToVisConvert" />
+            <converters:AlternationEqualityConverter x:Key="alternationConverter" />
+            <converters:IsNullToVisibilityConverter x:Key="nullToVizConverter" />
+            <converters:IsNullConverter x:Key="nullConverter" />
+            <converters:MatchesUserIDConverter x:Key="MatchUser" />
+            <converters:DatetimeToTimeElapsedConverter x:Key="TimeDisplayConv" />
+            <converters:IsNullToThicknessConverter x:Key="IsNullToThick" />
+            <converters:MatchesUserIDToVisConverter x:Key="MatchUserConv" />
+            <converters:ValueConverterGroup x:Key="MatchUserInvertAndVisibilitate">
+                <converters:MatchesUserIDConverter />
+                <converters:InverseBooleanConverter />
+                <converters:BooleanToVizConverter />
+            </converters:ValueConverterGroup>
+            <converters:ValueConverterGroup x:Key="InvertAndVisibilitate">
+                <converters:InverseBooleanConverter />
+                <BooleanToVisibilityConverter />
+            </converters:ValueConverterGroup>
+            <converters:ValueConverterGroup x:Key="IsNullInverseConverter">
+                <converters:IsNullConverter />
+                <converters:InverseBooleanConverter />
+                <converters:BooleanToVizConverter />
+            </converters:ValueConverterGroup>
             <ResourceDictionary.MergedDictionaries>               
                 <ResourceDictionary x:Name="ColorScheme"
                                     Source="View/Resources/ColorSchemeResourceDictionary.xaml" />
                 <ResourceDictionary x:Name="Common"
                                     Source="View/Resources/CommonResourceDictionary.xaml" />
+                <ResourceDictionary x:Name="ProjectSettingsDictionary"
+                                    Source="View/Resources/ProjectSettingsResourceDictionary.xaml" />
+                <ResourceDictionary x:Name="PermissionsDictionary"
+                                    Source="View/Resources/PermissionsResourceDictionary.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

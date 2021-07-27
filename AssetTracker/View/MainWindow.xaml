@@ -15,16 +15,6 @@
     <Window.DataContext>
         <viewmodel:MainViewModel />
     </Window.DataContext>
-    <Window.Resources>
-        <ResourceDictionary>
-            <converters:ValueConverterGroup x:Key="IsNullInverseConverter">
-                <converters:IsNullConverter />
-                <converters:InverseBooleanConverter />
-                <converters:BooleanToVizConverter />
-            </converters:ValueConverterGroup>
-            <converters:IsNullToVisibilityConverter x:Key="IsNullToViz" />
-        </ResourceDictionary>
-    </Window.Resources>
     <Grid Background="{StaticResource ResourceKey=BackgroundColor_Dark}">
         <Grid.Resources>
             <Style x:Key="NavText"
@@ -55,8 +45,8 @@
                         Width="75"
                         Grid.Column="0"
                         HorizontalAlignment="Left">
-                    <Image x:Name="AppLogo"
-                           Source="//Images/Placeholder.jpg" />
+                    <materialicons:MaterialIcon Icon="ic_place"
+                                                Foreground="{StaticResource Text_Dark}" />
                 </Button>
 
                 <StackPanel x:Name="Nav"

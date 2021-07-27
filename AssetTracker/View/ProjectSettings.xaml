@@ -16,16 +16,12 @@
         <viewmodel:ProjectSettingsViewModel />
     </Page.DataContext>
     <Page.Resources>
-        <ResourceDictionary>
-            <BooleanToVisibilityConverter x:Key="BoolToVis" />
+        <ResourceDictionary>            
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary x:Name="ProjectSettingsDictionary"
                                     Source="Resources/ProjectSettingsResourceDictionary.xaml" />
             </ResourceDictionary.MergedDictionaries>
-
-
         </ResourceDictionary>
-
     </Page.Resources>
 
     <Grid Margin="100,0">
@@ -146,7 +142,7 @@
 
                 <StackPanel x:Name="Users"
                             Orientation="Vertical"
-                            Visibility="{Binding ElementName=UsersBtn, Path=IsChecked,Converter={StaticResource BoolToVis}}"
+                            Visibility="{Binding ElementName=UsersBtn, Path=IsChecked,Converter={StaticResource BooleanToVisibilityConverter}}"
                             Margin="50">
 
                     <TextBlock Text="Users"
@@ -193,7 +189,7 @@
 
                 <StackPanel x:Name="Roles"
                             Orientation="Vertical"
-                            Visibility="{Binding ElementName=RolesBtn, Path=IsChecked,Converter={StaticResource BoolToVis}}"
+                            Visibility="{Binding ElementName=RolesBtn, Path=IsChecked,Converter={StaticResource BooleanToVisibilityConverter}}"
                             Margin="50">
 
                     <TextBlock Text="Roles"
@@ -238,7 +234,7 @@
 
                 <StackPanel x:Name="Category"
                             Orientation="Vertical"
-                            Visibility="{Binding ElementName=CategoriesBtn, Path=IsChecked,Converter={StaticResource BoolToVis}}"
+                            Visibility="{Binding ElementName=CategoriesBtn, Path=IsChecked,Converter={StaticResource BooleanToVisibilityConverter}}"
                             Margin="50">
 
                     <TextBlock Text="Categories"

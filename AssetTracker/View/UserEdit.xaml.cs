@@ -29,26 +29,14 @@ namespace AssetTracker.View
             set { DataContext = value; }
         }
         private Coordinator coordinator;
-
-        public UserEdit(Coordinator coord)
+        public UserEdit(UserEditViewModel vm,Coordinator coord)
         {
             InitializeComponent();
-            VM = new UserEditViewModel();
+            VM = vm;
             coordinator = coord;
             Searchbox_Role.SetType(typeof(SecRole));
             Searchbox_Role.SetCurrentSelectedObject(VM.CurrentUser.us_roid);
-        }
-
-        public UserEdit(User user, Coordinator coord)
-        {
-            InitializeComponent();
-            VM = new UserEditViewModel(user);
-            coordinator = coord;
-            coordinator.OnNavigateSelected += (v) => OnNavigatingAway(v);
-
-            Searchbox_Role.SetType(typeof(SecRole));
-            Searchbox_Role.SetCurrentSelectedObject(VM.CurrentUser.us_roid);
-        }        
+        }          
 
         #region ISavableSetup
         public event EventHandler OnSaveComplete;
@@ -95,7 +83,7 @@ namespace AssetTracker.View
             List<Violation> violations = new List<Violation>();
             if (!VM.OnSave(out violations))
             {
-
+                throw new NotImplementedException();
             }
             else
             {

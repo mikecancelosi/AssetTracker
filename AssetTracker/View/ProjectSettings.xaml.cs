@@ -29,10 +29,10 @@ namespace AssetTracker.View
         }
         private Coordinator myCoordinator;
 
-        public ProjectSettings(Coordinator coordinator)
+        public ProjectSettings(ProjectSettingsViewModel vm, Coordinator coordinator)
         {
             InitializeComponent();
-            VM = new ProjectSettingsViewModel();
+            VM = vm;
             myCoordinator = coordinator;
         }     
 

@@ -102,7 +102,7 @@ namespace AssetTracker.View
             List<Violation> violations = new List<Violation>();
             if (!VM.Save(out violations))
             {
-
+                throw new NotImplementedException();
             }
             else
             {

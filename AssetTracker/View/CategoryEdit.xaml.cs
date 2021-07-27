@@ -30,18 +30,10 @@ namespace AssetTracker.View
         }
         private Coordinator coordinator;
 
-        
-        public CategoryEdit(AssetCategory cat, Coordinator coord)
+        public CategoryEdit(CategoryEditViewModel vm,Coordinator coord)
         {
             InitializeComponent();
-            VM = new CategoryEditViewModel(cat);
-            coordinator = coord;
-        }
-
-        public CategoryEdit(Coordinator coord)
-        {
-            InitializeComponent();
-            VM = new CategoryEditViewModel();
+            VM = vm;
             coordinator = coord;
             coordinator.OnNavigateSelected += (v) => OnNavigatingAway(v);
         }
@@ -91,7 +83,7 @@ namespace AssetTracker.View
             List<Violation> violations = new List<Violation>();
             if (!VM.Save(out violations))
             {
-
+                throw new NotImplementedException();
             }
             else
             {

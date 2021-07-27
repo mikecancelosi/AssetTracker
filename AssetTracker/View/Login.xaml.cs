@@ -27,11 +27,11 @@ namespace AssetTracker.View
             get { return (LoginViewModel)DataContext; }
             set { DataContext = value; }
         }
-        public Login(Coordinator coord)
+        public Login(LoginViewModel vm,Coordinator coord)
         {
             InitializeComponent();
             coordinator = coord;
-            VM = new LoginViewModel();
+            VM = vm;
         }
 
         private void OnLogin_Clicked(object sender, RoutedEventArgs e)

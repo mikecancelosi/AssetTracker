@@ -58,19 +58,22 @@ namespace AssetTracker
 
         public void NavigateToLogin()
         {
-            Login login = new Login(this);
+            LoginViewModel vm = new LoginViewModel();
+            Login login = new Login(vm,this);
             NavigateTo(login);
         }
 
         public void NavigateToCreateUser()
         {
-            UserEdit userEdit = new UserEdit(this);
+            UserEditViewModel vm = new UserEditViewModel();
+            UserEdit userEdit = new UserEdit(vm,this);
             NavigateTo(userEdit);
 
         }
         public void NavigateToUserEdit(User userToEdit)
         {
-            UserEdit userEdit = new UserEdit(userToEdit, this);
+            UserEditViewModel vm = new UserEditViewModel(userToEdit);
+            UserEdit userEdit = new UserEdit(vm, this);
             NavigateTo(userEdit);
 
         }
@@ -85,41 +88,48 @@ namespace AssetTracker
 
         public void NavigateToUserDashboard()
         {
-            UserDashboard dashboard = new UserDashboard();
+            UserDashboardViewModel vm = new UserDashboardViewModel();
+            UserDashboard dashboard = new UserDashboard(vm, this);
             NavigateTo(dashboard);
         }
 
         public void NavigateToCreateRole()
         {
-            RoleEdit roleEdit = new RoleEdit(this);
+            RoleEditViewModel vm = new RoleEditViewModel();
+            RoleEdit roleEdit = new RoleEdit(vm,this);
             NavigateTo(roleEdit);
         }
         public void NavigateToRoleEdit(SecRole roleToEdit)
         {
-            RoleEdit roleEdit = new RoleEdit(roleToEdit, this);
+            RoleEditViewModel vm = new RoleEditViewModel(roleToEdit);
+            RoleEdit roleEdit = new RoleEdit(vm, this);
             NavigateTo(roleEdit);
         }
 
         public void NavigateToProjectSettings()
         {
-            ProjectSettings projectSettings = new ProjectSettings(this);
+            ProjectSettingsViewModel vm = new ProjectSettingsViewModel();
+            ProjectSettings projectSettings = new ProjectSettings(vm,this);
             NavigateTo(projectSettings);
         }
 
         public void NavigateToAssetList()
         {
-            AssetList assetList = new AssetList(this);
+            AssetListViewModel vm = new AssetListViewModel();
+            AssetList assetList = new AssetList(vm,this);
             NavigateTo(assetList);
         }
 
         public void NavigateToCreateCategory()
         {
-            CategoryEdit catEdit = new CategoryEdit(this);
+            CategoryEditViewModel vm = new CategoryEditViewModel();
+            CategoryEdit catEdit = new CategoryEdit(vm,this);
             NavigateTo(catEdit);
         }
         public void NavigatetoCategoryEdit(AssetCategory cat)
         {
-            CategoryEdit catEdit = new CategoryEdit(cat, this);
+            CategoryEditViewModel vm = new CategoryEditViewModel(cat);
+            CategoryEdit catEdit = new CategoryEdit(vm, this);
             NavigateTo(catEdit);
         }
 

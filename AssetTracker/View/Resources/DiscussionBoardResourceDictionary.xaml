@@ -206,7 +206,7 @@
                             <StackPanel Orientation="Horizontal"
                                         HorizontalAlignment="Right">
                                 <StackPanel.Resources>
-                                    <Style TargetType="Border"
+                                    <Style TargetType="Button"
                                            BasedOn="{StaticResource HoverBtn}">
                                         <Setter Property="Margin"
                                                 Value="0,0,5,0" />
@@ -215,7 +215,7 @@
                                            BasedOn="{StaticResource HoverBtn_Content}">
 
                                     </Style>
-                                    <Style TargetType="Border" BasedOn="{StaticResource HoverBtn}" x:Key="EditBord">
+                                    <Style TargetType="Button" BasedOn="{StaticResource HoverBtn}" x:Key="EditBord">
                                        
                                         <Style.Triggers>
                                             <MultiDataTrigger>
@@ -243,20 +243,20 @@
                                     </Style>
                                 </StackPanel.Resources>
 
-                                <Border IsEnabled="False"
+                                <Button IsEnabled="False"
                                         Background="Transparent"
                                         Visibility="{Binding di_usid, Converter={StaticResource MatchUserInvertAndVisibilitate}}">
                                     <mi:MaterialIcon Icon="ic_face" />
-                                </Border>
+                                </Button>
 
-                                <Border Style="{StaticResource EditBord}">
+                                <Button Style="{StaticResource EditBord}">
                                     <mi:MaterialIcon Icon="ic_edit" />
-                                </Border>
+                                </Button>
 
-                                <Border IsEnabled="False"
+                                <Button IsEnabled="False"
                                         Background="Transparent">
                                     <mi:MaterialIcon Icon="ic_more_vert" />
-                                </Border>
+                                </Button>
 
 
                             </StackPanel>

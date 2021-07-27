@@ -1,4 +1,4 @@
-﻿using AssetTracker.ViewModel;
+﻿using AssetTracker.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,7 +34,7 @@ namespace AssetTracker.View
             VM = new LoginViewModel();
         }
 
-        private void OnLogin_Clicked(object sender, MouseButtonEventArgs e)
+        private void OnLogin_Clicked(object sender, RoutedEventArgs e)
         {
             var loginResult = VM.LoginUser();
             switch (loginResult)

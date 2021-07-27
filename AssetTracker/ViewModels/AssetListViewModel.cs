@@ -8,7 +8,7 @@ using System.ComponentModel;
 using System.Text;
 using System.Linq;
 
-namespace AssetTracker.ViewModel
+namespace AssetTracker.ViewModels
 {
     public class AssetListViewModel : ViewModel
     {

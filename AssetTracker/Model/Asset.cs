@@ -1,5 +1,5 @@
 ﻿using AssetTracker.Enums;
-using AssetTracker.ViewModel;
+using AssetTracker.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Validation;

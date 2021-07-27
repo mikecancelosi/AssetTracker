@@ -4,7 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:AssetTracker.View"
-      xmlns:viewmodel="clr-namespace:AssetTracker.ViewModel"
+      xmlns:viewmodel="clr-namespace:AssetTracker.ViewModels"
       xmlns:materialicons="clr-namespace:MaterialIcons;assembly=MaterialIcons"
       mc:Ignorable="d"
       d:DesignHeight="450"
@@ -26,8 +26,8 @@
                 <StackPanel Orientation="Horizontal"
                             HorizontalAlignment="Left">
 
-                    <Border Style="{StaticResource HoverBtn}"
-                            MouseUp="CreateAsset_Clicked"
+                    <Button Style="{StaticResource HoverBtn}"
+                            Click="CreateAsset_Clicked"
                             Margin="0,0,15,10">
                         <StackPanel Orientation="Vertical">
                             <materialicons:MaterialIcon Icon="ic_add"
@@ -35,10 +35,10 @@
                             <TextBlock Text="Add"
                                        Style="{StaticResource ListHeaderBtn_Text}" />
                         </StackPanel>
-                    </Border>
+                    </Button>
 
-                    <Border Style="{StaticResource HoverBtn}"
-                            MouseUp="DeleteAsset_Clicked">
+                    <Button Style="{StaticResource HoverBtn}"
+                            Click="DeleteAsset_Clicked">
                         <StackPanel Orientation="Vertical"
                                     MouseLeftButtonUp="DeleteAsset_Clicked">
                             <materialicons:MaterialIcon Icon="ic_delete"
@@ -47,7 +47,7 @@
                                        Style="{StaticResource ListHeaderBtn_Text}" />
                         </StackPanel>
 
-                    </Border>
+                    </Button>
                 </StackPanel>
                 
                 <ListView Name="MainGrid"
@@ -177,7 +177,7 @@
                                 Margin="10"
                                 HorizontalAlignment="Center">
                         <StackPanel.Resources>
-                            <Style TargetType="Border">
+                            <Style TargetType="Button">
                                 <Setter Property="Width"
                                         Value="150" />
                                 <Setter Property="Padding"
@@ -196,19 +196,19 @@
 
                         </StackPanel.Resources>
 
-                        <Border Margin="10,0"
+                        <Button Margin="10,0"
                                 HorizontalAlignment="Stretch"
-                                MouseUp="CreateConfirm_Clicked">
+                                Click="CreateConfirm_Clicked">
                             <TextBlock Text="Save"                                       
                                        Style="{StaticResource HoverBtn_TextContent}"
                                        HorizontalAlignment="Center" />
-                        </Border>
+                        </Button>
 
-                        <Border MouseUp="CreateCancel_Clicked">
+                        <Button Click="CreateCancel_Clicked">
                             <TextBlock Text="Cancel"
                                        Style="{StaticResource HoverBtn_TextContent}"
                                        HorizontalAlignment="Center" />
-                        </Border>
+                        </Button>
 
 
 
@@ -247,12 +247,12 @@
 
                     <StackPanel Orientation="Horizontal"
                                 HorizontalAlignment="Center">
-                        <Border Margin="0,10,20,0"
+                        <Button Margin="0,10,20,0"
                                 Style="{StaticResource HoverBtn}"
                                 Padding="5"
                                 BorderThickness="5"
                                 BorderBrush="{StaticResource ConfirmOverlay_Dark}"
-                                MouseUp="DeleteConfirm_Clicked"
+                                Click="DeleteConfirm_Clicked"
                                 Width="150">
                             <TextBlock Text="Confirm"
                                        Style="{StaticResource HoverBtn_TextContent}"
@@ -261,14 +261,14 @@
                                        Foreground="{StaticResource TextOverlay_Dark}"
                                        FontWeight="SemiBold"
                                        FontSize="14" />
-                        </Border>
-                        <Border  Margin="0,10,20,0"
+                        </Button>
+                        <Button  Margin="0,10,20,0"
                                  Width="150"
                                  Style="{StaticResource HoverBtn}"
                                  Padding="5"
                                  BorderThickness="5"
                                  BorderBrush="{StaticResource RejectOverlay_Dark}"
-                                 MouseUp="DeleteCancel_Clicked">
+                                 Click="DeleteCancel_Clicked">
                             <TextBlock Text="Cancel"
                                        Style="{StaticResource HoverBtn_TextContent}"
                                        HorizontalAlignment="Center"
@@ -276,7 +276,7 @@
                                        Foreground="{StaticResource TextOverlay_Dark}"
                                        FontWeight="SemiBold"
                                        FontSize="14" />
-                        </Border>
+                        </Button>
 
                     </StackPanel>
 

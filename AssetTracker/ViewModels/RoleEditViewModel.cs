@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static AssetTracker.Model.SecPermission;
 
-namespace AssetTracker.ViewModel
+namespace AssetTracker.ViewModels
 {
     public class RoleEditViewModel : ViewModel
     {

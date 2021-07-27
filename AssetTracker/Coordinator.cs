@@ -1,10 +1,12 @@
 ﻿using AssetTracker.Model;
 using AssetTracker.View;
+using AssetTracker.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Navigation;
 
 namespace AssetTracker
@@ -12,37 +14,46 @@ namespace AssetTracker
     public class Coordinator
     {
         private NavigationService nav;
-        public delegate void NullDelegate();
-        public event NullDelegate OnNavigateSelected;
-        private object queuedPage;
-        private bool AnyListeners => OnNavigateSelected.GetInvocationList().Count() > 1;
+        public delegate void ViewDelegate(Page p);
+        public event ViewDelegate OnNavigateSelected;
+        private Page queuedPage;
+        private bool AnyListeners => (OnNavigateSelected?.GetInvocationList().Count() ?? 0) > 1;
 
         public Coordinator(NavigationService navigationService)
         {
             nav = navigationService;
-            OnNavigateSelected = delegate { };
         }
 
-        private void NavigateTo(object page)
+        private void NavigateTo(Page page)
         {
             if (!AnyListeners)
             {
                 nav.Navigate(page);
-                OnNavigateSelected = delegate { };
+                ClearDelegates();
             }
             else
             {
                 queuedPage = page;
-                OnNavigateSelected?.Invoke();
-                OnNavigateSelected = delegate { };
+                OnNavigateSelected?.Invoke(queuedPage);
+                ClearDelegates();
             }
         }
 
-        
         public void NavigateToQueued()
         {
-            OnNavigateSelected = delegate { };
+            ClearDelegates();
             NavigateTo(queuedPage);
+        }
+
+        private void ClearDelegates()
+        {
+            if (OnNavigateSelected != null)
+            {
+                foreach (ViewDelegate d in OnNavigateSelected.GetInvocationList())
+                {
+                    OnNavigateSelected -= d;
+                }
+            }
         }
 
         public void NavigateToLogin()
@@ -66,7 +77,9 @@ namespace AssetTracker
 
         public void NavigateToAssetDetail(Asset asset)
         {
-            AssetDetail assetDetail = new AssetDetail(asset, this);
+            AssetDetailViewModel vm = new AssetDetailViewModel();
+            vm.myAsset = asset;
+            AssetDetail assetDetail = new AssetDetail(vm, this);
             NavigateTo(assetDetail);
         }
 
@@ -110,6 +123,6 @@ namespace AssetTracker
             NavigateTo(catEdit);
         }
 
-        
+
     }
 }

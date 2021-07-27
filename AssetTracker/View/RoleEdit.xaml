@@ -4,14 +4,13 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:AssetTracker.View"
-      xmlns:viewmodel="clr-namespace:AssetTracker.ViewModel"
+      xmlns:viewmodel="clr-namespace:AssetTracker.ViewModels"
       xmlns:mi="clr-namespace:MaterialIcons;assembly=MaterialIcons"
       xmlns:extensions="clr-namespace:AssetTracker.View.Extensions"
       mc:Ignorable="d"
       d:DesignHeight="900"
       d:DesignWidth="1600"
-      Title="RoleEdit"
-      Loaded="Page_Loaded">
+      Title="RoleEdit">
 
     <Page.DataContext>
         <viewmodel:RoleEditViewModel />
@@ -39,21 +38,21 @@
                     <StackPanel  Orientation="Horizontal"
                                  HorizontalAlignment="Center">
 
-                        <Border IsEnabled="{Binding Savable}"
-                                MouseUp="OnSaveClicked"
+                        <Button IsEnabled="{Binding Savable}"
+                                Click="OnSaveClicked"
                                 Style="{StaticResource ControlBtn }" Margin="0,0,15,0">
                             <mi:MaterialIcon Icon="ic_save"
                                              Width="36"
                                              Height="36"
                                              Style="{StaticResource HoverBtn_Content}"/>
-                        </Border>
+                        </Button>
 
-                        <Border MouseUp="DeleteRole_Clicked" Style="{StaticResource ControlBtn}">
+                        <Button Click="DeleteRole_Clicked" Style="{StaticResource ControlBtn}">
                             <mi:MaterialIcon Icon="ic_delete"
                                              Width="36"
                                              Height="36"
                                              Style="{StaticResource HoverBtn_Content}" />
-                        </Border>
+                        </Button>
 
                     </StackPanel>
                 </Border>
@@ -166,12 +165,12 @@
 
                         <StackPanel Orientation="Horizontal"
                                     HorizontalAlignment="Center">
-                            <Border Margin="0,10,20,0"
+                            <Button Margin="0,10,20,0"
                                     Style="{StaticResource HoverBtn}"
                                     Padding="5"
                                     BorderThickness="5"
                                     BorderBrush="{StaticResource ConfirmOverlay_Dark}"
-                                    MouseUp="DeleteConfirm_Clicked"
+                                    Click="DeleteConfirm_Clicked"
                                     Width="150">
                                 <TextBlock Text="Confirm"
                                            Style="{StaticResource HoverBtn_TextContent}"
@@ -180,14 +179,14 @@
                                            Foreground="{StaticResource TextOverlay_Dark}"
                                            FontWeight="SemiBold"
                                            FontSize="14" />
-                            </Border>
-                            <Border  Margin="0,10,20,0"
+                            </Button>
+                            <Button  Margin="0,10,20,0"
                                      Width="150"
                                      Style="{StaticResource HoverBtn}"
                                      Padding="5"
                                      BorderThickness="5"
                                      BorderBrush="{StaticResource RejectOverlay_Dark}"
-                                     MouseUp="DeleteCancel_Clicked">
+                                     Click="DeleteCancel_Clicked">
                                 <TextBlock Text="Cancel"
                                            Style="{StaticResource HoverBtn_TextContent}"
                                            HorizontalAlignment="Center"
@@ -195,7 +194,7 @@
                                            Foreground="{StaticResource TextOverlay_Dark}"
                                            FontWeight="SemiBold"
                                            FontSize="14" />
-                            </Border>
+                            </Button>
 
                         </StackPanel>
 

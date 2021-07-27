@@ -1,5 +1,5 @@
 ﻿using AssetTracker.Model;
-using AssetTracker.ViewModel;
+using AssetTracker.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,24 +36,24 @@ namespace AssetTracker.View
             myCoordinator = coordinator;
         }     
 
-        private void CreateUser_Clicked(object sender, MouseButtonEventArgs e)
+        private void CreateUser_Clicked(object sender, RoutedEventArgs e)
         {
             myCoordinator.NavigateToCreateUser();
         }
        
-        private void CreateRole_Clicked(object sender, MouseButtonEventArgs e)
+        private void CreateRole_Clicked(object sender, RoutedEventArgs e)
         {
             myCoordinator.NavigateToCreateRole();
         }
 
-        private void CreateCategory_Clicked(object sender, MouseButtonEventArgs e)
+        private void CreateCategory_Clicked(object sender, RoutedEventArgs e)
         {
             myCoordinator.NavigateToCreateCategory();
         }
 
-        private void OnOperationClicked(object sender, MouseButtonEventArgs e)
+        private void OnOperationClicked(object sender, RoutedEventArgs e)
         {
-            Border selectedItem = sender as Border;
+            Button selectedItem = sender as Button;
             string tag = selectedItem.Tag.ToString();
             switch(selectedItem.DataContext.GetType().BaseType.Name)
             {
@@ -137,13 +137,13 @@ namespace AssetTracker.View
 
         #region Delete Item
 
-        private void DeleteConfirm_Clicked(object sender, MouseButtonEventArgs e)
+        private void DeleteConfirm_Clicked(object sender, RoutedEventArgs e)
         {
             VM.DeleteSelectedObject();
             AssetDeletePrompt.Visibility = Visibility.Collapsed;
         }
 
-        private void DeleteCancel_Clicked(object sender, MouseButtonEventArgs e)
+        private void DeleteCancel_Clicked(object sender, RoutedEventArgs e)
         {
             AssetDeletePrompt.Visibility = Visibility.Collapsed;
         }

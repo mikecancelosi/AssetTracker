@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using static AssetTracker.Model.SecPermission;
 
-namespace AssetTracker.ViewModel
+namespace AssetTracker.ViewModels
 {
     public class UserEditViewModel : ViewModel
     {

@@ -12,7 +12,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 
-namespace AssetTracker.ViewModel
+namespace AssetTracker.ViewModels
 {
     public class AssetDetailViewModel : ViewModel
     {
@@ -60,6 +60,17 @@ namespace AssetTracker.ViewModel
         public List<Change> Changelog { get; set; }
         public ObservableCollection<AssetHierarchyObject> Hierarchy { get; set; }
 
+        public string StatusFilter
+        {
+            get
+            {
+                if (myAsset.AssetCategory != null)
+                {
+                    return "select * from Phase where ph_caid = " + myAsset.AssetCategory.ca_id;
+                }
+                return "";
+            }
+        }
         public List<Discussion> DiscussionBoard
         {
             get
@@ -76,6 +87,18 @@ namespace AssetTracker.ViewModel
             }
         }
 
+        public ICommand DeleteConfirmed { get; set; }
+
+        public AssetDetailViewModel()
+        {
+            DeleteConfirmed = new RelayCommand((s) => DeleteAsset(), (s) => true);
+        }
+
+        public void DeleteAsset()
+        {
+            myAsset.Delete(context);
+         
+        }
 
         public void OnModelChanged()
         {
@@ -91,37 +114,25 @@ namespace AssetTracker.ViewModel
             SetHierarchy();
         }
 
-        public void OnAssignedUserChange(int userID)
+        #region SetNewValues
+        public void ModifyAssignedUser(int userID)
         {
             context.Entry(myAsset).Property(x => x.as_usid).CurrentValue = userID;
             NotifyPropertyChanged("Savable");
         }
 
-        public void OnPhaseChanged(int phaseID)
+        public void ModifyPhase(int phaseID)
         {
             context.Entry(myAsset).Property(x => x.as_phid).CurrentValue = phaseID;
             NotifyPropertyChanged("Savable");
         }
 
-        public void OnCategoryChanged(int catID)
+        public void ModifyCategory(int catID)
         {
             context.Entry(myAsset).Property(x => x.as_caid).CurrentValue = catID;
             NotifyPropertyChanged("Savable");
             NotifyPropertyChanged("myAsset");
         }
-
-        public string StatusFilter
-        {
-            get
-            {
-                if(myAsset.AssetCategory != null)
-                {
-                    return "select * from Phase where ph_caid = " + myAsset.AssetCategory.ca_id;
-                }
-                return "";
-            }
-        }
-
 
         public void ModifyAssetName(string newName)
         {
@@ -136,6 +147,7 @@ namespace AssetTracker.ViewModel
             NotifyPropertyChanged("myAsset");
             NotifyPropertyChanged("Savable");
         }
+        #endregion
 
         #region Saving
         public bool Savable
@@ -145,6 +157,8 @@ namespace AssetTracker.ViewModel
                 return context.ChangeTracker.HasChanges();
             }
         }
+     
+
         public bool Save(out List<Violation> violations)
         {
             List<Change> changes = new List<Change>();
@@ -172,29 +186,11 @@ namespace AssetTracker.ViewModel
             return false;
         }
 
-        /// <summary>
-        /// Refuseing a save means to continue without saving.
-        /// </summary>
-        public void OnSaveRefused()
-        {
-
-        }
-
-        /// <summary>
-        /// Canceling a save means to stop and not save
-        /// </summary>
-        public void OnSaveCanceled()
-        {
-
-        }
-
         #endregion
 
-        public void DeleteAsset()
-        {
-            myAsset.Delete(context);
-        }
+     
 
+        #region Tags
         public void DeleteTag(int id)
         {
             Metadata data = context.Metadata.Find(id);
@@ -214,6 +210,7 @@ namespace AssetTracker.ViewModel
             NotifyPropertyChanged("Savable");
             NotifyPropertyChanged("Tags");
         }
+        #endregion
 
         #region Hierarchy
         public struct AssetHierarchyObject

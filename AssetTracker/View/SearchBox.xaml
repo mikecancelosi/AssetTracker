@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:view="clr-namespace:AssetTracker.View"
-             xmlns:viewmodel="clr-namespace:AssetTracker.ViewModel"
+             xmlns:viewmodel="clr-namespace:AssetTracker.ViewModels"
              xmlns:model="clr-namespace:AssetTracker.Model"
              xmlns:materialicons="clr-namespace:MaterialIcons;assembly=MaterialIcons"
              mc:Ignorable="d"

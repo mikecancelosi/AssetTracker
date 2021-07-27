@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AssetTracker.ViewModel
+namespace AssetTracker.ViewModels
 {
     public abstract class ViewModel : INotifyPropertyChanged
     {

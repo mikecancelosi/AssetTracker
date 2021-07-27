@@ -4,14 +4,13 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:AssetTracker.View"
-      xmlns:viewmodel="clr-namespace:AssetTracker.ViewModel"
+      xmlns:viewmodel="clr-namespace:AssetTracker.ViewModels"
       xmlns:converters="clr-namespace:AssetTracker.View.Converters"
       xmlns:prop="clr-namespace:AssetTracker.View.Properties"
       xmlns:materialicons="clr-namespace:MaterialIcons;assembly=MaterialIcons"
       mc:Ignorable="d"
       d:DesignWidth="1200"
-      d:DesignHeight="800" 
-      Loaded="Page_Loaded">
+      d:DesignHeight="800">
     <Page.DataContext>
         <viewmodel:AssetDetailViewModel />
     </Page.DataContext>
@@ -29,7 +28,7 @@
                                     Source="Resources/DiscussionBoardResourceDictionary.xaml" />
                 <ResourceDictionary x:Name="TimelineDictionary"
                                     Source="Resources/AssetTimelineResourceDictionary.xaml" />
-            </ResourceDictionary.MergedDictionaries>     
+            </ResourceDictionary.MergedDictionaries>
 
         </ResourceDictionary>
 
@@ -81,28 +80,40 @@
                                  HorizontalAlignment="Center">
 
 
-                        <Border IsEnabled="{Binding Savable}"
-                                MouseUp="OnSaveClicked"
+                        <Button IsEnabled="{Binding Savable}"
+                                Click="OnSaveClicked"
                                 Style="{StaticResource HoverBtn}"
                                 Height="30">
                             <materialicons:MaterialIcon Icon="ic_save"
                                                         Style="{StaticResource HoverBtn_Content}" />
-                        </Border>
+                        </Button>
 
-                        <Border Margin="30,0"
-                                MouseUp="OnChangelogClicked"
+                        <Button Margin="30,0"
+                                Click="OnChangelogClicked"
                                 Style="{StaticResource HoverBtn}"
                                 Height="30">
                             <materialicons:MaterialIcon Icon="ic_list"
                                                         Style="{StaticResource HoverBtn_Content}" />
-                        </Border>
+                        </Button>
 
-                        <Border MouseUp="DeleteAsset_Clicked"
-                                Style="{StaticResource HoverBtn}"
+                        <Button Style="{StaticResource HoverBtn}"
                                 Height="30">
+                            <Button.Triggers>
+                                <EventTrigger RoutedEvent="Button.Click">
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="AssetDeletePrompt"
+                                                                           Storyboard.TargetProperty="Visibility">
+                                                <DiscreteObjectKeyFrame KeyTime="0:0:0"
+                                                                        Value="{x:Static Visibility.Visible}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                            </Button.Triggers>
                             <materialicons:MaterialIcon Icon="ic_delete"
                                                         Style="{StaticResource HoverBtn_Content}" />
-                        </Border>
+                        </Button>
 
                     </StackPanel>
                 </Border>
@@ -141,30 +152,30 @@
                                                    Margin="0,0,10,0"
                                                    Foreground="{StaticResource Text_Dark}"
                                                    VerticalAlignment="Center" />
-                                        <Border VerticalAlignment="Stretch"
-                                                MouseUp="OnMetadataDelete_Clicked"
+                                        <Button VerticalAlignment="Stretch"
+                                                Click="OnMetadataDelete_Clicked"
                                                 Tag="{Binding md_id}"
                                                 Style="{StaticResource HoverBtn}">
                                             <materialicons:MaterialIcon Icon="ic_close"
                                                                         Foreground="{StaticResource Text_Dark}"
                                                                         Height="14" />
-                                        </Border>
+                                        </Button>
 
                                     </StackPanel>
 
 
 
                                 </Border>
-                                <Border x:Name="AddTagControl"
+                                <Button x:Name="AddTagControl"
                                         Padding="5"
                                         BorderThickness="2"
                                         BorderBrush="{StaticResource Text_Dark}"
                                         HorizontalAlignment="Left"
-                                        CornerRadius="5"
                                         VerticalAlignment="Center"
-                                        MouseUp="OnMetadataAdd_Clicked"
+                                        Click="OnMetadataAdd_Clicked"
                                         Visibility="Collapsed"
-                                        Style="{StaticResource HoverBtn}" Margin="5,0,0,0">
+                                        Style="{StaticResource HoverBtn}"
+                                        Margin="5,0,0,0">
                                     <StackPanel Orientation="Horizontal">
                                         <materialicons:MaterialIcon Icon="ic_add"
                                                                     Foreground="{StaticResource Text_Dark}"
@@ -175,7 +186,7 @@
                                                    Foreground="{StaticResource Text_Dark}" />
 
                                     </StackPanel>
-                                </Border>
+                                </Button>
                             </StackPanel>
 
                             <DataTemplate.Triggers>
@@ -197,14 +208,13 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
 
-                <Border x:Name="AddTagControl_null"
+                <Button x:Name="AddTagControl_null"
                         Padding="5"
                         BorderThickness="2"
                         BorderBrush="{StaticResource Text_Dark}"
-                        HorizontalAlignment="Left"
-                        CornerRadius="5"
+                        HorizontalAlignment="Left"                       
                         VerticalAlignment="Center"
-                        MouseUp="OnMetadataAdd_Clicked"
+                        Click="OnMetadataAdd_Clicked"
                         Visibility="{Binding Tags.Count, Converter={StaticResource nullToVizConverter}}"
                         Style="{StaticResource HoverBtn}"
                         Margin="5,0,0,0">
@@ -218,7 +228,7 @@
                                    Foreground="{StaticResource Text_Dark}" />
 
                     </StackPanel>
-                </Border>
+                </Button>
 
 
                 <!--#endregion-->
@@ -368,7 +378,7 @@
                                         <Setter Property="FontSize"
                                                 Value="12" />
                                         <Setter Property="VerticalAlignment"
-                                                Value="Center" />                                      
+                                                Value="Center" />
                                         <Style.Triggers>
                                             <Trigger Property="IsEnabled"
                                                      Value="True">
@@ -394,8 +404,8 @@
                                     </Style>
                                 </StackPanel.Resources>
 
-                                <StackPanel Orientation="Vertical">                                    
-                                    <TextBlock Text="Assigned To:"  /> 
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock Text="Assigned To:" />
                                     <local:Searchbox x:Name="Searchbox_AssignedTo" />
                                 </StackPanel>
 
@@ -414,7 +424,7 @@
                                         </converters:ValueConverterGroup>
                                     </StackPanel.Resources>
                                     <TextBlock x:Name="Status_HeaderText"
-                                                Text="Current Status:"
+                                               Text="Current Status:"
                                                IsEnabled="{Binding myAsset.AssetCategory, Converter={StaticResource IsNullInverseConverter}}" />
                                     <local:Searchbox x:Name="Searchbox_Phase"
                                                      IsEnabled="{Binding ElementName=Status_HeaderText, Path=IsEnabled}" />
@@ -513,26 +523,30 @@
                   Margin="40"
                   Visibility="Collapsed">
 
-                <Border Height="30"
+                <Button Height="30"
                         Width="30"
                         VerticalAlignment="Top"
                         HorizontalAlignment="Right"
                         Background="{StaticResource RejectOverlay_Dark}"
-                        MouseUp="OnChangelogExited" Style="{StaticResource HoverBtn}">
+                        Click="OnChangelogExited"
+                        Style="{StaticResource HoverBtn}">
                     <materialicons:MaterialIcon Icon="ic_close"
-                                                 Style="{StaticResource HoverBtn_Content}" />
-                </Border>
+                                                Style="{StaticResource HoverBtn_Content}" />
+                </Button>
 
                 <StackPanel Orientation="Vertical"
                             Margin="10">
-                    
+
                     <TextBlock Text="Changelog"
                                FontSize="24"
                                Foreground="{StaticResource TextOverlay_Dark}"
                                Margin="0,5" />
                     <ListView VerticalAlignment="Top"
-                              ScrollViewer.HorizontalScrollBarVisibility="Hidden" Background="Transparent" BorderThickness="0"
-                              ItemsSource="{Binding Changelog}" ItemContainerStyle="{StaticResource AssetList_ListViewItem}">
+                              ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                              Background="Transparent"
+                              BorderThickness="0"
+                              ItemsSource="{Binding Changelog}"
+                              ItemContainerStyle="{StaticResource AssetList_ListViewItem}">
                         <ListView.Resources>
                             <Style TargetType="{x:Type GridViewColumnHeader}">
                                 <Setter Property="HorizontalContentAlignment"
@@ -642,7 +656,9 @@
             </Border>
             <!--#endregion-->
 
-            <Control x:Name="PromptSavePanel" Style="{StaticResource  PromptSave}" Visibility="Collapsed"/>
+            <Control x:Name="PromptSavePanel"
+                     Style="{StaticResource  PromptSave}"
+                     Visibility="Collapsed" />
 
             <!--#region AddMetatag -->
             <Border x:Name="TagAdd_Window"
@@ -679,12 +695,12 @@
 
                     <StackPanel Orientation="Horizontal"
                                 HorizontalAlignment="Center">
-                        <Border Margin="0,10,20,0"
+                        <Button Margin="0,10,20,0"
                                 Style="{StaticResource HoverBtn}"
                                 Padding="5"
                                 BorderThickness="5"
                                 BorderBrush="{StaticResource ConfirmOverlay_Dark}"
-                                MouseUp="AddTagConfirm_Clicked"
+                                Click="AddTagConfirm_Clicked"
                                 Width="150">
                             <TextBlock Text="Confirm"
                                        Style="{StaticResource HoverBtn_TextContent}"
@@ -693,14 +709,14 @@
                                        Foreground="{StaticResource TextOverlay_Dark}"
                                        FontWeight="SemiBold"
                                        FontSize="14" />
-                        </Border>
-                        <Border  Margin="0,10,20,0"
+                        </Button>
+                        <Button  Margin="0,10,20,0"
                                  Width="150"
                                  Style="{StaticResource HoverBtn}"
                                  Padding="5"
                                  BorderThickness="5"
                                  BorderBrush="{StaticResource RejectOverlay_Dark}"
-                                 MouseUp="AddTagCancel_Clicked">
+                                 Click="AddTagCancel_Clicked">
                             <TextBlock Text="Cancel"
                                        Style="{StaticResource HoverBtn_TextContent}"
                                        HorizontalAlignment="Center"
@@ -708,7 +724,7 @@
                                        Foreground="{StaticResource TextOverlay_Dark}"
                                        FontWeight="SemiBold"
                                        FontSize="14" />
-                        </Border>
+                        </Button>
 
                     </StackPanel>
 
@@ -746,34 +762,66 @@
                     <StackPanel Orientation="Horizontal"
                                 HorizontalAlignment="Center">
                         <Border Margin="0,10,20,0"
-                                Style="{StaticResource HoverBtn}"
                                 Padding="5"
                                 BorderThickness="5"
                                 BorderBrush="{StaticResource ConfirmOverlay_Dark}"
-                                MouseUp="DeleteConfirm_Clicked"
                                 Width="150">
-                            <TextBlock Text="Confirm"
-                                       Style="{StaticResource HoverBtn_TextContent}"
-                                       VerticalAlignment="Center"
-                                       HorizontalAlignment="Center"
-                                       Foreground="{StaticResource TextOverlay_Dark}"
-                                       FontWeight="SemiBold"
-                                       FontSize="14" />
-                        </Border>
-                        <Border  Margin="0,10,20,0"
-                                 Width="150"
-                                 Style="{StaticResource HoverBtn}"
-                                 Padding="5"
-                                 BorderThickness="5"
-                                 BorderBrush="{StaticResource RejectOverlay_Dark}"
-                                 MouseUp="DeleteCancel_Clicked">
-                            <TextBlock Text="Cancel"
-                                       Style="{StaticResource HoverBtn_TextContent}"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"
-                                       Foreground="{StaticResource TextOverlay_Dark}"
-                                       FontWeight="SemiBold"
-                                       FontSize="14" />
+
+
+                            <Button Style="{StaticResource HoverBtn}"
+                                    Command="{Binding DeleteConfirmed}">
+
+                                <Button.Triggers>
+                                    <EventTrigger RoutedEvent="Button.Click">
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="AssetDeletePrompt"
+                                                                               Storyboard.TargetProperty="Visibility">
+                                                    <DiscreteObjectKeyFrame KeyTime="0:0:0"
+                                                                            Value="{x:Static Visibility.Collapsed}" />
+                                                </ObjectAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </EventTrigger>
+                                </Button.Triggers>
+
+                                <TextBlock Text="Confirm"
+                                           Style="{StaticResource HoverBtn_TextContent}"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Center"
+                                           Foreground="{StaticResource TextOverlay_Dark}"
+                                           FontWeight="SemiBold"
+                                           FontSize="14" />
+                            </Button>
+                        </Border>                       
+
+                        <Border Margin="0,10,20,0"
+                                Padding="5"
+                                BorderThickness="5"
+                                BorderBrush="{StaticResource RejectOverlay_Dark}"
+                                Width="150">
+                            <Button Style="{StaticResource HoverBtn}">
+                                <Button.Triggers>
+                                    <EventTrigger RoutedEvent="Button.Click">
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="AssetDeletePrompt"
+                                                                               Storyboard.TargetProperty="Visibility">
+                                                    <DiscreteObjectKeyFrame KeyTime="0:0:0"
+                                                                            Value="{x:Static Visibility.Collapsed}" />
+                                                </ObjectAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </EventTrigger>
+                                </Button.Triggers>
+                                <TextBlock Text="Cancel"
+                                           Style="{StaticResource HoverBtn_TextContent}"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           Foreground="{StaticResource TextOverlay_Dark}"
+                                           FontWeight="SemiBold"
+                                           FontSize="14" />
+                            </Button>
                         </Border>
 
                     </StackPanel>

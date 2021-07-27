@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Navigation;
 
-namespace AssetTracker.ViewModel
+namespace AssetTracker.ViewModels
 {
     public class ProjectSettingsViewModel : ViewModel
     {

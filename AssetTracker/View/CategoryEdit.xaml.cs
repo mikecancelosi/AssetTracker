@@ -1,6 +1,6 @@
 ﻿using AssetTracker.Model;
 using AssetTracker.View.Commands;
-using AssetTracker.ViewModel;
+using AssetTracker.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,11 +43,7 @@ namespace AssetTracker.View
             InitializeComponent();
             VM = new CategoryEditViewModel();
             coordinator = coord;
-        }
-
-        public void Page_Loaded(object sender, RoutedEventArgs e)
-        {
-            coordinator.OnNavigateSelected += OnNavigatingAway;
+            coordinator.OnNavigateSelected += (v) => OnNavigatingAway(v);
         }
 
         #region ISavableSetup
@@ -66,9 +62,12 @@ namespace AssetTracker.View
                 methodToCall();
             }
         }
-        public void OnNavigatingAway()
+        public void OnNavigatingAway(Page v)
         {
-            CheckForPromptSave(() => coordinator.NavigateToQueued());
+            if (v != this)
+            {
+                CheckForPromptSave(() => coordinator.NavigateToQueued());
+            }
         }
 
         public ICommand ConfirmSave_Clicked => new IDReceiverCmd((arr) => OnConfirmSave(), (arr) => { return true; });
@@ -105,18 +104,18 @@ namespace AssetTracker.View
        
         #region Delete Category
 
-        private void DeleteCategory_Clicked(object sender, MouseButtonEventArgs e)
+        private void DeleteCategory_Clicked(object sender, RoutedEventArgs e)
         {
             DeletePrompt.Visibility = Visibility.Visible;
         }
 
-        private void DeleteConfirm_Clicked(object sender, MouseButtonEventArgs e)
+        private void DeleteConfirm_Clicked(object sender, RoutedEventArgs e)
         {
             VM.DeleteCategory();
             coordinator.NavigateToProjectSettings();
         }
 
-        private void DeleteCancel_Clicked(object sender, MouseButtonEventArgs e)
+        private void DeleteCancel_Clicked(object sender, RoutedEventArgs e)
         {
             DeletePrompt.Visibility = Visibility.Collapsed;
         }

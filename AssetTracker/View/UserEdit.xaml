@@ -4,13 +4,13 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:AssetTracker.View"
-      xmlns:viewmodel="clr-namespace:AssetTracker.ViewModel"
+      xmlns:viewmodel="clr-namespace:AssetTracker.ViewModels"
       xmlns:mi="clr-namespace:MaterialIcons;assembly=MaterialIcons"
       xmlns:converters="clr-namespace:AssetTracker.View.Converters"
       mc:Ignorable="d"
       d:DesignHeight="1080"
       d:DesignWidth="1920"
-      Title="UserEdit" Loaded="Page_Loaded">
+      Title="UserEdit">
 
     <Page.DataContext>
         <viewmodel:UserEditViewModel />
@@ -52,19 +52,19 @@
                         <StackPanel  Orientation="Horizontal"
                                      HorizontalAlignment="Center">
 
-                            <Border IsEnabled="{Binding Savable}"
-                                    MouseUp="OnSaveClicked"
+                            <Button IsEnabled="{Binding Savable}"
+                                    Click="OnSaveClicked"
                                     Margin="0,0,30,0"
                                     Style="{StaticResource  ControlBtn}">
                                 <mi:MaterialIcon Icon="ic_save"
                                                  Style="{StaticResource HoverBtn_Content}" />
-                            </Border>
+                            </Button>
 
-                            <Border MouseUp="DeleteUser_Clicked"
+                            <Button Click="DeleteUser_Clicked"
                                     Style="{StaticResource  ControlBtn }">
                                 <mi:MaterialIcon Icon="ic_delete"
                                                  Style="{StaticResource HoverBtn_Content}" />
-                            </Border>
+                            </Button>
 
                         </StackPanel>
                     </Border>
@@ -247,12 +247,12 @@
 
                         <StackPanel Orientation="Horizontal"
                                     HorizontalAlignment="Center">
-                            <Border Margin="0,10,20,0"
+                            <Button Margin="0,10,20,0"
                                     Style="{StaticResource HoverBtn}"
                                     Padding="5"
                                     BorderThickness="5"
                                     BorderBrush="{StaticResource ConfirmOverlay_Dark}"
-                                    MouseUp="DeleteConfirm_Clicked"
+                                    Click="DeleteConfirm_Clicked"
                                     Width="150">
                                 <TextBlock Text="Confirm"
                                            Style="{StaticResource HoverBtn_TextContent}"
@@ -261,14 +261,14 @@
                                            Foreground="{StaticResource TextOverlay_Dark}"
                                            FontWeight="SemiBold"
                                            FontSize="14" />
-                            </Border>
-                            <Border  Margin="0,10,20,0"
+                            </Button>
+                            <Button  Margin="0,10,20,0"
                                      Width="150"
                                      Style="{StaticResource HoverBtn}"
                                      Padding="5"
                                      BorderThickness="5"
                                      BorderBrush="{StaticResource RejectOverlay_Dark}"
-                                     MouseUp="DeleteCancel_Clicked">
+                                     Click="DeleteCancel_Clicked">
                                 <TextBlock Text="Cancel"
                                            Style="{StaticResource HoverBtn_TextContent}"
                                            HorizontalAlignment="Center"
@@ -276,7 +276,7 @@
                                            Foreground="{StaticResource TextOverlay_Dark}"
                                            FontWeight="SemiBold"
                                            FontSize="14" />
-                            </Border>
+                            </Button>
 
                         </StackPanel>
 

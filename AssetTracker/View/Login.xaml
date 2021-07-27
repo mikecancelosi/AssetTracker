@@ -4,7 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:AssetTracker.View"
-      xmlns:viewmodel="clr-namespace:AssetTracker.ViewModel"
+      xmlns:viewmodel="clr-namespace:AssetTracker.ViewModels"
       xmlns:materialicons="clr-namespace:MaterialIcons;assembly=MaterialIcons"
       mc:Ignorable="d"
       d:DesignHeight="1080"
@@ -79,18 +79,19 @@
                            Margin="0,125,0,0"
                            Visibility="Collapsed" />
 
-                <Border Style="{StaticResource HoverBtn}"
+                <Button Style="{StaticResource HoverBtn}"
                         VerticalAlignment="Bottom"
                         HorizontalAlignment="Right"
-                        MouseUp="OnLogin_Clicked"
-                        Background="{StaticResource Layer2_Dark}"
-                        Padding="10"
+                        Click="OnLogin_Clicked"
+                        Background="{StaticResource Layer2_Dark}"                      
                         Width="150">
+                    <Border Padding="10" >
                     <TextBlock Text="Login"
                                HorizontalAlignment="Center"
                                FontWeight="Bold"
                                Style="{StaticResource HoverBtn_TextContent}" />
-                </Border>
+                    </Border>
+                </Button>
 
             </Grid>
         </Border>

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AssetTracker"
         xmlns:View="clr-namespace:AssetTracker.View"
-        xmlns:viewmodel="clr-namespace:AssetTracker.ViewModel"
+        xmlns:viewmodel="clr-namespace:AssetTracker.ViewModels"
         xmlns:materialicons="clr-namespace:MaterialIcons;assembly=MaterialIcons"
         xmlns:converters="clr-namespace:AssetTracker.View.Converters"
         mc:Ignorable="d"
@@ -64,21 +64,21 @@
                             Margin="50,0"
                             VerticalAlignment="Center"
                             HorizontalAlignment="Center">
-                   
-                    <Border MouseUp="NavigateToAssetList" Style="{StaticResource HoverBtn}">
+
+                    <Button Click="NavigateToAssetList" Style="{StaticResource HoverBtn}">
                         <materialicons:MaterialIcon Icon="ic_list"
                                                     Style="{StaticResource HoverBtn_Content}" />
-                    </Border>
+                    </Button>
 
-                    <Border MouseUp="NavigateToProjectStatus"
+                    <Button Click="NavigateToProjectStatus"
                             IsEnabled="False"
                             Margin="50,0" Style="{StaticResource HoverBtn}">
                         <materialicons:MaterialIcon Icon="ic_equalizer" Style="{StaticResource HoverBtn_Content}" />
-                    </Border>
+                    </Button>
 
-                    <Border MouseUp="NavigateToProjectConfig" Style="{StaticResource HoverBtn}">
+                    <Button Click="NavigateToProjectConfig" Style="{StaticResource HoverBtn}">
                         <materialicons:MaterialIcon Icon="ic_settings" Style="{StaticResource HoverBtn_Content}"/>
-                    </Border>
+                    </Button>
 
                 </StackPanel>
 
@@ -135,12 +135,12 @@
                     </Style>
                 </Border.Resources>
                 <StackPanel>
-                    <Border Style="{StaticResource HoverBtn}" MouseUp="OnProfileSettings_MouseUp">
+                    <Button Style="{StaticResource HoverBtn}" Click="OnProfileSettings_Click">
                         <TextBlock Text="Profile Settings" />
-                    </Border>
-                    <Border Style="{StaticResource HoverBtn}" MouseUp="OnLogout_MouseUp">
+                    </Button>
+                    <Button Style="{StaticResource HoverBtn}" Click="OnLogout_Click">
                         <TextBlock Text="Logout" />
-                    </Border>
+                    </Button>
                 </StackPanel>
 
             </Border>

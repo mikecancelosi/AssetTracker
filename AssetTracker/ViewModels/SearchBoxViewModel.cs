@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AssetTracker.ViewModel
+namespace AssetTracker.ViewModels
 {
     public class SearchBoxViewModel : ViewModel
     {

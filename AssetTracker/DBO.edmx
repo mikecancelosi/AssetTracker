@@ -155,6 +155,7 @@
           <Property Name="us_fname" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="us_lname" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="us_email" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="us_password" Type="nvarchar" MaxLength="16" Nullable="false" />
         </EntityType>
         <Association Name="FK_Alert_Asset">
           <End Role="Asset" Type="Self.Asset" Multiplicity="0..1" />
@@ -608,6 +609,7 @@
           <NavigationProperty Name="SecRole" Relationship="Self.FK_user_secrole" FromRole="User" ToRole="SecRole" />
           <NavigationProperty Name="Discussions" Relationship="Model.FK_Discussion_User" FromRole="User" ToRole="Discussion" />
           <NavigationProperty Name="Alerts" Relationship="Model.FK_Alert_User" FromRole="User" ToRole="Alert" />
+          <Property Name="us_password" Type="String" Nullable="false" MaxLength="16" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_asset_assetcategory">
           <End Role="AssetCategory" Type="Self.AssetCategory" Multiplicity="0..1" />
@@ -1108,6 +1110,7 @@
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="Model.User">
               <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="us_password" ColumnName="us_password" />
                 <ScalarProperty Name="us_id" ColumnName="us_id" />
                 <ScalarProperty Name="us_displayname" ColumnName="us_displayname" />
                 <ScalarProperty Name="us_roid" ColumnName="us_roid" />

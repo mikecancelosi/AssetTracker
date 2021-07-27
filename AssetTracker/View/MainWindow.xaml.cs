@@ -1,7 +1,7 @@
 ﻿using AssetTracker.Model;
 using AssetTracker.Services;
 using AssetTracker.View;
-using AssetTracker.ViewModel;
+using AssetTracker.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,17 +38,17 @@ namespace AssetTracker
             myCoordinator.NavigateToLogin();       
         }
 
-        public void NavigateToAssetList(object sender, MouseEventArgs e)
+        public void NavigateToAssetList(object sender, RoutedEventArgs e)
         {
             myCoordinator.NavigateToAssetList();
         }
 
-        public void NavigateToProjectStatus(object sender, MouseEventArgs e)
+        public void NavigateToProjectStatus(object sender, RoutedEventArgs e)
         {
             
         }
 
-        private void NavigateToProjectConfig(object sender, MouseEventArgs e)
+        private void NavigateToProjectConfig(object sender, RoutedEventArgs e)
         {
             myCoordinator.NavigateToProjectSettings();
         }
@@ -63,7 +63,7 @@ namespace AssetTracker
             myCoordinator.NavigateToUserEdit(VM.CurrentUser);
         }
 
-        private void OnLogoutUser_Clicked(object sender, MouseEventArgs e)
+        private void OnLogoutUser_Clicked(object sender, RoutedEventArgs e)
         {
             VM.LogoutUser();
             myCoordinator.NavigateToLogin();
@@ -74,12 +74,12 @@ namespace AssetTracker
             ProfileBtn_Popup.IsOpen = true;
         }
 
-        private void OnProfileSettings_MouseUp(object sender, MouseButtonEventArgs e)
+        private void OnProfileSettings_Click(object sender, RoutedEventArgs e)
         {
             myCoordinator.NavigateToUserEdit(VM.CurrentUser);
         }
 
-        private void OnLogout_MouseUp(object sender, MouseButtonEventArgs e)
+        private void OnLogout_Click(object sender, RoutedEventArgs e)
         {
             VM.LogoutUser();
             ProfileBtn_Popup.IsOpen = false;

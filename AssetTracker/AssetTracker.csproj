@@ -165,17 +165,17 @@
     <Compile Include="User.cs">
       <DependentUpon>DBO.tt</DependentUpon>
     </Compile>
-    <Compile Include="ViewModel\AssetDetailViewModel.cs" />
-    <Compile Include="ViewModel\AssetListViewModel.cs" />
-    <Compile Include="ViewModel\CategoryEditViewModel.cs" />
-    <Compile Include="ViewModel\LoginViewModel.cs" />
-    <Compile Include="ViewModel\MainViewModel.cs" />
-    <Compile Include="ViewModel\ProjectSettingsViewModel.cs" />
-    <Compile Include="ViewModel\RoleEditViewModel.cs" />
-    <Compile Include="ViewModel\SearchBoxViewModel.cs" />
-    <Compile Include="ViewModel\UserDashboardViewModel.cs" />
-    <Compile Include="ViewModel\UserEditViewModel.cs" />
-    <Compile Include="ViewModel\ViewModel.cs" />
+    <Compile Include="ViewModels\AssetDetailViewModel.cs" />
+    <Compile Include="ViewModels\AssetListViewModel.cs" />
+    <Compile Include="ViewModels\CategoryEditViewModel.cs" />
+    <Compile Include="ViewModels\LoginViewModel.cs" />
+    <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\ProjectSettingsViewModel.cs" />
+    <Compile Include="ViewModels\RoleEditViewModel.cs" />
+    <Compile Include="ViewModels\SearchBoxViewModel.cs" />
+    <Compile Include="ViewModels\UserDashboardViewModel.cs" />
+    <Compile Include="ViewModels\UserEditViewModel.cs" />
+    <Compile Include="ViewModels\ViewModel.cs" />
     <Compile Include="View\AssetDetail.xaml.cs">
       <DependentUpon>AssetDetail.xaml</DependentUpon>
     </Compile>
@@ -186,6 +186,7 @@
       <DependentUpon>CategoryEdit.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Commands\IDReceiverCmd.cs" />
+    <Compile Include="View\Commands\RelayCommand.cs" />
     <Compile Include="View\Converters\AlternationEqualityConverter.cs" />
     <Compile Include="View\Converters\BooleanToVizConverter.cs" />
     <Compile Include="View\Converters\DatetimeToTimeElapsedConverter.cs" />

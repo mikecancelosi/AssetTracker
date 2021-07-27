@@ -1,5 +1,5 @@
 ﻿using AssetTracker.Model;
-using AssetTracker.ViewModel;
+using AssetTracker.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -55,7 +55,7 @@ namespace AssetTracker.View
             }
         }
 
-        private void ItemClicked(object sender, MouseButtonEventArgs e)
+        private void ItemClicked(object sender, RoutedEventArgs e)
         {
             DatabaseBackedObject dbo = MainGrid.SelectedItem as DatabaseBackedObject;
             if (dbo != null)

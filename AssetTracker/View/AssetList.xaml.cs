@@ -1,5 +1,5 @@
 ﻿using AssetTracker.Model;
-using AssetTracker.ViewModel;
+using AssetTracker.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,13 +47,13 @@ namespace AssetTracker.View
             Value_ParentID.OnSelectionChanged += () => { VM.OnParentAssetChanged(Value_ParentID.CurrentSelection.ID); };
         }
 
-        private void ListViewItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void ListViewItem_MouseDoubleClick(object sender, RoutedEventArgs e)
         {
             Asset ast = MainGrid.SelectedItem as Asset;
             myCoordinator.NavigateToAssetDetail(ast);
         }
 
-        private void CreateAsset_Clicked(object sender, MouseButtonEventArgs e)
+        private void CreateAsset_Clicked(object sender, RoutedEventArgs e)
         {
             VM.CreateAsset();
             AssetCreateControl.Visibility = Visibility.Visible;
@@ -61,13 +61,13 @@ namespace AssetTracker.View
         }
 
       
-        private void CreateCancel_Clicked(object sender, MouseButtonEventArgs e)
+        private void CreateCancel_Clicked(object sender, RoutedEventArgs e)
         {
             AssetCreateControl.Visibility = Visibility.Collapsed;
             VM.ResetNewAsset();
         }
 
-        private void CreateConfirm_Clicked(object sender, MouseButtonEventArgs e)
+        private void CreateConfirm_Clicked(object sender, RoutedEventArgs e)
         {           
             List<Violation> violations;
             if (!VM.SaveAsset(out violations))
@@ -89,7 +89,7 @@ namespace AssetTracker.View
             VM.ChangeSelectedAsset(ast);
         }
 
-        private void DeleteAsset_Clicked(object sender, MouseButtonEventArgs e)
+        private void DeleteAsset_Clicked(object sender, RoutedEventArgs e)
         {
             if (MainGrid.SelectedItem != null)
             {
@@ -97,14 +97,14 @@ namespace AssetTracker.View
             }
         }
 
-        private void DeleteConfirm_Clicked(object sender, MouseButtonEventArgs e)
+        private void DeleteConfirm_Clicked(object sender, RoutedEventArgs e)
         {
             VM.DeleteCurrentlySelectedAsset();
             AssetDeletePrompt.Visibility = Visibility.Collapsed;
 
         }
 
-        private void DeleteCancel_Clicked(object sender, MouseButtonEventArgs e)
+        private void DeleteCancel_Clicked(object sender, RoutedEventArgs e)
         {
             AssetDeletePrompt.Visibility = Visibility.Collapsed;
         }

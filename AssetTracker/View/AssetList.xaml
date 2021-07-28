@@ -7,15 +7,10 @@
       xmlns:viewmodel="clr-namespace:AssetTracker.ViewModels"
       xmlns:materialicons="clr-namespace:MaterialIcons;assembly=MaterialIcons"
       mc:Ignorable="d"
-      d:DesignHeight="450"
-      d:DesignWidth="800"
+      d:DataContext="{d:DesignInstance viewmodel:AssetListViewModel, IsDesignTimeCreatable=True}"
       Title="AssetList"
       ShowsNavigationUI="False">
-
-    <Page.DataContext>
-        <viewmodel:AssetListViewModel />
-    </Page.DataContext>
-
+    
     <Border  Margin="100,0"
              Background="{StaticResource Layer1_Dark}"
              Padding="50">
@@ -49,7 +44,7 @@
 
                     </Button>
                 </StackPanel>
-                
+
                 <ListView Name="MainGrid"
                           VerticalAlignment="Top"
                           ScrollViewer.HorizontalScrollBarVisibility="Hidden"
@@ -58,9 +53,8 @@
                           BorderThickness="0"
                           Background="Transparent"
                           BorderBrush="Transparent"
-                          MouseDoubleClick="ListViewItem_MouseDoubleClick"
-                          ItemContainerStyle="{StaticResource AssetList_ListViewItem}">
-
+                          ItemContainerStyle="{StaticResource AssetList_ListViewItem}"
+                          MouseDoubleClick="ListViewItem_MouseDoubleClick">
 
                     <ListView.View>
                         <GridView ColumnHeaderContainerStyle="{StaticResource AssetList_GridViewColumnHeader}">

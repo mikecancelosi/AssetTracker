@@ -1,6 +1,8 @@
 ﻿using AssetTracker.Enums;
 using AssetTracker.Model;
+using AssetTracker.Services;
 using AssetTracker.View.Commands;
+using AssetTracker.ViewModels.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -14,7 +16,7 @@ using System.Windows.Input;
 
 namespace AssetTracker.ViewModels
 {
-    public class AssetDetailViewModel : ViewModel
+    public class AssetDetailViewModel : ViewModel, ISavable
     {
         /// <summary>
         /// Debug display setup
@@ -87,11 +89,20 @@ namespace AssetTracker.ViewModels
             }
         }
 
+        //ISavable Properties
+        public bool IsSavable => context.ChangeTracker.HasChanges();
         public ICommand DeleteConfirmed { get; set; }
-
-        public AssetDetailViewModel()
+        public ICommand SaveCommand { get; set; }
+        public ICommand CancelSave { get; set; }
+        public List<Violation> SaveViolations { get; set; }
+        public NavigationCoordinator navCoordinator { get; set; }
+        public bool PromptSave { get; set; }
+        //TODO : Add back in hierarchy selected command
+        public AssetDetailViewModel(NavigationCoordinator coord)
         {
             DeleteConfirmed = new RelayCommand((s) => DeleteAsset(), (s) => true);
+            SaveCommand = new RelayCommand((s) => Save(), (s) => true);
+            CancelSave = new RelayCommand((s) => navCoordinator.NavigateToQueued(), (s) => true);
         }
 
         public void DeleteAsset()
@@ -149,20 +160,12 @@ namespace AssetTracker.ViewModels
         }
         #endregion
 
-        #region Saving
-        public bool Savable
-        {
-            get
-            {
-                return context.ChangeTracker.HasChanges();
-            }
-        }
-     
-
-        public bool Save(out List<Violation> violations)
+        public void Save()
         {
             List<Change> changes = new List<Change>();
             List<Alert> alerts = new List<Alert>();
+            var violations = new List<Violation>();
+           
             if (context.Entry(myAsset).State == System.Data.Entity.EntityState.Modified)
             {
                 Asset beforeAsset = context.Entry(myAsset).GetDatabaseValues().ToObject() as Asset;
@@ -180,13 +183,20 @@ namespace AssetTracker.ViewModels
                     //alert.Save(context);
                 }
                 NotifyPropertyChanged("Savable");
-                NotifyPropertyChanged("Changelog");
-                return true;
+                NotifyPropertyChanged("Changelog");    
+                if(navCoordinator.WaitingToNavigate)
+                {
+                    navCoordinator.NavigateToQueued();
+                }
             }
-            return false;
+            else
+            {
+                SaveViolations = violations;
+                NotifyPropertyChanged("Violations");
+                throw new NotImplementedException();
+            }
+          
         }
-
-        #endregion
 
      
 

@@ -8,12 +8,8 @@
       xmlns:converters="clr-namespace:AssetTracker.View.Converters"
       xmlns:prop="clr-namespace:AssetTracker.View.Properties"
       xmlns:materialicons="clr-namespace:MaterialIcons;assembly=MaterialIcons"
-      mc:Ignorable="d"
-      d:DesignWidth="1200"
-      d:DesignHeight="800">
-    <Page.DataContext>
-        <viewmodel:AssetDetailViewModel />
-    </Page.DataContext>
+      mc:Ignorable="d"     
+      d:DataContext="{d:DesignInstance viewmodel:AssetDetailViewModel, IsDesignTimeCreatable=True}">
     <Page.Resources>
         <ResourceDictionary>            
             <ResourceDictionary.MergedDictionaries>
@@ -72,8 +68,8 @@
                                  HorizontalAlignment="Center">
 
 
-                        <Button IsEnabled="{Binding Savable}"
-                                Click="OnSaveClicked"
+                        <Button IsEnabled="{Binding IsSavable}"
+                                Command="{Binding SaveCommand}"
                                 Style="{StaticResource HoverBtn}"
                                 Height="30">
                             <materialicons:MaterialIcon Icon="ic_save"
@@ -241,7 +237,6 @@
                         <DataTemplate>
                             <Border x:Name="HierarchyBorder"
                                     Padding="{Binding marginFactor}"
-                                    MouseLeftButtonUp="OnHierarchyAssetSelected_Clicked"
                                     Tag="{Binding asset.as_id}"
                                     Cursor="Hand">
 
@@ -580,7 +575,7 @@
                     BorderBrush="Black"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    Background="Gray"
+                    Background="{StaticResource Overlay}"
                     Visibility="Collapsed">
                 <Grid>
                     <TextBlock Text="Modify Asset Info"
@@ -606,7 +601,7 @@
                                    Grid.Column="0"
                                    Grid.Row="1"
                                    Margin="0,10,0,0" />
-                        <TextBox x:Name="EditDescription_Value"
+                        <TextBox x:Name="EditDescription_Value"                                 
                                  Grid.Column="1"
                                  Grid.Row="1"
                                  Width="300"
@@ -614,7 +609,7 @@
                                  TextWrapping="Wrap"
                                  AcceptsTab="True"
                                  AcceptsReturn="True"
-                                 Margin="10" />
+                                 Margin="10" Text="{Binding myAsset.as_description, Mode=TwoWay}"/>
                     </Grid>
                     <StackPanel Orientation="Horizontal"
                                 HorizontalAlignment="Right"

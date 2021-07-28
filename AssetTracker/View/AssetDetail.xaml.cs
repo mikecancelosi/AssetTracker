@@ -1,4 +1,5 @@
 ﻿using AssetTracker.Model;
+using AssetTracker.Services;
 using AssetTracker.View.Commands;
 using AssetTracker.View.Properties;
 using AssetTracker.ViewModels;
@@ -24,7 +25,7 @@ namespace AssetTracker.View
     /// <summary>
     /// Interaction logic for AssetDetail.xaml
     /// </summary>
-    public partial class AssetDetail : Page, ISavable
+    public partial class AssetDetail : Page
     {
         public AssetDetailViewModel VM
         {
@@ -32,13 +33,10 @@ namespace AssetTracker.View
             set { DataContext = value; }
         }
 
-        private Coordinator coordinator;
-        public AssetDetail(AssetDetailViewModel vm, Coordinator coord)
+        public AssetDetail(AssetDetailViewModel vm)
         {
             InitializeComponent();           
             VM = vm;
-            coordinator = coord;
-            coordinator.OnNavigateSelected += (v) => OnNavigatingAway(v);
             #region SearchboxSetup
             Searchbox_AssignedTo.SetType(typeof(User));
             Searchbox_Phase.SetType(typeof(Phase));
@@ -97,60 +95,6 @@ namespace AssetTracker.View
 
         }      
 
-        private void OnSaveClicked(object sender, RoutedEventArgs e)
-        {
-            List<Violation> violations = new List<Violation>();
-            if (!VM.Save(out violations))
-            {
-                throw new NotImplementedException();
-            }
-            else
-            {
-                OnSaveComplete?.Invoke(sender,null);
-                OnSaveComplete = delegate { };
-            }
-        }
-
-        #region ISavableSetup
-        public event EventHandler OnSaveComplete;
-        public event EventHandler OnSaveRefused;
-        public void CheckForPromptSave(Action methodToCall)
-        {
-            if (VM.Savable)
-            {
-                PromptSavePanel.Visibility = Visibility.Visible;
-                OnSaveComplete += (s, e) => methodToCall();
-                OnSaveRefused += (s, e) => methodToCall();
-            }
-            else
-            {
-                methodToCall();
-            }
-        }
-
-        public void OnNavigatingAway(Page v)
-        {
-            if (v != this)
-            {
-                CheckForPromptSave(() => coordinator.NavigateToQueued());
-            }
-        }
-
-        public ICommand ConfirmSave_Clicked => new RelayCommand((arr) => OnConfirmSave(), (arr) => { return true; });
-        public ICommand RefuseSave_Clicked => new RelayCommand((arr) => OnRefuseSave(), (arr) => { return true; });
-
-        private void OnConfirmSave()
-        {
-            OnSaveClicked(this, null);
-        }
-
-        public void OnRefuseSave()
-        {
-            OnSaveRefused?.Invoke(this, null);
-            OnSaveRefused = delegate { };
-        }
-        #endregion
-
         private void OnChangelogClicked(object sender, RoutedEventArgs e)
         {
             if (Changelog.Visibility == Visibility.Visible)
@@ -183,16 +127,7 @@ namespace AssetTracker.View
             }
 
         }
-        #endregion
-
-        private void OnHierarchyAssetSelected_Clicked(object sender, MouseButtonEventArgs e)
-        {
-            int senderId = (int)((Border)sender).Tag;
-            if (VM.myAsset.ID != senderId)
-            {
-                CheckForPromptSave(() => VM.OnHierarchyAssetSelected(senderId));
-            }
-        }
+        #endregion        
 
         #region Tags
         private void OnMetadataAdd_Clicked(object sender, RoutedEventArgs e)

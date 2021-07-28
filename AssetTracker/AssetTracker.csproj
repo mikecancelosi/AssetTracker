@@ -101,7 +101,7 @@
     <Compile Include="Change.cs">
       <DependentUpon>DBO.tt</DependentUpon>
     </Compile>
-    <Compile Include="Coordinator.cs" />
+    <Compile Include="Services\NavigationObserver.cs" />
     <Compile Include="DBO.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -159,6 +159,9 @@
       <DependentUpon>DBO.tt</DependentUpon>
     </Compile>
     <Compile Include="Services\DefaultRepositoryData.cs" />
+    <Compile Include="Services\INavigationCoordinator.cs" />
+    <Compile Include="Services\NavigationCoordinator.cs" />
+    <Compile Include="Services\NavigationObserverAttribute.cs" />
     <Compile Include="Setting.cs">
       <DependentUpon>DBO.tt</DependentUpon>
     </Compile>
@@ -168,6 +171,7 @@
     <Compile Include="ViewModels\AssetDetailViewModel.cs" />
     <Compile Include="ViewModels\AssetListViewModel.cs" />
     <Compile Include="ViewModels\CategoryEditViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\ISavable.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ProjectSettingsViewModel.cs" />
@@ -201,7 +205,6 @@
     <Compile Include="View\Converters\MultiValueConverter.cs" />
     <Compile Include="View\Converters\ValueConverterGroup.cs" />
     <Compile Include="View\Extensions\TilePanel.cs" />
-    <Compile Include="View\ISavable.cs" />
     <Compile Include="View\Login.xaml.cs">
       <DependentUpon>Login.xaml</DependentUpon>
     </Compile>
@@ -219,6 +222,8 @@
     <Compile Include="View\Searchbox.xaml.cs">
       <DependentUpon>Searchbox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Services\IViewFactory.cs" />
+    <Compile Include="View\Services\ViewFactory.cs" />
     <Compile Include="View\UserDashboard.xaml.cs">
       <DependentUpon>UserDashboard.xaml</DependentUpon>
     </Compile>

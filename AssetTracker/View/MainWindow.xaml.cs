@@ -1,7 +1,12 @@
 ﻿using AssetTracker.Model;
 using AssetTracker.Services;
 using AssetTracker.View;
+using AssetTracker.View.Services;
 using AssetTracker.ViewModels;
+using Castle.Core.Resource;
+using Castle.MicroKernel.Registration;
+using Castle.Windsor;
+using Castle.Windsor.Configuration.Interpreters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,18 +34,19 @@ namespace AssetTracker
             get { return (MainViewModel)DataContext; }
             set { DataContext = value; }
         }
-        private Coordinator myCoordinator;
+        private NavigationObserver navObserver;
+        private INavigationCoordinator navCoordinator;
         public MainWindow()
         {
             InitializeComponent();
+            setServices();
             VM = MainViewModel.Instance;
-            myCoordinator = new Coordinator(ContentFrame.NavigationService);
-            myCoordinator.NavigateToLogin();       
+            navCoordinator.NavigateToLogin();
         }
 
         public void NavigateToAssetList(object sender, RoutedEventArgs e)
         {
-            myCoordinator.NavigateToAssetList();
+            navCoordinator.NavigateToAssetList();
         }
 
         public void NavigateToProjectStatus(object sender, RoutedEventArgs e)
@@ -50,23 +56,23 @@ namespace AssetTracker
 
         private void NavigateToProjectConfig(object sender, RoutedEventArgs e)
         {
-            myCoordinator.NavigateToProjectSettings();
+            navCoordinator.NavigateToProjectSettings();
         }
 
         private void NavigateToDashboard(object sender, RoutedEventArgs e)
         {
-            myCoordinator.NavigateToUserDashboard();
+            navCoordinator.NavigateToUserDashboard();
         }
 
         private void NavigateToUserEdit(object sender, RoutedEventArgs e)
         {
-            myCoordinator.NavigateToUserEdit(VM.CurrentUser);
+            navCoordinator.NavigateToUserEdit(VM.CurrentUser);
         }
 
         private void OnLogoutUser_Clicked(object sender, RoutedEventArgs e)
         {
             VM.LogoutUser();
-            myCoordinator.NavigateToLogin();
+            navCoordinator.NavigateToLogin();
         }
 
         private void ProfileBtn_Click(object sender, RoutedEventArgs e)
@@ -76,15 +82,33 @@ namespace AssetTracker
 
         private void OnProfileSettings_Click(object sender, RoutedEventArgs e)
         {
-            myCoordinator.NavigateToUserEdit(VM.CurrentUser);
+            navCoordinator.NavigateToUserEdit(VM.CurrentUser);
         }
 
         private void OnLogout_Click(object sender, RoutedEventArgs e)
         {
             VM.LogoutUser();
             ProfileBtn_Popup.IsOpen = false;
-            myCoordinator.NavigateToLogin();
+            navCoordinator.NavigateToLogin();
             
+        }
+
+        private void setServices()
+        {
+            
+            WindsorContainer container = new WindsorContainer();
+            container.Register(Component.For<IViewFactory>()
+                                        .ImplementedBy<ViewFactory>());
+            container.Register(Component.For<NavigationService>().Instance(ContentFrame.NavigationService));
+            container.Register(Component.For<INavigationCoordinator>()
+                                        .ImplementedBy<NavigationCoordinator>()
+                                        .LifeStyle.Singleton);
+            container.Register(Component.For<NavigationObserver>());
+
+
+            navObserver = container.Resolve<NavigationObserver>();
+            navCoordinator = container.Resolve<INavigationCoordinator>();
+
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AssetTracker.Model;
+using AssetTracker.Services;
 using AssetTracker.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -27,9 +28,9 @@ namespace AssetTracker.View
             get { return (ProjectSettingsViewModel)DataContext; }
             set { DataContext = value; }
         }
-        private Coordinator myCoordinator;
+        private INavigationCoordinator myCoordinator;
 
-        public ProjectSettings(ProjectSettingsViewModel vm, Coordinator coordinator)
+        public ProjectSettings(ProjectSettingsViewModel vm, INavigationCoordinator coordinator)
         {
             InitializeComponent();
             VM = vm;
@@ -38,17 +39,17 @@ namespace AssetTracker.View
 
         private void CreateUser_Clicked(object sender, RoutedEventArgs e)
         {
-            myCoordinator.NavigateToCreateUser();
+            //myCoordinator.NavigateToCreateUser();
         }
        
         private void CreateRole_Clicked(object sender, RoutedEventArgs e)
         {
-            myCoordinator.NavigateToCreateRole();
+            //myCoordinator.NavigateToCreateRole();
         }
 
         private void CreateCategory_Clicked(object sender, RoutedEventArgs e)
         {
-            myCoordinator.NavigateToCreateCategory();
+            //myCoordinator.NavigateToCreateCategory();
         }
 
         private void OnOperationClicked(object sender, RoutedEventArgs e)
@@ -79,10 +80,10 @@ namespace AssetTracker.View
             {
                 case "copy":
                     User copiedUser = VM.CopyUser(selectedUser.us_id);
-                    myCoordinator.NavigateToUserEdit(copiedUser);
+                   // myCoordinator.NavigateToUserEdit(copiedUser);
                     break;
                 case "edit":
-                    myCoordinator.NavigateToUserEdit(selectedUser);
+                    //myCoordinator.NavigateToUserEdit(selectedUser);
                     break;
                 case "delete":
                     VM.SetSelectedObject(selectedUser);
@@ -98,10 +99,10 @@ namespace AssetTracker.View
             {
                 case "copy":
                     SecRole copiedRole = VM.CopyRole(selectedRole.ro_id);
-                    myCoordinator.NavigateToRoleEdit(copiedRole);
+                    //myCoordinator.NavigateToRoleEdit(copiedRole);
                     break;
                 case "edit":
-                    myCoordinator.NavigateToRoleEdit(selectedRole);
+                    //myCoordinator.NavigateToRoleEdit(selectedRole);
                     break;
                 case "delete":
                     VM.SetSelectedObject(selectedRole);
@@ -117,10 +118,10 @@ namespace AssetTracker.View
             {
                 case "copy":
                     AssetCategory copiedCategory = VM.CopyCategory(selectedCategory.ca_id);
-                    myCoordinator.NavigatetoCategoryEdit(copiedCategory);
+                   // myCoordinator.NavigatetoCategoryEdit(copiedCategory);
                     break;
                 case "edit":
-                    myCoordinator.NavigatetoCategoryEdit(selectedCategory);
+                    //myCoordinator.NavigatetoCategoryEdit(selectedCategory);
                     break;
                 case "delete":
                     VM.SetSelectedObject(selectedCategory);

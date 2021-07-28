@@ -7,11 +7,13 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Text;
 using System.Linq;
+using System.Windows.Input;
+using AssetTracker.View.Commands;
 
 namespace AssetTracker.ViewModels
 {
     public class AssetListViewModel : ViewModel
-    {
+    {       
         public List<Asset> Assets
         {
             get
@@ -20,6 +22,18 @@ namespace AssetTracker.ViewModels
                         select a).ToList();
             }
         }
+
+        private readonly NavigationCoordinator navCoordinator;
+        public AssetListViewModel(NavigationCoordinator coord)
+        {
+            navCoordinator = coord;
+        }
+
+        public void NavigateToAssetDetail(Asset ast)
+        {
+            navCoordinator.NavigateToAssetDetail(ast);
+        }
+
 
         #region AddAsset
         public Asset AssetToCreate { get; set; }
@@ -102,8 +116,6 @@ namespace AssetTracker.ViewModels
             CurrentSelectedAsset = newAsset;
             NotifyPropertyChanged("CurrentSelectedAsset");
         }
-
-
 
         public void DeleteCurrentlySelectedAsset()
         {

@@ -1,4 +1,5 @@
-﻿using AssetTracker.ViewModels;
+﻿using AssetTracker.Services;
+using AssetTracker.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,13 +22,13 @@ namespace AssetTracker.View
     /// </summary>
     public partial class Login : Page
     {
-        private Coordinator coordinator;
+        private INavigationCoordinator coordinator;
         private LoginViewModel VM
         {
             get { return (LoginViewModel)DataContext; }
             set { DataContext = value; }
         }
-        public Login(LoginViewModel vm,Coordinator coord)
+        public Login(LoginViewModel vm, INavigationCoordinator coord)
         {
             InitializeComponent();
             coordinator = coord;

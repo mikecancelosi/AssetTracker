@@ -1,4 +1,5 @@
 ﻿using AssetTracker.Model;
+using AssetTracker.Services;
 using AssetTracker.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -27,8 +28,8 @@ namespace AssetTracker.View
             get { return (AssetListViewModel)DataContext; }
             set { DataContext = value; }
         }
-        private Coordinator myCoordinator;
-        public AssetList(AssetListViewModel vm, Coordinator coordinator)
+        private INavigationCoordinator myCoordinator;
+        public AssetList(AssetListViewModel vm, INavigationCoordinator coordinator)
         {
             InitializeComponent();
             VM = vm;
@@ -50,7 +51,7 @@ namespace AssetTracker.View
         private void ListViewItem_MouseDoubleClick(object sender, RoutedEventArgs e)
         {
             Asset ast = MainGrid.SelectedItem as Asset;
-            myCoordinator.NavigateToAssetDetail(ast);
+            VM.NavigateToAssetDetail(ast);
         }
 
         private void CreateAsset_Clicked(object sender, RoutedEventArgs e)

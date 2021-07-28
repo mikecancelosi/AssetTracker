@@ -26,12 +26,10 @@ namespace AssetTracker.View
             get { return (UserDashboardViewModel)DataContext; }
             set { DataContext = value; }
         }
-        private Coordinator coordinator;
-        public UserDashboard(UserDashboardViewModel vm, Coordinator coord)
+        public UserDashboard(UserDashboardViewModel vm)
         {
             InitializeComponent();
             VM = vm;
-            coordinator = coord;
         }
     }
 }

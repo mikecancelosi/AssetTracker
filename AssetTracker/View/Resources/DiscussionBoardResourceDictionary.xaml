@@ -41,6 +41,7 @@
                         HorizontalAlignment="Right"
                         Margin="10"
                         BorderThickness="0"
+                        Style="{StaticResource HoverBtn}"
                         Command="{Binding DiscussionReplyClicked, RelativeSource={RelativeSource AncestorLevel=1, AncestorType=Page}}">
                     <Button.CommandParameter>
                         <MultiBinding>
@@ -55,10 +56,8 @@
                             <Binding ElementName="NewDiscussionReply"
                                      Path="Text" />
                         </MultiBinding>
-
                     </Button.CommandParameter>
-                    <mi:MaterialIcon Icon="ic_send"
-                                     Foreground="{StaticResource Text_Dark}" />
+                    <mi:MaterialIcon Icon="ic_send" Style="{StaticResource HoverBtn_Content}"/>
                 </Button>
             </Grid>
         </Border>
@@ -245,8 +244,8 @@
                 </Grid>
                 </Border>
                 <ItemsControl ItemsSource="{Binding Children}"
-                              ItemTemplate="{DynamicResource ResourceKey=DiscussionItem}">
-                </ItemsControl>
+                              ItemTemplate="{DynamicResource ResourceKey=DiscussionItem}" />
+
 
                 <Control Template="{StaticResource ResourceKey=DiscussionReply}"
                          prop:DBOPropertyExtension.IDSource="{Binding  di_id}"

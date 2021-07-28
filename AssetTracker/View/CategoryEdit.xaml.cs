@@ -1,4 +1,5 @@
 ﻿using AssetTracker.Model;
+using AssetTracker.Services;
 using AssetTracker.View.Commands;
 using AssetTracker.ViewModels;
 using System;
@@ -21,21 +22,21 @@ namespace AssetTracker.View
     /// <summary>
     /// Interaction logic for CategoryEdit.xaml
     /// </summary>
-    public partial class CategoryEdit : Page, ISavable
+    public partial class CategoryEdit : Page
     {
         public CategoryEditViewModel VM
         {
             get { return (CategoryEditViewModel)DataContext; }
             set { DataContext = value; }
         }
-        private Coordinator coordinator;
+        private INavigationCoordinator coordinator;
 
-        public CategoryEdit(CategoryEditViewModel vm,Coordinator coord)
+        public CategoryEdit(CategoryEditViewModel vm, INavigationCoordinator coord)
         {
             InitializeComponent();
             VM = vm;
             coordinator = coord;
-            coordinator.OnNavigateSelected += (v) => OnNavigatingAway(v);
+            //coordinator.OnNavigateSelected += (v) => OnNavigatingAway(v);
         }
 
         #region ISavableSetup
@@ -104,7 +105,7 @@ namespace AssetTracker.View
         private void DeleteConfirm_Clicked(object sender, RoutedEventArgs e)
         {
             VM.DeleteCategory();
-            coordinator.NavigateToProjectSettings();
+            //coordinator.NavigateToProjectSettings();
         }
 
         private void DeleteCancel_Clicked(object sender, RoutedEventArgs e)
@@ -115,7 +116,7 @@ namespace AssetTracker.View
 
         public void NavigateToProjectSettings(object sender, RoutedEventArgs e)
         {
-            CheckForPromptSave(() => coordinator.NavigateToProjectSettings());
+            //CheckForPromptSave(() => coordinator.NavigateToProjectSettings());
         }
 
         private void OnPhaseUp(object sender, RoutedEventArgs e)

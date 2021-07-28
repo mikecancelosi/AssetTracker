@@ -1,4 +1,5 @@
 ﻿using AssetTracker.Model;
+using AssetTracker.Services;
 using AssetTracker.View.Commands;
 using AssetTracker.ViewModels;
 using System;
@@ -21,21 +22,21 @@ namespace AssetTracker.View
     /// <summary>
     /// Interaction logic for RoleEdit.xaml
     /// </summary>
-    public partial class RoleEdit : Page, ISavable
+    public partial class RoleEdit : Page
     {
         public RoleEditViewModel VM
         {
             get { return (RoleEditViewModel)DataContext; }
             set { DataContext = value; }
         }
-        private Coordinator coordinator;       
+        private INavigationCoordinator coordinator;       
 
-        public RoleEdit(RoleEditViewModel vm, Coordinator coord)
+        public RoleEdit(RoleEditViewModel vm, INavigationCoordinator coord)
         {
             InitializeComponent();
             VM = vm;
             coordinator = coord;
-            coordinator.OnNavigateSelected += (v) => OnNavigatingAway(v);
+            //coordinator.OnNavigateSelected += (v) => OnNavigatingAway(v);
         }
 
         #region ISavableSetup
@@ -103,7 +104,7 @@ namespace AssetTracker.View
         private void DeleteConfirm_Clicked(object sender, RoutedEventArgs e)
         {
             VM.DeleteRole();
-            coordinator.NavigateToProjectSettings();
+           // coordinator.NavigateToProjectSettings();
         }
 
         private void DeleteCancel_Clicked(object sender, RoutedEventArgs e)
@@ -114,7 +115,7 @@ namespace AssetTracker.View
 
         public void NavigateToProjectSettings(object sender, RoutedEventArgs e)
         {
-            coordinator.NavigateToProjectSettings();
+            //coordinator.NavigateToProjectSettings();
         }
 
         public void OnActivateAllClicked(object sender, RoutedEventArgs e)

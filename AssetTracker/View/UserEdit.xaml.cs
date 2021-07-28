@@ -1,4 +1,5 @@
 ﻿using AssetTracker.Model;
+using AssetTracker.Services;
 using AssetTracker.View.Commands;
 using AssetTracker.ViewModels;
 using System;
@@ -21,15 +22,15 @@ namespace AssetTracker.View
     /// <summary>
     /// Interaction logic for UserEdit.xaml
     /// </summary>
-    public partial class UserEdit : Page, ISavable
+    public partial class UserEdit : Page
     {
         public UserEditViewModel VM
         {
             get { return (UserEditViewModel)DataContext; }
             set { DataContext = value; }
         }
-        private Coordinator coordinator;
-        public UserEdit(UserEditViewModel vm,Coordinator coord)
+        private INavigationCoordinator coordinator;
+        public UserEdit(UserEditViewModel vm, INavigationCoordinator coord)
         {
             InitializeComponent();
             VM = vm;
@@ -142,7 +143,7 @@ namespace AssetTracker.View
 
         public void NavigateToProjectSettings(object sender, RoutedEventArgs e)
         {
-            coordinator.NavigateToProjectSettings();
+            //coordinator.NavigateToProjectSettings();
         }
 
 
@@ -156,7 +157,7 @@ namespace AssetTracker.View
         private void DeleteConfirm_Clicked(object sender, RoutedEventArgs e)
         {
             VM.DeleteUser();
-            coordinator.NavigateToProjectSettings();
+            //coordinator.NavigateToProjectSettings();
         }
 
         private void DeleteCancel_Clicked(object sender, RoutedEventArgs e)

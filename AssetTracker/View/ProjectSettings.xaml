@@ -7,14 +7,10 @@
       xmlns:viewmodel="clr-namespace:AssetTracker.ViewModels"
       xmlns:materialicons="clr-namespace:MaterialIcons;assembly=MaterialIcons"
       mc:Ignorable="d"
-      d:DesignHeight="900"
-      d:DesignWidth="1500"
       Title="ProjectSettings"
       ShowsNavigationUI="False"
-      Loaded="Page_Loaded">
-    <Page.DataContext>
-        <viewmodel:ProjectSettingsViewModel />
-    </Page.DataContext>
+      Loaded="Page_Loaded"
+      d:DataContext="{d:DesignInstance viewmodel:ProjectSettingsViewModel, IsDesignTimeCreatable=True}">
     <Page.Resources>
         <ResourceDictionary>            
             <ResourceDictionary.MergedDictionaries>
@@ -133,6 +129,11 @@
                                         Click="OnOperationClicked"
                                         Tag="delete"
                                         Width="24">
+                                    <Button.Triggers>
+                                        <EventTrigger RoutedEvent="Button.Click">
+                                            <BeginStoryboard Storyboard="{DynamicResource ShowDeletePrompt}" />
+                                        </EventTrigger>
+                                    </Button.Triggers>
                                     <materialicons:MaterialIcon Icon="ic_delete" />
                                 </Button>
                             </StackPanel>
@@ -149,7 +150,7 @@
                                Style="{StaticResource RightPanel_Header}" />
 
                     <Button Style="{StaticResource HoverBtn}"
-                            Click="CreateUser_Clicked"
+                            Command="{Binding CreateUser}"
                             HorizontalAlignment="Left"
                             Margin="0,40,0,10">
                         <StackPanel Orientation="Vertical"
@@ -196,7 +197,7 @@
                                Style="{StaticResource RightPanel_Header}" />
 
                     <Button Style="{StaticResource HoverBtn}"
-                            Click="CreateRole_Clicked"
+                            Command="{Binding CreateRole}"
                             HorizontalAlignment="Left"
                             Margin="0,40,0,10">
                         <StackPanel Orientation="Vertical"
@@ -241,7 +242,7 @@
                                Style="{StaticResource RightPanel_Header}" />
 
                     <Button Style="{StaticResource HoverBtn}"
-                            Click="CreateCategory_Clicked"
+                            Command="{Binding CreateCategory}"
                             HorizontalAlignment="Left"
                             Margin="0,40,0,10">
                         <StackPanel Orientation="Vertical"
@@ -277,8 +278,8 @@
 
                 </StackPanel>
 
-                <Border x:Name="AssetDeletePrompt"
-                        Visibility="Collapsed"
+                <Border x:Name="DeletePrompt"
+                        Visibility="{Binding PromptDelete, Converter={StaticResource BooleanToVisibilityConverter}}"
                         Background="{StaticResource Overlay}"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Center"
@@ -295,11 +296,11 @@
                                    Margin="0,50"
                                    FontSize="16">
                         <Run Text="Are you sure you want to delete" />
-                        <Run Text="{Binding SelectedObject.Name}"
+                        <Run Text="{Binding DeletionObject.Name}"
                              FontWeight="Bold" />
                         <Run Text="#"
                              FontWeight="Bold" />
-                        <Run Text="{Binding SelectedObject.ID}"
+                        <Run Text="{Binding DeletionObject.ID}"
                              FontWeight="Bold" />
                         <Run Text="?" />
                         </TextBlock>
@@ -311,8 +312,13 @@
                                     Padding="5"
                                     BorderThickness="5"
                                     BorderBrush="{StaticResource ConfirmOverlay_Dark}"
-                                    Click="DeleteConfirm_Clicked"
+                                    Command="{Binding DeleteConfirmed}"
                                     Width="150">
+                                <Button.Triggers>
+                                    <EventTrigger RoutedEvent="Button.Click">
+                                        <BeginStoryboard Storyboard="{DynamicResource HideDeletePrompt}" />
+                                    </EventTrigger>
+                                </Button.Triggers>
                                 <TextBlock Text="Confirm"
                                            Style="{StaticResource HoverBtn_TextContent}"
                                            VerticalAlignment="Center"
@@ -326,8 +332,12 @@
                                      Style="{StaticResource HoverBtn}"
                                      Padding="5"
                                      BorderThickness="5"
-                                     BorderBrush="{StaticResource RejectOverlay_Dark}"
-                                     Click="DeleteCancel_Clicked">
+                                     BorderBrush="{StaticResource RejectOverlay_Dark}">
+                                <Button.Triggers>
+                                    <EventTrigger RoutedEvent="Button.Click">
+                                        <BeginStoryboard Storyboard="{DynamicResource HideDeletePrompt}" />
+                                    </EventTrigger>
+                                </Button.Triggers>
                                 <TextBlock Text="Cancel"
                                            Style="{StaticResource HoverBtn_TextContent}"
                                            HorizontalAlignment="Center"

@@ -61,49 +61,51 @@ namespace AssetTracker.Services
         #region BuildViewmodels
         public void NavigateToLogin()
         {
-            LoginViewModel vm = new LoginViewModel();
+            LoginViewModel vm = new LoginViewModel(this);
             RequestNavigationTo(vm);
         }
 
         public void NavigateToCreateUser()
         {
-            UserEditViewModel vm = new UserEditViewModel();
+            UserEditViewModel vm = new UserEditViewModel(this);
             RequestNavigationTo(vm);
 
         }
         public void NavigateToUserEdit(User userToEdit)
         {
-            UserEditViewModel vm = new UserEditViewModel(userToEdit);
+            UserEditViewModel vm = new UserEditViewModel(this);
+            vm.SetUser(userToEdit);
             RequestNavigationTo(vm);
         }
 
         public void NavigateToAssetDetail(Asset asset)
         {
             AssetDetailViewModel vm = new AssetDetailViewModel(this);
-            vm.myAsset = asset;
+            vm.SetAsset(asset);
             RequestNavigationTo(vm);
         }
 
         public void NavigateToUserDashboard()
         {
-            UserDashboardViewModel vm = new UserDashboardViewModel();
+            UserDashboardViewModel vm = new UserDashboardViewModel(this);
             RequestNavigationTo(vm);
         }
 
         public void NavigateToCreateRole()
         {
-            RoleEditViewModel vm = new RoleEditViewModel();
+            RoleEditViewModel vm = new RoleEditViewModel(this);
             RequestNavigationTo(vm);
         }
         public void NavigateToRoleEdit(SecRole roleToEdit)
         {
-            RoleEditViewModel vm = new RoleEditViewModel(roleToEdit);
+            RoleEditViewModel vm = new RoleEditViewModel(this);
+            vm.Role = roleToEdit;
             RequestNavigationTo(vm);
         }
 
         public void NavigateToProjectSettings()
         {
-            ProjectSettingsViewModel vm = new ProjectSettingsViewModel();
+            ProjectSettingsViewModel vm = new ProjectSettingsViewModel(this);
             RequestNavigationTo(vm);
         }
 
@@ -115,12 +117,13 @@ namespace AssetTracker.Services
 
         public void NavigateToCreateCategory()
         {
-            CategoryEditViewModel vm = new CategoryEditViewModel();
+            CategoryEditViewModel vm = new CategoryEditViewModel(this);
             RequestNavigationTo(vm);
         }
         public void NavigatetoCategoryEdit(AssetCategory cat)
         {
-            CategoryEditViewModel vm = new CategoryEditViewModel();
+            CategoryEditViewModel vm = new CategoryEditViewModel(this);
+            vm.Category = cat;
             RequestNavigationTo(vm);
         }
         #endregion

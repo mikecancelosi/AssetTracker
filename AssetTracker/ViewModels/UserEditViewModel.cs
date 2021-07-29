@@ -1,5 +1,8 @@
 ﻿using AssetTracker.Model;
+using AssetTracker.Services;
 using AssetTracker.View;
+using AssetTracker.View.Commands;
+using AssetTracker.ViewModels.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -7,13 +10,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using static AssetTracker.Model.SecPermission;
 
 namespace AssetTracker.ViewModels
 {
-    public class UserEditViewModel : ViewModel
+    public class UserEditViewModel : ViewModel, ISavable
     {
-        public User CurrentUser { get; set; }
+        public User CurrentUser { get; private set; }
        
         private ObservableCollection<PermissionGroup> permissionGrps;
         public ObservableCollection<PermissionGroup> PermissionGroups
@@ -62,14 +66,6 @@ namespace AssetTracker.ViewModels
             }
         }
 
-        public bool Savable
-        {
-            get
-            {
-                return context.ChangeTracker.HasChanges();
-            }
-        }
-
         public bool Creating { get; set; }
         private bool Cloning { get; set; }
         public string HeadingContext
@@ -91,7 +87,25 @@ namespace AssetTracker.ViewModels
             }
         }
 
-        public UserEditViewModel(User user)
+        public ICommand DeleteConfirmed { get; set; }
+        public ICommand SaveCommand { get; set; }
+        public ICommand CancelSave { get; set; }
+        public bool IsSavable => context.ChangeTracker.HasChanges();
+        public List<Violation> SaveViolations { get; set; }
+        public bool PromptSave { get; set; }
+        public INavigationCoordinator navCoordinator { get; set; }
+
+        public UserEditViewModel(INavigationCoordinator coord)
+        {
+            navCoordinator = coord;
+            CurrentUser = context.Users.Create();
+
+            DeleteConfirmed = new RelayCommand((s) => DeleteUser(), (s) => true);
+            SaveCommand = new RelayCommand((s) => Save(), (s) => true);
+            CancelSave = new RelayCommand((s) => navCoordinator.NavigateToQueued(), (s) => true);
+        }
+
+        public void SetUser(User user)
         {
             if (user.us_id > 0)
             {
@@ -108,30 +122,29 @@ namespace AssetTracker.ViewModels
             NotifyPropertyChanged("HeadingContext");
         }
 
-        /// <summary>
-        /// We are creating a user
-        /// </summary>
-        public UserEditViewModel()
-        {
-            CurrentUser = context.Users.Create();
-            Creating = true;
-            context.Users.Add(CurrentUser);
-        }
 
-        public bool OnSave(out List<Violation> violations)
+        public void Save()
         {
+            List<Violation> violations;
             if(CurrentUser.Save(context, out violations))
             {
                 context.SaveChanges();
-                NotifyPropertyChanged("Savable");
-                NotifyPropertyChanged("CurrentUser");
                 Creating = false;
                 Cloning = false;
+                NotifyPropertyChanged("Savable");
+                NotifyPropertyChanged("CurrentUser");               
                 NotifyPropertyChanged("HeadingContext");
-                return true;
+                if (navCoordinator.WaitingToNavigate)
+                {
+                    navCoordinator.NavigateToQueued();
+                }
             }
-
-            return false;
+            else
+            {
+                SaveViolations = violations;
+                NotifyPropertyChanged("SaveViolations");
+                throw new NotImplementedException();
+            }
         }
 
         public void DeleteUser()
@@ -139,6 +152,7 @@ namespace AssetTracker.ViewModels
             CurrentUser.Delete(context);
         }
 
+        #region ValueChange
         public void OnFirstNameChanged(string newName)
         {
             context.Entry(CurrentUser).Property(x => x.us_fname).CurrentValue = newName;
@@ -174,7 +188,9 @@ namespace AssetTracker.ViewModels
             context.Entry(CurrentUser).Property(x => x.us_roid).CurrentValue = newValue;
             NotifyPropertyChanged("Savable");
         }
+        #endregion
 
+        #region Permissions
         public void OnPermissionChanged(int prid, bool newValue)
         {
             SecPermission2 overridePer = GetUserOverride(prid);
@@ -231,5 +247,6 @@ namespace AssetTracker.ViewModels
 
             return overridePer;
         }
+        #endregion
     }
 }

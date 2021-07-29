@@ -18,38 +18,7 @@ namespace AssetTracker.ViewModels
 {
     public class AssetDetailViewModel : ViewModel, ISavable
     {
-        /// <summary>
-        /// Debug display setup
-        /// </summary>
-        private Asset myasset = new Asset()
-        {
-            as_displayname = "Asset Name",
-            as_id = 229,
-            Children = new List<Asset>()
-            {
-                new Asset()
-                {
-                    as_displayname = "Child 1"
-                },
-                new Asset()
-                {
-                    as_displayname = "Child 2"
-                }
-            }
-        };
-
-        public Asset myAsset
-        {
-            get
-            {
-                return myasset;
-            }
-            set
-            {
-                myasset = context.Assets.Find(value.ID);
-                OnModelChanged();
-            }
-        }
+        public Asset myAsset { get; private set; }
 
         public List<Metadata> Tags
         {
@@ -95,34 +64,35 @@ namespace AssetTracker.ViewModels
         public ICommand SaveCommand { get; set; }
         public ICommand CancelSave { get; set; }
         public List<Violation> SaveViolations { get; set; }
-        public NavigationCoordinator navCoordinator { get; set; }
+        public INavigationCoordinator navCoordinator { get; set; }
         public bool PromptSave { get; set; }
         //TODO : Add back in hierarchy selected command
-        public AssetDetailViewModel(NavigationCoordinator coord)
+        public AssetDetailViewModel(INavigationCoordinator coord)
         {
+            navCoordinator = coord;
             DeleteConfirmed = new RelayCommand((s) => DeleteAsset(), (s) => true);
             SaveCommand = new RelayCommand((s) => Save(), (s) => true);
             CancelSave = new RelayCommand((s) => navCoordinator.NavigateToQueued(), (s) => true);
         }
 
-        public void DeleteAsset()
+        public void SetAsset(Asset ast)
         {
-            myAsset.Delete(context);
-         
-        }
-
-        public void OnModelChanged()
-        {
+            myAsset = ast;
             NotifyPropertyChanged("myAsset");
 
             Changelog = (from s in context.Changes
-                         where s.ch_recid == myasset.ID
+                         where s.ch_recid == myAsset.ID
                          select s).ToList();
             NotifyPropertyChanged("Changelog");
             NotifyPropertyChanged("DiscussionBoard");
             NotifyPropertyChanged("myAsset");
             NotifyPropertyChanged("Tags");
             SetHierarchy();
+        }
+
+        public void DeleteAsset()
+        {
+            myAsset.Delete(context);         
         }
 
         #region SetNewValues
@@ -196,9 +166,7 @@ namespace AssetTracker.ViewModels
                 throw new NotImplementedException();
             }
           
-        }
-
-     
+        }     
 
         #region Tags
         public void DeleteTag(int id)
@@ -311,14 +279,7 @@ namespace AssetTracker.ViewModels
                 }
             }
 
-            public string UserNameLabel
-            {
-                get
-                {
-                    return UserName == "" ? "Unassigned" : UserName;
-                }
-            }
-
+            public string UserNameLabel => UserName == "" ? "Unassigned" : UserName;
             public string DateLabel
             {
                 get
@@ -348,7 +309,7 @@ namespace AssetTracker.ViewModels
                 {
                     phaseTimelineObjects = new List<PhaseTimelineObject>();
                     List<Phase> phases = (from p in context.Phases
-                                          where p.ph_caid == myasset.as_caid
+                                          where p.ph_caid == myAsset.as_caid
                                           orderby p.ph_step ascending
                                           select p).ToList();
 

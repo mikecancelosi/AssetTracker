@@ -18,19 +18,19 @@ namespace AssetTracker.View.Services
                 case "AssetDetailViewModel":
                     return new AssetDetail((AssetDetailViewModel)vm);
                 case "AssetListViewModel":
-                    return new AssetList((AssetListViewModel)vm, coord);
+                    return new AssetList((AssetListViewModel)vm);
                 case "CategoryEditViewModel":
-                    return new CategoryEdit((CategoryEditViewModel)vm, coord);
+                    return new CategoryEdit((CategoryEditViewModel)vm);
                 case "LoginViewModel":
-                    return new Login((LoginViewModel)vm, coord);
+                    return new Login((LoginViewModel)vm);
                 case "ProjectSettingsViewModel":
-                    return new ProjectSettings((ProjectSettingsViewModel)vm, coord);
+                    return new ProjectSettings((ProjectSettingsViewModel)vm);
                 case "RoleEditViewModel":
-                    return new RoleEdit((RoleEditViewModel)vm, coord);
+                    return new RoleEdit((RoleEditViewModel)vm);
                 case "UserDashboardViewModel":
                     return new UserDashboard((UserDashboardViewModel)vm);
                 case "UserEditViewModel":
-                    return new UserEdit((UserEditViewModel)vm, coord);
+                    return new UserEdit((UserEditViewModel)vm);
                 default:
                     throw new Exception();
             }

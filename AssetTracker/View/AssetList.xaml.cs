@@ -28,12 +28,10 @@ namespace AssetTracker.View
             get { return (AssetListViewModel)DataContext; }
             set { DataContext = value; }
         }
-        private INavigationCoordinator myCoordinator;
-        public AssetList(AssetListViewModel vm, INavigationCoordinator coordinator)
+        public AssetList(AssetListViewModel vm)
         {
             InitializeComponent();
             VM = vm;
-            myCoordinator = coordinator;
             #region SearchboxSetup
             Value_AssignedTo.SetType(typeof(User));
             Value_Category.SetType(typeof(AssetCategory));

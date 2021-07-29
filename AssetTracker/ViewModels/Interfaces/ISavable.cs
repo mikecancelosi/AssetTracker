@@ -11,7 +11,7 @@ namespace AssetTracker.ViewModels.Interfaces
     public interface ISavable
     {
         bool IsSavable { get; }
-        NavigationCoordinator navCoordinator { get; set; }
+        INavigationCoordinator navCoordinator { get; set; }
         void Save();
         bool PromptSave { get; set; }
         List<Violation> SaveViolations { get; set; }

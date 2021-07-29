@@ -8,13 +8,8 @@
       xmlns:mi="clr-namespace:MaterialIcons;assembly=MaterialIcons"
       xmlns:extensions="clr-namespace:AssetTracker.View.Extensions"
       mc:Ignorable="d"
-      d:DesignHeight="900"
-      d:DesignWidth="1600"
-      Title="RoleEdit">
-
-    <Page.DataContext>
-        <viewmodel:RoleEditViewModel />
-    </Page.DataContext>
+      Title="RoleEdit"
+      d:DataContext="{d:DesignInstance viewmodel:RoleEditViewModel, IsDesignTimeCreatable=True}">
     <Page.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -23,14 +18,14 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Page.Resources>
-    <Grid Margin="100,0" >
+    <Grid Margin="100,0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*"
                               MaxWidth="300" />
             <ColumnDefinition Width="5*" />
         </Grid.ColumnDefinitions>
         <Border x:Name="LeftPanel"
-              Style="{StaticResource LeftPanel}">
+                Style="{StaticResource LeftPanel}">
             <StackPanel>
                 <Border Name="ControlButtons"
                         Style="{StaticResource ControlBtns}">
@@ -39,15 +34,29 @@
                                  HorizontalAlignment="Center">
 
                         <Button IsEnabled="{Binding Savable}"
-                                Click="OnSaveClicked"
-                                Style="{StaticResource ControlBtn }" Margin="0,0,15,0">
+                                Command="{Binding SaveCommand}"
+                                Style="{StaticResource ControlBtn }"
+                                Margin="0,0,15,0">
                             <mi:MaterialIcon Icon="ic_save"
                                              Width="36"
                                              Height="36"
-                                             Style="{StaticResource HoverBtn_Content}"/>
+                                             Style="{StaticResource HoverBtn_Content}" />
                         </Button>
 
-                        <Button Click="DeleteRole_Clicked" Style="{StaticResource ControlBtn}">
+                        <Button Style="{StaticResource ControlBtn}">
+                            <Button.Triggers>
+                                <EventTrigger RoutedEvent="Button.Click">
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DeletePrompt"
+                                                                           Storyboard.TargetProperty="Visibility">
+                                                <DiscreteObjectKeyFrame KeyTime="0:0:0"
+                                                                        Value="{x:Static Visibility.Visible}" />
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                            </Button.Triggers>
                             <mi:MaterialIcon Icon="ic_delete"
                                              Width="36"
                                              Height="36"
@@ -63,17 +72,18 @@
 
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="{Binding Role.Name}"
-                               Margin="0,0,20,0" Foreground="{StaticResource Text_Dark}"/>
+                               Margin="0,0,20,0"
+                               Foreground="{StaticResource Text_Dark}" />
                     <TextBlock Foreground="{StaticResource Text_Dark}">
                         <Run Text="#" />
-                        <Run Text="{Binding Role.ID}"  />
+                        <Run Text="{Binding Role.ID}" />
                     </TextBlock>
                 </StackPanel>
             </StackPanel>
         </Border>
 
         <Border Grid.Column="1"
-               Style="{StaticResource RightPanel}">
+                Style="{StaticResource RightPanel}">
             <Border.Resources>
                 <Style TargetType="TextBlock">
                     <Setter Property="Foreground"
@@ -131,7 +141,7 @@
                         </StackPanel>
                     </Grid>
                 </ScrollViewer>
-                
+
                 <Control x:Name="PromptSavePanel"
                          Style="{StaticResource  PromptSave}"
                          Visibility="Collapsed" />
@@ -170,8 +180,21 @@
                                     Padding="5"
                                     BorderThickness="5"
                                     BorderBrush="{StaticResource ConfirmOverlay_Dark}"
-                                    Click="DeleteConfirm_Clicked"
+                                    Command="{Binding DeleteConfirmed}"
                                     Width="150">
+                                <Button.Triggers>
+                                    <EventTrigger RoutedEvent="Button.Click">
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DeletePrompt"
+                                                                               Storyboard.TargetProperty="Visibility">
+                                                    <DiscreteObjectKeyFrame KeyTime="0:0:0"
+                                                                            Value="{x:Static Visibility.Collapsed}" />
+                                                </ObjectAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </EventTrigger>
+                                </Button.Triggers>
                                 <TextBlock Text="Confirm"
                                            Style="{StaticResource HoverBtn_TextContent}"
                                            VerticalAlignment="Center"
@@ -185,8 +208,20 @@
                                      Style="{StaticResource HoverBtn}"
                                      Padding="5"
                                      BorderThickness="5"
-                                     BorderBrush="{StaticResource RejectOverlay_Dark}"
-                                     Click="DeleteCancel_Clicked">
+                                     BorderBrush="{StaticResource RejectOverlay_Dark}">
+                                <Button.Triggers>
+                                    <EventTrigger RoutedEvent="Button.Click">
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DeletePrompt"
+                                                                               Storyboard.TargetProperty="Visibility">
+                                                    <DiscreteObjectKeyFrame KeyTime="0:0:0"
+                                                                            Value="{x:Static Visibility.Collapsed}" />
+                                                </ObjectAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </EventTrigger>
+                                </Button.Triggers>
                                 <TextBlock Text="Cancel"
                                            Style="{StaticResource HoverBtn_TextContent}"
                                            HorizontalAlignment="Center"

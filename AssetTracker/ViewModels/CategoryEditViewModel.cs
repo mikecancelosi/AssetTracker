@@ -1,5 +1,8 @@
 ﻿using AssetTracker.Model;
+using AssetTracker.Services;
 using AssetTracker.View;
+using AssetTracker.View.Commands;
+using AssetTracker.ViewModels.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -7,10 +10,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 
 namespace AssetTracker.ViewModels
 {
-    public class CategoryEditViewModel : ViewModel
+    public class CategoryEditViewModel : ViewModel,ISavable
     {
         public AssetCategory Category { get; set; }
         private List<Phase> phasesToDelete = new List<Phase>();
@@ -23,34 +27,6 @@ namespace AssetTracker.ViewModels
                 return orderedList.ToList();
             }
         }
-
-        public CategoryEditViewModel()
-        {
-            Category = context.AssetCategories.Create();
-            Creating = true;
-            context.AssetCategories.Add(Category);
-        }
-
-        public CategoryEditViewModel(AssetCategory cat)
-        {
-            if (cat.ca_id > 0)
-            {
-                Category = context.AssetCategories.Find(cat.ca_id);
-                Creating = false;
-            }
-            else
-            {
-                Category = context.AssetCategories.Add(cat);
-                Creating = false;
-                Cloning = true;
-            }
-            NotifyPropertyChanged("Category");
-            NotifyPropertyChanged("HeadingContext");
-        }
-
-        public bool Savable => context.ChangeTracker.HasChanges();
-        public bool Creating { get; set; }
-        public bool Cloning { get; set; }
         public string HeadingContent
         {
             get
@@ -68,6 +44,74 @@ namespace AssetTracker.ViewModels
                     return "Modify Category";
                 }
             }
+        }
+        public bool IsSavable => context.ChangeTracker.HasChanges();
+        public bool PromptSave { get; set; }
+        public ICommand DeleteConfirmed { get; set; }
+        public ICommand SaveCommand { get; set; }
+        public ICommand CancelSave { get; set; }
+        public List<Violation> SaveViolations { get; set; }
+
+
+        public bool Creating { get; set; }
+        public bool Cloning { get; set; }
+
+        public INavigationCoordinator navCoordinator { get; set; }
+        public CategoryEditViewModel(INavigationCoordinator coord)
+        {
+            navCoordinator = coord;
+            Category = context.AssetCategories.Create();
+            Creating = true;
+            DeleteConfirmed = new RelayCommand((s) => DeleteCategory(), (s) => true);
+            SaveCommand = new RelayCommand((s) => Save(), (s) => true);
+            CancelSave = new RelayCommand((s) => navCoordinator.NavigateToQueued(), (s) => true);
+        }
+
+        public void SetCategory(AssetCategory cat)
+        {
+            if (cat.ca_id > 0)
+            {
+                Category = context.AssetCategories.Find(cat.ca_id);
+            }
+            else
+            {
+                Category = context.AssetCategories.Add(cat);                
+                Cloning = true;
+            }
+            Creating = false;
+            NotifyPropertyChanged("Category");
+            NotifyPropertyChanged("HeadingContext");
+        }
+
+        public void Save()
+        {
+            var violations = new List<Violation>();
+            foreach (var phase in phasesToDelete)
+            {
+                phase.Delete(context);
+            }
+            if (Category.Save(context, out violations))
+            {
+                context.SaveChanges();
+                Creating = false;
+                Cloning = false;
+                NotifyPropertyChanged("Savable");
+                NotifyPropertyChanged("HeadingContent");
+                NotifyPropertyChanged("CurrentPhases");
+                NotifyPropertyChanged("Category");
+            }
+            else
+            {
+                SaveViolations = violations;
+                NotifyPropertyChanged("SaveViolations");
+                throw new NotImplementedException();
+            }
+        }
+
+        public void DeleteCategory()
+        {
+            Category.Delete(context);
+            navCoordinator.NavigateToProjectSettings();
         }
 
         public void OnCategoryNameChanged(string newName)
@@ -145,36 +189,6 @@ namespace AssetTracker.ViewModels
             phasesToDelete.Add(phase);
             NotifyPropertyChanged("CurrentPhases");
             NotifyPropertyChanged("Savable");
-        }
-
-        public bool Save(out List<Violation> violations)
-        {
-            violations = new List<Violation>();
-            foreach(var phase in phasesToDelete)
-            {
-                phase.Delete(context);
-            }
-            if (Category.Save(context, out violations))
-            {
-                context.SaveChanges();
-                Creating = false;
-                Cloning = false;
-                NotifyPropertyChanged("Savable");
-                NotifyPropertyChanged("HeadingContent");
-                NotifyPropertyChanged("CurrentPhases");
-                NotifyPropertyChanged("Category");
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        public void DeleteCategory()
-        {
-            Category.Delete(context);
-        }
-
+        }     
     }
 }

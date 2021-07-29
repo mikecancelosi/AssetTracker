@@ -28,126 +28,38 @@ namespace AssetTracker.View
             get { return (ProjectSettingsViewModel)DataContext; }
             set { DataContext = value; }
         }
-        private INavigationCoordinator myCoordinator;
 
-        public ProjectSettings(ProjectSettingsViewModel vm, INavigationCoordinator coordinator)
+        public ProjectSettings(ProjectSettingsViewModel vm)
         {
             InitializeComponent();
             VM = vm;
-            myCoordinator = coordinator;
-        }     
-
-        private void CreateUser_Clicked(object sender, RoutedEventArgs e)
-        {
-            //myCoordinator.NavigateToCreateUser();
-        }
-       
-        private void CreateRole_Clicked(object sender, RoutedEventArgs e)
-        {
-            //myCoordinator.NavigateToCreateRole();
-        }
-
-        private void CreateCategory_Clicked(object sender, RoutedEventArgs e)
-        {
-            //myCoordinator.NavigateToCreateCategory();
         }
 
         private void OnOperationClicked(object sender, RoutedEventArgs e)
         {
             Button selectedItem = sender as Button;
-            string tag = selectedItem.Tag.ToString();
-            switch(selectedItem.DataContext.GetType().BaseType.Name)
-            {
-                case "User":
-                    User selectedUser = selectedItem.DataContext as User;
-                    OnUserOperationClicked(selectedUser, tag);
-                    break;
-                case "AssetCategory":
-                    AssetCategory selectedCategory = selectedItem.DataContext as AssetCategory;
-                    OnCategoryOperationClicked(selectedCategory, tag);
-                    break;
-                case "SecRole":
-                    SecRole selectedRole = selectedItem.DataContext as SecRole;
-                    OnRoleOperationClicked(selectedRole, tag);
-                    break;
-
-            }
-        }
-
-        private void OnUserOperationClicked(User selectedUser,string tag)
-        {
+            string tag = selectedItem.Tag.ToString();            
+            ProjectSettingsViewModel.OperationType operation;
             switch(tag)
             {
                 case "copy":
-                    User copiedUser = VM.CopyUser(selectedUser.us_id);
-                   // myCoordinator.NavigateToUserEdit(copiedUser);
+                    operation = ProjectSettingsViewModel.OperationType.Copy;
                     break;
                 case "edit":
-                    //myCoordinator.NavigateToUserEdit(selectedUser);
+                    operation = ProjectSettingsViewModel.OperationType.Edit;
                     break;
                 case "delete":
-                    VM.SetSelectedObject(selectedUser);
-                    AssetDeletePrompt.Visibility = Visibility.Visible;
+                default:
+                    operation = ProjectSettingsViewModel.OperationType.Delete;
                     break;
             }
-                
-        }
-
-        private void OnRoleOperationClicked(SecRole selectedRole, string tag)
-        {
-            switch (tag)
-            {
-                case "copy":
-                    SecRole copiedRole = VM.CopyRole(selectedRole.ro_id);
-                    //myCoordinator.NavigateToRoleEdit(copiedRole);
-                    break;
-                case "edit":
-                    //myCoordinator.NavigateToRoleEdit(selectedRole);
-                    break;
-                case "delete":
-                    VM.SetSelectedObject(selectedRole);
-                    AssetDeletePrompt.Visibility = Visibility.Visible;
-                    break;
-            }
-
-        }
-
-        private void OnCategoryOperationClicked(AssetCategory selectedCategory, string tag)
-        {
-            switch (tag)
-            {
-                case "copy":
-                    AssetCategory copiedCategory = VM.CopyCategory(selectedCategory.ca_id);
-                   // myCoordinator.NavigatetoCategoryEdit(copiedCategory);
-                    break;
-                case "edit":
-                    //myCoordinator.NavigatetoCategoryEdit(selectedCategory);
-                    break;
-                case "delete":
-                    VM.SetSelectedObject(selectedCategory);
-                    AssetDeletePrompt.Visibility = Visibility.Visible;
-                    break;
-            }
-
+            DatabaseBackedObject dbo = selectedItem.DataContext as DatabaseBackedObject;
+            VM.CompleteDBOOperation(dbo, operation);
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             VM.Reload();
-        }
-
-        #region Delete Item
-
-        private void DeleteConfirm_Clicked(object sender, RoutedEventArgs e)
-        {
-            VM.DeleteSelectedObject();
-            AssetDeletePrompt.Visibility = Visibility.Collapsed;
-        }
-
-        private void DeleteCancel_Clicked(object sender, RoutedEventArgs e)
-        {
-            AssetDeletePrompt.Visibility = Visibility.Collapsed;
-        }
-        #endregion
+        }       
     }
 }

@@ -9,6 +9,34 @@
              StartupUri="View/MainWindow.xaml" Startup="Application_Startup">
     <Application.Resources>
         <ResourceDictionary>
+            <Storyboard x:Key="HideDeletePrompt">
+                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DeletePrompt"
+                                               Storyboard.TargetProperty="Visibility">
+                    <DiscreteObjectKeyFrame KeyTime="0:0:0"
+                                            Value="{x:Static Visibility.Collapsed}" />
+                </ObjectAnimationUsingKeyFrames>
+            </Storyboard>
+            <Storyboard x:Key="ShowDeletePrompt">
+                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DeletePrompt"
+                                               Storyboard.TargetProperty="Visibility">
+                    <DiscreteObjectKeyFrame KeyTime="0:0:0"
+                                            Value="{x:Static Visibility.Visible}" />
+                </ObjectAnimationUsingKeyFrames>
+            </Storyboard>
+            <Storyboard x:Key="HideSavePrompt">
+                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="SavePrompt"
+                                               Storyboard.TargetProperty="Visibility">
+                    <DiscreteObjectKeyFrame KeyTime="0:0:0"
+                                            Value="{x:Static Visibility.Collapsed}" />
+                </ObjectAnimationUsingKeyFrames>
+            </Storyboard>
+            <Storyboard x:Key="ShowSavePrompt">
+                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="SavePrompt"
+                                               Storyboard.TargetProperty="Visibility">
+                    <DiscreteObjectKeyFrame KeyTime="0:0:0"
+                                            Value="{x:Static Visibility.Visible}" />
+                </ObjectAnimationUsingKeyFrames>
+            </Storyboard>
             <converters:InverseBooleanConverter x:Key="inverseBooleanConverter" />
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
             <converters:MultiBooleanToVisibilityConverter x:Key="multiBoolToVisConvert" />
@@ -42,7 +70,8 @@
                                     Source="View/Resources/ProjectSettingsResourceDictionary.xaml" />
                 <ResourceDictionary x:Name="PermissionsDictionary"
                                     Source="View/Resources/PermissionsResourceDictionary.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
+                
+            </ResourceDictionary.MergedDictionaries>            
+        </ResourceDictionary>        
     </Application.Resources>
 </Application>

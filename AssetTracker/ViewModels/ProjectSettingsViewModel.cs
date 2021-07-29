@@ -1,82 +1,96 @@
 ﻿using AssetTracker.Extensions;
 using AssetTracker.Model;
+using AssetTracker.Services;
 using AssetTracker.View;
+using AssetTracker.View.Commands;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using System.Windows.Navigation;
 
 namespace AssetTracker.ViewModels
 {
     public class ProjectSettingsViewModel : ViewModel
     {
+        public ObservableCollection<User> Users => new ObservableCollection<User>(context.Users);
+        public ObservableCollection<SecRole> Roles => new ObservableCollection<SecRole>(context.SecRoles);
+        public ObservableCollection<AssetCategory> Categories => new ObservableCollection<AssetCategory>(context.AssetCategories);
 
-        public ObservableCollection<User> Users
+        public ICommand CreateRole { get; set; }
+        public ICommand CreateCategory { get; set; }
+        public ICommand CreateUser { get; set; }
+
+        public bool PromptDelete { get; set; }
+        public ICommand DeleteConfirmed { get; set; }
+        public DatabaseBackedObject DeletionObject { get; private set; }
+
+        private readonly INavigationCoordinator navCoordinator;
+        public ProjectSettingsViewModel(INavigationCoordinator coord)
         {
-            get
+            navCoordinator = coord;
+            CreateRole = new RelayCommand((s) => navCoordinator.NavigateToCreateRole(), (s) => true);
+            CreateCategory = new RelayCommand((s) => navCoordinator.NavigateToCreateCategory(), (s) => true);
+            CreateUser = new RelayCommand((s) => navCoordinator.NavigateToCreateUser(), (s) => true);
+            DeleteConfirmed = new RelayCommand((s) => DeleteSelectedObject(), (s) => true);
+        }
+
+        public enum OperationType
+        {
+            Copy,
+            Edit,
+            Delete
+        }
+
+        public void CompleteDBOOperation(DatabaseBackedObject dbo, OperationType operation)
+        {
+            //TODO : Fix this monstrosity
+            string typeName = dbo.GetType().Name;
+            switch (operation)
             {
-                return new ObservableCollection<User>(context.Users);
+
+                case OperationType.Copy:
+                    DatabaseBackedObject clone = dbo.Clone();
+                    if (typeName == "SecRole")
+                    {
+                        navCoordinator.NavigateToRoleEdit((SecRole)clone);
+                    }
+                    else if (typeName == "AssetCategory")
+                    {
+                        navCoordinator.NavigatetoCategoryEdit((AssetCategory)clone);
+                    }
+                    else if (typeName == "User")
+                    {
+                        navCoordinator.NavigateToUserEdit((User)clone);
+                    }
+                    break;
+                case OperationType.Edit:
+                    if (typeName == "SecRole")
+                    {
+                        navCoordinator.NavigateToRoleEdit((SecRole)dbo);
+                    }
+                    else if (typeName == "AssetCategory")
+                    {
+                        navCoordinator.NavigatetoCategoryEdit((AssetCategory)dbo);
+                    }
+                    else if (typeName == "User")
+                    {
+                        navCoordinator.NavigateToUserEdit((User)dbo);
+                    }
+                    break;
+                case OperationType.Delete:
+                    DeletionObject = dbo;
+                    PromptDelete = true;
+                    NotifyPropertyChanged("PromptDelete");
+                    break;
             }
         }
 
-        public ObservableCollection<SecRole> Roles
-        {
-            get
-            {
-                return new ObservableCollection<SecRole>(context.SecRoles);
-            }
-
-        }
-
-        public ObservableCollection<AssetCategory> Categories
-        {
-            get
-            {
-                return new ObservableCollection<AssetCategory>(context.AssetCategories);
-            }
-        }
-
-        public User CopyUser(int id)
-        {
-            User user = context.Users.Find(id);
-            return user.Clone() as User;
-        }
-
-        public void DeleteUser(int id)
-        {
-            User user = context.Users.Find(id);
-            user.Delete(context);
-            NotifyPropertyChanged("Users");
-        }
-
-        public AssetCategory CopyCategory(int id)
-        {
-            AssetCategory cat = context.AssetCategories.Find(id);
-            return cat.Clone() as AssetCategory;
-        }
-        public void DeleteCategory(int id)
-        {
-            AssetCategory cat = context.AssetCategories.Find(id);
-            cat.Delete(context);
-            NotifyPropertyChanged("Categories");
-        }
-
-        public SecRole CopyRole(int id)
-        {
-            SecRole role = context.SecRoles.Find(id);
-            return role.Clone() as SecRole;
-        }
-
-        public void DeleteRole(int id)
-        {
-            SecRole role = context.SecRoles.Find(id);
-            role.Delete(context);
-            NotifyPropertyChanged("Roles");
-        }
 
         public void Reload()
         {
@@ -86,41 +100,15 @@ namespace AssetTracker.ViewModels
             NotifyPropertyChanged("Categories");
         }
 
-        public void SetDeletionObject(DatabaseBackedObject obj)
+        private void DeleteSelectedObject()
         {
-            SelectedObject = obj;
-            NotifyPropertyChanged("SelectedObject");
+            DeletionObject.Delete(context);
+            DeletionObject = null;
+            NotifyPropertyChanged("Users");
+            NotifyPropertyChanged("Roles");
+            NotifyPropertyChanged("Categories");
         }
 
-        public void DeleteSelectedObject()
-        {
-            if(SelectedObject.GetType().BaseType == typeof(AssetCategory))
-            {
-                DeleteCategory(SelectedObject.ID);
-            } 
-            else if (SelectedObject.GetType().BaseType == typeof(SecRole))
-            {
-                DeleteRole(SelectedObject.ID);
-            }
-            else if (SelectedObject.GetType().BaseType == typeof(User))
-            {
-                DeleteUser(SelectedObject.ID);
-            }
-            else
-            {
-                return;
-            }
 
-            SelectedObject = null;
-            NotifyPropertyChanged("SelectedObject");
-        }
-        
-        public void SetSelectedObject(DatabaseBackedObject dbo)
-        {
-            SelectedObject = dbo;
-            NotifyPropertyChanged("SelectedObject");
-        }
-
-        public DatabaseBackedObject SelectedObject { get; private set; }
     }
 }

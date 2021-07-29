@@ -1,4 +1,5 @@
 ﻿using AssetTracker.Model;
+using AssetTracker.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +26,7 @@ namespace AssetTracker.ViewModels
                 }
 
                 MainViewModel.Instance.LoginUser(user);
+                navCoordinator.NavigateToUserDashboard();
                 return LoginCode.Success;                
             }
             else
@@ -34,10 +36,12 @@ namespace AssetTracker.ViewModels
                         
         }
 
-        public LoginViewModel()
+        private NavigationCoordinator navCoordinator;
+        public LoginViewModel(NavigationCoordinator coord)
         {
             Email = "";
             Password = "";
+            navCoordinator = coord;
         }
 
         public enum LoginCode

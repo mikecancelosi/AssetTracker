@@ -22,16 +22,15 @@ namespace AssetTracker.View
     /// </summary>
     public partial class Login : Page
     {
-        private INavigationCoordinator coordinator;
         private LoginViewModel VM
         {
             get { return (LoginViewModel)DataContext; }
             set { DataContext = value; }
         }
-        public Login(LoginViewModel vm, INavigationCoordinator coord)
+
+        public Login(LoginViewModel vm)
         {
             InitializeComponent();
-            coordinator = coord;
             VM = vm;
         }
 
@@ -48,12 +47,6 @@ namespace AssetTracker.View
                 case LoginViewModel.LoginCode.Password:
                     {
                         PasswordError.Visibility = Visibility.Visible;
-                        break;
-                    }
-                case LoginViewModel.LoginCode.Success:
-                default:
-                    {
-                        coordinator.NavigateToUserDashboard();
                         break;
                     }
             }

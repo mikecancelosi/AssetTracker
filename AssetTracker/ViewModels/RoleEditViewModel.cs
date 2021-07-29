@@ -1,15 +1,19 @@
 ﻿using AssetTracker.Model;
+using AssetTracker.Services;
+using AssetTracker.View.Commands;
+using AssetTracker.ViewModels.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using static AssetTracker.Model.SecPermission;
 
 namespace AssetTracker.ViewModels
 {
-    public class RoleEditViewModel : ViewModel
+    public class RoleEditViewModel : ViewModel, ISavable
     {
         public SecRole Role { get; set; }
 
@@ -59,13 +63,7 @@ namespace AssetTracker.ViewModels
                 return permissionGrps;
             }
         }
-        public bool Savable
-        {
-            get
-            {
-                return context.ChangeTracker.HasChanges();
-            }
-        }
+        
         public bool Creating { get; set; }
         public bool Cloning { get; set; }
         public string HeadingContext
@@ -87,35 +85,42 @@ namespace AssetTracker.ViewModels
             }
         }
 
-        public RoleEditViewModel(SecRole role)
+        public bool IsSavable => context.ChangeTracker.HasChanges();
+        public ICommand DeleteConfirmed { get; set; }
+        public ICommand SaveCommand { get; set; }
+        public ICommand CancelSave { get; set; }
+        public List<Violation> SaveViolations { get; set; }
+        public bool PromptSave { get; set; }
+
+        public INavigationCoordinator navCoordinator { get; set; }
+        public RoleEditViewModel(INavigationCoordinator coord)
+        {
+            navCoordinator = coord;
+            DeleteConfirmed = new RelayCommand((s) => DeleteRole(), (s) => true);
+            SaveCommand = new RelayCommand((s) => Save(), (s) => true);
+            CancelSave = new RelayCommand((s) => navCoordinator.NavigateToQueued(), (s) => true);
+
+        }
+
+        public void SetRole(SecRole role)
         {
             if (role.ro_id > 0)
             {
-                Role = context.SecRoles.Find(role.ro_id);
-                Creating = false;
+                Role = context.SecRoles.Find(role.ro_id);               
             }
             else
             {
                 Role = context.SecRoles.Attach(role);
-                Creating = false;
                 Cloning = true;
             }
+            Creating = false;
             NotifyPropertyChanged("Role");
             NotifyPropertyChanged("HeadingContext");
         }
 
-        public RoleEditViewModel()
+        public void Save()
         {
-            Role = context.SecRoles.Create();
-            Creating = true;
-            context.SecRoles.Add(Role);
-            NotifyPropertyChanged("Role");
-            NotifyPropertyChanged("HeadingContext");
-        }
-
-        public bool Save(out List<Violation> violations)
-        {
-            // Saving Role also saves role permissions changes         
+            List<Violation> violations;     
             if (Role.Save(context, out violations))
             {
                 context.SaveChanges();
@@ -124,15 +129,19 @@ namespace AssetTracker.ViewModels
                 Creating = false;
                 Cloning = false;
                 NotifyPropertyChanged("HeadingContext");
-                return true;
             }
-
-            return false;
+            else
+            {
+                SaveViolations = violations;
+                NotifyPropertyChanged("SaveViolations");
+                throw new NotImplementedException();
+            }
         }
 
         public void DeleteRole()
         {
             Role.Delete(context);
+            navCoordinator.NavigateToProjectSettings();
         }
 
         public void OnRoleNameChanged(string newValue)

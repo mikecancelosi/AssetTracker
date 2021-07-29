@@ -8,13 +8,9 @@
       xmlns:mi="clr-namespace:MaterialIcons;assembly=MaterialIcons"
       xmlns:converters="clr-namespace:AssetTracker.View.Converters"
       mc:Ignorable="d"
-      d:DesignHeight="1080"
-      d:DesignWidth="1920"
-      Title="UserEdit">
-
-    <Page.DataContext>
-        <viewmodel:UserEditViewModel />
-    </Page.DataContext>    
+      Title="UserEdit"
+      d:DataContext="{d:DesignInstance viewmodel:UserEditViewModel, IsDesignTimeCreatable=True}">
+  
     <Grid Margin="100,0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*"
@@ -33,7 +29,7 @@
                                      HorizontalAlignment="Center">
 
                             <Button IsEnabled="{Binding Savable}"
-                                    Click="OnSaveClicked"
+                                    Command="{Binding SaveCommand}"
                                     Margin="0,0,30,0"
                                     Style="{StaticResource  ControlBtn}">
                                 <mi:MaterialIcon Icon="ic_save"
@@ -42,6 +38,19 @@
 
                             <Button Click="DeleteUser_Clicked"
                                     Style="{StaticResource  ControlBtn }">
+                                <Button.Triggers>
+                                    <EventTrigger RoutedEvent="Button.Click">
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DeletePrompt"
+                                                                               Storyboard.TargetProperty="Visibility">
+                                                    <DiscreteObjectKeyFrame KeyTime="0:0:0"
+                                                                            Value="{x:Static Visibility.Visible}" />
+                                                </ObjectAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </EventTrigger>
+                                </Button.Triggers>
                                 <mi:MaterialIcon Icon="ic_delete"
                                                  Style="{StaticResource HoverBtn_Content}" />
                             </Button>

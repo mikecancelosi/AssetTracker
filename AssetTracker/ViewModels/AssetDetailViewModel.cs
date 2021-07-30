@@ -59,25 +59,38 @@ namespace AssetTracker.ViewModels
         }
 
         //ISavable Properties
-        public bool IsSavable => context.ChangeTracker.HasChanges();
-        public ICommand DeleteConfirmed { get; set; }
+        public bool IsSavable => context.ChangeTracker.HasChanges(); 
         public ICommand SaveCommand { get; set; }
-        public ICommand CancelSave { get; set; }
+        public ICommand RefuseSave { get; set; }
         public List<Violation> SaveViolations { get; set; }
         public INavigationCoordinator navCoordinator { get; set; }
-        public bool PromptSave { get; set; }
+        private bool promptSave;
+        public bool PromptSave
+        {
+            get => promptSave;
+            set
+            {
+                promptSave = value;
+                NotifyPropertyChanged("PromptSave");
+            }
+        }
+
+        public ICommand DeleteConfirmed { get; set; }
+
         //TODO : Add back in hierarchy selected command
         public AssetDetailViewModel(INavigationCoordinator coord)
         {
             navCoordinator = coord;
-            DeleteConfirmed = new RelayCommand((s) => DeleteAsset(), (s) => true);
+            navCoordinator.UserNavigationAttempt += (s) => PromptSave = true;
+            myAsset = context.Assets.Create();
             SaveCommand = new RelayCommand((s) => Save(), (s) => true);
-            CancelSave = new RelayCommand((s) => navCoordinator.NavigateToQueued(), (s) => true);
+            RefuseSave = new RelayCommand((s) => navCoordinator.NavigateToQueued(), (s) => true);
+            DeleteConfirmed = new RelayCommand((s) => DeleteAsset(), (s) => true);
         }
 
         public void SetAsset(Asset ast)
         {
-            myAsset = ast;
+            myAsset = context.Assets.Find(ast.ID);
             NotifyPropertyChanged("myAsset");
 
             Changelog = (from s in context.Changes
@@ -92,26 +105,27 @@ namespace AssetTracker.ViewModels
 
         public void DeleteAsset()
         {
-            myAsset.Delete(context);         
+            myAsset.Delete(context);
+            navCoordinator.NavigateToAssetList();
         }
 
         #region SetNewValues
         public void ModifyAssignedUser(int userID)
         {
             context.Entry(myAsset).Property(x => x.as_usid).CurrentValue = userID;
-            NotifyPropertyChanged("Savable");
+            NotifyPropertyChanged("IsSavable");
         }
 
         public void ModifyPhase(int phaseID)
         {
             context.Entry(myAsset).Property(x => x.as_phid).CurrentValue = phaseID;
-            NotifyPropertyChanged("Savable");
+            NotifyPropertyChanged("IsSavable");
         }
 
         public void ModifyCategory(int catID)
         {
             context.Entry(myAsset).Property(x => x.as_caid).CurrentValue = catID;
-            NotifyPropertyChanged("Savable");
+            NotifyPropertyChanged("IsSavable");
             NotifyPropertyChanged("myAsset");
         }
 
@@ -119,14 +133,14 @@ namespace AssetTracker.ViewModels
         {
             context.Entry(myAsset).Property(x => x.as_displayname).CurrentValue = newName;
             NotifyPropertyChanged("myAsset");
-            NotifyPropertyChanged("Savable");
+            NotifyPropertyChanged("IsSavable");
         }
 
         public void ModifyDescription(string newDescription)
         {
             context.Entry(myAsset).Property(x => x.as_description).CurrentValue = newDescription;
             NotifyPropertyChanged("myAsset");
-            NotifyPropertyChanged("Savable");
+            NotifyPropertyChanged("IsSavable");
         }
         #endregion
 
@@ -136,6 +150,12 @@ namespace AssetTracker.ViewModels
             List<Alert> alerts = new List<Alert>();
             var violations = new List<Violation>();
            
+            //TODO: Properly handle changes
+            if(context.Entry(myAsset).State == System.Data.Entity.EntityState.Detached)
+            {
+                context.Assets.Add(myAsset);
+            }
+
             if (context.Entry(myAsset).State == System.Data.Entity.EntityState.Modified)
             {
                 Asset beforeAsset = context.Entry(myAsset).GetDatabaseValues().ToObject() as Asset;
@@ -152,7 +172,7 @@ namespace AssetTracker.ViewModels
                 {
                     //alert.Save(context);
                 }
-                NotifyPropertyChanged("Savable");
+                NotifyPropertyChanged("IsSavable");
                 NotifyPropertyChanged("Changelog");    
                 if(navCoordinator.WaitingToNavigate)
                 {
@@ -174,7 +194,7 @@ namespace AssetTracker.ViewModels
             Metadata data = context.Metadata.Find(id);
             myAsset.Metadata.Remove(data);
             context.Metadata.Remove(data);
-            NotifyPropertyChanged("Savable");
+            NotifyPropertyChanged("IsSavable");
             NotifyPropertyChanged("Tags");
         }
 
@@ -185,7 +205,7 @@ namespace AssetTracker.ViewModels
             dataInst.md_value = text;
             myAsset.Metadata.Add(dataInst);
             context.Metadata.Add(dataInst);
-            NotifyPropertyChanged("Savable");
+            NotifyPropertyChanged("IsSavable");
             NotifyPropertyChanged("Tags");
         }
         #endregion

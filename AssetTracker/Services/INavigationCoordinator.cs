@@ -26,6 +26,7 @@ namespace AssetTracker.Services
         void NavigateToCreateUser();
         void NavigateToUserEdit(User userToEdit);
         void NavigateToAssetDetail(Asset asset);
+        void NavigateToCreateAsset();
         void NavigateToUserDashboard();
         void NavigateToCreateRole();
         void NavigateToRoleEdit(SecRole roleToEdit);

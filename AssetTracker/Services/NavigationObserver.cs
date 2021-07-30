@@ -18,7 +18,9 @@ namespace AssetTracker.Services
         private NavigationService nav;
         private readonly INavigationCoordinator coordinator;
         private readonly IViewFactory viewFactory;
-        public NavigationObserver(NavigationService navigationService, INavigationCoordinator coord, IViewFactory factory)
+        public NavigationObserver(NavigationService navigationService, 
+                                  INavigationCoordinator coord, 
+                                  IViewFactory factory)
         {
             nav = navigationService;
             viewFactory = factory;

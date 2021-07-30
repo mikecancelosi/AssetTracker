@@ -31,55 +31,13 @@ namespace AssetTracker.View
         public AssetList(AssetListViewModel vm)
         {
             InitializeComponent();
-            VM = vm;
-            #region SearchboxSetup
-            Value_AssignedTo.SetType(typeof(User));
-            Value_Category.SetType(typeof(AssetCategory));
-            Value_ParentID.SetType(typeof(Asset));
-            SubscribeToSearchboxes();
-            #endregion
-        }
-        private void SubscribeToSearchboxes()
-        {
-            Value_AssignedTo.OnSelectionChanged += () => { VM.OnParentAssetChanged(Value_AssignedTo.CurrentSelection.ID); };
-            Value_Category.OnSelectionChanged += () => { VM.OnCategoryChanged(Value_Category.CurrentSelection.ID); };
-            Value_ParentID.OnSelectionChanged += () => { VM.OnParentAssetChanged(Value_ParentID.CurrentSelection.ID); };
-        }
+            VM = vm;          
+        }     
 
         private void ListViewItem_MouseDoubleClick(object sender, RoutedEventArgs e)
         {
             Asset ast = MainGrid.SelectedItem as Asset;
             VM.NavigateToAssetDetail(ast);
-        }
-
-        private void CreateAsset_Clicked(object sender, RoutedEventArgs e)
-        {
-            VM.CreateAsset();
-            AssetCreateControl.Visibility = Visibility.Visible;
-            //TODO: Make everything else not interactable
-        }
-
-      
-        private void CreateCancel_Clicked(object sender, RoutedEventArgs e)
-        {
-            AssetCreateControl.Visibility = Visibility.Collapsed;
-            VM.ResetNewAsset();
-        }
-
-        private void CreateConfirm_Clicked(object sender, RoutedEventArgs e)
-        {           
-            List<Violation> violations;
-            if (!VM.SaveAsset(out violations))
-            {
-                throw new NotImplementedException();
-            }
-            else
-            {
-                AssetCreateControl.Visibility = Visibility.Collapsed;
-                Value_AssignedTo.ResetDisplay();
-                Value_Category.ResetDisplay();
-                Value_ParentID.ResetDisplay();
-            }
         }
 
         private void MainGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -106,16 +64,6 @@ namespace AssetTracker.View
         private void DeleteCancel_Clicked(object sender, RoutedEventArgs e)
         {
             AssetDeletePrompt.Visibility = Visibility.Collapsed;
-        }
-
-        private void Value_Name_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            VM.OnNameChanged(Value_Name.Text);
-        }
-
-        private void Value_Description_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            VM.OnDescriptionChanged(Value_Description.Text);
         }
     }
 }

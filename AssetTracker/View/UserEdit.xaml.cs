@@ -2,6 +2,7 @@
 using AssetTracker.Services;
 using AssetTracker.View.Commands;
 using AssetTracker.ViewModels;
+using AssetTracker.ViewModels.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,13 +30,21 @@ namespace AssetTracker.View
             get { return (UserEditViewModel)DataContext; }
             set { DataContext = value; }
         }
-      
-        public UserEdit(UserEditViewModel vm)
+
+        private SearchBoxViewModel roleSearchboxVM;
+
+        private readonly IControlViewModelFactory controlFactory;
+        public UserEdit(UserEditViewModel vm, IControlViewModelFactory vmFactory)
         {
             InitializeComponent();
-            VM = vm;           
-            Searchbox_Role.SetType(typeof(SecRole));
-            Searchbox_Role.SetCurrentSelectedObject(VM.CurrentUser.us_roid);
+            VM = vm;
+            controlFactory = vmFactory;
+
+            roleSearchboxVM = controlFactory.BuildSearchboxViewModel(typeof(SecRole), 
+                                                                            startingID : vm.CurrentUser.us_roid);
+            roleSearchboxVM.OnSelectionChanged += () => Role_OnSelectionChanged();
+
+            Searchbox_Role.SetViewmodel(roleSearchboxVM);
         }            
 
         private void FirstName_TextChanged(object sender, TextChangedEventArgs e)
@@ -70,7 +79,7 @@ namespace AssetTracker.View
 
         private void Role_OnSelectionChanged()
         {
-            VM.OnRoleChanged(Searchbox_Role.CurrentSelection.ID);
+            VM.OnRoleChanged(roleSearchboxVM.CurrentlySelectedObject.ID);
             //TODO: Adjust permissions.
         }
 

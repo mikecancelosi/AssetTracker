@@ -161,7 +161,6 @@
     <Compile Include="Services\DefaultRepositoryData.cs" />
     <Compile Include="Services\INavigationCoordinator.cs" />
     <Compile Include="Services\NavigationCoordinator.cs" />
-    <Compile Include="Services\NavigationObserverAttribute.cs" />
     <Compile Include="Setting.cs">
       <DependentUpon>DBO.tt</DependentUpon>
     </Compile>
@@ -222,6 +221,8 @@
     <Compile Include="View\Searchbox.xaml.cs">
       <DependentUpon>Searchbox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\Services\ControlViewModelFactory.cs" />
+    <Compile Include="ViewModels\Services\IControlViewModelFactory.cs" />
     <Compile Include="View\Services\IViewFactory.cs" />
     <Compile Include="View\Services\ViewFactory.cs" />
     <Compile Include="View\UserDashboard.xaml.cs">

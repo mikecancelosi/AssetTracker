@@ -3,6 +3,7 @@ using AssetTracker.Services;
 using AssetTracker.View;
 using AssetTracker.View.Services;
 using AssetTracker.ViewModels;
+using AssetTracker.ViewModels.Services;
 using Castle.Core.Resource;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
@@ -104,6 +105,8 @@ namespace AssetTracker
                                         .ImplementedBy<NavigationCoordinator>()
                                         .LifeStyle.Singleton);
             container.Register(Component.For<NavigationObserver>());
+            container.Register(Component.For<IControlViewModelFactory>()
+                                        .ImplementedBy<ControlViewModelFactory>());
 
 
             navObserver = container.Resolve<NavigationObserver>();

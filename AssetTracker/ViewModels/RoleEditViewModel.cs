@@ -88,7 +88,7 @@ namespace AssetTracker.ViewModels
         public bool IsSavable => context.ChangeTracker.HasChanges();
         public ICommand DeleteConfirmed { get; set; }
         public ICommand SaveCommand { get; set; }
-        public ICommand CancelSave { get; set; }
+        public ICommand RefuseSave { get; set; }
         public List<Violation> SaveViolations { get; set; }
         public bool PromptSave { get; set; }
 
@@ -98,7 +98,7 @@ namespace AssetTracker.ViewModels
             navCoordinator = coord;
             DeleteConfirmed = new RelayCommand((s) => DeleteRole(), (s) => true);
             SaveCommand = new RelayCommand((s) => Save(), (s) => true);
-            CancelSave = new RelayCommand((s) => navCoordinator.NavigateToQueued(), (s) => true);
+            RefuseSave = new RelayCommand((s) => navCoordinator.NavigateToQueued(), (s) => true);
 
         }
 

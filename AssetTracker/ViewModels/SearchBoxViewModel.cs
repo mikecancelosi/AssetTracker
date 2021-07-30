@@ -40,11 +40,8 @@ namespace AssetTracker.ViewModels
         private DatabaseBackedObject currentlySelectedObject;
         public DatabaseBackedObject CurrentlySelectedObject
         {
-            get
-            {
-                return currentlySelectedObject;
-            }
-            set
+            get => currentlySelectedObject;
+            private set
             {
                 currentlySelectedObject = value;
                 NotifyPropertyChanged("CurrentlySelectedObject");
@@ -54,54 +51,44 @@ namespace AssetTracker.ViewModels
         public List<DatabaseBackedObject> FilteredItems
         {
             get
-            {
-                return Items?.Where(x => x.ID.ToString().ToLower().Contains(UserFilter.ToLower()) || x.Name.ToLower().Contains(UserFilter.ToLower())).ToList() ?? new List<DatabaseBackedObject>();
+            {               
+                return Items?.Where(x => x.ID.ToString().ToLower().Contains(UserFilter.ToLower())
+                                         || x.Name.ToLower().Contains(UserFilter.ToLower()))
+                                         .ToList() ?? new List<DatabaseBackedObject>();
             }
         }
 
-        //TODO: Applying a filter to searchbox results
-
+        /// <summary>
+        /// Filter set in initialization of the seachbox
+        /// </summary>
         public string BaseFilter { get; set; }
+        /// <summary>
+        /// Filter set by the user trying to search results through the textbox
+        /// </summary>
         public string UserFilter { get; set; }
         private Type DboType;
-
-        public SearchBoxViewModel()
-        {
-
-        }
-
-        public SearchBoxViewModel(Type dbotype, string filter = "")
+        public event Action OnSelectionChanged;
+        public SearchBoxViewModel(Type dbotype)
         {
             DboType = dbotype;
-            UserFilter = filter;
-            currentlySelectedObject = Activator.CreateInstance(dbotype) as DatabaseBackedObject;
-        }
+            UserFilter = "";
+            CurrentlySelectedObject = (DatabaseBackedObject) context.Set(dbotype).Create();
+        }        
 
-
-        public void SelectionChanged(int id)
+        public void SetSelectedItem(int id)
         {
             if (id > 0)
             {
-                DatabaseBackedObject copyFrom = context.Set(DboType).Find(id) as DatabaseBackedObject;
+                DatabaseBackedObject copyFrom = Items.Find(dbo => dbo.ID == id);
                 DatabaseBackedObject.CopyProperties(copyFrom, CurrentlySelectedObject);
-                NotifyPropertyChanged("CurrentlySelectedObject");
-                ResetUserFilter();
-
-
             }
-        }
-
-        public void ResetUserFilter()
-        {
-            UserFilter = CurrentlySelectedObject.Name;
-            NotifyPropertyChanged("UserFilter");
-        }
-
-        public void SetUserFilter(string newValue)
-        {
-            UserFilter = newValue;
-            NotifyPropertyChanged("FilteredItems");
-
+            else
+            {
+                CurrentlySelectedObject = null;
+            }
+            SetUserFilter("");
+            NotifyPropertyChanged("CurrentlySelectedObject");
+            OnSelectionChanged?.Invoke();
         }
 
         public async Task SetBaseFilter(string newFilter)
@@ -118,6 +105,44 @@ namespace AssetTracker.ViewModels
             }
         }
 
+        public void SetUserFilter(string newValue)
+        {
+            UserFilter = newValue;
+            NotifyPropertyChanged("UserFilter");
+            NotifyPropertyChanged("FilteredItems");
+        }
 
+        public void CheckFilter()
+        {
+           //TODO: Add ability to clear selection.
+           var dbo =  Items.FirstOrDefault(x => x.ID.ToString() == UserFilter || x.Name == UserFilter);
+           if(dbo != null)
+            {
+                CurrentlySelectedObject = dbo;
+                UserFilter = "";
+                NotifyPropertyChanged("UserFilter");
+                NotifyPropertyChanged("CurrentlySelectedObject");
+            }
+        }      
+
+        public void ClearInvocationList()
+        {
+            foreach (Delegate d in OnSelectionChanged.GetInvocationList())
+            {
+                OnSelectionChanged -= (Action)d;
+            }
+        }
+
+        public void ResetDisplay()
+        {
+            CurrentlySelectedObject = null;
+            BaseFilter = "";
+            UserFilter = "";
+            Items = null;
+            NotifyPropertyChanged("CurrentlySelectedObject");
+            NotifyPropertyChanged("BaseFilter");
+            NotifyPropertyChanged("UserFilter");
+            NotifyPropertyChanged("FilteredItems");
+        }
     }
 }

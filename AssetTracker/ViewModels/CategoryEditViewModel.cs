@@ -49,7 +49,7 @@ namespace AssetTracker.ViewModels
         public bool PromptSave { get; set; }
         public ICommand DeleteConfirmed { get; set; }
         public ICommand SaveCommand { get; set; }
-        public ICommand CancelSave { get; set; }
+        public ICommand RefuseSave { get; set; }
         public List<Violation> SaveViolations { get; set; }
 
 
@@ -64,7 +64,7 @@ namespace AssetTracker.ViewModels
             Creating = true;
             DeleteConfirmed = new RelayCommand((s) => DeleteCategory(), (s) => true);
             SaveCommand = new RelayCommand((s) => Save(), (s) => true);
-            CancelSave = new RelayCommand((s) => navCoordinator.NavigateToQueued(), (s) => true);
+            RefuseSave = new RelayCommand((s) => navCoordinator.NavigateToQueued(), (s) => true);
         }
 
         public void SetCategory(AssetCategory cat)

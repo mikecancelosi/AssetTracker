@@ -3,6 +3,7 @@ using AssetTracker.Services;
 using AssetTracker.View.Commands;
 using AssetTracker.View.Properties;
 using AssetTracker.ViewModels;
+using AssetTracker.ViewModels.Services;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -33,67 +34,45 @@ namespace AssetTracker.View
             set { DataContext = value; }
         }
 
-        public AssetDetail(AssetDetailViewModel vm)
+        private readonly IControlViewModelFactory controlFactory;
+        public AssetDetail(AssetDetailViewModel vm, IControlViewModelFactory conFactory)
         {
-            InitializeComponent();           
+            InitializeComponent();
             VM = vm;
-            #region SearchboxSetup
-            Searchbox_AssignedTo.SetType(typeof(User));
-            Searchbox_Phase.SetType(typeof(Phase));
-            Searchbox_Category.SetType(typeof(AssetCategory));
-            AssignSearchboxValues();
-            SubscribeToSearchboxes();
-            #endregion
-
-            VM.PropertyChanged += (s, e) =>
-            {
-                if (e.PropertyName == "myAsset")
-                {
-                    OnModelChanged();
-                }
-            };
+            controlFactory = conFactory;
+            InitializeSearchboxes();
         }
 
+        private SearchBoxViewModel assignVM;
+        private SearchBoxViewModel categoryVM;
+        private SearchBoxViewModel phaseVM;
 
-        private void AssignSearchboxValues()
+        private void InitializeSearchboxes()
         {
-            if (VM.myAsset.AssignedToUser != null)
-            {
-                Searchbox_AssignedTo.SetCurrentSelectedObject(VM.myAsset.AssignedToUser.ID);
-            }
-            if (VM.myAsset.Phase != null)
-            {
-                Searchbox_Phase.SetCurrentSelectedObject(VM.myAsset.Phase.ID);
-            }
-            if (VM.myAsset.AssetCategory != null)
-            {
-                Searchbox_Category.SetCurrentSelectedObject(VM.myAsset.AssetCategory.ca_id);
-                Searchbox_Phase.SetFilter(VM.StatusFilter);
-            }
-        }
-        private void SubscribeToSearchboxes()
-        {
-            Searchbox_AssignedTo.OnSelectionChanged += () => { VM.ModifyAssignedUser(Searchbox_AssignedTo.CurrentSelection.ID); };
-            Searchbox_Phase.OnSelectionChanged += () => { VM.ModifyPhase(Searchbox_Phase.CurrentSelection.ID); };
-            Searchbox_Category.OnSelectionChanged += () => { OnCategoryChanged(Searchbox_Category.CurrentSelection.ID); };
+            assignVM = controlFactory.BuildSearchboxViewModel(typeof(User),
+                                                              startingID: VM.myAsset.AssignedToUser?.ID ?? 0);
+            categoryVM = controlFactory.BuildSearchboxViewModel(typeof(AssetCategory),
+                                                                startingID: VM.myAsset.AssetCategory?.ID ?? 0);
+            phaseVM = controlFactory.BuildSearchboxViewModel(typeof(Phase),
+                                                             baseFilter: VM.StatusFilter,
+                                                             startingID: VM.myAsset.Phase?.ID ?? 0);
+
+            assignVM.OnSelectionChanged += () => { VM.ModifyAssignedUser(assignVM.CurrentlySelectedObject.ID); };
+            phaseVM.OnSelectionChanged += () => { VM.ModifyPhase(phaseVM.CurrentlySelectedObject.ID); };
+            categoryVM.OnSelectionChanged += () => { OnCategoryChanged(categoryVM.CurrentlySelectedObject.ID); };
+
+            Searchbox_AssignedTo.SetViewmodel(assignVM);
+            Searchbox_Phase.SetViewmodel(phaseVM);
+            Searchbox_Category.SetViewmodel(categoryVM);
+            
         }
 
         private void OnCategoryChanged(int newID)
         {
             VM.ModifyCategory(newID);
-            Searchbox_Phase.ResetDisplay();
-            Searchbox_Phase.SetFilter(VM.StatusFilter);
+            phaseVM.ResetDisplay();
+            phaseVM.SetBaseFilter(VM.StatusFilter);
         }
-
-        private void OnModelChanged()
-        {
-            Searchbox_AssignedTo.ClearInvocationList();
-            Searchbox_Phase.ClearInvocationList();
-            Searchbox_Category.ClearInvocationList();
-            AssignSearchboxValues();
-            SubscribeToSearchboxes();
-
-        }      
 
         private void OnChangelogClicked(object sender, RoutedEventArgs e)
         {

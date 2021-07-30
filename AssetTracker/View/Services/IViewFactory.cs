@@ -1,5 +1,6 @@
 ﻿using AssetTracker.Services;
 using AssetTracker.ViewModels;
+using AssetTracker.ViewModels.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;

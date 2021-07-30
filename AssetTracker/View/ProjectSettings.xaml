@@ -127,13 +127,8 @@
                                 </Button>
                                 <Button Style="{StaticResource HoverBtn}"
                                         Click="OnOperationClicked"
-                                        Tag="delete"
-                                        Width="24">
-                                    <Button.Triggers>
-                                        <EventTrigger RoutedEvent="Button.Click">
-                                            <BeginStoryboard Storyboard="{DynamicResource ShowDeletePrompt}" />
-                                        </EventTrigger>
-                                    </Button.Triggers>
+                                        Tag="delete"                                        
+                                        Width="24">                                  
                                     <materialicons:MaterialIcon Icon="ic_delete" />
                                 </Button>
                             </StackPanel>
@@ -314,11 +309,6 @@
                                     BorderBrush="{StaticResource ConfirmOverlay_Dark}"
                                     Command="{Binding DeleteConfirmed}"
                                     Width="150">
-                                <Button.Triggers>
-                                    <EventTrigger RoutedEvent="Button.Click">
-                                        <BeginStoryboard Storyboard="{DynamicResource HideDeletePrompt}" />
-                                    </EventTrigger>
-                                </Button.Triggers>
                                 <TextBlock Text="Confirm"
                                            Style="{StaticResource HoverBtn_TextContent}"
                                            VerticalAlignment="Center"
@@ -331,13 +321,9 @@
                                      Width="150"
                                      Style="{StaticResource HoverBtn}"
                                      Padding="5"
+                                     Command="{Binding DeleteCanceled}"
                                      BorderThickness="5"
-                                     BorderBrush="{StaticResource RejectOverlay_Dark}">
-                                <Button.Triggers>
-                                    <EventTrigger RoutedEvent="Button.Click">
-                                        <BeginStoryboard Storyboard="{DynamicResource HideDeletePrompt}" />
-                                    </EventTrigger>
-                                </Button.Triggers>
+                                     BorderBrush="{StaticResource RejectOverlay_Dark}">                              
                                 <TextBlock Text="Cancel"
                                            Style="{StaticResource HoverBtn_TextContent}"
                                            HorizontalAlignment="Center"

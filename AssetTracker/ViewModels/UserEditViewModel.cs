@@ -89,7 +89,7 @@ namespace AssetTracker.ViewModels
 
         public ICommand DeleteConfirmed { get; set; }
         public ICommand SaveCommand { get; set; }
-        public ICommand CancelSave { get; set; }
+        public ICommand RefuseSave { get; set; }
         public bool IsSavable => context.ChangeTracker.HasChanges();
         public List<Violation> SaveViolations { get; set; }
         public bool PromptSave { get; set; }
@@ -102,7 +102,7 @@ namespace AssetTracker.ViewModels
 
             DeleteConfirmed = new RelayCommand((s) => DeleteUser(), (s) => true);
             SaveCommand = new RelayCommand((s) => Save(), (s) => true);
-            CancelSave = new RelayCommand((s) => navCoordinator.NavigateToQueued(), (s) => true);
+            RefuseSave = new RelayCommand((s) => navCoordinator.NavigateToQueued(), (s) => true);
         }
 
         public void SetUser(User user)
@@ -120,6 +120,7 @@ namespace AssetTracker.ViewModels
             }
             NotifyPropertyChanged("CurrentUser");
             NotifyPropertyChanged("HeadingContext");
+            NotifyPropertyChanged("IsSavable");
         }
 
 
@@ -131,7 +132,7 @@ namespace AssetTracker.ViewModels
                 context.SaveChanges();
                 Creating = false;
                 Cloning = false;
-                NotifyPropertyChanged("Savable");
+                NotifyPropertyChanged("IsSavable");
                 NotifyPropertyChanged("CurrentUser");               
                 NotifyPropertyChanged("HeadingContext");
                 if (navCoordinator.WaitingToNavigate)
@@ -150,6 +151,7 @@ namespace AssetTracker.ViewModels
         public void DeleteUser()
         {
             CurrentUser.Delete(context);
+
         }
 
         #region ValueChange

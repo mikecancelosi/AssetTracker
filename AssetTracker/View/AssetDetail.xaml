@@ -113,7 +113,6 @@
                              FontSize="24"
                              FontWeight="Bold" />
 
-
                 <!--#region Metadata -->
                 <ItemsControl ItemsSource="{Binding Tags}"
                               Margin="0,0,0,10"
@@ -220,6 +219,7 @@
 
 
                 <!--#endregion-->
+                
                 <TextBlock Text="{Binding myAsset.as_description}"
                            Style="{StaticResource EditableText}"
                            Foreground="White"
@@ -596,7 +596,8 @@
                         <TextBox x:Name="EditTitle_Value"
                                  Grid.Column="1"
                                  Grid.Row="0"
-                                 Margin="10,0" />
+                                 Margin="10,0"
+                                 Text="{Binding myAsset.as_displayname, Mode=TwoWay}"/>
                         <TextBlock Text="Description:"
                                    Grid.Column="0"
                                    Grid.Row="1"
@@ -621,7 +622,7 @@
                                 Padding="5"
                                 BorderThickness="0"
                                 Margin="10,0"
-                                Click="OnModifyTitleCancel_Clicked">
+                                Click="OnModifyTitleSave_Clicked">
                         </Button>
                         <Button Content="Save"
                                 HorizontalAlignment="Right"
@@ -637,9 +638,9 @@
             </Border>
             <!--#endregion-->
 
-            <Control x:Name="PromptSavePanel"
+            <Control x:Name="PromptSave"
                      Style="{StaticResource  PromptSave}"
-                     Visibility="Collapsed" />
+                     Visibility="{Binding PromptSave,Converter={StaticResource BooleanToVisibilityConverter}}" />
 
             <!--#region AddMetatag -->
             <Border x:Name="TagAdd_Window"

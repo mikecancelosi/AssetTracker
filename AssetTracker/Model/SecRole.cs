@@ -24,6 +24,10 @@ namespace AssetTracker.Model
             {
                 overridePer.Delete(context);
             }
+            foreach(User user in Users.ToList())
+            {
+                context.Entry(user).Property(x => x.us_roid).CurrentValue = context.SecRoles.FirstOrDefault().ID;
+            }
 
             base.Delete(context);
         }

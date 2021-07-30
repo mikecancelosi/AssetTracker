@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace AssetTracker.ViewModels.Interfaces
 {
@@ -15,6 +16,8 @@ namespace AssetTracker.ViewModels.Interfaces
         void Save();
         bool PromptSave { get; set; }
         List<Violation> SaveViolations { get; set; }
+        ICommand RefuseSave { get; set; }
+        ICommand SaveCommand { get; set; }
 
     }
 }

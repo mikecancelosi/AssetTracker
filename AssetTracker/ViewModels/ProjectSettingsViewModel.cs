@@ -26,8 +26,18 @@ namespace AssetTracker.ViewModels
         public ICommand CreateCategory { get; set; }
         public ICommand CreateUser { get; set; }
 
-        public bool PromptDelete { get; set; }
+        private bool promptDelete;
+        public bool PromptDelete 
+        {
+            get => promptDelete;
+            set
+            {
+                promptDelete = value;
+                NotifyPropertyChanged("PromptDelete");
+            }
+        }
         public ICommand DeleteConfirmed { get; set; }
+        public ICommand DeleteCanceled { get; set; }
         public DatabaseBackedObject DeletionObject { get; private set; }
 
         private readonly INavigationCoordinator navCoordinator;
@@ -38,6 +48,7 @@ namespace AssetTracker.ViewModels
             CreateCategory = new RelayCommand((s) => navCoordinator.NavigateToCreateCategory(), (s) => true);
             CreateUser = new RelayCommand((s) => navCoordinator.NavigateToCreateUser(), (s) => true);
             DeleteConfirmed = new RelayCommand((s) => DeleteSelectedObject(), (s) => true);
+            DeleteCanceled = new RelayCommand((s) => { PromptDelete = false; }, (s) => true);
         }
 
         public enum OperationType
@@ -50,7 +61,7 @@ namespace AssetTracker.ViewModels
         public void CompleteDBOOperation(DatabaseBackedObject dbo, OperationType operation)
         {
             //TODO : Fix this monstrosity
-            string typeName = dbo.GetType().Name;
+            string typeName = dbo.GetType().BaseType.Name;
             switch (operation)
             {
 
@@ -86,7 +97,7 @@ namespace AssetTracker.ViewModels
                 case OperationType.Delete:
                     DeletionObject = dbo;
                     PromptDelete = true;
-                    NotifyPropertyChanged("PromptDelete");
+                    NotifyPropertyChanged("DeletionObject");
                     break;
             }
         }
@@ -104,6 +115,7 @@ namespace AssetTracker.ViewModels
         {
             DeletionObject.Delete(context);
             DeletionObject = null;
+            PromptDelete = false;
             NotifyPropertyChanged("Users");
             NotifyPropertyChanged("Roles");
             NotifyPropertyChanged("Categories");

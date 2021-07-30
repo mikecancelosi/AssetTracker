@@ -37,7 +37,7 @@ namespace AssetTracker.Services
                 ISavable savInst = (ISavable)currentVM;
                 if (savInst.IsSavable)
                 {
-                    queuedVM = CurrentVM;
+                    queuedVM = vm;
                     UserNavigationAttempt?.Invoke(vm);
                     return;
                 }
@@ -56,7 +56,6 @@ namespace AssetTracker.Services
                 queuedVM = null;
             }
         }
-
 
         #region BuildViewmodels
         public void NavigateToLogin()
@@ -124,6 +123,12 @@ namespace AssetTracker.Services
         {
             CategoryEditViewModel vm = new CategoryEditViewModel(this);
             vm.Category = cat;
+            RequestNavigationTo(vm);
+        }
+
+        public void NavigateToCreateAsset()
+        {
+            AssetDetailViewModel vm = new AssetDetailViewModel(this);
             RequestNavigationTo(vm);
         }
         #endregion

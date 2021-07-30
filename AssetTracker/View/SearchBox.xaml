@@ -8,19 +8,15 @@
              xmlns:model="clr-namespace:AssetTracker.Model"
              xmlns:materialicons="clr-namespace:MaterialIcons;assembly=MaterialIcons"
              mc:Ignorable="d"
-             d:DesignHeight="50"
-             d:DesignWidth="400">
-    <UserControl.DataContext>
-        <viewmodel:SearchBoxViewModel />
-    </UserControl.DataContext>
+             d:DataContext="{d:DesignInstance viewmodel:SearchBoxViewModel, IsDesignTimeCreatable=True}">
 
     <Grid x:Name="FieldGrid"
-          Height="24" >
+          Height="24">
         <Grid.Resources>
             <Style TargetType="Popup">
-                <Style.Triggers>                  
+                <Style.Triggers>
                     <Trigger Property="IsEnabled"
-                                 Value="False">
+                             Value="False">
                         <Setter Property="Visibility"
                                 Value="Collapsed" />
                     </Trigger>
@@ -51,19 +47,22 @@
         <Border x:Name="InputField"
                 BorderThickness="2"
                 CornerRadius="5,1,5,1"
-                Padding="5,0" 
-                VerticalAlignment="Center" >
+                Padding="5,0"
+                VerticalAlignment="Center">
             <Grid>
+                <TextBlock Text="{Binding CurrentlySelectedObject.Name}"
+                           Visibility="{Binding ElementName=InputText, Path=IsFocused, Converter={StaticResource InvertAndVisibilitate}}" />
                 <TextBox x:Name="InputText"
-                         Text="{Binding UserFilter}"                        
+                         Text="{Binding UserFilter}"
                          GotKeyboardFocus="InputText_GotKeyboardFocus"
-                         LostKeyboardFocus="InputText_LostKeyboardFocus"                         
+                         LostKeyboardFocus="InputText_LostKeyboardFocus"
                          BorderThickness="0"
                          VerticalAlignment="Center"
                          Background="Transparent"
                          Foreground="{StaticResource Text_Dark}"
                          TextChanged="InputText_TextChanged" />
-                    <materialicons:MaterialIcon Icon="ic_search"                                         
+
+                <materialicons:MaterialIcon Icon="ic_search"
                                             HorizontalAlignment="Right">
                     <materialicons:MaterialIcon.Resources>
                         <Style TargetType="materialicons:MaterialIcon">
@@ -82,6 +81,7 @@
                         </Style>
                     </materialicons:MaterialIcon.Resources>
                 </materialicons:MaterialIcon>
+                
             </Grid>
         </Border>
 
@@ -92,10 +92,11 @@
             <ListView Name="MainGrid"
                       VerticalAlignment="Top"
                       ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                      ItemsSource="{Binding FilteredItems}" 
-                      Background="{StaticResource Layer3_Dark}" 
+                      ItemsSource="{Binding FilteredItems}"
+                      Background="{StaticResource Layer3_Dark}"
                       BorderThickness="0"
-                      Padding="5" SelectionChanged="MainGrid_SelectionChanged">
+                      Padding="5"
+                      SelectionChanged="MainGrid_SelectionChanged">
                 <ListView.Resources>
                     <Style TargetType="{x:Type GridViewColumnHeader}">
                         <Setter Property="HorizontalContentAlignment"
@@ -108,16 +109,12 @@
                                 Value="Medium" />
                     </Style>
 
-                    <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource AssetList_ListViewItem}">
-                        <EventSetter Event="MouseDoubleClick"
-                                     Handler="ItemClicked" />
-                        <EventSetter Event="MouseDown"
-                                     Handler="ItemClicked" />
+                    <Style TargetType="{x:Type ListViewItem}"
+                           BasedOn="{StaticResource AssetList_ListViewItem}">
                         <Setter Property="Height"
                                 Value="30" />
                         <Setter Property="Margin"
                                 Value="0" />
-
                     </Style>
                 </ListView.Resources>
 

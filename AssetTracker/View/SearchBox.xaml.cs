@@ -30,55 +30,21 @@ namespace AssetTracker.View
         }
         public DatabaseBackedObject CurrentSelection => VM.CurrentlySelectedObject;
 
-        public delegate void NotifyOfChange();
-        public event NotifyOfChange OnSelectionChanged;
-        private bool SettingFilter = false;
-
         public Searchbox()
         {
             InitializeComponent();
         }
 
-        public void SetType(Type dboType)
+        public void SetViewmodel(SearchBoxViewModel vm)
         {
-            VM = new SearchBoxViewModel(dboType);
+            VM = vm;
             Results.IsOpen = false;
-        }
+        }     
 
-        public async void SetFilter(string filter)
+        private void SetCurrentSelectedObject(int objectID)
         {
-            if (!SettingFilter)
-            {
-                SettingFilter = true;
-                await VM.SetBaseFilter(filter);
-                SettingFilter = false;
-            }
-        }
-
-        private void ItemClicked(object sender, RoutedEventArgs e)
-        {
-            DatabaseBackedObject dbo = MainGrid.SelectedItem as DatabaseBackedObject;
-            if (dbo != null)
-            {
-                VM.SelectionChanged(dbo.ID);
-                OnSelectionChanged?.Invoke();
-                Results.IsOpen = false;
-            }
+            VM.SetSelectedItem(objectID);
         }       
-
-        public void SetCurrentSelectedObject(int objectID)
-        {
-            VM.SelectionChanged(objectID);
-            OnSelectionChanged?.Invoke();
-        }
-
-        public void ClearInvocationList()
-        {
-            foreach (Delegate d in OnSelectionChanged.GetInvocationList())
-            {
-                OnSelectionChanged -= (NotifyOfChange)d;
-            }
-        }
 
         private void InputText_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -100,7 +66,8 @@ namespace AssetTracker.View
         private void InputText_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
             if (IsLoaded)
-            {
+            {               
+                VM.CheckFilter();
                 if (Results.IsOpen)
                 {
                     Results.IsOpen = false;
@@ -113,17 +80,13 @@ namespace AssetTracker.View
             DatabaseBackedObject dbo = MainGrid.SelectedItem as DatabaseBackedObject;
             if (dbo != null)
             {
-                VM.SelectionChanged(dbo.ID);
-                OnSelectionChanged?.Invoke();
+                VM.SetSelectedItem(dbo.ID);
                 Results.IsOpen = false;
             }
-        }
-
-        public void ResetDisplay()
-        {
-            InputText.Text = "";
-            VM.SetUserFilter(InputText.Text);
-            Results.IsOpen = false;
+            else
+            {
+                SetCurrentSelectedObject(0);
+            }
         }
     }
 }

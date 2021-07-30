@@ -239,7 +239,7 @@
                                         Padding="5"
                                         Width="100"
                                         Margin="0,0,30,0"
-                                        Command="{Binding RefuseSave_Clicked, RelativeSource={RelativeSource AncestorLevel=1, AncestorType=Page}}">
+                                        Command="{Binding RefuseSave}">
                                     <Button.Triggers>
                                         <EventTrigger RoutedEvent="Button.Click">
                                             <BeginStoryboard>
@@ -257,7 +257,7 @@
                                 <Button Content="Yes"
                                         Padding="5"
                                         Width="100"
-                                        Command="{Binding ConfirmSave_Clicked, RelativeSource={RelativeSource AncestorLevel=1, AncestorType=Page}}">
+                                        Command="{Binding SaveCommand}">
                                     <Button.Triggers>
                                         <EventTrigger RoutedEvent="Button.Click">
                                             <BeginStoryboard>

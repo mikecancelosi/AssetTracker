@@ -45,36 +45,6 @@ namespace AssetTracker.View
             roleSearchboxVM.OnSelectionChanged += () => Role_OnSelectionChanged();
 
             Searchbox_Role.SetViewmodel(roleSearchboxVM);
-        }            
-
-        private void FirstName_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            TextBox nameTextBox = sender as TextBox;
-            VM.OnFirstNameChanged(nameTextBox.Text);
-        }
-
-        private void LastName_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            TextBox nameTextBox = sender as TextBox;
-            VM.OnLastNameChanged(nameTextBox.Text);
-        }
-
-        private void DisplayName_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            TextBox nameTextBox = sender as TextBox;
-            VM.OnDisplayNameChanged(nameTextBox.Text);
-        }
-
-        private void  Password_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            TextBox passTextBox = sender as TextBox;
-            VM.OnPasswordChanged(passTextBox.Text);
-        }
-
-        private void Email_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            TextBox emailTextBox = sender as TextBox;
-            VM.OnEmailChanged(emailTextBox.Text);
         }
 
         private void Role_OnSelectionChanged()
@@ -92,31 +62,6 @@ namespace AssetTracker.View
         {
             VM.DeactivateAllPermissions();
         }
-
-        public void NavigateToProjectSettings(object sender, RoutedEventArgs e)
-        {
-            //coordinator.NavigateToProjectSettings();
-        }
-
-
-        #region Delete User
-
-        private void DeleteUser_Clicked(object sender, RoutedEventArgs e)
-        {
-            UserDeletePrompt.Visibility = Visibility.Visible;
-        }
-
-        private void DeleteConfirm_Clicked(object sender, RoutedEventArgs e)
-        {
-            VM.DeleteUser();
-            //coordinator.NavigateToProjectSettings();
-        }
-
-        private void DeleteCancel_Clicked(object sender, RoutedEventArgs e)
-        {
-            UserDeletePrompt.Visibility = Visibility.Collapsed;
-        }
-        #endregion
 
 
     }

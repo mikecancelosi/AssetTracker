@@ -87,22 +87,89 @@ namespace AssetTracker.ViewModels
             }
         }
 
-        public ICommand DeleteConfirmed { get; set; }
+        public string FirstName
+        {
+            get => CurrentUser?.us_fname ?? "";
+            set
+            {
+                context.Entry(CurrentUser).Property(x => x.us_fname).CurrentValue = value;
+                NotifyPropertyChanged("FirstName");
+                NotifyPropertyChanged("IsSavable");
+            }
+        }
+
+        public string LastName
+        {
+            get => CurrentUser?.us_lname ?? "";
+            set
+            {
+                context.Entry(CurrentUser).Property(x => x.us_lname).CurrentValue = value;
+                NotifyPropertyChanged("LastName");
+                NotifyPropertyChanged("IsSavable");
+            }
+        }
+
+        public string DisplayName
+        {
+            get => CurrentUser?.us_displayname ?? "";
+            set
+            {
+                context.Entry(CurrentUser).Property(x => x.us_displayname).CurrentValue = value;
+                NotifyPropertyChanged("DisplayName");
+                NotifyPropertyChanged("IsSavable");
+            }
+        }
+
+        public string Email
+        {
+            get => CurrentUser?.us_email ?? "";
+            set
+            {
+                context.Entry(CurrentUser).Property(x => x.us_email).CurrentValue = value;
+                NotifyPropertyChanged("Email");
+                NotifyPropertyChanged("IsSavable");
+            }
+        }
+
+        public string Password
+        {
+            get => CurrentUser?.us_password ?? "";
+            set
+            {
+                context.Entry(CurrentUser).Property(x => x.us_password).CurrentValue = value;
+                NotifyPropertyChanged("Password");
+                NotifyPropertyChanged("IsSavable");
+            }
+        }
+
         public ICommand SaveCommand { get; set; }
         public ICommand RefuseSave { get; set; }
         public bool IsSavable => context.ChangeTracker.HasChanges();
         public List<Violation> SaveViolations { get; set; }
-        public bool PromptSave { get; set; }
+        private bool promptSave;
+        public bool PromptSave
+        {
+            get => promptSave;
+            set
+            {
+                promptSave = value;
+                NotifyPropertyChanged("PromptSave");
+            }
+        }
         public INavigationCoordinator navCoordinator { get; set; }
+
+        public ICommand DeleteConfirmed { get; set; }
 
         public UserEditViewModel(INavigationCoordinator coord)
         {
             navCoordinator = coord;
+            navCoordinator.UserNavigationAttempt += (s) => PromptSave = true;
             CurrentUser = context.Users.Create();
-
             DeleteConfirmed = new RelayCommand((s) => DeleteUser(), (s) => true);
             SaveCommand = new RelayCommand((s) => Save(), (s) => true);
             RefuseSave = new RelayCommand((s) => navCoordinator.NavigateToQueued(), (s) => true);
+
+            //TODO: Implement breadcrumbs
         }
 
         public void SetUser(User user)
@@ -154,43 +221,11 @@ namespace AssetTracker.ViewModels
 
         }
 
-        #region ValueChange
-        public void OnFirstNameChanged(string newName)
-        {
-            context.Entry(CurrentUser).Property(x => x.us_fname).CurrentValue = newName;
-            NotifyPropertyChanged("Savable");
-        }
-
-        public void OnLastNameChanged(string newName)
-        {
-            context.Entry(CurrentUser).Property(x => x.us_lname).CurrentValue = newName;
-            NotifyPropertyChanged("Savable");
-        }
-
-        public void OnDisplayNameChanged(string newName)
-        {
-            context.Entry(CurrentUser).Property(x => x.us_displayname).CurrentValue = newName;
-            NotifyPropertyChanged("Savable");
-        }
-
-        public void OnEmailChanged(string newValue)
-        {
-            context.Entry(CurrentUser).Property(x => x.us_email).CurrentValue = newValue;
-            NotifyPropertyChanged("Savable");
-        }
-
-        public void OnPasswordChanged(string newValue)
-        {
-            context.Entry(CurrentUser).Property(x => x.us_password).CurrentValue = newValue;
-            NotifyPropertyChanged("Savable");
-        }
-
         public void OnRoleChanged(int newValue)
         {
             context.Entry(CurrentUser).Property(x => x.us_roid).CurrentValue = newValue;
             NotifyPropertyChanged("Savable");
         }
-        #endregion
 
         #region Permissions
         public void OnPermissionChanged(int prid, bool newValue)

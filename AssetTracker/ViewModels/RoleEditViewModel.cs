@@ -90,12 +90,23 @@ namespace AssetTracker.ViewModels
         public ICommand SaveCommand { get; set; }
         public ICommand RefuseSave { get; set; }
         public List<Violation> SaveViolations { get; set; }
-        public bool PromptSave { get; set; }
+        private bool promptSave;
+        public bool PromptSave
+        {
+            get => promptSave;
+            set
+            {
+                promptSave = value;
+                NotifyPropertyChanged("PromptSave");
+            }
+        }
 
         public INavigationCoordinator navCoordinator { get; set; }
         public RoleEditViewModel(INavigationCoordinator coord)
         {
             navCoordinator = coord;
+            navCoordinator.UserNavigationAttempt += (s) => PromptSave = true;
+            Role = context.SecRoles.Create();
             DeleteConfirmed = new RelayCommand((s) => DeleteRole(), (s) => true);
             SaveCommand = new RelayCommand((s) => Save(), (s) => true);
             RefuseSave = new RelayCommand((s) => navCoordinator.NavigateToQueued(), (s) => true);

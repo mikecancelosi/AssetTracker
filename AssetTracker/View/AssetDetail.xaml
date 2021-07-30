@@ -90,7 +90,7 @@
                                 <EventTrigger RoutedEvent="Button.Click">
                                     <BeginStoryboard>
                                         <Storyboard>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="AssetDeletePrompt"
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DeletePrompt"
                                                                            Storyboard.TargetProperty="Visibility">
                                                 <DiscreteObjectKeyFrame KeyTime="0:0:0"
                                                                         Value="{x:Static Visibility.Visible}" />
@@ -714,7 +714,7 @@
             </Border>
             <!--#endregion-->
 
-            <Border x:Name="AssetDeletePrompt"
+            <Border x:Name="DeletePrompt"
                     Visibility="Collapsed"
                     Background="{StaticResource Overlay}"
                     VerticalAlignment="Center"
@@ -757,7 +757,7 @@
                                     <EventTrigger RoutedEvent="Button.Click">
                                         <BeginStoryboard>
                                             <Storyboard>
-                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="AssetDeletePrompt"
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DeletePrompt"
                                                                                Storyboard.TargetProperty="Visibility">
                                                     <DiscreteObjectKeyFrame KeyTime="0:0:0"
                                                                             Value="{x:Static Visibility.Collapsed}" />
@@ -787,7 +787,7 @@
                                     <EventTrigger RoutedEvent="Button.Click">
                                         <BeginStoryboard>
                                             <Storyboard>
-                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="AssetDeletePrompt"
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DeletePrompt"
                                                                                Storyboard.TargetProperty="Visibility">
                                                     <DiscreteObjectKeyFrame KeyTime="0:0:0"
                                                                             Value="{x:Static Visibility.Collapsed}" />

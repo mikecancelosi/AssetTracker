@@ -46,7 +46,16 @@ namespace AssetTracker.ViewModels
             }
         }
         public bool IsSavable => context.ChangeTracker.HasChanges();
-        public bool PromptSave { get; set; }
+        private bool promptSave;
+        public bool PromptSave
+        {
+            get => promptSave;
+            set
+            {
+                promptSave = value;
+                NotifyPropertyChanged("PromptSave");
+            }
+        }
         public ICommand DeleteConfirmed { get; set; }
         public ICommand SaveCommand { get; set; }
         public ICommand RefuseSave { get; set; }
@@ -60,6 +69,7 @@ namespace AssetTracker.ViewModels
         public CategoryEditViewModel(INavigationCoordinator coord)
         {
             navCoordinator = coord;
+            navCoordinator.UserNavigationAttempt += (s) => PromptSave = true;
             Category = context.AssetCategories.Create();
             Creating = true;
             DeleteConfirmed = new RelayCommand((s) => DeleteCategory(), (s) => true);

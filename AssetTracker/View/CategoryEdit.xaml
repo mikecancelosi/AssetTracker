@@ -181,7 +181,8 @@
                 </StackPanel>
 
                 <Control x:Name="PromptSavePanel"
-                         Style="{StaticResource  PromptSave}" Visibility="Collapsed"/>
+                         Style="{StaticResource  PromptSave}"
+                         Visibility="{Binding PromptSave,Converter={StaticResource BooleanToVisibilityConverter}}" />
 
                 <Border x:Name="DeletePrompt"
                         Visibility="Collapsed"

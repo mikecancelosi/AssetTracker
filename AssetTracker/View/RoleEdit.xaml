@@ -144,7 +144,7 @@
 
                 <Control x:Name="PromptSavePanel"
                          Style="{StaticResource  PromptSave}"
-                         Visibility="Collapsed" />
+                         Visibility="{Binding PromptSave,Converter={StaticResource BooleanToVisibilityConverter}}" />
 
                 <Border x:Name="DeletePrompt"
                         Visibility="Collapsed"

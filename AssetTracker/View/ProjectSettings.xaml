@@ -323,16 +323,23 @@
                                                             VerticalAlignment="Top" TextWrapping="WrapWithOverflow"
                                                             Margin="0,20" />
                                              </StackPanel>
-                                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">                                                
-                                                     <Button Style="{StaticResource HoverBtn}" Margin="5,0">
+                                             
+                                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
+                                                <Button Style="{StaticResource HoverBtn}"
+                                                        Margin="5,0"
+                                                        Command="{Binding RelativeSource={RelativeSource AncestorLevel=1,AncestorType=Page}, Path=DataContext.EditAlertCommand}"
+                                                        CommandParameter="{Binding ar_id}">
                                                          <materialicons:MaterialIcon Icon="ic_edit"
                                                                                      Style="{StaticResource HoverBtn_Content}" />
                                                      </Button>
-                                                     <Button Style="{StaticResource HoverBtn}">
+                                                     <Button Style="{StaticResource HoverBtn}" 
+                                                             Command="{Binding RelativeSource={RelativeSource AncestorLevel=1,AncestorType=Page}, Path=DataContext.DeleteAlertCommand}" 
+                                                             CommandParameter="{Binding ar_id}">
                                                          <materialicons:MaterialIcon Icon="ic_delete"
                                                                                      Style="{StaticResource HoverBtn_Content}" />
                                                      </Button>
-                                                 </StackPanel>
+                                             </StackPanel>
+                                             
                                              <StackPanel HorizontalAlignment="Right"
                                                          VerticalAlignment="Bottom">
                                                  <TextBlock Text="{Binding User.us_displayname}" HorizontalAlignment="Right" />
@@ -357,11 +364,18 @@
                         Visibility="{Binding PromptNewAlert,Converter={StaticResource BooleanToVisibilityConverter}}">
                     <StackPanel>
 
-                        <TextBlock Text="Add Project-Wide Alert"
-                                   VerticalAlignment="Center"
+                        <TextBlock VerticalAlignment="Center"
+                                   Text="Add Project-Wide Alert"
                                    Margin="5,0,0,0"
                                    FontSize="16"
-                                   FontWeight="SemiBold" />
+                                   FontWeight="SemiBold"  Visibility="{Binding AlertPrompt_ID, Converter={StaticResource IsNullToVizConverter}}"/>
+
+                        <TextBlock VerticalAlignment="Center"
+                                   Text="Edit Project-Wide Alert"
+                                   Margin="5,0,0,0"
+                                   FontSize="16"
+                                   FontWeight="SemiBold"
+                                   Visibility="{Binding AlertPrompt_ID, Converter={StaticResource IsNullInvertToVizConverter}}" />
 
                         <StackPanel Margin="20,20,20,0">
                             <TextBlock Text="Header"
@@ -370,12 +384,12 @@
                                      Width="400"
                                      Height="30"
                                      VerticalContentAlignment="Center"
-                                     Text="{Binding NewPrompt_Header}" />
+                                     Text="{Binding AlertPrompt_Header}" />
 
                             <TextBlock Text="Contents"
                                        Margin="0,30,0,10" />
                             <TextBox x:Name="NewAlert_Contents"
-                                     Text="{Binding NewPrompt_Contents}"
+                                     Text="{Binding AlertPrompt_Contents}"
                                      Width="400"
                                      Height="200" TextWrapping="WrapWithOverflow" />
 

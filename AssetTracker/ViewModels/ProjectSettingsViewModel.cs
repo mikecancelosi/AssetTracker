@@ -41,10 +41,12 @@ namespace AssetTracker.ViewModels
         public ICommand CreateRole { get; set; }
         public ICommand CreateCategory { get; set; }
         public ICommand CreateUser { get; set; }
-        public ICommand CreateAlert => new RelayCommand((s) => CreateNewProjectWideAlert(), (s) => true);
 
+        public ICommand CreateAlert => new RelayCommand((s) => CreateNewProjectWideAlert(), (s) => true);
         public ICommand OpenNewAlert => new RelayCommand((s) => PromptNewAlert= true, (s) => true);
         public ICommand CloseNewAlert => new RelayCommand((s) => PromptNewAlert = false, (s) => true);
+        public ICommand EditAlertCommand => new RelayCommand((s) => EditAlert(s), (s) => true);
+        public ICommand DeleteAlertCommand => new RelayCommand((s) => DeleteAlert(s), (s) => true);
 
         private bool promptNewAlert;
         public bool PromptNewAlert
@@ -54,8 +56,8 @@ namespace AssetTracker.ViewModels
             {
                 if(value == false)
                 {
-                    NewPrompt_Header = "";
-                    NewPrompt_Contents = "";
+                    AlertPrompt_Header = "";
+                    AlertPrompt_Contents = "";
                     NotifyPropertyChanged("NewPrompt_Header");
                     NotifyPropertyChanged("NewPrompt_Contents");
                 }
@@ -64,8 +66,9 @@ namespace AssetTracker.ViewModels
             }
         }
 
-        public string NewPrompt_Header { get; set; }
-        public string NewPrompt_Contents { get; set; }
+        public string AlertPrompt_Header { get; set; }
+        public string AlertPrompt_Contents { get; set; }
+        public int AlertPrompt_ID { get; set; }
 
         private bool promptDelete;
         public bool PromptDelete 
@@ -162,19 +165,66 @@ namespace AssetTracker.ViewModels
         }
 
         private void CreateNewProjectWideAlert()
-        {           
-
-            Alert newAlert = context.Alerts.Create();
-            newAlert.ar_usid = MainViewModel.Instance.CurrentUser.ID;
-            newAlert.ar_projectwide = true;
-            newAlert.ar_date = DateTime.Now;
-            newAlert.ar_header = NewPrompt_Header;
-            newAlert.ar_content = NewPrompt_Contents;
-            newAlert.ar_type = AlertType.ProjectWideAlert;
-            context.Alerts.Add(newAlert);
+        {
+            Alert alert;
+            if (AlertPrompt_ID > 0)
+            {
+                alert = ProjectWideAlerts.FirstOrDefault(x => x.ID == AlertPrompt_ID);
+            }
+            else
+            {
+                alert = context.Alerts.Create();
+                alert.ar_projectwide = true; 
+                alert.ar_type = AlertType.ProjectWideAlert;
+                context.Alerts.Add(alert);                    
+            }
+            alert.ar_header = AlertPrompt_Header;
+            alert.ar_content = AlertPrompt_Contents;
+            alert.ar_date = DateTime.Now;
+            alert.ar_usid = MainViewModel.Instance.CurrentUser.ID;
             context.SaveChanges();
+
+            ResetAlertPrompt();
+        }
+
+        private void ResetAlertPrompt()
+        {
+            AlertPrompt_ID = 0;
+            AlertPrompt_Contents = "";
+            AlertPrompt_Header = "";
             PromptNewAlert = false;
+
+            NotifyPropertyChanged("AlertPrompt_ID");
+            NotifyPropertyChanged("AlertPrompt_Contents");
+            NotifyPropertyChanged("AlertPrompt_Header");
             NotifyPropertyChanged("ProjectWideAlerts");
+        }
+
+        private void EditAlert(object input)
+        {
+            int id = (int)input;
+            Alert alert = ProjectWideAlerts.FirstOrDefault(x => x.ID == id);
+            if (alert != null)
+            {
+                PromptNewAlert = true;
+                AlertPrompt_Header = alert.ar_header;
+                AlertPrompt_Contents = alert.ar_content;
+                AlertPrompt_ID = alert.ID;
+            }
+
+            NotifyPropertyChanged("AlertPrompt_Header");
+            NotifyPropertyChanged("AlertPrompt_Contents");
+        }
+
+        private void DeleteAlert(object input)
+        {
+            int id = (int)input;
+            Alert alert = ProjectWideAlerts.FirstOrDefault(x => x.ID == id);
+            if(alert != null)
+            {
+                alert.Delete(context);
+                NotifyPropertyChanged("ProjectWideAlerts");
+            }
         }
 
     }

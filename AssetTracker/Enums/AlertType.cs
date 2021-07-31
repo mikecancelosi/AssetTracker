@@ -12,5 +12,6 @@ namespace AssetTracker.Enums
         public const string AssetAssigned = "Assign";
         public const string ReviewAssigned = "AssignForReview";
         public const string AssetUpdate = "AssetUpdate";
+        public const string ProjectWideAlert = "ProjectWide";
     }
 }

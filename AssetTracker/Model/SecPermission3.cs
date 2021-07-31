@@ -8,8 +8,17 @@ namespace AssetTracker.Model
 {
     public partial class SecPermission3 : DatabaseBackedObject
     {
-        public override int ID => p3_id;
-        public override string Name => SecPermission.pr_name + "Override";
+        public override int ID
+        {
+            get => p3_id;
+            set => p3_id = value;
+        }
+
+        public override string Name
+        {
+            get => SecPermission.pr_name + "Override";
+            set => throw new NotImplementedException();
+        }
 
     }
 }

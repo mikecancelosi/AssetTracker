@@ -11,28 +11,16 @@ namespace AssetTracker.Model
 
         public override int ID
         {
-            get
-            {
-                return us_id;
-            }
-            set
-            {
-                us_id = value;
-            }
+            get => us_id;
+            set => us_id = value;
         }
-        
+
         public override string Name
         {
-            get
-            {
-                return us_displayname;
-            }
-            set
-            {
-                us_displayname = value;
-            }
+            get => us_displayname;
+            set => us_displayname = value;
         }
-        
+
         public override bool IsValid(out List<Violation> violations)
         {
             violations = new List<Violation>();

@@ -60,6 +60,6 @@ namespace AssetTracker.View
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             VM.Reload();
-        }       
+        }
     }
 }

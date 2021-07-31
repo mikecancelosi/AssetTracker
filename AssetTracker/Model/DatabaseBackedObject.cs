@@ -11,35 +11,9 @@ using System.Threading.Tasks;
 namespace AssetTracker.Model
 {
     public abstract class DatabaseBackedObject
-    {
-        public DatabaseBackedObject()
-        {
-
-        }
-
-        public virtual int ID
-        {
-            get
-            {
-                return 0;
-            }
-            set
-            {
-
-            }
-        }
-        public virtual string Name
-        {
-            get
-            {
-                return "";
-            }
-            set
-            {
-
-            }
-        }
-
+    {      
+        public abstract int ID { get; set; }
+        public abstract string Name { get; set; }
         public virtual bool IsValid(out List<Violation> violations)
         {
             violations = new List<Violation>();
@@ -50,6 +24,7 @@ namespace AssetTracker.Model
         public static void CopyProperties(DatabaseBackedObject copyFrom, DatabaseBackedObject copyTo)
         {
             Type dboType = copyFrom.GetType().BaseType;
+
             if (copyTo.GetType().BaseType != dboType &&
                copyTo.GetType() != dboType)
             {

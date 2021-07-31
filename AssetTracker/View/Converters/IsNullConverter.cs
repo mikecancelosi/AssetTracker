@@ -13,7 +13,17 @@ namespace AssetTracker.View.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value == null;
+            if(value == null)
+            {
+                return true;
+            }
+
+            if(value.GetType() == typeof(string))
+            {
+                return (string)value == "";
+            }
+
+            return false;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

@@ -13,27 +13,15 @@ namespace AssetTracker.Model
     {
         public override int ID
         {
-            get
-            {
-                return as_id;
-            }
-            set
-            {
-                as_id = value;
-            }
-        }
-        public override string Name
-        {
-            get
-            {
-                return as_displayname;
-            }
-            set
-            {
-                as_displayname = value;
-            }
+            get => as_id;
+            set => as_id = value;
         }
 
+        public override string Name
+        {
+            get => as_displayname;
+            set => as_displayname = value;
+        }
 
         public override bool IsValid(out List<Violation> violations)
         {
@@ -76,13 +64,31 @@ namespace AssetTracker.Model
                      ar_usid = as_usid,
                      ar_priority = false,
                      ar_header = "You've been assigned to #" + as_id,
-                     ar_content = Phase.ph_name + " | " + as_displayname,
+                     ar_content = Phase?.ph_name ?? "Status Unavailable" + " | " + as_displayname,
                      ar_recid = MainViewModel.Instance.CurrentUser.ID,
                      ar_type = AlertType.AssetAssigned
                 });
             }
             
             return output;
+        }
+
+        public override bool Save(TrackerContext context, out List<Violation> violations)
+        {
+            violations = new List<Violation>();
+            Asset beforeAsset = context.Entry(this).GetDatabaseValues().ToObject() as Asset;
+            var changes = GetChanges(beforeAsset);
+            var alerts = GetAlerts(beforeAsset);
+            foreach(Change change in changes)
+            {
+                change.Save(context, out violations);
+            }
+            foreach(Alert alert in alerts)
+            {
+                alert.Save(context, out violations);
+            }
+
+            return base.Save(context, out violations);
         }
 
         public override void Delete(TrackerContext context)

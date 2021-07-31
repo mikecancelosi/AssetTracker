@@ -30,11 +30,11 @@
                              Handler="OnModifyTitleOpen_Clicked" />
                 <Setter Property="Foreground"
                         Value="{StaticResource Text_Dark}" />
-                <Style.Triggers>
+                <Style.Triggers>                   
                     <Trigger Property="IsMouseOver"
                              Value="True">
                         <Setter Property="Cursor"
-                                Value="Hand" />
+                                Value="Hand" />                        
                     </Trigger>
                     <Trigger Property="IsMouseOver"
                              Value="False">
@@ -66,8 +66,6 @@
 
                     <StackPanel  Orientation="Horizontal"
                                  HorizontalAlignment="Center">
-
-
                         <Button IsEnabled="{Binding IsSavable}"
                                 Command="{Binding SaveCommand}"
                                 Style="{StaticResource HoverBtn}"
@@ -107,11 +105,11 @@
                 </Border>
 
                 <TextBlock   x:Name="DisplayName"
-                             Text="{Binding myAsset.as_displayname}"
+                             Text="{Binding AssetTitle}"
                              Style="{StaticResource EditableText}"
                              Margin="0,40,0,10"
                              FontSize="24"
-                             FontWeight="Bold" />
+                             FontWeight="Bold"/>
 
                 <!--#region Metadata -->
                 <ItemsControl ItemsSource="{Binding Tags}"
@@ -220,7 +218,7 @@
 
                 <!--#endregion-->
                 
-                <TextBlock Text="{Binding myAsset.as_description}"
+                <TextBlock Text="{Binding Description}"
                            Style="{StaticResource EditableText}"
                            Foreground="White"
                            Margin="0,20" />
@@ -354,7 +352,7 @@
                             </ItemsControl>
                             <!--#endregion-->
 
-                            <TextBlock Text="Modify Asset"
+                            <TextBlock Text="{Binding HeadingText}"
                                        FontSize="20"
                                        Margin="0,20" />
 
@@ -406,7 +404,7 @@
                                 <StackPanel  Orientation="Vertical">                                    
                                     <TextBlock x:Name="Status_HeaderText"
                                                Text="Current Status:"
-                                               IsEnabled="{Binding myAsset.AssetCategory, Converter={StaticResource IsNullInverseConverter}}" />
+                                               IsEnabled="{Binding Category, Converter={StaticResource IsNullInverseConverter}}" />
                                     <local:Searchbox x:Name="Searchbox_Phase"
                                                      IsEnabled="{Binding ElementName=Status_HeaderText, Path=IsEnabled}" />
                                 </StackPanel>
@@ -597,7 +595,7 @@
                                  Grid.Column="1"
                                  Grid.Row="0"
                                  Margin="10,0"
-                                 Text="{Binding myAsset.as_displayname, Mode=TwoWay}"/>
+                                 Text="{Binding myAsset.as_displayname}"/>
                         <TextBlock Text="Description:"
                                    Grid.Column="0"
                                    Grid.Row="1"
@@ -610,7 +608,7 @@
                                  TextWrapping="Wrap"
                                  AcceptsTab="True"
                                  AcceptsReturn="True"
-                                 Margin="10" Text="{Binding myAsset.as_description, Mode=TwoWay}"/>
+                                 Margin="10" Text="{Binding myAsset.as_description}"/>
                     </Grid>
                     <StackPanel Orientation="Horizontal"
                                 HorizontalAlignment="Right"
@@ -622,8 +620,9 @@
                                 Padding="5"
                                 BorderThickness="0"
                                 Margin="10,0"
-                                Click="OnModifyTitleSave_Clicked">
-                        </Button>
+                                Click="OnModifyTitleCancel_Clicked" />
+
+
                         <Button Content="Save"
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Bottom"
@@ -631,9 +630,9 @@
                                 Padding="5"
                                 BorderThickness="0"
                                 Click="OnModifyTitleSave_Clicked">
+                            
                         </Button>
                     </StackPanel>
-
                 </Grid>
             </Border>
             <!--#endregion-->

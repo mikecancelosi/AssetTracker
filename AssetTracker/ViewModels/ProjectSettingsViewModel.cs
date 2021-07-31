@@ -1,4 +1,5 @@
-﻿using AssetTracker.Extensions;
+﻿using AssetTracker.Enums;
+using AssetTracker.Extensions;
 using AssetTracker.Model;
 using AssetTracker.Services;
 using AssetTracker.View;
@@ -22,9 +23,49 @@ namespace AssetTracker.ViewModels
         public ObservableCollection<SecRole> Roles => new ObservableCollection<SecRole>(context.SecRoles);
         public ObservableCollection<AssetCategory> Categories => new ObservableCollection<AssetCategory>(context.AssetCategories);
 
+        /// <summary>
+        /// These are alerts that are visible to everyone. Typically messages
+        /// like 'Remember to keep your assets updated with the current status'
+        /// </summary>
+        public List<Alert> ProjectWideAlerts
+        {
+            get
+            {
+                return (from a in context.Alerts
+                        where a.ar_usid != null &&
+                        a.ar_projectwide
+                        select a).ToList();
+            }
+        }
+
         public ICommand CreateRole { get; set; }
         public ICommand CreateCategory { get; set; }
         public ICommand CreateUser { get; set; }
+        public ICommand CreateAlert => new RelayCommand((s) => CreateNewProjectWideAlert(), (s) => true);
+
+        public ICommand OpenNewAlert => new RelayCommand((s) => PromptNewAlert= true, (s) => true);
+        public ICommand CloseNewAlert => new RelayCommand((s) => PromptNewAlert = false, (s) => true);
+
+        private bool promptNewAlert;
+        public bool PromptNewAlert
+        {
+            get => promptNewAlert;
+            set
+            {
+                if(value == false)
+                {
+                    NewPrompt_Header = "";
+                    NewPrompt_Contents = "";
+                    NotifyPropertyChanged("NewPrompt_Header");
+                    NotifyPropertyChanged("NewPrompt_Contents");
+                }
+                promptNewAlert = value;
+                NotifyPropertyChanged("PromptNewAlert");
+            }
+        }
+
+        public string NewPrompt_Header { get; set; }
+        public string NewPrompt_Contents { get; set; }
 
         private bool promptDelete;
         public bool PromptDelete 
@@ -40,6 +81,13 @@ namespace AssetTracker.ViewModels
         public ICommand DeleteCanceled { get; set; }
         public DatabaseBackedObject DeletionObject { get; private set; }
 
+        public enum OperationType
+        {
+            Copy,
+            Edit,
+            Delete
+        }
+
         private readonly INavigationCoordinator navCoordinator;
         public ProjectSettingsViewModel(INavigationCoordinator coord)
         {
@@ -49,14 +97,7 @@ namespace AssetTracker.ViewModels
             CreateUser = new RelayCommand((s) => navCoordinator.NavigateToCreateUser(), (s) => true);
             DeleteConfirmed = new RelayCommand((s) => DeleteSelectedObject(), (s) => true);
             DeleteCanceled = new RelayCommand((s) => { PromptDelete = false; }, (s) => true);
-        }
-
-        public enum OperationType
-        {
-            Copy,
-            Edit,
-            Delete
-        }
+        }        
 
         public void CompleteDBOOperation(DatabaseBackedObject dbo, OperationType operation)
         {
@@ -102,7 +143,6 @@ namespace AssetTracker.ViewModels
             }
         }
 
-
         public void Reload()
         {
             context = new TrackerContext();
@@ -121,6 +161,21 @@ namespace AssetTracker.ViewModels
             NotifyPropertyChanged("Categories");
         }
 
+        private void CreateNewProjectWideAlert()
+        {           
+
+            Alert newAlert = context.Alerts.Create();
+            newAlert.ar_usid = MainViewModel.Instance.CurrentUser.ID;
+            newAlert.ar_projectwide = true;
+            newAlert.ar_date = DateTime.Now;
+            newAlert.ar_header = NewPrompt_Header;
+            newAlert.ar_content = NewPrompt_Contents;
+            newAlert.ar_type = AlertType.ProjectWideAlert;
+            context.Alerts.Add(newAlert);
+            context.SaveChanges();
+            PromptNewAlert = false;
+            NotifyPropertyChanged("ProjectWideAlerts");
+        }
 
     }
 }

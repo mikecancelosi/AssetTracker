@@ -89,24 +89,7 @@ namespace AssetTracker.View
         private void OnChangelogExited(object sender, RoutedEventArgs e)
         {
             Changelog.Visibility = Visibility.Collapsed;
-        }
-
-        #region Discussion
-
-        public ICommand DiscussionReplyClicked => new IDReceiverCmd((arr) => OnDiscussionReplyClicked(arr), (arr) => { return true; });
-        public void OnDiscussionReplyClicked(object input)
-        {
-            string defaultText = "Start a new discussion..";
-            object[] values = input as object[];
-            int parentID = (int)values[0];
-            string content = values[1] as string;
-            if (content != defaultText)
-            {
-                VM.CreateNewDiscussion(parentID, content);
-            }
-
-        }
-        #endregion        
+        }            
 
         #region Tags
         private void OnMetadataAdd_Clicked(object sender, RoutedEventArgs e)
@@ -137,21 +120,20 @@ namespace AssetTracker.View
         private void OnModifyTitleOpen_Clicked(object sender, RoutedEventArgs e)
         {
             ModifyTitlePanel.Visibility = Visibility.Visible;
-            EditTitle_Value.Text = VM.myAsset.Name;
-            EditDescription_Value.Text = VM.myAsset.as_description;
+            EditTitle_Value.Text = VM.AssetTitle;
+            EditDescription_Value.Text = VM.Description;
+        }
+
+        private void OnModifyTitleCancel_Clicked(object sender, RoutedEventArgs e)
+        {
+            ModifyTitlePanel.Visibility = Visibility.Collapsed;
         }
 
         private void OnModifyTitleSave_Clicked(object sender, RoutedEventArgs e)
         {
             ModifyTitlePanel.Visibility = Visibility.Collapsed;
-            VM.ModifyAssetName(EditTitle_Value.Text);
-            VM.ModifyDescription(EditDescription_Value.Text);
-        }
-        private void OnModifyTitleCancel_Clicked(object sender, RoutedEventArgs e)
-        {
-            ModifyTitlePanel.Visibility = Visibility.Collapsed;
-            EditTitle_Value.Text = "";
-            EditDescription_Value.Text = "";
+            VM.AssetTitle = EditTitle_Value.Text;
+            VM.Description = EditDescription_Value.Text;
         }
     }
 }

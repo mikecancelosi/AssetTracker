@@ -4,36 +4,50 @@
                     xmlns:prop="clr-namespace:AssetTracker.View.Properties"
                     xmlns:conv="clr-namespace:AssetTracker.View.Converters"
                     xmlns:mi="clr-namespace:MaterialIcons;assembly=MaterialIcons">
+
     <ControlTemplate x:Key="NewDiscussion"
-                     TargetType="Control">      
+                     TargetType="Control">
         <Border BorderThickness="0"
                 CornerRadius="2"
                 Background="{StaticResource Layer2_Dark}"
-                Margin="10">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*" />
-                    <ColumnDefinition Width="12*" />
-                </Grid.ColumnDefinitions>
+                Margin="10" Padding="10,0">
+            <StackPanel Orientation="Horizontal">
 
-                <Border  BorderBrush="{StaticResource Layer1_Dark}"
-                         BorderThickness="4"
-                         OpacityMask="White"
-                         CornerRadius="40"
-                         Height="40"
-                         Width="40" />
-                <mi:MaterialIcon Icon="ic_account_circle"
-                                 Width="40"
-                                 Height="40"
+
+                <Grid>
+                    <Border  BorderBrush="{StaticResource Layer1_Dark}"
+                             BorderThickness="4"
+                             OpacityMask="White"
+                             CornerRadius="40"
+                             Height="40"
+                             Width="40" />
+                    <mi:MaterialIcon Icon="ic_account_circle"
+                                     Width="40"
+                                     Height="40"
+                                     Foreground="{StaticResource Text_Dark}"
+                                     VerticalAlignment="Center"
+                                     Margin="0,15" />
+                </Grid>
+                <Border  Grid.Column="1"
+                         Margin="10,20"
+                         Background="{StaticResource Overlay}"
+                         Padding="10,0" Width="1050"
+                         HorizontalAlignment="Stretch">
+                    <Grid>
+                        <TextBox x:Name="NewDiscussionReply"
+                                 VerticalContentAlignment="Center"
                                  Foreground="{StaticResource Text_Dark}"
-                                 VerticalAlignment="Center"
-                                 Margin="0,15" />
-                <TextBox x:Name="NewDiscussionReply"
-                         Text="Start a new discussion.."
-                         Margin="0,20,60,20"
-                         Grid.Column="1"
-                         VerticalContentAlignment="Center"
-                         HorizontalContentAlignment="Stretch" />
+                                 HorizontalContentAlignment="Stretch"
+                                 Background="Transparent"
+                                 BorderThickness="0" />
+                        <TextBlock Text="Start a New Discussion..."
+                                   Foreground="{StaticResource TextOverlay_Dark}"
+                                   Visibility="{Binding ElementName=NewDiscussionReply, Path=Text, Converter={StaticResource IsNullToVizConverter}}"
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Center" />
+                    </Grid>
+                </Border>
+
                 <Button Grid.Column="1"
                         Height="40"
                         Background="Transparent"
@@ -42,7 +56,8 @@
                         Margin="10"
                         BorderThickness="0"
                         Style="{StaticResource HoverBtn}"
-                        Command="{Binding DiscussionReplyClicked, RelativeSource={RelativeSource AncestorLevel=1, AncestorType=Page}}">
+                        Command="{Binding DataContext.DiscussionReplyClicked, RelativeSource={RelativeSource AncestorLevel=1, AncestorType=Page}}"
+                        IsEnabled="{Binding ElementName=NewDiscussionReply, Path=Text, Converter={StaticResource IsNullInverseConverter}}">
                     <Button.CommandParameter>
                         <MultiBinding>
                             <MultiBinding.Converter>
@@ -57,9 +72,10 @@
                                      Path="Text" />
                         </MultiBinding>
                     </Button.CommandParameter>
-                    <mi:MaterialIcon Icon="ic_send" Style="{StaticResource HoverBtn_Content}"/>
+                    <mi:MaterialIcon Icon="ic_send"
+                                     Style="{StaticResource HoverBtn_Content}" Height="35" />
                 </Button>
-            </Grid>
+            </StackPanel>
         </Border>
     </ControlTemplate>
 
@@ -70,11 +86,24 @@
                 Background="{StaticResource Layer3_Dark}">
             <Grid>
 
-                <TextBox x:Name="NewDiscussionReply"
-                         Text="Reply..."
-                         Margin="10,10,60,10"
-                         VerticalContentAlignment="Center"
-                         HorizontalContentAlignment="Stretch" />
+                <Border  Margin="10,10,60,10"
+                         Background="{StaticResource Overlay}"
+                         Padding="10,0">
+                    <Grid>
+                        <TextBox x:Name="NewDiscussionReply"
+                                 VerticalContentAlignment="Center"
+                                 Foreground="{StaticResource Text_Dark}"
+                                 HorizontalContentAlignment="Stretch"
+                                 Background="Transparent"
+                                 BorderThickness="0" />
+                        <TextBlock Text="Reply..."
+                                   Foreground="{StaticResource TextOverlay_Dark}"
+                                   Visibility="{Binding ElementName=NewDiscussionReply, Path=Text, Converter={StaticResource IsNullToVizConverter}}"
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Center" />
+                    </Grid>
+                </Border>
+
                 <Button Height="30"
                         Background="Transparent"
                         Width="30"
@@ -82,7 +111,8 @@
                         Margin="10"
                         BorderThickness="0"
                         Style="{StaticResource HoverBtn}"
-                        Command="{Binding DiscussionReplyClicked, RelativeSource={RelativeSource AncestorLevel=1, AncestorType=Page}}">
+                        Command="{Binding DataContext.DiscussionReplyClicked, RelativeSource={RelativeSource AncestorLevel=1, AncestorType=Page}}"
+                        IsEnabled="{Binding ElementName=NewDiscussionReply, Path=Text, Converter={StaticResource IsNullInverseConverter}}">
                     <Button.CommandParameter>
                         <MultiBinding>
                             <MultiBinding.Converter>
@@ -101,13 +131,15 @@
 
                     <mi:MaterialIcon Icon="ic_send"
                                      Style="{StaticResource HoverBtn_Content}" />
+
+
                 </Button>
             </Grid>
         </Border>
     </ControlTemplate>
 
-    <DataTemplate DataType="{x:Type model:Discussion}"
-                  x:Key="DiscussionItem">
+    <DataTemplate  x:Key="DiscussionItem"
+                   DataType="{x:Type model:Discussion}">
         <Border BorderBrush="{StaticResource BackgroundColor_Dark}"
                 Background="{StaticResource Layer2_Dark}">
             <Border.Margin>
@@ -131,117 +163,119 @@
             </Border.BorderThickness>
             <StackPanel Orientation="Vertical">
                 <Border Background="Transparent">
-                <Grid Margin="10">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1*"
-                                          MaxWidth="50" />
-                        <ColumnDefinition Width="10*" />
-                    </Grid.ColumnDefinitions>
-                    <Border  BorderBrush="{StaticResource Layer1_Dark}"
-                             BorderThickness="4"
-                             OpacityMask="White"
-                             CornerRadius="40"
-                             Height="40"
-                             Width="40" />
-                    <mi:MaterialIcon Icon="ic_account_circle"
-                                     Foreground="{StaticResource Text_Dark}"
-                                     Width="40" />
+                    <Grid Margin="10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"
+                                              MaxWidth="50" />
+                            <ColumnDefinition Width="10*" />
+                        </Grid.ColumnDefinitions>
+                        <Border  BorderBrush="{StaticResource Layer1_Dark}"
+                                 BorderThickness="4"
+                                 OpacityMask="White"
+                                 CornerRadius="40"
+                                 Height="40"
+                                 Width="40" />
+                        <mi:MaterialIcon Icon="ic_account_circle"
+                                         Foreground="{StaticResource Text_Dark}"
+                                         Width="40" />
 
-                    <StackPanel Orientation="Vertical"
-                                Grid.Column="1"
-                                Margin="10,0,0,10">
+                        <StackPanel Orientation="Vertical"
+                                    Grid.Column="1"
+                                    Margin="10,0,0,10">
 
-                        <Grid x:Name="ReplyHeader"
-                              Margin="0,5">
-                            <StackPanel Orientation="Horizontal"
-                                        HorizontalAlignment="Left">
+                            <Grid x:Name="ReplyHeader"
+                                  Margin="0,5">
+                                <StackPanel Orientation="Horizontal"
+                                            HorizontalAlignment="Left">
 
-                                <TextBlock Text="{Binding User.Name}"
-                                           Margin="0,0,5,0"
-                                           FontSize="16"
-                                           FontWeight="SemiBold"
-                                           VerticalAlignment="Bottom"
-                                           Foreground="{StaticResource Text_Dark}" />
+                                    <TextBlock Text="{Binding User.Name}"
+                                               Margin="0,0,5,0"
+                                               FontSize="16"
+                                               FontWeight="SemiBold"
+                                               VerticalAlignment="Bottom"
+                                               Foreground="{StaticResource Text_Dark}" />
 
-                                <TextBlock Text="{Binding di_date, Converter={StaticResource ResourceKey=TimeDisplayConv}}"
-                                           VerticalAlignment="Bottom"
-                                           Foreground="{StaticResource Text_Dark}" />
+                                    <TextBlock Text="{Binding di_date, Converter={StaticResource ResourceKey=TimeDisplayConv}}"
+                                               VerticalAlignment="Bottom"
+                                               Foreground="{StaticResource Text_Dark}" />
+
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal"
+                                            HorizontalAlignment="Right">
+                                    <StackPanel.Resources>
+                                        <Style TargetType="Button"
+                                               BasedOn="{StaticResource HoverBtn}">
+                                            <Setter Property="Margin"
+                                                    Value="0,0,5,0" />
+                                        </Style>
+                                        <Style TargetType="mi:MaterialIcon"
+                                               BasedOn="{StaticResource HoverBtn_Content}">
+
+                                        </Style>
+                                        <Style TargetType="Button"
+                                               BasedOn="{StaticResource HoverBtn}"
+                                               x:Key="EditBord">
+
+                                            <Style.Triggers>
+                                                <MultiDataTrigger>
+                                                    <MultiDataTrigger.Conditions>
+                                                        <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type Border},AncestorLevel=1}}"
+                                                                   Value="True" />
+                                                        <Condition Binding="{Binding di_usid, Converter={StaticResource MatchUser}}"
+                                                                   Value="True" />
+                                                    </MultiDataTrigger.Conditions>
+
+                                                    <Setter Property="Visibility"
+                                                            Value="Visible" />
+                                                </MultiDataTrigger>
+                                                <DataTrigger Binding="{Binding di_usid, Converter={StaticResource MatchUser}}"
+                                                             Value="False">
+                                                    <Setter Property="Visibility"
+                                                            Value="Collapsed" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type Border},AncestorLevel=1}}"
+                                                             Value="False">
+                                                    <Setter Property="Visibility"
+                                                            Value="Collapsed" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </StackPanel.Resources>
+
+                                    <Button IsEnabled="False"
+                                            Background="Transparent"
+                                            Visibility="{Binding di_usid, Converter={StaticResource MatchUserInvertAndVisibilitate}}">
+                                        <mi:MaterialIcon Icon="ic_face" />
+                                    </Button>
+
+                                    <Button Style="{StaticResource EditBord}">
+                                        <mi:MaterialIcon Icon="ic_edit" />
+                                    </Button>
+
+                                    <Button IsEnabled="False"
+                                            Background="Transparent">
+                                        <mi:MaterialIcon Icon="ic_more_vert" />
+                                    </Button>
+
+
+                                </StackPanel>
+                            </Grid>
+
+                            <StackPanel Orientation="Vertical">
+                                <TextBox x:Name="DiscussionContents"
+                                         Text="{Binding di_contents}"
+                                         Background="Transparent"
+                                         Padding="0,5"
+                                         BorderThickness="0"
+                                         Foreground="{StaticResource Text_Dark}" />
 
                             </StackPanel>
-
-                            <StackPanel Orientation="Horizontal"
-                                        HorizontalAlignment="Right">
-                                <StackPanel.Resources>
-                                    <Style TargetType="Button"
-                                           BasedOn="{StaticResource HoverBtn}">
-                                        <Setter Property="Margin"
-                                                Value="0,0,5,0" />
-                                    </Style>
-                                    <Style TargetType="mi:MaterialIcon"
-                                           BasedOn="{StaticResource HoverBtn_Content}">
-
-                                    </Style>
-                                    <Style TargetType="Button" BasedOn="{StaticResource HoverBtn}" x:Key="EditBord">
-                                       
-                                        <Style.Triggers>
-                                            <MultiDataTrigger>
-                                                <MultiDataTrigger.Conditions>
-                                                    <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type Border},AncestorLevel=1}}"
-                                                               Value="True" />
-                                                    <Condition Binding="{Binding di_usid, Converter={StaticResource MatchUser}}"
-                                                               Value="True" />
-                                                </MultiDataTrigger.Conditions>
-
-                                                <Setter Property="Visibility"
-                                                        Value="Visible" />
-                                            </MultiDataTrigger>
-                                            <DataTrigger Binding="{Binding di_usid, Converter={StaticResource MatchUser}}"
-                                                         Value="False">
-                                                <Setter Property="Visibility"
-                                                        Value="Collapsed" />
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type Border},AncestorLevel=1}}"
-                                                Value="False">
-                                                <Setter Property="Visibility"
-                                                        Value="Collapsed" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </StackPanel.Resources>
-
-                                <Button IsEnabled="False"
-                                        Background="Transparent"
-                                        Visibility="{Binding di_usid, Converter={StaticResource MatchUserInvertAndVisibilitate}}">
-                                    <mi:MaterialIcon Icon="ic_face" />
-                                </Button>
-
-                                <Button Style="{StaticResource EditBord}">
-                                    <mi:MaterialIcon Icon="ic_edit" />
-                                </Button>
-
-                                <Button IsEnabled="False"
-                                        Background="Transparent">
-                                    <mi:MaterialIcon Icon="ic_more_vert" />
-                                </Button>
-
-
-                            </StackPanel>
-                        </Grid>
-
-                        <StackPanel Orientation="Vertical">
-                            <TextBox x:Name="DiscussionContents"
-                                     Text="{Binding di_contents}"
-                                     Background="Transparent"
-                                     Padding="0,5"
-                                     BorderThickness="0"
-                                     Foreground="{StaticResource Text_Dark}" />
 
                         </StackPanel>
 
-                    </StackPanel>
 
-
-                </Grid>
+                    </Grid>
                 </Border>
                 <ItemsControl ItemsSource="{Binding Children}"
                               ItemTemplate="{DynamicResource ResourceKey=DiscussionItem}" />

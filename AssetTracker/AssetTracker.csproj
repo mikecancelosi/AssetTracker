@@ -188,7 +188,6 @@
     <Compile Include="View\CategoryEdit.xaml.cs">
       <DependentUpon>CategoryEdit.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Commands\IDReceiverCmd.cs" />
     <Compile Include="View\Commands\RelayCommand.cs" />
     <Compile Include="View\Converters\AlternationEqualityConverter.cs" />
     <Compile Include="View\Converters\BooleanToVizConverter.cs" />

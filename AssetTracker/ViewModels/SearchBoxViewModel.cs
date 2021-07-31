@@ -80,11 +80,17 @@ namespace AssetTracker.ViewModels
             if (id > 0)
             {
                 DatabaseBackedObject copyFrom = Items.Find(dbo => dbo.ID == id);
+
+                if(CurrentlySelectedObject == null) // Can't copy to a null value
+                {
+                    CurrentlySelectedObject = (DatabaseBackedObject)context.Set(DboType).Create();
+                }
+
                 DatabaseBackedObject.CopyProperties(copyFrom, CurrentlySelectedObject);
             }
             else
             {
-                CurrentlySelectedObject = null;
+                CurrentlySelectedObject = (DatabaseBackedObject)context.Set(DboType).Create();
             }
             SetUserFilter("");
             NotifyPropertyChanged("CurrentlySelectedObject");

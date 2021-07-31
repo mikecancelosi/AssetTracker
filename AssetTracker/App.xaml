@@ -8,35 +8,7 @@
              mc:Ignorable="d"
              StartupUri="View/MainWindow.xaml" Startup="Application_Startup">
     <Application.Resources>
-        <ResourceDictionary>
-            <Storyboard x:Key="HideDeletePrompt">
-                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DeletePrompt"
-                                               Storyboard.TargetProperty="Visibility">
-                    <DiscreteObjectKeyFrame KeyTime="0:0:0"
-                                            Value="{x:Static Visibility.Collapsed}" />
-                </ObjectAnimationUsingKeyFrames>
-            </Storyboard>
-            <Storyboard x:Key="ShowDeletePrompt">
-                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DeletePrompt"
-                                               Storyboard.TargetProperty="Visibility">
-                    <DiscreteObjectKeyFrame KeyTime="0:0:0"
-                                            Value="{x:Static Visibility.Visible}" />
-                </ObjectAnimationUsingKeyFrames>
-            </Storyboard>
-            <Storyboard x:Key="HideSavePrompt">
-                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="SavePrompt"
-                                               Storyboard.TargetProperty="Visibility">
-                    <DiscreteObjectKeyFrame KeyTime="0:0:0"
-                                            Value="{x:Static Visibility.Collapsed}" />
-                </ObjectAnimationUsingKeyFrames>
-            </Storyboard>
-            <Storyboard x:Key="ShowSavePrompt">
-                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="SavePrompt"
-                                               Storyboard.TargetProperty="Visibility">
-                    <DiscreteObjectKeyFrame KeyTime="0:0:0"
-                                            Value="{x:Static Visibility.Visible}" />
-                </ObjectAnimationUsingKeyFrames>
-            </Storyboard>
+        <ResourceDictionary>            
             <converters:InverseBooleanConverter x:Key="inverseBooleanConverter" />
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
             <converters:MultiBooleanToVisibilityConverter x:Key="multiBoolToVisConvert" />
@@ -51,7 +23,7 @@
                 <converters:MatchesUserIDConverter />
                 <converters:InverseBooleanConverter />
                 <converters:BooleanToVizConverter />
-            </converters:ValueConverterGroup>
+            </converters:ValueConverterGroup> 
             <converters:ValueConverterGroup x:Key="InvertAndVisibilitate">
                 <converters:InverseBooleanConverter />
                 <BooleanToVisibilityConverter />
@@ -59,6 +31,15 @@
             <converters:ValueConverterGroup x:Key="IsNullInverseConverter">
                 <converters:IsNullConverter />
                 <converters:InverseBooleanConverter />
+            </converters:ValueConverterGroup>
+
+            <converters:ValueConverterGroup x:Key="IsNullInvertToVizConverter">
+                 <converters:IsNullConverter />
+                 <converters:InverseBooleanConverter />
+                 <converters:BooleanToVizConverter />
+            </converters:ValueConverterGroup>
+            <converters:ValueConverterGroup x:Key="IsNullToVizConverter">
+                <converters:IsNullConverter />
                 <converters:BooleanToVizConverter />
             </converters:ValueConverterGroup>
             <ResourceDictionary.MergedDictionaries>               

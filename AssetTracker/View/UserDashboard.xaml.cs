@@ -1,4 +1,5 @@
-﻿using AssetTracker.ViewModels;
+﻿using AssetTracker.Model;
+using AssetTracker.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,6 +31,15 @@ namespace AssetTracker.View
         {
             InitializeComponent();
             VM = vm;
+        }
+
+        private void ListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {            
+            Alert alert = UserAlertList.SelectedItem as Alert;
+            if (alert != null)
+            {
+                VM.NavigateToAlert(alert.ID);
+            }
         }
     }
 }

@@ -9,8 +9,18 @@ namespace AssetTracker.Model
     public partial class SecRole : DatabaseBackedObject
     {
 
-        public override int ID => ro_id;
-        public override string Name => ro_name;
+        public override int ID
+        {
+            get => ro_id;
+            set => ro_id = value;
+        }
+
+        public override string Name
+        {
+            get => ro_name;
+            set => ro_name = value;
+        }
+
         public override bool IsValid(out List<Violation> violations)
         {
             violations = new List<Violation>();

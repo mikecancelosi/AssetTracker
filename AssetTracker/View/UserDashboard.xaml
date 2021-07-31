@@ -8,7 +8,8 @@
       xmlns:materialicons="clr-namespace:MaterialIcons;assembly=MaterialIcons"
       d:DataContext="{d:DesignInstance Type=viewmodel:UserDashboardViewModel}"
       mc:Ignorable="d"
-      Title="UserDashboard">   
+      Title="UserDashboard"
+      x:Name="Dashboard">   
     <Grid Margin="50,0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" />
@@ -139,12 +140,14 @@
                 </StackPanel>
 
                 <Grid Margin="0,20,0,10">
+                    <Button Style="{StaticResource HoverBtn}" Command="{Binding MarkAlertsAsRead}">
                     <TextBlock Text="Mark all as read."
                                HorizontalAlignment="Right"
-                               Foreground="White" />
+                              Style="{StaticResource HoverBtn_TextContent}" />
+                    </Button>
                 </Grid>
 
-                <ListView ItemsSource="{Binding UserAlerts}" Background="Transparent" BorderThickness="0">
+                <ListView x:Name="UserAlertList" ItemsSource="{Binding UserAlerts}" Background="Transparent" BorderThickness="0" MouseDoubleClick="ListView_MouseDoubleClick">
                     <ListView.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel Orientation="Vertical" />
@@ -157,7 +160,7 @@
                         </Style>
                     </ListView.ItemContainerStyle>
                     <ListView.ItemTemplate>
-                        <DataTemplate>
+                        <DataTemplate>                           
                             <Border Padding="10" Background="{StaticResource Layer2_Dark}">
                                  <Grid>
                                     <Grid.ColumnDefinitions>
@@ -166,23 +169,66 @@
                                         <ColumnDefinition Width="2*" />
                                         <ColumnDefinition Width="2*" />
                                     </Grid.ColumnDefinitions>
-                                     <materialicons:MaterialIcon Grid.Column="0"
-                                                                 Icon="ic_face"
-                                                                 Foreground="{StaticResource Text_Dark}" Height="40" HorizontalAlignment="Left"/>
-                                     <StackPanel Grid.Column="1"
+                                    <Grid.Resources>
+                                        <Style TargetType="materialicons:MaterialIcon">
+                                            <Setter Property="Foreground"
+                                                    Value="{StaticResource Text_Dark}" />
+                                            <Style.Triggers>
+                                                <MultiDataTrigger>
+                                                    <MultiDataTrigger.Conditions>
+                                                        <Condition Binding="{Binding Path=ar_priority}"
+                                                                   Value="False" />
+                                                        <Condition Binding="{Binding Path=ar_viewed}"
+                                                                   Value="True" />
+                                                    </MultiDataTrigger.Conditions>
+                                                    <Setter Property="Foreground"
+                                                            Value="{StaticResource Layer3_Dark}" />
+                                                </MultiDataTrigger>
+
+                                                <MultiDataTrigger>
+                                                    <MultiDataTrigger.Conditions>
+                                                        <Condition Binding="{Binding Path=ar_priority}"
+                                                                   Value="False" />
+                                                        <Condition Binding="{Binding Path=ar_viewed}"
+                                                                   Value="False" />
+                                                    </MultiDataTrigger.Conditions>
+                                                    <Setter Property="Foreground"
+                                                            Value="{StaticResource Text_Dark}" />
+                                                </MultiDataTrigger>
+                                                
+                                                <DataTrigger Binding="{Binding ar_priority}"
+                                                             Value="True">
+                                                    <Setter Property="Foreground"
+                                                            Value="{StaticResource Accent_Dark}" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Grid.Resources>
+                                    <materialicons:MaterialIcon x:Name="AlertIcon"
+                                                                Grid.Column="0"
+                                                                Icon="ic_face"
+                                                                Height="40"
+                                                                HorizontalAlignment="Left" />
+
+                                    <StackPanel Grid.Column="1"
                                                 Orientation="Vertical"
                                                 Width="300"
                                                 HorizontalAlignment="Left"
                                                 VerticalAlignment="Center">
-                                        <TextBlock Text="{Binding ar_header}" />
-                                        <TextBlock Text="{Binding ar_content}" />
+                                        <TextBlock Text="{Binding ar_header}" Foreground="{StaticResource Text_Dark}" />
+                                        <TextBlock Text="{Binding ar_content}"
+                                                   Foreground="{StaticResource Text_Dark}" />
                                      </StackPanel>
                                      <StackPanel Orientation="Horizontal" Grid.Column="2" >
-                                        <Button Style="{StaticResource HoverBtn }">
+                                        <Button Style="{StaticResource HoverBtn }"
+                                                Command="{Binding ElementName=UserAlertList, Path=DataContext.PrioritizeAlertCommand}"
+                                                CommandParameter="{Binding ar_id}">
                                             <materialicons:MaterialIcon Icon="ic_priority_high"
                                                                         Style="{StaticResource HoverBtn_Content}" />
                                         </Button>
-                                        <Button Style="{StaticResource HoverBtn }">
+                                        <Button Style="{StaticResource HoverBtn }"
+                                                Command="{Binding  ElementName=UserAlertList, Path=DataContext.ArchiveAlertCommand}"
+                                                CommandParameter="{Binding ar_id}">
                                             <materialicons:MaterialIcon Icon="ic_archive"
                                                                         Style="{StaticResource HoverBtn_Content}" />
                                         </Button>
@@ -190,7 +236,8 @@
                                         <TextBlock Text="{Binding ar_date}"
                                                    HorizontalAlignment="Right"
                                                    Grid.Column="3"
-                                                   VerticalAlignment="Center" />
+                                               VerticalAlignment="Center"
+                                               Foreground="{StaticResource Text_Dark}" />
                                  </Grid>
                             </Border>
                         </DataTemplate>

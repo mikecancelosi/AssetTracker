@@ -9,8 +9,17 @@ namespace AssetTracker.Model
 {
     public partial class Alert : DatabaseBackedObject
     {
-        public override int ID => ar_id;
-        public override string Name { get => base.Name; set => base.Name = value; }      
+        public override int ID
+        {
+            get => ar_id;
+            set => ar_id = value;
+        }
+
+        public override string Name
+        {
+            get => ar_header;
+            set => ar_header = value;
+        }
 
     }
 }

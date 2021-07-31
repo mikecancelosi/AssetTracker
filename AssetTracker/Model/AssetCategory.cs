@@ -11,25 +11,14 @@ namespace AssetTracker.Model
 
         public override int ID
         {
-            get
-            {
-                return ca_id;
-            }
-            set
-            {
-                ca_id = value;
-            }
+            get => ca_id;
+            set => ca_id = value;
         }
+
         public override string Name
         {
-            get
-            {
-                return ca_name;
-            }
-            set
-            {
-                ca_name = value;
-            }
+            get => ca_name;
+            set => ca_name = value;
         }
 
         public override DatabaseBackedObject Clone()

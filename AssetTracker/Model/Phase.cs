@@ -8,8 +8,17 @@ namespace AssetTracker.Model
 {
     public partial class Phase : DatabaseBackedObject
     {
-        public override int ID => ph_id;
-        public override string Name => ph_name;
+        public override int ID
+        {
+            get => ph_id;
+            set => ph_id = value;
+        }
+
+        public override string Name
+        {
+            get => ph_name;
+            set => ph_name = value;
+        }
         public override bool IsValid(out List<Violation> violations)
         {
             violations = new List<Violation>();

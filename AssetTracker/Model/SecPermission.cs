@@ -11,25 +11,14 @@ namespace AssetTracker.Model
     {
         public override int ID
         {
-            get
-            {
-                return  pr_id;
-            }
-            set
-            {
-                pr_id = value;
-            }
+            get => pr_id;
+            set => pr_id = value;
         }
+
         public override string Name
         {
-            get
-            {
-                return pr_name;
-            }
-            set
-            {
-                pr_name = value;
-            }
+            get => pr_name;
+            set => pr_name = value;
         }
 
         // Structs used for displaying permissions in roleEdit and user edit

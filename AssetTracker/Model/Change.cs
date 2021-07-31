@@ -8,6 +8,18 @@ namespace AssetTracker.Model
 {
     public partial class Change : DatabaseBackedObject
     {
+        public override int ID
+        {
+            get => ch_id;            
+            set => ch_id = value;
+        }
+
+        public override string Name         
+        {
+            get => ch_field;
+            set => ch_field = value;
+        }
+
         public override bool IsValid(out List<Violation> violations)
         {
             violations = new List<Violation>();

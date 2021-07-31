@@ -77,12 +77,77 @@ namespace AssetTracker.ViewModels
 
         public ICommand DeleteConfirmed { get; set; }
 
+        private bool Creating;
+        private bool Cloning;
+        public string HeadingText
+        {
+            get
+            {
+                if(Creating)
+                {
+                    return "Creating Asset";
+                }
+                else if(Cloning)
+                {
+                    return "Cloning Asset";
+                }
+                return "Modify Asset";
+            }
+        }
+
+        public string AssetTitle
+        {
+            get
+            {
+                string title = myAsset?.Name ?? "";
+                return title != "" ? title : "New Asset";                
+            }
+            set
+            {
+                context.Entry(myAsset).Property(x => x.as_displayname).CurrentValue = value;
+                NotifyPropertyChanged("AssetTitle");
+                NotifyPropertyChanged("IsSavable");
+            }
+        }
+
+        public string Description
+        {
+            get
+            {
+                string description = myAsset?.as_description ?? "";
+                return description != "" ? description : "Add a short blurb to describe this new asset!";
+            }
+            set
+            {
+                context.Entry(myAsset).Property(x => x.as_description).CurrentValue = value;
+                NotifyPropertyChanged("Description");
+                NotifyPropertyChanged("IsSavable");
+            }
+        }
+
+        public AssetCategory Category
+        {
+            get => myAsset.AssetCategory;
+            set
+            {
+                context.Entry(myAsset).Property(x => x.as_caid).CurrentValue = value.ID;
+                myAsset.AssetCategory = value;
+                NotifyPropertyChanged("Category");
+                NotifyPropertyChanged("IsSavable");
+            }
+        }
+
+        public ICommand DiscussionReplyClicked => new RelayCommand((arr) => CreateNewDiscussio(arr), (arr) => { return true; });
+
+
         //TODO : Add back in hierarchy selected command
         public AssetDetailViewModel(INavigationCoordinator coord)
         {
             navCoordinator = coord;
             navCoordinator.UserNavigationAttempt += (s) => PromptSave = true;
             myAsset = context.Assets.Create();
+            Creating = true;
+            Cloning = false;
             SaveCommand = new RelayCommand((s) => Save(), (s) => true);
             RefuseSave = new RelayCommand((s) => navCoordinator.NavigateToQueued(), (s) => true);
             DeleteConfirmed = new RelayCommand((s) => DeleteAsset(), (s) => true);
@@ -91,11 +156,13 @@ namespace AssetTracker.ViewModels
         public void SetAsset(Asset ast)
         {
             myAsset = context.Assets.Find(ast.ID);
-            NotifyPropertyChanged("myAsset");
-
             Changelog = (from s in context.Changes
                          where s.ch_recid == myAsset.ID
                          select s).ToList();
+            Creating = false;
+            Cloning = ast.ID == 0;
+
+            NotifyPropertyChanged("myAsset");          
             NotifyPropertyChanged("Changelog");
             NotifyPropertyChanged("DiscussionBoard");
             NotifyPropertyChanged("myAsset");
@@ -109,69 +176,50 @@ namespace AssetTracker.ViewModels
             navCoordinator.NavigateToAssetList();
         }
 
-        #region SetNewValues
+        #region SetNewValuesFromSearchboxes
         public void ModifyAssignedUser(int userID)
         {
-            context.Entry(myAsset).Property(x => x.as_usid).CurrentValue = userID;
-            NotifyPropertyChanged("IsSavable");
+            User user = context.Users.Find(userID);
+            if (user != null)
+            {
+                context.Entry(myAsset).Property(x => x.as_usid).CurrentValue = userID;
+                myAsset.AssignedToUser = user;
+                NotifyPropertyChanged("IsSavable");
+                NotifyPropertyChanged("myAsset");
+            }
         }
 
         public void ModifyPhase(int phaseID)
         {
-            context.Entry(myAsset).Property(x => x.as_phid).CurrentValue = phaseID;
-            NotifyPropertyChanged("IsSavable");
+            Phase phase = context.Phases.Find(phaseID);
+            if (phase != null)
+            {
+                context.Entry(myAsset).Property(x => x.as_phid).CurrentValue = phase.ID;
+                myAsset.Phase = phase;
+                NotifyPropertyChanged("IsSavable");
+                NotifyPropertyChanged("myAsset");
+            }
         }
 
         public void ModifyCategory(int catID)
         {
-            context.Entry(myAsset).Property(x => x.as_caid).CurrentValue = catID;
-            NotifyPropertyChanged("IsSavable");
-            NotifyPropertyChanged("myAsset");
-        }
-
-        public void ModifyAssetName(string newName)
-        {
-            context.Entry(myAsset).Property(x => x.as_displayname).CurrentValue = newName;
-            NotifyPropertyChanged("myAsset");
-            NotifyPropertyChanged("IsSavable");
-        }
-
-        public void ModifyDescription(string newDescription)
-        {
-            context.Entry(myAsset).Property(x => x.as_description).CurrentValue = newDescription;
-            NotifyPropertyChanged("myAsset");
-            NotifyPropertyChanged("IsSavable");
+            AssetCategory cat = context.AssetCategories.Find(catID);
+            if (cat != null)
+            {               
+                Category = cat;               
+            }
         }
         #endregion
 
         public void Save()
-        {
-            List<Change> changes = new List<Change>();
-            List<Alert> alerts = new List<Alert>();
-            var violations = new List<Violation>();
-           
-            //TODO: Properly handle changes
+        {        
             if(context.Entry(myAsset).State == System.Data.Entity.EntityState.Detached)
             {
                 context.Assets.Add(myAsset);
             }
-
-            if (context.Entry(myAsset).State == System.Data.Entity.EntityState.Modified)
-            {
-                Asset beforeAsset = context.Entry(myAsset).GetDatabaseValues().ToObject() as Asset;
-                changes = myAsset.GetChanges(beforeAsset);
-                alerts = myAsset.GetAlerts(beforeAsset);
-            }
-            if (myAsset.Save(context, out violations))
-            {
-                foreach (Change change in changes)
-                {
-                    change.Save(context, out violations);
-                }
-                foreach (Alert alert in alerts)
-                {
-                    //alert.Save(context);
-                }
+            
+            if (myAsset.Save(context, out List<Violation> violations))
+            {               
                 NotifyPropertyChanged("IsSavable");
                 NotifyPropertyChanged("Changelog");    
                 if(navCoordinator.WaitingToNavigate)
@@ -386,40 +434,47 @@ namespace AssetTracker.ViewModels
 
         #endregion
 
-        public void CreateNewDiscussion(int parentID, string content)
+        public void CreateNewDiscussio(object input)
         {
-            Discussion newDiscussion = context.Discussions.Create();
-            newDiscussion.di_contents = content;
-            newDiscussion.di_date = DateTime.Now;
-            newDiscussion.di_asid = myAsset.ID;
-            newDiscussion.di_usid = MainViewModel.Instance.CurrentUser.us_id;
-            if (parentID > 0)
+            string defaultText = "Start a new discussion..";
+            object[] values = input as object[];
+            int parentID = (int)values[0];
+            string content = values[1] as string;
+            if (content != defaultText && content != "")
             {
-                newDiscussion.di_parentid = parentID;
-
-                Discussion parentDiscussion = context.Discussions.Find(parentID);
-                int parentUserId = parentDiscussion.di_usid ?? 0;
-                if (parentUserId > 0 &&
-                    parentUserId != MainViewModel.Instance.CurrentUser.us_id)
+                Discussion newDiscussion = context.Discussions.Create();
+                newDiscussion.di_contents = content;
+                newDiscussion.di_date = DateTime.Now;
+                newDiscussion.di_asid = myAsset.ID;
+                newDiscussion.di_usid = MainViewModel.Instance.CurrentUser.us_id;
+                if (parentID > 0)
                 {
-                    //TODO: Create an alert for all users that have replied on the discussion
-                    User parentUser = context.Users.Find(parentUserId);
-                    Alert newAlert = context.Alerts.Create();
-                    newAlert.ar_usid = parentDiscussion.di_usid;
-                    newAlert.ar_projectwide = false;
-                    newAlert.ar_asid = myAsset.as_id;
-                    newAlert.ar_date = DateTime.Now;
-                    newAlert.ar_type = AlertType.DiscussionReply;
-                    newAlert.ar_header = parentUser.us_displayname + " continued the conversation on #" + myAsset.as_id;
-                    newAlert.ar_content = content.Substring(0,47) + "...";
+                    newDiscussion.di_parentid = parentID;
 
-                    context.Alerts.Add(newAlert);
+                    Discussion parentDiscussion = context.Discussions.Find(parentID);
+                    int parentUserId = parentDiscussion.di_usid ?? 0;
+                    if (parentUserId > 0 &&
+                        parentUserId != MainViewModel.Instance.CurrentUser.us_id)
+                    {
+                        //TODO: Create an alert for all users that have replied on the discussion
+                        User parentUser = context.Users.Find(parentUserId);
+                        Alert newAlert = context.Alerts.Create();
+                        newAlert.ar_usid = parentDiscussion.di_usid;
+                        newAlert.ar_projectwide = false;
+                        newAlert.ar_asid = myAsset.as_id;
+                        newAlert.ar_date = DateTime.Now;
+                        newAlert.ar_type = AlertType.DiscussionReply;
+                        newAlert.ar_header = parentUser.us_displayname + " continued the conversation on #" + myAsset.as_id;
+                        newAlert.ar_content = content.Substring(0, Math.Min(content.Length, 47)) + "...";
+
+                        context.Alerts.Add(newAlert);
+                    }
                 }
-            }
 
-            context.Discussions.Add(newDiscussion);
-            context.SaveChanges();
-            NotifyPropertyChanged("DiscussionBoard");
+                context.Discussions.Add(newDiscussion);
+                context.SaveChanges();
+                NotifyPropertyChanged("DiscussionBoard");
+            }
         }       
 
     }

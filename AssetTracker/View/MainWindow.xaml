@@ -12,6 +12,7 @@
         Title="MainWindow"
         Height="1080"
         Width="1920"
+        WindowState="Maximized"
         d:DataContext="{d:DesignInstance viewmodel:MainViewModel, IsDesignTimeCreatable=True}">
     <Grid Background="{StaticResource ResourceKey=BackgroundColor_Dark}">
         <Grid.Resources>
@@ -37,7 +38,8 @@
         <Grid x:Name="NavBar"
               Grid.Row="0"
               Margin="5"
-              Visibility="{Binding CurrentUser, Converter={StaticResource IsNullInverseConverter }}">
+              Visibility="{Binding CurrentUser, Converter={StaticResource IsNullInvertToVizConverter }}">
+            
             <Grid Margin="20,0">
                 <Button Click="NavigateToDashboard"
                         Width="75"

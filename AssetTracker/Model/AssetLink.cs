@@ -10,25 +10,14 @@ namespace AssetTracker.Model
     {
         public override int ID
         {
-            get
-            {
-                return li_id;
-            }
-            set
-            {
-                li_id = value;
-            }
+            get => li_id;
+            set => li_id = value;
         }
+
         public override string Name
         {
-            get
-            {
-                return li_location;
-            }
-            set
-            {
-                li_location = value;
-            }
+            get => li_location;
+            set => li_location = value;
         }
     }
 }

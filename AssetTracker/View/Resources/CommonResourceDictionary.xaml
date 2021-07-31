@@ -29,20 +29,22 @@
                 <Setter Property="Background"
                         Value="Transparent" />
             </Trigger>
-            <Trigger Property="IsMouseOver"
-                     Value="True">
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsMouseOver"
+                               Value="True" />
+                    <Condition Property="IsEnabled"
+                               Value="True" />
+                </MultiTrigger.Conditions>
                 <Setter Property="Cursor"
                         Value="Hand" />
-            </Trigger>
-            <Trigger Property="IsFocused"
-                     Value="True">
-            </Trigger>
+            </MultiTrigger>
         </Style.Triggers>
     </Style>
 
     <Style TargetType="materialicons:MaterialIcon"
            x:Key="HoverBtn_Content">
-        <Style.Triggers>
+        <Style.Triggers>            
             <Trigger Property="IsEnabled"
                      Value="True">
                 <Setter Property="Foreground"
@@ -55,11 +57,16 @@
                         Value="{StaticResource Layer3_Dark}" />
             </Trigger>
 
-            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Button, AncestorLevel=1}, Path=IsMouseOver}"
-                         Value="True">
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding RelativeSource={RelativeSource AncestorType=Button, AncestorLevel=1}, Path=IsMouseOver}"
+                               Value="True" />
+                    <Condition  Binding="{Binding  RelativeSource={RelativeSource AncestorType=Button, AncestorLevel=1}, Path=IsEnabled}"
+                               Value="True" />
+                </MultiDataTrigger.Conditions>
                 <Setter Property="Foreground"
                         Value="{StaticResource Accent_Dark}" />
-            </DataTrigger>
+            </MultiDataTrigger>
         </Style.Triggers>
     </Style>
 

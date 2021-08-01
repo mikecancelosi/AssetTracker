@@ -20,7 +20,11 @@
                  Name="LeftPanel"
                  Style="{StaticResource LeftPanel }">
             <StackPanel>
-                <ListView ItemsSource="{Binding ProjectUpdateAlerts}" Height="300" Background="{StaticResource Layer2_Dark}" BorderThickness="0">
+
+                <ListView ItemsSource="{Binding ProjectUpdateAlerts}"
+                          Height="300"
+                          Background="{StaticResource Layer2_Dark}"
+                          BorderThickness="0">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <Grid>
@@ -29,23 +33,37 @@
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
-                <ListView Margin="0,20,0,0"
+
+                <ScrollViewer Margin="0,20,0,0">
+                    <Border  Background="{StaticResource Layer2_Dark}"
+                             Padding="10">
+                        <ItemsControl
                           ItemsSource="{Binding ProjectWideAlerts}"
                           Height="500"
-                          Background="{StaticResource Layer2_Dark}"
                           BorderThickness="0">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Vertical">
-                                <TextBlock Text="{Binding ar_content}" />
-                                <TextBlock Text="{Binding ar_usid}"
-                                           HorizontalAlignment="Right" />
-                                <TextBlock Text="{Binding ar_date}"
-                                           HorizontalAlignment="Right" />
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
+                    <ItemsControl.ItemTemplate>    
+                    <DataTemplate>
+                                    <DataTemplate.Resources>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Foreground" Value="{StaticResource Text_Dark}"/>
+                                        </Style>
+                                    </DataTemplate.Resources>
+
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock Text="{Binding ar_content}"
+                                                   TextWrapping="WrapWithOverflow" />
+                                        <TextBlock Text="{Binding User.Name}"
+                                                   HorizontalAlignment="Right" />
+                                        <TextBlock Text="{Binding ar_date}"
+                                                   HorizontalAlignment="Right" />
+                                        <Separator Margin="0,20" />
+                                    </StackPanel>
+                                </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                    </Border>
+                </ScrollViewer>
+               
             </StackPanel>
         </Border>
 
@@ -139,7 +157,7 @@
                     </StackPanel>
                 </StackPanel>
 
-                <Grid Margin="0,20,0,10">
+                <Grid Margin="0,20,0,10" HorizontalAlignment="Right">
                     <Button Style="{StaticResource HoverBtn}" Command="{Binding MarkAlertsAsRead}">
                     <TextBlock Text="Mark all as read."
                                HorizontalAlignment="Right"

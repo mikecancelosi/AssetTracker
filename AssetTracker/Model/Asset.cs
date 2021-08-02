@@ -47,6 +47,19 @@ namespace AssetTracker.Model
 
                 });
             }
+            if((this?.as_phid ?? 0) != beforeAsset.as_phid)
+            {
+                output.Add(new Change()
+                {
+                    ch_description = ChangeType.ChangedPhase,
+                    ch_datetime = DateTime.Now,
+                    ch_oldvalue = beforeAsset.as_phid.ToString() ?? "",
+                    ch_newvalue = as_phid.ToString() ?? "",
+                    ch_field = "as_phid",
+                    ch_recid = ID,
+                    ch_usid = MainViewModel.Instance.CurrentUser.ID
+                });
+            }
             return output;
         }
 

@@ -135,5 +135,11 @@ namespace AssetTracker.View
             VM.AssetTitle = EditTitle_Value.Text;
             VM.Description = EditDescription_Value.Text;
         }
+
+        private void HierarchyObject_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            Border selectedObject = sender as Border;
+            VM.OnHierarchyAssetSelected((int)selectedObject.Tag );
+        }
     }
 }

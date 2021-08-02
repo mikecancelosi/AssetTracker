@@ -59,7 +59,7 @@ namespace AssetTracker.ViewModels
         }
 
         //ISavable Properties
-        public bool IsSavable => context.ChangeTracker.HasChanges(); 
+        public bool IsSavable => context.ChangeTracker.HasChanges();
         public ICommand SaveCommand { get; set; }
         public ICommand RefuseSave { get; set; }
         public List<Violation> SaveViolations { get; set; }
@@ -83,11 +83,11 @@ namespace AssetTracker.ViewModels
         {
             get
             {
-                if(Creating)
+                if (Creating)
                 {
                     return "Creating Asset";
                 }
-                else if(Cloning)
+                else if (Cloning)
                 {
                     return "Cloning Asset";
                 }
@@ -100,7 +100,7 @@ namespace AssetTracker.ViewModels
             get
             {
                 string title = myAsset?.Name ?? "";
-                return title != "" ? title : "New Asset";                
+                return title != "" ? title : "New Asset";
             }
             set
             {
@@ -131,9 +131,11 @@ namespace AssetTracker.ViewModels
             set
             {
                 context.Entry(myAsset).Property(x => x.as_caid).CurrentValue = value.ID;
+                context.Entry(myAsset).Property(x => x.as_phid).CurrentValue = null;
                 myAsset.AssetCategory = value;
                 NotifyPropertyChanged("Category");
                 NotifyPropertyChanged("IsSavable");
+                NotifyPropertyChanged("PhaseTimelineObjects");
             }
         }
 
@@ -158,11 +160,12 @@ namespace AssetTracker.ViewModels
             myAsset = context.Assets.Find(ast.ID);
             Changelog = (from s in context.Changes
                          where s.ch_recid == myAsset.ID
+                         orderby s.ch_datetime descending
                          select s).ToList();
             Creating = false;
             Cloning = ast.ID == 0;
 
-            NotifyPropertyChanged("myAsset");          
+            NotifyPropertyChanged("myAsset");
             NotifyPropertyChanged("Changelog");
             NotifyPropertyChanged("DiscussionBoard");
             NotifyPropertyChanged("myAsset");
@@ -205,24 +208,25 @@ namespace AssetTracker.ViewModels
         {
             AssetCategory cat = context.AssetCategories.Find(catID);
             if (cat != null)
-            {               
-                Category = cat;               
+            {
+                Category = cat;
             }
         }
         #endregion
 
         public void Save()
-        {        
-            if(context.Entry(myAsset).State == System.Data.Entity.EntityState.Detached)
+        {
+            if (context.Entry(myAsset).State == System.Data.Entity.EntityState.Detached)
             {
                 context.Assets.Add(myAsset);
             }
-            
+
             if (myAsset.Save(context, out List<Violation> violations))
-            {               
+            {
                 NotifyPropertyChanged("IsSavable");
-                NotifyPropertyChanged("Changelog");    
-                if(navCoordinator.WaitingToNavigate)
+                NotifyPropertyChanged("Changelog");
+                NotifyPropertyChanged("PhaseTimelineObjects");
+                if (navCoordinator.WaitingToNavigate)
                 {
                     navCoordinator.NavigateToQueued();
                 }
@@ -233,8 +237,8 @@ namespace AssetTracker.ViewModels
                 NotifyPropertyChanged("Violations");
                 throw new NotImplementedException();
             }
-          
-        }     
+
+        }
 
         #region Tags
         public void DeleteTag(int id)
@@ -310,8 +314,11 @@ namespace AssetTracker.ViewModels
 
         public void OnHierarchyAssetSelected(int id)
         {
-            Asset newAsset = context.Assets.Find(id);
-            myAsset = newAsset;
+            if (id != myAsset.ID)
+            {
+                Asset newAsset = context.Assets.Find(id);
+                SetAsset(newAsset);
+            }
         }
 
         #endregion
@@ -324,15 +331,19 @@ namespace AssetTracker.ViewModels
             public DateTime EndDate { get; set; }
             public string UserName { get; set; }
 
+            public bool IsCompleted => EndDate != null && EndDate <= DateTime.Now;
+            public bool IsInWork => !IsCompleted && (StartDate != null && StartDate > DateTime.MinValue);
+            public string UserNameLabel => UserName == "" ? "Unassigned" : UserName;
+
             public string UserLabel
             {
                 get
                 {
-                    if (EndDate != null && EndDate < DateTime.Today)
+                    if (IsCompleted)
                     {
                         return "Completed By:";
                     }
-                    else if (StartDate != null && StartDate > DateTime.MinValue)
+                    else if (IsInWork)
                     {
                         return "Being worked by:";
                     }
@@ -347,16 +358,15 @@ namespace AssetTracker.ViewModels
                 }
             }
 
-            public string UserNameLabel => UserName == "" ? "Unassigned" : UserName;
             public string DateLabel
             {
                 get
                 {
-                    if (EndDate != null && EndDate < DateTime.Today)
+                    if (IsCompleted)
                     {
                         return StartDate.ToString("MM/dd") + "-" + EndDate.ToString("MM/dd");
                     }
-                    else if (StartDate != null && StartDate > DateTime.MinValue)
+                    else if (IsInWork)
                     {
                         return "Started " + StartDate.ToString("MM/dd");
                     }
@@ -366,68 +376,91 @@ namespace AssetTracker.ViewModels
                     }
                 }
             }
-        }
 
-        private List<PhaseTimelineObject> phaseTimelineObjects;
+
+        }
         public List<PhaseTimelineObject> PhaseTimelineObjects
         {
             get
             {
-                if (phaseTimelineObjects == null)
+                var phaseTimelineObjects = new List<PhaseTimelineObject>();
+                List<Phase> phases = (from p in context.Phases
+                                      where p.ph_caid == myAsset.as_caid
+                                      orderby p.ph_step ascending
+                                      select p).ToList();
+
+                if (phases.Count > 0)
                 {
-                    phaseTimelineObjects = new List<PhaseTimelineObject>();
-                    List<Phase> phases = (from p in context.Phases
-                                          where p.ph_caid == myAsset.as_caid
-                                          orderby p.ph_step ascending
-                                          select p).ToList();
+                    List<Change> phaseChanges = (from c in context.Changes
+                                                 where c.ch_recid == myAsset.as_id
+                                                 && (c.ch_description == ChangeType.CreatedAsset
+                                                 || c.ch_description == ChangeType.ChangedPhase
+                                                 || c.ch_description == ChangeType.UserAssigned)
+                                                 select c).ToList();
 
-                    if (phases.Count > 0)
+                    int currentPhase = myAsset.Phase?.ph_step ?? 0;
+                    foreach (Phase phase in phases)
                     {
-                        List<Change> phaseChanges = (from c in context.Changes
-                                                     where c.ch_recid == myAsset.as_id
-                                                     && (c.ch_description == ChangeType.CreatedAsset
-                                                     || c.ch_description == ChangeType.ChangedPhase
-                                                     || c.ch_description == ChangeType.UserAssigned)
-                                                     select c).ToList();
+                        DateTime startDate = DateTime.MinValue;
+                        DateTime endDate = DateTime.MaxValue;
+                        string username = "";
 
-                        DateTime lastDate = DateTime.Now;
-                        foreach (Phase phase in phases)
+                        if (currentPhase >= phase.ph_step) // We need to account for steps backwards.
                         {
-                            if (phase.ph_step == 1)
+                            Change phaseChange = phaseChanges.FirstOrDefault(c => c.ch_description == ChangeType.ChangedPhase &&
+                                                                             c.ch_newvalue == (phase.ph_id).ToString());
+                            // Get start date through creation date if this is the first phase OR
+                            // when the phase was changed from the previous step
+                            if (phase.ph_step == 1 && phaseChange == null)
                             {
                                 Change createChange = phaseChanges.FirstOrDefault(c => c.ch_description == ChangeType.CreatedAsset);
-                                lastDate = createChange?.ch_datetime ?? DateTime.MinValue;
+                                startDate = createChange?.ch_datetime ?? DateTime.MinValue;
                             }
 
-                            Change phaseChange = phaseChanges.FirstOrDefault(c => c.ch_description == ChangeType.ChangedPhase &&
-                                                                                  c.ch_oldvalue == "1");
-
-                            string username = "";
-
-                            //TODO: Allow user to be assigned to phases individually.
-                            if (phaseChanges.Any(c => c.ch_description == ChangeType.UserAssigned))
+                            if (phaseChange != null)
                             {
-                                Change userAssignChange = phaseChanges.Last(c => c.ch_description == ChangeType.UserAssigned);
-                                int userID = int.Parse(userAssignChange.ch_newvalue);
-                                User userassigned = context.Users.Find(userID);
-                                username = userassigned.Name;
+                                startDate = phaseChange.ch_datetime;
                             }
 
-                            PhaseTimelineObject timelineObject = new PhaseTimelineObject()
-                            {
-                                StartDate = lastDate,
-                                EndDate = phaseChange?.ch_datetime ?? DateTime.MaxValue,
-                                PhaseName = phase.ph_name,
-                                UserName = username
-                            };
 
-                            phaseTimelineObjects.Add(timelineObject);
-                            lastDate = timelineObject.EndDate;
+                            Change phaseEndChange = phaseChanges.FirstOrDefault(c => c.ch_description == ChangeType.ChangedPhase &&
+                                                                           c.ch_oldvalue == (phase.ph_id).ToString());
+                            if (phaseEndChange != null)
+                            {
+                                endDate = phaseEndChange.ch_datetime;
+                            }
+
+                            if (phase.ph_step <= currentPhase)
+                            {
+                                if (phaseChanges.Any(c => c.ch_description == ChangeType.UserAssigned))
+                                {
+                                    List<Change> userAssignsInPeriod = phaseChanges.Where(c => c.ch_description == ChangeType.UserAssigned &&
+                                                                                      c.ch_datetime <= endDate)
+                                                                                      .OrderByDescending(c => c.ch_datetime).ToList();
+                                    if (userAssignsInPeriod.Count > 0)
+                                    {
+                                        Change userAssignChange = userAssignsInPeriod.FirstOrDefault();
+                                        int userID = int.Parse(userAssignChange.ch_newvalue);
+                                        User userassigned = context.Users.Find(userID);
+                                        username = userassigned.Name;
+                                    }
+                                }
+                            }
                         }
-                    }
 
+                        PhaseTimelineObject timelineObject = new PhaseTimelineObject()
+                        {
+                            StartDate = startDate,
+                            EndDate = endDate,
+                            PhaseName = phase.ph_name,
+                            UserName = username
+                        };
+
+                        phaseTimelineObjects.Add(timelineObject);
+                    }
                 }
                 return phaseTimelineObjects;
+
             }
         }
 
@@ -475,7 +508,7 @@ namespace AssetTracker.ViewModels
                 context.SaveChanges();
                 NotifyPropertyChanged("DiscussionBoard");
             }
-        }       
+        }
 
     }
 }

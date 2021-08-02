@@ -236,7 +236,7 @@
                             <Border x:Name="HierarchyBorder"
                                     Padding="{Binding marginFactor}"
                                     Tag="{Binding asset.as_id}"
-                                    Cursor="Hand">
+                                    Cursor="Hand" MouseUp="HierarchyObject_MouseUp">
 
                                 <Grid>
 
@@ -421,11 +421,30 @@
                                     </ItemsPanelTemplate>
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <Border Margin="0,20,20,20"
-                                                Width="200"
-                                                Background="#aaa"
+                                    <DataTemplate>                                       
+                                        <Border x:Name="PhaseBorder"                                                
+                                                Margin="0,20,20,20"
+                                                Width="200"                                               
                                                 CornerRadius="15">
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Setter Property="Background"
+                                                            Value="#999" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsCompleted}"
+                                                                     Value="True">
+                                                            <Setter Property="Background"
+                                                                    Value="#586" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding IsInWork}"
+                                                                     Value="True">
+                                                            <Setter Property="Background"
+                                                                    Value="#9a6" />
+                                                        </DataTrigger>                                                       
+
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
                                             <Grid>
                                                 <Grid.RowDefinitions>
                                                     <RowDefinition Height="3*" />
@@ -438,17 +457,22 @@
                                                                Text="{Binding PhaseName}"
                                                                FontSize="20"
                                                                VerticalAlignment="Center" />
-                                                    <CheckBox VerticalAlignment="Center"
-                                                              HorizontalAlignment="Right">
-                                                        <CheckBox.LayoutTransform>
-                                                            <ScaleTransform ScaleX="1.5"
-                                                                            ScaleY="1.5" />
-                                                        </CheckBox.LayoutTransform>
-                                                    </CheckBox>
+                                                    <Grid HorizontalAlignment="Right">
+                                                         <Border Background="{StaticResource   Text_Dark}"                                                            
+                                                                 Width="25"
+                                                                 Height="25" />
+                                                        <materialicons:MaterialIcon Icon="ic_check" 
+                                                                                    VerticalAlignment="Center" 
+                                                                                    HorizontalAlignment="Center"
+                                                                                    Height="40" 
+                                                                                    Margin="0,-10,-10,0" 
+                                                                                    Visibility="{Binding IsCompleted, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                                    </Grid>
+
                                                 </Grid>
 
                                                 <Border  Grid.Row="1"
-                                                         Background="#999"
+                                                         Background="{StaticResource Text_Dark}"
                                                          CornerRadius="0,0,15,15"
                                                          Padding="15,5">
                                                     <Grid>

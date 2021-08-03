@@ -51,7 +51,9 @@
                                     Source="View/Resources/ProjectSettingsResourceDictionary.xaml" />
                 <ResourceDictionary x:Name="PermissionsDictionary"
                                     Source="View/Resources/PermissionsResourceDictionary.xaml" />
-                
+                <ResourceDictionary x:Name="ScrollBarDictionary"
+                                    Source="View/Resources/ScrollbarDictionary.xaml" />
+
             </ResourceDictionary.MergedDictionaries>            
         </ResourceDictionary>        
     </Application.Resources>

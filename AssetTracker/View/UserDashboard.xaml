@@ -9,7 +9,7 @@
       d:DataContext="{d:DesignInstance Type=viewmodel:UserDashboardViewModel}"
       mc:Ignorable="d"
       Title="UserDashboard"
-      x:Name="Dashboard">   
+      x:Name="Dashboard">
     <Grid Margin="50,0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" />
@@ -34,48 +34,55 @@
                     </ListView.ItemTemplate>
                 </ListView>
 
-                <ScrollViewer Margin="0,20,0,0">
-                    <Border  Background="{StaticResource Layer2_Dark}"
-                             Padding="10">
-                        <ItemsControl
-                          ItemsSource="{Binding ProjectWideAlerts}"
-                          Height="500"
-                          BorderThickness="0">
-                    <ItemsControl.ItemTemplate>    
-                    <DataTemplate>
-                                    <DataTemplate.Resources>
-                                        <Style TargetType="TextBlock">
-                                            <Setter Property="Foreground" Value="{StaticResource Text_Dark}"/>
-                                        </Style>
-                                    </DataTemplate.Resources>
 
-                                    <StackPanel Orientation="Vertical">
-                                        <TextBlock Text="{Binding ar_content}"
-                                                   TextWrapping="WrapWithOverflow" />
-                                        <TextBlock Text="{Binding User.Name}"
-                                                   HorizontalAlignment="Right" />
-                                        <TextBlock Text="{Binding ar_date}"
-                                                   HorizontalAlignment="Right" />
-                                        <Separator Margin="0,20" />
-                                    </StackPanel>
-                                </DataTemplate>
-                        </ItemsControl.ItemTemplate>
+
+
+                <ItemsControl ItemsSource="{Binding ProjectWideAlerts}"
+                              Height="500"
+                              BorderThickness="0" Margin="0,20,0,0">
+                    <ItemsControl.Template>
+                        <ControlTemplate>
+                            <ScrollViewer Background="{StaticResource Layer2_Dark}">
+                                <ItemsPresenter Margin="10"/>
+                            </ScrollViewer>
+                        </ControlTemplate>
+                    </ItemsControl.Template>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <DataTemplate.Resources>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Foreground"
+                                            Value="{StaticResource Text_Dark}" />
+                                </Style>
+                            </DataTemplate.Resources>
+
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Text="{Binding ar_content}"
+                                           TextWrapping="WrapWithOverflow" />
+                                <TextBlock Text="{Binding User.Name}"
+                                           HorizontalAlignment="Right" />
+                                <TextBlock Text="{Binding ar_date}"
+                                           HorizontalAlignment="Right" />
+                                <Separator Margin="0,20" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
                 </ItemsControl>
-                    </Border>
-                </ScrollViewer>
-               
+
             </StackPanel>
         </Border>
 
         <Border Name="RightPanel"
                 Grid.Column="1"
-                Style="{StaticResource RightPanel}" Padding="50">
+                Style="{StaticResource RightPanel}"
+                Padding="50">
             <StackPanel>
 
                 <StackPanel Name="Content_Header"
                             Orientation="Horizontal">
                     <materialicons:MaterialIcon Icon="ic_account_circle"
-                                                Height="96" Foreground="{StaticResource Text_Dark}" />
+                                                Height="96"
+                                                Foreground="{StaticResource Text_Dark}" />
                     <Grid Margin="10,0,0,0">
                         <Grid.Resources>
                             <Style TargetType="TextBlock">
@@ -142,7 +149,8 @@
                     </StackPanel.Resources>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{Binding DiscussionAlertCount}" />
-                        <materialicons:MaterialIcon Icon="ic_chat" Margin="10,0,0,0"/>
+                        <materialicons:MaterialIcon Icon="ic_chat"
+                                                    Margin="10,0,0,0" />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal"
                                 Margin="100,0">
@@ -157,15 +165,21 @@
                     </StackPanel>
                 </StackPanel>
 
-                <Grid Margin="0,20,0,10" HorizontalAlignment="Right">
-                    <Button Style="{StaticResource HoverBtn}" Command="{Binding MarkAlertsAsRead}">
-                    <TextBlock Text="Mark all as read."
-                               HorizontalAlignment="Right"
-                              Style="{StaticResource HoverBtn_TextContent}" />
+                <Grid Margin="0,20,0,10"
+                      HorizontalAlignment="Right">
+                    <Button Style="{StaticResource HoverBtn}"
+                            Command="{Binding MarkAlertsAsRead}">
+                        <TextBlock Text="Mark all as read."
+                                   HorizontalAlignment="Right"
+                                   Style="{StaticResource HoverBtn_TextContent}" />
                     </Button>
                 </Grid>
 
-                <ListView x:Name="UserAlertList" ItemsSource="{Binding UserAlerts}" Background="Transparent" BorderThickness="0" MouseDoubleClick="ListView_MouseDoubleClick">
+                <ListView x:Name="UserAlertList"
+                          ItemsSource="{Binding UserAlerts}"
+                          Background="Transparent"
+                          BorderThickness="0"
+                          MouseDoubleClick="ListView_MouseDoubleClick">
                     <ListView.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel Orientation="Vertical" />
@@ -178,11 +192,13 @@
                         </Style>
                     </ListView.ItemContainerStyle>
                     <ListView.ItemTemplate>
-                        <DataTemplate>                           
-                            <Border Padding="10" Background="{StaticResource Layer2_Dark}">
-                                 <Grid>
+                        <DataTemplate>
+                            <Border Padding="10"
+                                    Background="{StaticResource Layer2_Dark}">
+                                <Grid>
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="1*" MaxWidth="50" />
+                                        <ColumnDefinition Width="1*"
+                                                          MaxWidth="50" />
                                         <ColumnDefinition Width="4*" />
                                         <ColumnDefinition Width="2*" />
                                         <ColumnDefinition Width="2*" />
@@ -213,7 +229,7 @@
                                                     <Setter Property="Foreground"
                                                             Value="{StaticResource Text_Dark}" />
                                                 </MultiDataTrigger>
-                                                
+
                                                 <DataTrigger Binding="{Binding ar_priority}"
                                                              Value="True">
                                                     <Setter Property="Foreground"
@@ -233,11 +249,13 @@
                                                 Width="300"
                                                 HorizontalAlignment="Left"
                                                 VerticalAlignment="Center">
-                                        <TextBlock Text="{Binding ar_header}" Foreground="{StaticResource Text_Dark}" />
+                                        <TextBlock Text="{Binding ar_header}"
+                                                   Foreground="{StaticResource Text_Dark}" />
                                         <TextBlock Text="{Binding ar_content}"
                                                    Foreground="{StaticResource Text_Dark}" />
-                                     </StackPanel>
-                                     <StackPanel Orientation="Horizontal" Grid.Column="2" >
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal"
+                                                Grid.Column="2">
                                         <Button Style="{StaticResource HoverBtn }"
                                                 Command="{Binding ElementName=UserAlertList, Path=DataContext.PrioritizeAlertCommand}"
                                                 CommandParameter="{Binding ar_id}">
@@ -251,12 +269,12 @@
                                                                         Style="{StaticResource HoverBtn_Content}" />
                                         </Button>
                                     </StackPanel>
-                                        <TextBlock Text="{Binding ar_date}"
-                                                   HorizontalAlignment="Right"
-                                                   Grid.Column="3"
+                                    <TextBlock Text="{Binding ar_date}"
+                                               HorizontalAlignment="Right"
+                                               Grid.Column="3"
                                                VerticalAlignment="Center"
                                                Foreground="{StaticResource Text_Dark}" />
-                                 </Grid>
+                                </Grid>
                             </Border>
                         </DataTemplate>
                     </ListView.ItemTemplate>

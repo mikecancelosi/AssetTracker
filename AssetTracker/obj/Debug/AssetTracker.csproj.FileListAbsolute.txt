@@ -52,3 +52,4 @@ C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\bin\Debug\Ca
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\bin\Debug\Castle.Windsor.dll
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\bin\Debug\Castle.Core.xml
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\bin\Debug\Castle.Windsor.xml
+C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\View\Resources\ScrollbarDictionary.baml

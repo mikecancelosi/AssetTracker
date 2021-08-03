@@ -7,6 +7,10 @@ using System.Threading.Tasks;
 
 namespace AssetTracker.Model
 {
+    /// <summary>
+    /// Sec Permission (1) are the actual permissions users/ roles 
+    /// can have access to.
+    /// </summary>
     public partial class SecPermission : DatabaseBackedObject
     {
         public override int ID

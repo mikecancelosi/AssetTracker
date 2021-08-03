@@ -531,7 +531,7 @@
                         VerticalAlignment="Top"
                         HorizontalAlignment="Right"
                         Background="{StaticResource RejectOverlay_Dark}"
-                        Click="OnChangelogExited"
+                        Click="OnChangelogClicked"
                         Style="{StaticResource HoverBtn}">
                     <materialicons:MaterialIcon Icon="ic_close"
                                                 Style="{StaticResource HoverBtn_Content}" />

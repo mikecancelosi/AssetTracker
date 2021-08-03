@@ -7,6 +7,9 @@ using System.Windows.Data;
 
 namespace AssetTracker.View.Converters
 {
+    /// <summary>
+    /// If any booleans given are true, returns visible
+    /// </summary>
     public class MultiBooleanToVisibilityConverter : IMultiValueConverter
     {
         public object Convert(object[] values,

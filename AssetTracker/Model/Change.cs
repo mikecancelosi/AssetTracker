@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace AssetTracker.Model
 {
+    /// <summary>
+    /// A change is logged after asset saves in order for users to
+    /// be able to view a changelog ( left hand side of asset detail )
+    /// </summary>
     public partial class Change : DatabaseBackedObject
     {
         public override int ID

@@ -8,6 +8,9 @@ using System.Windows.Data;
 
 namespace AssetTracker.View.Converters
 {
+    /// <summary>
+    /// Custom converter to make an 'time elapsed' string shorter and more attractive
+    /// </summary>
     public class DatetimeToTimeElapsedConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter,

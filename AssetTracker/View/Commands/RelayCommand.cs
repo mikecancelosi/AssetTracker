@@ -7,6 +7,9 @@ using System.Windows.Input;
 
 namespace AssetTracker.View.Commands
 {
+    /// <summary>
+    /// Multi purpose use ICommand class
+    /// </summary>
     public class RelayCommand : ICommand
     {
         Action<object> _execteMethod;

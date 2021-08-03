@@ -6,6 +6,17 @@ using System.Threading.Tasks;
 
 namespace AssetTracker.Model
 {
+    /// <summary>
+    /// Discussions are displayed under an asset detail. There will be 
+    /// one parent discussion and many child discussions. If a child 
+    /// discussion is 'replied' to, the new reply will still go under
+    /// the parent.
+    /// 
+    /// Discussion replies will alert other people who have written in 
+    /// the parent discussion
+    /// 
+    /// Discussion starters will alert whoever is assigned to the asset.
+    /// </summary>
     public partial class Discussion : DatabaseBackedObject
     {
         public override int ID

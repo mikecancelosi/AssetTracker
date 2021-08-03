@@ -28,6 +28,7 @@ namespace AssetTracker.View
             get { return (AssetListViewModel)DataContext; }
             set { DataContext = value; }
         }
+
         public AssetList(AssetListViewModel vm)
         {
             InitializeComponent();
@@ -58,7 +59,6 @@ namespace AssetTracker.View
         {
             VM.DeleteCurrentlySelectedAsset();
             AssetDeletePrompt.Visibility = Visibility.Collapsed;
-
         }
 
         private void DeleteCancel_Clicked(object sender, RoutedEventArgs e)

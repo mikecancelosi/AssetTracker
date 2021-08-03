@@ -9,6 +9,9 @@ using System.Windows.Data;
 
 namespace AssetTracker.View.Converters
 {
+    /// <summary>
+    /// Used to aid in determining if the object is last in line (Asset Detail's tags)
+    /// </summary>
     public class AlternationEqualityConverter : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)

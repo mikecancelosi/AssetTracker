@@ -29,15 +29,11 @@ namespace AssetTracker.View
             get { return (CategoryEditViewModel)DataContext; }
             set { DataContext = value; }
         }
-         public CategoryEdit(CategoryEditViewModel vm)
+
+        public CategoryEdit(CategoryEditViewModel vm)
         {
             InitializeComponent();
             VM = vm;
-        }       
-
-        public void NavigateToProjectSettings(object sender, RoutedEventArgs e)
-        {
-            //CheckForPromptSave(() => coordinator.NavigateToProjectSettings());
         }
 
         private void OnPhaseUp(object sender, RoutedEventArgs e)
@@ -76,7 +72,5 @@ namespace AssetTracker.View
             TextBox senderText = sender as TextBox;
             VM.OnCategoryNameChanged(senderText.Text);
         }
-
-      
     }
 }

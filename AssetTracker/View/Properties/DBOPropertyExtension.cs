@@ -7,6 +7,9 @@ using System.Windows;
 
 namespace AssetTracker.View.Properties
 {
+    /// <summary>
+    /// Used to store DBO ids
+    /// </summary>
     public class DBOPropertyExtension
     {
         public static DependencyProperty IDSourceProperty =

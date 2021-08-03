@@ -9,7 +9,13 @@ using System.Windows.Controls;
 
 namespace AssetTracker.View.Extensions
 {
-    class TilePanel : Panel
+	/// <summary>
+	/// Like a wrappanel, but allows for panels that don't necessary line up in the vertical 
+	/// or horizontal
+	/// 
+	/// Source : https://www.codeproject.com/Articles/482501/TilePanel-An-alternative-to-the-WrapPanel
+	/// </summary>
+	class TilePanel : Panel
     {
    
 		public enum OrientationCategories

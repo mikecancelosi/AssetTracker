@@ -7,6 +7,9 @@ using System.Windows;
 
 namespace AssetTracker.View.Properties
 {
+    /// <summary>
+    /// Used to store textsources
+    /// </summary>
     public class TextPropertyExtension
     {
         public static DependencyProperty TextSourceProperty =

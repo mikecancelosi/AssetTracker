@@ -6,9 +6,14 @@ using System.Threading.Tasks;
 
 namespace AssetTracker.Model
 {
+    /// <summary>
+    /// Users are set in project settings > Users
+    /// Each separate employee should be given their own 
+    /// separate user account. This allows for proper security
+    /// and logging
+    /// </summary>
     public partial class User : DatabaseBackedObject
     {
-
         public override int ID
         {
             get => us_id;

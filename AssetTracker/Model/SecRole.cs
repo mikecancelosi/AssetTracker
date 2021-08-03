@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace AssetTracker.Model
 {
+    /// <summary>
+    /// Each user is assigned a role. This gives the user default permissions
+    /// (set in Project Settings > Roles > Role Edit).
+    /// </summary>
     public partial class SecRole : DatabaseBackedObject
     {
 

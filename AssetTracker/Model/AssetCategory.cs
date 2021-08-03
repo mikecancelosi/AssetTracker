@@ -6,6 +6,12 @@ using System.Threading.Tasks;
 
 namespace AssetTracker.Model
 {
+    /// <summary>
+    /// Assets are given a category they belong to. This helps
+    /// organization to enable better filtering. Phases are also
+    /// connected to Categories as each category has a different
+    /// set of phases.
+    /// </summary>
     public partial class AssetCategory : DatabaseBackedObject
     {
 

@@ -11,6 +11,12 @@ namespace AssetTracker.Extensions
 {
     public static class ObservableCollectionExtensions
     {
+        /// <summary>
+        /// Implements adding a range of objects to an observable collection
+        /// </summary>
+        /// <typeparam name="T">Type of collection</typeparam>
+        /// <param name="collection">Source collection to add items too</param>
+        /// <param name="items">Items to add to the collection</param>
         public static void InsertRange<T>(this ObservableCollection<T> collection, IEnumerable<T> items)
         {
             var enumerable = items as List<T> ?? items.ToList();

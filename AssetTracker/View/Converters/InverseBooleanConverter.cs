@@ -7,6 +7,9 @@ using System.Windows.Data;
 
 namespace AssetTracker.View.Converters
 {
+    /// <summary>
+    /// Inverts a boolean
+    /// </summary>
     [ValueConversion(typeof(bool), typeof(bool))]
     public class InverseBooleanConverter : IValueConverter
     {

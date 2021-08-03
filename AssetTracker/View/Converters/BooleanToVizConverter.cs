@@ -8,6 +8,10 @@ using System.Windows.Data;
 
 namespace AssetTracker.View.Converters
 {
+    /// <summary>
+    /// true == visible
+    /// false == collapsed
+    /// </summary>
     [ValueConversion(typeof(bool), typeof(System.Windows.Visibility))]
     public class BooleanToVizConverter : IValueConverter
     {

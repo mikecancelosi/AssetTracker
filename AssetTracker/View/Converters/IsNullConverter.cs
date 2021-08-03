@@ -8,6 +8,10 @@ using System.Windows.Data;
 
 namespace AssetTracker.View.Converters
 {
+    /// <summary>
+    /// Determines if the value is null or not. 
+    /// Handles certain non-nullable classes by using the default values rather than null
+    /// </summary>
     [ValueConversion(typeof(object), typeof(bool))]
     public class IsNullConverter : IValueConverter
     {

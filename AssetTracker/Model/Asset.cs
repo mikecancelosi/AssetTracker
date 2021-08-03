@@ -9,6 +9,10 @@ using System.Threading.Tasks;
 
 namespace AssetTracker.Model
 {
+    /// <summary>
+    /// Asset is the main object in AssetTracker. It represents any object that 
+    /// needs to be worked on.
+    /// </summary>
     public partial class Asset : DatabaseBackedObject
     {
         public override int ID
@@ -63,6 +67,11 @@ namespace AssetTracker.Model
             return output;
         }
 
+        /// <summary>
+        /// If an asset is being saved, alerts may also need to be saved
+        /// </summary>
+        /// <param name="beforeObject">Database record of the current object</param>
+        /// <returns>List of alerts based on before and after of this asset.</returns>
         public List<Alert> GetAlerts(Asset beforeObject)
         {
             List<Alert> output = new List<Alert>();

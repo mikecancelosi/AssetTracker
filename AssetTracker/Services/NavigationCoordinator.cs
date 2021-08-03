@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace AssetTracker.Services
 {
+    /// <summary>
+    /// Base concrete implementation of INavigationCoordinator.
+    /// </summary>
     public class NavigationCoordinator : INavigationCoordinator
     {
         public event Action<ViewModel> UserNavigationAttempt;

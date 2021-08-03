@@ -9,6 +9,10 @@ using System.Windows.Data;
 
 namespace AssetTracker.View.Converters
 {
+    /// <summary>
+    /// This converter returns thicknesses depending on if the inital value is null
+    /// [valuetocheck,thickness if null, thickness if not null]
+    /// </summary>
     public class IsNullToThicknessConverter : IMultiValueConverter
     {
         public object Convert(object[] values,

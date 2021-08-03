@@ -122,7 +122,6 @@
     </Compile>
     <Compile Include="Enums\AlertType.cs" />
     <Compile Include="Enums\ChangeType.cs" />
-    <Compile Include="Extensions\DBContextExtensions.cs" />
     <Compile Include="Extensions\ObservableCollectionExtensions.cs" />
     <Compile Include="Metadata.cs">
       <DependentUpon>DBO.tt</DependentUpon>
@@ -194,11 +193,9 @@
     <Compile Include="View\Converters\DatetimeToTimeElapsedConverter.cs" />
     <Compile Include="View\Converters\InverseBooleanConverter.cs" />
     <Compile Include="View\Converters\IsNullConverter.cs" />
-    <Compile Include="View\Converters\IsNullToBorderConverter.cs" />
     <Compile Include="View\Converters\IsNullToThicknessConverter.cs" />
     <Compile Include="View\Converters\IsNullToVisibilityConverter.cs" />
     <Compile Include="View\Converters\MatchesUserIDConverter.cs" />
-    <Compile Include="View\Converters\MatchesUserIDToVisConverter.cs" />
     <Compile Include="View\Converters\MultiBooleanToVisibilityConverter.cs" />
     <Compile Include="View\Converters\MultiValueConverter.cs" />
     <Compile Include="View\Converters\ValueConverterGroup.cs" />
@@ -362,26 +359,6 @@
       <LastGenOutput>DBO.cs</LastGenOutput>
       <CustomToolNamespace>AssetTracker.Model</CustomToolNamespace>
     </Content>
-    <Resource Include="Images\MaterialDesign\outline_content_copy_white_48dp.png" />
-    <Resource Include="Images\MaterialDesign\baseline_arrow_downward_white_48dp.png" />
-    <Resource Include="Images\MaterialDesign\baseline_arrow_upward_white_48dp.png" />
-    <Resource Include="Images\MaterialDesign\baseline_drag_indicator_white_48dp.png" />
-    <Resource Include="Images\MaterialDesign\baseline_add_white_48dp.png" />
-    <Resource Include="Images\MaterialDesign\baseline_send_white_48dp.png" />
-    <Resource Include="Images\MaterialDesign\baseline_more_vert_white_48dp.png" />
-    <Resource Include="Images\MaterialDesign\baseline_edit_white_48dp.png" />
-    <Resource Include="Images\MaterialDesign\baseline_reply_white_24dp.png" />
-    <Resource Include="Images\MaterialDesign\baseline_add_reaction_white_24dp.png" />
-    <Resource Include="Images\MaterialDesign\baseline_account_circle_white_48dp.png" />
-    <Resource Include="Images\MaterialDesign\baseline_close_white_48dp.png" />
-    <Resource Include="Images\MaterialDesign\baseline_list_white_48dp.png" />
-    <Resource Include="Images\MaterialDesign\baseline_delete_white_48dp.png" />
-    <Resource Include="Images\MaterialDesign\baseline_delete_white_24dp.png" />
-    <Resource Include="Images\MaterialDesign\outline_delete_white_48dp.png" />
-    <Resource Include="Images\MaterialDesign\baseline_save_white_48dp.png" />
-    <Resource Include="Images\MaterialDesign\baseline_save_white_24dp.png" />
-    <Resource Include="Images\MaterialDesign\baseline_search_white_24dp.png" />
-    <Resource Include="Images\MaterialDesign\baseline_edit_white_24dp.png" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

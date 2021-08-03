@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace AssetTracker.Services
 {
+    /// <summary>
+    /// This class serves to set up test data for an empty database.
+    /// </summary>
     public class DefaultRepositoryData
     {
         public static List<DatabaseBackedObject> BuildTestData()

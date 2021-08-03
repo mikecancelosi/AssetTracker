@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace AssetTracker.Enums
 {
+    /// <summary>
+    /// Used to set [Alert].[ar_type] values.
+    /// </summary>
     public static class AlertType
     {
         public const string DiscussionReply = "Discussion Reply";

@@ -205,14 +205,14 @@ namespace AssetTracker.ViewModels
             }
         }
 
-        public void OnPhaseDelete(int phaseId)
+        public void OnPhaseDelete(int phaseStep)
         {
-            Phase phase = Category.Phases.FirstOrDefault(x => x.ph_id == phaseId);
+            Phase phase = Category.Phases.FirstOrDefault(x => x.ph_step == phaseStep);
             int index = phase.ph_step;
             Category.Phases.Remove(phase);
             phaseRepo.Delete(phase);
 
-            for (int i = index; i < Category.Phases.Count+1; i++)
+            for (int i = index ; i < Category.Phases.Count+1; i++)
             {
                 Phase phaseToEdit = Category.Phases.FirstOrDefault(x => x.ph_step == i +1);
                 int afterStep = phaseToEdit.ph_step - 1;

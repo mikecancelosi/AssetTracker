@@ -32,7 +32,7 @@ namespace DomainModel
         public List<Change> GetChanges(DatabaseBackedObject beforeObject,User currentUser)
         {
             List<Change> output = new List<Change>();
-            Asset beforeAsset = ((Asset)beforeObject);
+            Asset beforeAsset = ((Asset)beforeObject) ?? new Asset();
             if (this.as_usid != beforeAsset.as_usid)
             {
                 output.Add(new Change()
@@ -71,6 +71,10 @@ namespace DomainModel
         public List<Alert> GetAlerts(Asset beforeObject, User currentUser)
         {
             List<Alert> output = new List<Alert>();
+            if(beforeObject == null)
+            {
+                beforeObject = new Asset();
+            }
             if(this.as_usid != beforeObject.as_usid)
             {
                 output.Add(new Alert()

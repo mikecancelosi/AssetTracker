@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataAccessLayer.Strategies;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -11,9 +12,9 @@ namespace DataAccessLayer
         internal TrackerContext context;
         internal DbSet<TEntity> dbSet;
 
-        public GenericRepository(TrackerContext trackerContext)
-        {
-            this.context = trackerContext;
+        public GenericRepository(TrackerContext context)
+        {           
+            this.context = context;
             this.dbSet = context.Set<TEntity>();
         }
 
@@ -81,13 +82,36 @@ namespace DataAccessLayer
         }
 
         public virtual void Update(TEntity entityToUpdate)
-        { 
-            context.Entry(entityToUpdate).State = EntityState.Modified;
+        {
+            if (context.Entry(entityToUpdate).State == EntityState.Detached)
+            {
+                if (!Exists(entityToUpdate))
+                {
+                    Insert(entityToUpdate);
+                }
+                else
+                {
+                    context.Set<TEntity>().Attach(entityToUpdate);
+                }
+            }
+            else if(context.Entry(entityToUpdate).State != EntityState.Added)
+            {
+                context.Entry(entityToUpdate).State = EntityState.Modified;
+            }
         }
 
         public virtual TEntity GetDBValues(TEntity localEntity)
         {
-            return context.Entry(localEntity).GetDatabaseValues().ToObject() as TEntity;
+            if (context.Entry(localEntity).State != EntityState.Added)
+            {
+                var dbValues = context.Entry(localEntity).GetDatabaseValues();
+                if (dbValues != null)
+                {
+                    return dbValues.ToObject() as TEntity;
+                }
+            }
+
+            return null;
         }
     }
 }

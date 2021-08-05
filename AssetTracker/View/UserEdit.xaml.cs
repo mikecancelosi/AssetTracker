@@ -19,7 +19,6 @@ namespace AssetTracker.View
             InitializeComponent();
             VM = vm;           
         }
-
      
         public void OnActivateAllClicked(object sender, RoutedEventArgs e)
         {
@@ -30,7 +29,5 @@ namespace AssetTracker.View
         {
             VM.DeactivateAllPermissions();
         }
-
-
     }
 }

@@ -1,6 +1,7 @@
 ﻿using AssetTracker.Services;
 using AssetTracker.View.Commands;
 using DataAccessLayer;
+using DataAccessLayer.Strategies;
 using DomainModel;
 using DomainModel.Enums;
 using System;
@@ -37,7 +38,7 @@ namespace AssetTracker.ViewModels
         public ICommand CreateUser { get; set; }
 
         public ICommand CreateAlert => new RelayCommand((s) => CreateNewProjectWideAlert(), (s) => true);
-        public ICommand OpenNewAlert => new RelayCommand((s) => PromptNewAlert= true, (s) => true);
+        public ICommand OpenNewAlert => new RelayCommand((s) => PromptNewAlert = true, (s) => true);
         public ICommand CloseNewAlert => new RelayCommand((s) => PromptNewAlert = false, (s) => true);
         public ICommand EditAlertCommand => new RelayCommand((s) => EditAlert(s), (s) => true);
         public ICommand DeleteAlertCommand => new RelayCommand((s) => DeleteAlert(s), (s) => true);
@@ -48,7 +49,7 @@ namespace AssetTracker.ViewModels
             get => promptNewAlert;
             set
             {
-                if(value == false)
+                if (value == false)
                 {
                     AlertPrompt_Header = "";
                     AlertPrompt_Contents = "";
@@ -65,7 +66,7 @@ namespace AssetTracker.ViewModels
         public int AlertPrompt_ID { get; set; }
 
         private bool promptDelete;
-        public bool PromptDelete 
+        public bool PromptDelete
         {
             get => promptDelete;
             set
@@ -89,10 +90,18 @@ namespace AssetTracker.ViewModels
         private GenericRepository<SecRole> roleRepo;
         private GenericRepository<AssetCategory> categoryRepo;
         private GenericRepository<Alert> alertRepo;
+        private GenericRepository<SecPermission3> roleOverrideRepo;
 
+        private IDeleteStrategy<SecRole> secRoleDeleteStrategy;
+        private IDeleteStrategy<Alert> alertDeleteStrategy;
+        private IDeleteStrategy<AssetCategory> catDeleteStrategy;
 
         private readonly INavigationCoordinator navCoordinator;
-        public ProjectSettingsViewModel(INavigationCoordinator coord, GenericUnitOfWork uow)
+        public ProjectSettingsViewModel(INavigationCoordinator coord, 
+                                        GenericUnitOfWork uow,
+                                        IDeleteStrategy<SecRole> roleDeleteStrat,
+                                        IDeleteStrategy<Alert> alertDeleteStrat,
+                                        IDeleteStrategy<AssetCategory> catDeleteStrat)
         {
             navCoordinator = coord;
             unitOfWork = uow;
@@ -101,13 +110,18 @@ namespace AssetTracker.ViewModels
             roleRepo = unitOfWork.GetRepository<SecRole>();
             categoryRepo = unitOfWork.GetRepository<AssetCategory>();
             alertRepo = unitOfWork.GetRepository<Alert>();
+            roleOverrideRepo = unitOfWork.GetRepository<SecPermission3>();
+
+            secRoleDeleteStrategy = roleDeleteStrat;
+            alertDeleteStrategy = alertDeleteStrat;
+            catDeleteStrategy = catDeleteStrat;
 
             CreateRole = new RelayCommand((s) => navCoordinator.NavigateToCreateRole(), (s) => true);
             CreateCategory = new RelayCommand((s) => navCoordinator.NavigateToCreateCategory(), (s) => true);
             CreateUser = new RelayCommand((s) => navCoordinator.NavigateToCreateUser(), (s) => true);
             DeleteConfirmed = new RelayCommand((s) => DeleteSelectedObject(), (s) => true);
             DeleteCanceled = new RelayCommand((s) => { PromptDelete = false; }, (s) => true);
-        }        
+        }
 
         public void CompleteDBOOperation(DatabaseBackedObject dbo, OperationType operation)
         {
@@ -163,28 +177,35 @@ namespace AssetTracker.ViewModels
 
         private void DeleteSelectedObject()
         {
-            switch(DeletionObject.GetType().Name)
+            switch (DeletionObject.GetType().BaseType.Name)
             {
                 case "User":
                     userRepo.Delete(DeletionObject.ID);
+                    unitOfWork.Commit();
+                    NotifyPropertyChanged("Users");
                     break;
                 case "SecRole":
-                    roleRepo.Delete(DeletionObject.ID);
+                    var roleItem =(SecRole)DeletionObject;
+                    secRoleDeleteStrategy.Delete(unitOfWork, roleItem);
+                    unitOfWork.Commit();
+                    NotifyPropertyChanged("Roles");
                     break;
                 case "AssetCategory":
-                    categoryRepo.Delete(DeletionObject.ID);
+                    var catItem = (AssetCategory)DeletionObject;
+                    catDeleteStrategy.Delete(unitOfWork, catItem);
+                    unitOfWork.Commit();
+                    NotifyPropertyChanged("Categories");
                     break;
                 case "Alert":
-                    alertRepo.Delete(DeletionObject.ID);
+                    var alertItem = (Alert)DeletionObject;
+                    alertDeleteStrategy.Delete(unitOfWork, alertItem);
+                    unitOfWork.Commit();
+                    NotifyPropertyChanged("ProjectWideAlerts");
                     break;
             }
-            
+
             DeletionObject = null;
             PromptDelete = false;
-            NotifyPropertyChanged("Users");
-            NotifyPropertyChanged("Roles");
-            NotifyPropertyChanged("Categories");
-            NotifyPropertyChanged("ProjectWideAlerts");
         }
 
         private void CreateNewProjectWideAlert()
@@ -196,10 +217,13 @@ namespace AssetTracker.ViewModels
             }
             else
             {
-                alert = new Alert();
-                alert.ar_projectwide = true; 
-                alert.ar_type = AlertType.ProjectWideAlert;
-                alertRepo.Insert(alert);                    
+                alert = new Alert()
+                {
+                    ar_projectwide = true,
+                    ar_type = AlertType.ProjectWideAlert,
+                    ar_priority = false
+                };
+                alertRepo.Insert(alert);
             }
             alert.ar_header = AlertPrompt_Header;
             alert.ar_content = AlertPrompt_Contents;
@@ -208,7 +232,7 @@ namespace AssetTracker.ViewModels
             unitOfWork.Commit();
 
             ResetAlertPrompt();
-        }
+        }       
 
         private void ResetAlertPrompt()
         {
@@ -237,17 +261,6 @@ namespace AssetTracker.ViewModels
 
             NotifyPropertyChanged("AlertPrompt_Header");
             NotifyPropertyChanged("AlertPrompt_Contents");
-        }
-
-        private void DeleteAlert(object input)
-        {
-            int id = (int)input;
-            Alert alert = ProjectWideAlerts.FirstOrDefault(x => x.ID == id);
-            if(alert != null)
-            {
-                alertRepo.Delete(alert);
-                NotifyPropertyChanged("ProjectWideAlerts");
-            }
         }
     }
 }

@@ -98,7 +98,7 @@
                             <StackPanel x:Name="Breadcrumbs"
                                         Orientation="Horizontal">
                                 <Button Content="Configuration"
-                                        Click="NavigateToProjectSettings" />
+                                        Command="{Binding NavigateToProjectSettingsCommand}"/>
                                 <TextBlock Text=">" />
                                 <TextBlock Text="{Binding HeadingContext}" />
                             </StackPanel>
@@ -114,11 +114,10 @@
                                             Margin="0,0,100,0">
                                     <TextBlock Text="Role Name"
                                                FontWeight="SemiBold" />
-                                    <TextBox Text="{Binding Role.ro_name}"
+                                    <TextBox Text="{Binding RoleName, Mode=TwoWay}"
                                              Width="200"
                                              Height="25"
-                                             FontSize="16"
-                                             TextChanged="RoleName_TextChanged" />
+                                             FontSize="16" />
                                 </StackPanel>
                                 <Button Content="Activate All"
                                         FontSize="18"

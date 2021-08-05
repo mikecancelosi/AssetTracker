@@ -39,7 +39,7 @@ namespace AssetTracker.View
         {
             Button senderBtn = sender as Button;
             Phase senderPhase = senderBtn.DataContext as Phase;
-            VM.OnPhaseDelete(senderPhase.ph_id);
+            VM.OnPhaseDelete(senderPhase.ph_step);
         }
         private void OnPhaseAdd(object sender, RoutedEventArgs e)
         {

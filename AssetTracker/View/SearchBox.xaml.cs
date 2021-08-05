@@ -159,8 +159,9 @@ namespace AssetTracker.View
         {
             if (IsLoaded)
             {
-                DatabaseBackedObject dbo = Items.FirstOrDefault(x => x.ID.ToString().ToLower() == UserFilter.ToLower() ||
-                                        x.Name.ToLower() == UserFilter.ToLower());
+                string filter = UserFilter?.ToLower() ?? "";
+                DatabaseBackedObject dbo = Items?.FirstOrDefault(x => x.ID.ToString().ToLower() == filter ||
+                                        x.Name.ToLower() == filter) ?? null;
 
                 if (dbo != null)
                 {

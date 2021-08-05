@@ -161,7 +161,9 @@
                                 <TextBlock Text="Role" />
                                 <local:Searchbox x:Name="Searchbox_Role"
                                                  Width="300"
-                                                 Height="30" />
+                                                 Height="30"
+                                                 Items="{Binding Roles}" 
+                                                 CurrentSelection="{Binding UserRole,Mode=TwoWay}"/>
                             </StackPanel>
                         </WrapPanel>
 

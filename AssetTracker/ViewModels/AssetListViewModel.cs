@@ -22,12 +22,14 @@ namespace AssetTracker.ViewModels
         public ICommand CreateAssetCommand { get; set; }
 
         private GenericRepository<Asset> assetRepo;
+        private GenericRepository<Alert> alertRepo;
         private readonly INavigationCoordinator navCoordinator;
         public AssetListViewModel(INavigationCoordinator coord, GenericUnitOfWork uow)
         {
             navCoordinator = coord;
             unitOfWork = uow;
             assetRepo = unitOfWork.GetRepository<Asset>();
+            alertRepo = unitOfWork.GetRepository<Alert>();
             CreateAssetCommand = new RelayCommand((p) => navCoordinator.NavigateToCreateAsset(), (p) => true);
         }
 
@@ -46,6 +48,11 @@ namespace AssetTracker.ViewModels
 
         public void DeleteCurrentlySelectedAsset()
         {
+            foreach(Alert al in CurrentSelectedAsset.Alerts.ToList())
+            {
+                alertRepo.Delete(al);
+            }
+
             assetRepo.Delete(CurrentSelectedAsset);
             unitOfWork.Commit();
             NotifyPropertyChanged("CurrentSelectedAsset");

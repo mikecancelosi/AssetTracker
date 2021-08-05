@@ -21,11 +21,6 @@ namespace AssetTracker.View
             VM = vm;
         }
 
-        public void NavigateToProjectSettings(object sender, RoutedEventArgs e)
-        {
-            //coordinator.NavigateToProjectSettings();
-        }
-
         public void OnActivateAllClicked(object sender, RoutedEventArgs e)
         {
             VM.ActivateAllPermissions();
@@ -34,12 +29,6 @@ namespace AssetTracker.View
         public void OnDeactivateAllClicked(object sender, RoutedEventArgs e)
         {
             VM.DeactivateAllPermissions();
-        }
-
-        private void RoleName_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            TextBox nameTextBox = sender as TextBox;
-            VM.OnRoleNameChanged(nameTextBox.Text);
         }
     }
 }

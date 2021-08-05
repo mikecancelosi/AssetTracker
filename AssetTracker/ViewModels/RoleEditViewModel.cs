@@ -16,6 +16,16 @@ namespace AssetTracker.ViewModels
     {
         public SecRole Role { get; set; }
 
+        public string RoleName
+        {
+            get => Role.ro_name;
+            set
+            {
+                Role.ro_name = value;
+                NotifyPropertyChanged("IsSavable");
+            }
+        }
+
         private ObservableCollection<PermissionGroup> permissionGrps;
         public ObservableCollection<PermissionGroup> PermissionGroups
         {
@@ -100,6 +110,9 @@ namespace AssetTracker.ViewModels
             }
         }
 
+        public ICommand NavigateToProjectSettingsCommand => new RelayCommand((s) => navCoordinator.NavigateToProjectSettings(),
+                                                                             (s) => true);
+
         private GenericRepository<SecPermission4> roleGroupsRepo;
         private GenericRepository<SecPermission3> roleOverrideRepo;
         private GenericRepository<SecRole> roleRepo;
@@ -112,13 +125,14 @@ namespace AssetTracker.ViewModels
             navCoordinator.UserNavigationAttempt += (s) => PromptSave = true;
 
             unitOfWork = uow;
-
+            roleGroupsRepo = unitOfWork.GetRepository<SecPermission4>();
+            roleOverrideRepo = unitOfWork.GetRepository<SecPermission3>();
+            roleRepo = unitOfWork.GetRepository<SecRole>();
 
             Role = new SecRole();
             DeleteConfirmed = new RelayCommand((s) => DeleteRole(), (s) => true);
             SaveCommand = new RelayCommand((s) => Save(), (s) => true);
             RefuseSave = new RelayCommand((s) => navCoordinator.NavigateToQueued(), (s) => true);
-
         }
 
         public void SetRole(SecRole role)

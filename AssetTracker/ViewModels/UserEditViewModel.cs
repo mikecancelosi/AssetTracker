@@ -167,6 +167,28 @@ namespace AssetTracker.ViewModels
         private GenericRepository<SecPermission2> userOverrideRepo;
         private GenericRepository<SecPermission4> roleGroupsRepo;
 
+        public List<DatabaseBackedObject> Roles
+        {
+            get
+            {
+                return (from r in roleRepo.Get()
+                        select r).ToList<DatabaseBackedObject>();
+            }
+        }
+
+        public SecRole UserRole
+        {
+            get => CurrentUser.SecRole;
+            set
+            {
+                CurrentUser.SecRole = value;
+                CurrentUser.us_roid = value.ID;
+                userRepo.Update(CurrentUser);
+                NotifyPropertyChanged("CurrentUser");
+                NotifyPropertyChanged("IsSavable");
+            }
+        }
+
 
 
         public UserEditViewModel(INavigationCoordinator coord, GenericUnitOfWork uow)
@@ -178,11 +200,15 @@ namespace AssetTracker.ViewModels
             userRepo = unitOfWork.GetRepository<User>();
             roleRepo = unitOfWork.GetRepository<SecRole>();
             userOverrideRepo = unitOfWork.GetRepository<SecPermission2>();
+            roleGroupsRepo = unitOfWork.GetRepository<SecPermission4>();
 
             CurrentUser = new User();
             DeleteConfirmed = new RelayCommand((s) => DeleteUser(), (s) => true);
             SaveCommand = new RelayCommand((s) => Save(), (s) => true);
             RefuseSave = new RelayCommand((s) => navCoordinator.NavigateToQueued(), (s) => true);
+
+            NotifyPropertyChanged("UserRole");
+            NotifyPropertyChanged("Roles");
 
             //TODO: Implement breadcrumbs
         }
@@ -204,6 +230,7 @@ namespace AssetTracker.ViewModels
             NotifyPropertyChanged("CurrentUser");
             NotifyPropertyChanged("HeadingContext");
             NotifyPropertyChanged("IsSavable");
+            NotifyPropertyChanged("UserRole");
         }
 
 

@@ -126,6 +126,7 @@ namespace AssetTracker.ViewModels
             set
             {
                 myAsset.AssignedToUser = value;
+                myAsset.as_usid = value.ID;
                 assetRepo.Update(myAsset);
                 NotifyPropertyChanged("AssignedUser");
                 NotifyPropertyChanged("IsSavable");

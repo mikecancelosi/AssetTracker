@@ -1,6 +1,7 @@
 ﻿using AssetTracker.ViewModels;
 using AssetTracker.ViewModels.Interfaces;
 using DataAccessLayer;
+using DataAccessLayer.Strategies;
 using DomainModel;
 using System;
 using System.Linq;
@@ -15,20 +16,42 @@ namespace AssetTracker.Services
         public event Action<ViewModel> UserNavigationAttempt;
         public event Action<ViewModel> VMChanged;
 
+        private ViewModel queuedVM { get; set; }
+        public bool WaitingToNavigate => queuedVM != null;
+
         private ViewModel currentVM;
         public ViewModel CurrentVM
         {
-            get
-            {
-                return currentVM;
-            }
+            get => currentVM;
             set
             {
                 currentVM = value;
                 VMChanged?.Invoke(currentVM);
             }
         }
-        private ViewModel queuedVM { get; set; }
+
+        private IDeleteStrategy<User> userDeleteStrategy;
+        private IDeleteStrategy<Asset> assetDeleteStrategy;
+        private IDeleteStrategy<SecRole> roleDeleteStrategy;
+        private IDeleteStrategy<AssetCategory> catDeleteStrategy;
+        private IDeleteStrategy<Alert> alertDeleteStrategy;
+        private IDeleteStrategy<Metadata> tagDeleteStrategy;
+
+        public NavigationCoordinator(IDeleteStrategy<User> userDeleteStrat,
+                                     IDeleteStrategy<Asset> assetDeleteStrat,
+                                     IDeleteStrategy<SecRole> roleDeleteStrat,
+                                     IDeleteStrategy<AssetCategory> catDeleteStrat,
+                                     IDeleteStrategy<Alert> alertDeleteStrat,
+                                     IDeleteStrategy<Metadata> tagDeleteStrat)
+        {
+            userDeleteStrategy = userDeleteStrat;
+            assetDeleteStrategy = assetDeleteStrat;
+            roleDeleteStrategy = roleDeleteStrat;
+            catDeleteStrategy = catDeleteStrat;
+            alertDeleteStrategy = alertDeleteStrat;
+            tagDeleteStrategy = tagDeleteStrat;
+        }
+
 
         public void RequestNavigationTo(ViewModel vm)
         {
@@ -46,8 +69,6 @@ namespace AssetTracker.Services
             CurrentVM = vm;
         }
 
-        public bool WaitingToNavigate => queuedVM != null;
-
         public void NavigateToQueued()
         {
             if (queuedVM != null)
@@ -57,25 +78,27 @@ namespace AssetTracker.Services
             }
         }
 
+
+
         #region BuildViewmodels
         public void NavigateToLogin()
         {
             GenericUnitOfWork uow = new GenericUnitOfWork(new TrackerContext());
-            LoginViewModel vm = new LoginViewModel(this,uow);
+            LoginViewModel vm = new LoginViewModel(this, uow);
             RequestNavigationTo(vm);
         }
 
         public void NavigateToCreateUser()
         {
             GenericUnitOfWork uow = new GenericUnitOfWork(new TrackerContext());
-            UserEditViewModel vm = new UserEditViewModel(this, uow);
+            UserEditViewModel vm = new UserEditViewModel(this, uow, userDeleteStrategy);
             RequestNavigationTo(vm);
 
         }
         public void NavigateToUserEdit(User userToEdit)
         {
             GenericUnitOfWork uow = new GenericUnitOfWork(new TrackerContext());
-            UserEditViewModel vm = new UserEditViewModel(this, uow);
+            UserEditViewModel vm = new UserEditViewModel(this, uow, userDeleteStrategy);
             vm.SetUser(userToEdit);
             RequestNavigationTo(vm);
         }
@@ -83,7 +106,7 @@ namespace AssetTracker.Services
         public void NavigateToAssetDetail(Asset asset)
         {
             GenericUnitOfWork uow = new GenericUnitOfWork(new TrackerContext());
-            AssetDetailViewModel vm = new AssetDetailViewModel(this, uow);
+            AssetDetailViewModel vm = new AssetDetailViewModel(this, uow, assetDeleteStrategy, tagDeleteStrategy);
             vm.SetAsset(asset);
             RequestNavigationTo(vm);
         }
@@ -98,13 +121,13 @@ namespace AssetTracker.Services
         public void NavigateToCreateRole()
         {
             GenericUnitOfWork uow = new GenericUnitOfWork(new TrackerContext());
-            RoleEditViewModel vm = new RoleEditViewModel(this, uow);
+            RoleEditViewModel vm = new RoleEditViewModel(this, uow, roleDeleteStrategy);
             RequestNavigationTo(vm);
         }
         public void NavigateToRoleEdit(SecRole roleToEdit)
         {
             GenericUnitOfWork uow = new GenericUnitOfWork(new TrackerContext());
-            RoleEditViewModel vm = new RoleEditViewModel(this, uow);
+            RoleEditViewModel vm = new RoleEditViewModel(this, uow, roleDeleteStrategy);
             vm.Role = roleToEdit;
             RequestNavigationTo(vm);
         }
@@ -112,27 +135,27 @@ namespace AssetTracker.Services
         public void NavigateToProjectSettings()
         {
             GenericUnitOfWork uow = new GenericUnitOfWork(new TrackerContext());
-            ProjectSettingsViewModel vm = new ProjectSettingsViewModel(this, uow);
+            ProjectSettingsViewModel vm = new ProjectSettingsViewModel(this, uow, roleDeleteStrategy, alertDeleteStrategy, userDeleteStrategy, catDeleteStrategy);
             RequestNavigationTo(vm);
         }
 
         public void NavigateToAssetList()
         {
             GenericUnitOfWork uow = new GenericUnitOfWork(new TrackerContext());
-            AssetListViewModel vm = new AssetListViewModel(this, uow);
+            AssetListViewModel vm = new AssetListViewModel(this, uow, assetDeleteStrategy);
             RequestNavigationTo(vm);
         }
 
         public void NavigateToCreateCategory()
         {
             GenericUnitOfWork uow = new GenericUnitOfWork(new TrackerContext());
-            CategoryEditViewModel vm = new CategoryEditViewModel(this, uow);
+            CategoryEditViewModel vm = new CategoryEditViewModel(this, uow, catDeleteStrategy);
             RequestNavigationTo(vm);
         }
         public void NavigatetoCategoryEdit(AssetCategory cat)
         {
             GenericUnitOfWork uow = new GenericUnitOfWork(new TrackerContext());
-            CategoryEditViewModel vm = new CategoryEditViewModel(this, uow);
+            CategoryEditViewModel vm = new CategoryEditViewModel(this, uow, catDeleteStrategy);
             vm.Category = cat;
             RequestNavigationTo(vm);
         }
@@ -140,7 +163,7 @@ namespace AssetTracker.Services
         public void NavigateToCreateAsset()
         {
             GenericUnitOfWork uow = new GenericUnitOfWork(new TrackerContext());
-            AssetDetailViewModel vm = new AssetDetailViewModel(this, uow);
+            AssetDetailViewModel vm = new AssetDetailViewModel(this, uow, assetDeleteStrategy, tagDeleteStrategy);
             RequestNavigationTo(vm);
         }
         #endregion

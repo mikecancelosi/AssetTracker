@@ -3,6 +3,8 @@ using AssetTracker.View.Services;
 using AssetTracker.ViewModels;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
+using DataAccessLayer.Strategies;
+using DomainModel;
 using System.Windows;
 using System.Windows.Navigation;
 
@@ -89,6 +91,26 @@ namespace AssetTracker
                                         .LifeStyle.Singleton);
             container.Register(Component.For<NavigationObserver>());
 
+            container.Register(Component.For<IDeleteStrategy<Asset>>()
+                                        .ImplementedBy<AssetDeleteStrategy>());
+
+            container.Register(Component.For<IDeleteStrategy<AssetCategory>>()
+                                       .ImplementedBy<CategoryDeleteStrategy>());
+
+            container.Register(Component.For<IDeleteStrategy<Phase>>()
+                                       .ImplementedBy<PhaseDeleteStrategy>());
+
+            container.Register(Component.For<IDeleteStrategy<SecRole>>()
+                                       .ImplementedBy<SecRoleDeleteStrategy>());
+
+            container.Register(Component.For<IDeleteStrategy<Metadata>>()
+                                       .ImplementedBy<TagDeleteStrategy>());
+
+            container.Register(Component.For<IDeleteStrategy<User>>()
+                                       .ImplementedBy<UserDeleteStrategy>());
+
+            container.Register(Component.For<IDeleteStrategy<Alert>>()
+                                       .ImplementedBy<AlertDeleteStrategy>());
 
             navObserver = container.Resolve<NavigationObserver>();
             navCoordinator = container.Resolve<INavigationCoordinator>();

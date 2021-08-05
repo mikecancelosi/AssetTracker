@@ -2,6 +2,7 @@
 using AssetTracker.View.Commands;
 using AssetTracker.ViewModels.Interfaces;
 using DataAccessLayer;
+using DataAccessLayer.Strategies;
 using DomainModel;
 using DomainModel.Enums;
 using System;
@@ -43,6 +44,8 @@ namespace AssetTracker.ViewModels
         public ICommand RefuseSave { get; set; }
         public List<Violation> SaveViolations { get; set; }
         public INavigationCoordinator navCoordinator { get; set; }
+        private IDeleteStrategy<Asset> assetDeleteStrategy;
+        private IDeleteStrategy<Metadata> tagDeleteStrategy;
         private bool promptSave;
         public bool PromptSave
         {
@@ -189,9 +192,11 @@ namespace AssetTracker.ViewModels
 
 
         //TODO : Add back in hierarchy selected command
-        public AssetDetailViewModel(INavigationCoordinator coord, GenericUnitOfWork uow)
+        public AssetDetailViewModel(INavigationCoordinator coord, GenericUnitOfWork uow, IDeleteStrategy<Asset> assetDeleteStrat, IDeleteStrategy<Metadata> tagDeleteStrat)
         {
             navCoordinator = coord;
+            assetDeleteStrategy = assetDeleteStrat;
+            tagDeleteStrategy = tagDeleteStrat;
             navCoordinator.UserNavigationAttempt += (s) => PromptSave = true;
 
             unitOfWork = uow;
@@ -241,7 +246,7 @@ namespace AssetTracker.ViewModels
 
         public void DeleteAsset()
         {
-            assetRepo.Delete(myAsset);
+            assetDeleteStrategy.Delete(unitOfWork, myAsset);
             unitOfWork.Commit();
             navCoordinator.NavigateToAssetList();
         }
@@ -318,8 +323,9 @@ namespace AssetTracker.ViewModels
         public void DeleteTag(int id)
         {
             Metadata data = tagsRepo.GetByID(id);
-            myAsset.Metadata.Remove(data);
-            tagsRepo.Delete(data);
+            tagDeleteStrategy.Delete(unitOfWork, data);
+            unitOfWork.Commit();
+
             NotifyPropertyChanged("IsSavable");
             NotifyPropertyChanged("Tags");
         }

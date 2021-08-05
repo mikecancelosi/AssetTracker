@@ -2,6 +2,7 @@
 using AssetTracker.View.Commands;
 using AssetTracker.ViewModels.Interfaces;
 using DataAccessLayer;
+using DataAccessLayer.Strategies;
 using DomainModel;
 using System;
 using System.Collections.Generic;
@@ -65,9 +66,12 @@ namespace AssetTracker.ViewModels
         private GenericRepository<Phase> phaseRepo;
         
         public INavigationCoordinator navCoordinator { get; set; }
-        public CategoryEditViewModel(INavigationCoordinator coord, GenericUnitOfWork uow)
+        private IDeleteStrategy<AssetCategory> catDeleteStrategy;
+
+        public CategoryEditViewModel(INavigationCoordinator coord, GenericUnitOfWork uow, IDeleteStrategy<AssetCategory> catDeleteStrat)
         {
             navCoordinator = coord;
+            catDeleteStrategy = catDeleteStrat;
             navCoordinator.UserNavigationAttempt += (s) => PromptSave = true;
             unitOfWork = uow;
             categoryRepo = unitOfWork.GetRepository<AssetCategory>();
@@ -129,7 +133,7 @@ namespace AssetTracker.ViewModels
 
         public void DeleteCategory()
         {
-            categoryRepo.Delete(Category);
+            catDeleteStrategy.Delete(unitOfWork, Category);
             unitOfWork.Commit();
             navCoordinator.NavigateToProjectSettings();
         }

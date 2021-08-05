@@ -11,7 +11,18 @@ namespace DataAccessLayer.Strategies
     {
         public void Delete(GenericUnitOfWork uow, User item)
         {
-            throw new NotImplementedException();
+            GenericRepository<User> userRepo = uow.GetRepository<User>();
+
+            foreach(Asset asset in item.AssetsAssigned.ToList())
+            {
+                asset.as_usid = null;
+            }
+
+            foreach(Discussion post in item.Discussions.ToList())
+            {
+                post.di_usid = null;
+            }
+
         }
     }
 }

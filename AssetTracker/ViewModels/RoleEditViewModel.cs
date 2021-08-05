@@ -2,6 +2,7 @@
 using AssetTracker.View.Commands;
 using AssetTracker.ViewModels.Interfaces;
 using DataAccessLayer;
+using DataAccessLayer.Strategies;
 using DomainModel;
 using System;
 using System.Collections.Generic;
@@ -44,10 +45,10 @@ namespace AssetTracker.ViewModels
                         {
                             bool allowed = permission.pr_default;
                             SecPermission3 permissionOverride = (from p in roleOverrideRepo.Get()
-                                                                    where p.p3_prid == permission.pr_id &&
-                                                                    p.p3_roid == Role.ro_id
-                                                                    orderby p.p3_id descending
-                                                                    select p)?.FirstOrDefault() ?? null;                          
+                                                                 where p.p3_prid == permission.pr_id &&
+                                                                 p.p3_roid == Role.ro_id
+                                                                 orderby p.p3_id descending
+                                                                 select p)?.FirstOrDefault() ?? null;
 
                             allowed = permissionOverride?.p3_allow ?? allowed;
                             PermissionItem item = new PermissionItem()
@@ -61,18 +62,18 @@ namespace AssetTracker.ViewModels
                         Grps.Add(new PermissionGroup()
                         {
                             Name = grp.p4_name,
-                            Height = 100 *( new Random().NextDouble()),
+                            Height = 100 * (new Random().NextDouble()),
                             Permissions = items
                         });
                     }
                     permissionGrps = new ObservableCollection<PermissionGroup>();
-                    Grps.ForEach(x=> permissionGrps.Add(x));                    
+                    Grps.ForEach(x => permissionGrps.Add(x));
                 }
 
                 return permissionGrps;
             }
         }
-        
+
         public bool Creating { get; set; }
         public bool Cloning { get; set; }
         public string HeadingContext
@@ -119,9 +120,12 @@ namespace AssetTracker.ViewModels
 
 
         public INavigationCoordinator navCoordinator { get; set; }
-        public RoleEditViewModel(INavigationCoordinator coord, GenericUnitOfWork uow)
+        private IDeleteStrategy<SecRole> roleDeleteStrategy;
+
+        public RoleEditViewModel(INavigationCoordinator coord, GenericUnitOfWork uow, IDeleteStrategy<SecRole> roleDeleteStrat)
         {
             navCoordinator = coord;
+            roleDeleteStrategy = roleDeleteStrat;
             navCoordinator.UserNavigationAttempt += (s) => PromptSave = true;
 
             unitOfWork = uow;
@@ -139,7 +143,7 @@ namespace AssetTracker.ViewModels
         {
             if (role.ro_id > 0)
             {
-                Role = roleRepo.GetByID(role.ro_id);   
+                Role = roleRepo.GetByID(role.ro_id);
             }
             else
             {
@@ -175,7 +179,8 @@ namespace AssetTracker.ViewModels
 
         public void DeleteRole()
         {
-            roleRepo.Delete(Role);      
+            roleDeleteStrategy.Delete(unitOfWork, Role);
+            unitOfWork.Commit();
             navCoordinator.NavigateToProjectSettings();
         }
 
@@ -229,7 +234,7 @@ namespace AssetTracker.ViewModels
         {
             SecPermission3 overridePer = (from p in roleOverrideRepo.Get()
                                           where p.p3_prid == prid
-                                          && p.p3_roid ==  Role.ID
+                                          && p.p3_roid == Role.ID
                                           select p).FirstOrDefault();
             if (overridePer == null)
             {

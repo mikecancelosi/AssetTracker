@@ -291,7 +291,8 @@
 
                     <Button Style="{StaticResource HoverBtn}"
                             HorizontalAlignment="Left"
-                            Margin="0,40,0,10" Command="{Binding OpenNewAlert}">
+                            Margin="0,40,0,10"
+                            Command="{Binding OpenNewAlert}">
                         <StackPanel Orientation="Vertical"
                                     Margin="0,0,15,0">
                             <materialicons:MaterialIcon Icon="ic_add"
@@ -302,56 +303,65 @@
                     </Button>
 
                     <ScrollViewer>
-                         <ItemsControl ItemsSource="{Binding ProjectWideAlerts}" Margin="0,10">
-                             <ItemsControl.ItemTemplate>
-                                 <DataTemplate>
-                                     <Border Background="{StaticResource Layer2_Dark}" Padding="20" Margin="0,0,0,10" MinHeight="150">
-                                         <Border.Resources>
-                                             <Style TargetType="TextBlock">
-                                                 <Setter Property="Foreground"
-                                                         Value="{StaticResource Text_Dark}" />
-                                             </Style>
-                                         </Border.Resources>
-                                         <Grid>
+                        <ItemsControl ItemsSource="{Binding ProjectWideAlerts}"
+                                      Margin="0,10">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Background="{StaticResource Layer2_Dark}"
+                                            Padding="20"
+                                            Margin="0,0,0,10"
+                                            MinHeight="150">
+                                        <Border.Resources>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Foreground"
+                                                        Value="{StaticResource Text_Dark}" />
+                                            </Style>
+                                        </Border.Resources>
+                                        <Grid>
                                             <StackPanel Margin="0,10,0,0"
-                                                        MaxWidth="900" HorizontalAlignment="Left">
+                                                        MaxWidth="900"
+                                                        HorizontalAlignment="Left">
                                                 <TextBlock Text="{Binding ar_header}"
-                                                            HorizontalAlignment="Left"
-                                                            VerticalAlignment="Top" />
-                                                 <TextBlock Text="{Binding ar_content}"
-                                                            HorizontalAlignment="Left"
-                                                            VerticalAlignment="Top" TextWrapping="WrapWithOverflow"
-                                                            Margin="0,20" />
-                                             </StackPanel>
-                                             
-                                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
+                                                           HorizontalAlignment="Left"
+                                                           VerticalAlignment="Top" />
+                                                <TextBlock Text="{Binding ar_content}"
+                                                           HorizontalAlignment="Left"
+                                                           VerticalAlignment="Top"
+                                                           TextWrapping="WrapWithOverflow"
+                                                           Margin="0,20" />
+                                            </StackPanel>
+
+                                            <StackPanel Orientation="Horizontal"
+                                                        HorizontalAlignment="Right"
+                                                        VerticalAlignment="Top">
                                                 <Button Style="{StaticResource HoverBtn}"
                                                         Margin="5,0"
                                                         Command="{Binding RelativeSource={RelativeSource AncestorLevel=1,AncestorType=Page}, Path=DataContext.EditAlertCommand}"
                                                         CommandParameter="{Binding ar_id}">
-                                                         <materialicons:MaterialIcon Icon="ic_edit"
-                                                                                     Style="{StaticResource HoverBtn_Content}" />
-                                                     </Button>
-                                                     <Button Style="{StaticResource HoverBtn}" 
-                                                             Command="{Binding RelativeSource={RelativeSource AncestorLevel=1,AncestorType=Page}, Path=DataContext.DeleteAlertCommand}" 
-                                                             CommandParameter="{Binding ar_id}">
-                                                         <materialicons:MaterialIcon Icon="ic_delete"
-                                                                                     Style="{StaticResource HoverBtn_Content}" />
-                                                     </Button>
-                                             </StackPanel>
-                                             
-                                             <StackPanel HorizontalAlignment="Right"
-                                                         VerticalAlignment="Bottom">
-                                                 <TextBlock Text="{Binding User.us_displayname}" HorizontalAlignment="Right" />
-                                                 <TextBlock Text="{Binding ar_date}" />
-                                             </StackPanel>
+                                                    <materialicons:MaterialIcon Icon="ic_edit"
+                                                                                Style="{StaticResource HoverBtn_Content}" />
+                                                </Button>
+                                                <Button Style="{StaticResource HoverBtn}"
+                                                        Command="{Binding RelativeSource={RelativeSource AncestorLevel=1,AncestorType=Page}, Path=DataContext.DeleteAlertCommand}"
+                                                        CommandParameter="{Binding ar_id}">
+                                                    <materialicons:MaterialIcon Icon="ic_delete"
+                                                                                Style="{StaticResource HoverBtn_Content}" />
+                                                </Button>
+                                            </StackPanel>
 
-                                         </Grid>
-                                     </Border>
-                                 </DataTemplate>
-                             </ItemsControl.ItemTemplate>
+                                            <StackPanel HorizontalAlignment="Right"
+                                                        VerticalAlignment="Bottom">
+                                                <TextBlock Text="{Binding User.us_displayname}"
+                                                           HorizontalAlignment="Right" />
+                                                <TextBlock Text="{Binding ar_date}" />
+                                            </StackPanel>
 
-                         </ItemsControl>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+
+                        </ItemsControl>
                     </ScrollViewer>
 
                 </StackPanel>
@@ -368,7 +378,8 @@
                                    Text="Add Project-Wide Alert"
                                    Margin="5,0,0,0"
                                    FontSize="16"
-                                   FontWeight="SemiBold"  Visibility="{Binding AlertPrompt_ID, Converter={StaticResource IsNullToVizConverter}}"/>
+                                   FontWeight="SemiBold"
+                                   Visibility="{Binding AlertPrompt_ID, Converter={StaticResource IsNullToVizConverter}}" />
 
                         <TextBlock VerticalAlignment="Center"
                                    Text="Edit Project-Wide Alert"
@@ -391,7 +402,8 @@
                             <TextBox x:Name="NewAlert_Contents"
                                      Text="{Binding AlertPrompt_Contents}"
                                      Width="400"
-                                     Height="200" TextWrapping="WrapWithOverflow" />
+                                     Height="200"
+                                     TextWrapping="WrapWithOverflow" />
 
                             <StackPanel Orientation="Horizontal"
                                         HorizontalAlignment="Right">

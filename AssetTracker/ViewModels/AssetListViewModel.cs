@@ -5,6 +5,7 @@ using System.Windows.Input;
 using AssetTracker.View.Commands;
 using DomainModel;
 using DataAccessLayer;
+using DataAccessLayer.Strategies;
 
 namespace AssetTracker.ViewModels
 {
@@ -22,14 +23,15 @@ namespace AssetTracker.ViewModels
         public ICommand CreateAssetCommand { get; set; }
 
         private GenericRepository<Asset> assetRepo;
-        private GenericRepository<Alert> alertRepo;
         private readonly INavigationCoordinator navCoordinator;
-        public AssetListViewModel(INavigationCoordinator coord, GenericUnitOfWork uow)
+        private readonly IDeleteStrategy<Asset> assetDeleteStrategy;
+
+        public AssetListViewModel(INavigationCoordinator coord, GenericUnitOfWork uow, IDeleteStrategy<Asset> assetDeleteStrat)
         {
             navCoordinator = coord;
+            assetDeleteStrategy = assetDeleteStrat;
             unitOfWork = uow;
             assetRepo = unitOfWork.GetRepository<Asset>();
-            alertRepo = unitOfWork.GetRepository<Alert>();
             CreateAssetCommand = new RelayCommand((p) => navCoordinator.NavigateToCreateAsset(), (p) => true);
         }
 
@@ -48,13 +50,9 @@ namespace AssetTracker.ViewModels
 
         public void DeleteCurrentlySelectedAsset()
         {
-            foreach(Alert al in CurrentSelectedAsset.Alerts.ToList())
-            {
-                alertRepo.Delete(al);
-            }
-
-            assetRepo.Delete(CurrentSelectedAsset);
+            assetDeleteStrategy.Delete(unitOfWork, CurrentSelectedAsset);           
             unitOfWork.Commit();
+            CurrentSelectedAsset = null;
             NotifyPropertyChanged("CurrentSelectedAsset");
             NotifyPropertyChanged("Assets");
         }

@@ -2,6 +2,7 @@
 using AssetTracker.View.Commands;
 using AssetTracker.ViewModels.Interfaces;
 using DataAccessLayer;
+using DataAccessLayer.Strategies;
 using DomainModel;
 using System;
 using System.Collections.Generic;
@@ -159,7 +160,7 @@ namespace AssetTracker.ViewModels
             }
         }
         public INavigationCoordinator navCoordinator { get; set; }
-
+        private IDeleteStrategy<User> userDeleteStrategy;
         public ICommand DeleteConfirmed { get; set; }
 
         private GenericRepository<User> userRepo;
@@ -191,9 +192,10 @@ namespace AssetTracker.ViewModels
 
 
 
-        public UserEditViewModel(INavigationCoordinator coord, GenericUnitOfWork uow)
+        public UserEditViewModel(INavigationCoordinator coord, GenericUnitOfWork uow, IDeleteStrategy<User> userDeleteStrat)
         {
             navCoordinator = coord;
+            userDeleteStrategy = userDeleteStrat;
             navCoordinator.UserNavigationAttempt += (s) => PromptSave = true;
 
             unitOfWork = uow;

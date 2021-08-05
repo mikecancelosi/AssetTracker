@@ -95,12 +95,14 @@ namespace AssetTracker.ViewModels
         private IDeleteStrategy<SecRole> secRoleDeleteStrategy;
         private IDeleteStrategy<Alert> alertDeleteStrategy;
         private IDeleteStrategy<AssetCategory> catDeleteStrategy;
+        private IDeleteStrategy<User> userDeleteStrategy;
 
         private readonly INavigationCoordinator navCoordinator;
         public ProjectSettingsViewModel(INavigationCoordinator coord, 
                                         GenericUnitOfWork uow,
                                         IDeleteStrategy<SecRole> roleDeleteStrat,
                                         IDeleteStrategy<Alert> alertDeleteStrat,
+                                        IDeleteStrategy<User> userDeleteStrat,
                                         IDeleteStrategy<AssetCategory> catDeleteStrat)
         {
             navCoordinator = coord;
@@ -115,6 +117,7 @@ namespace AssetTracker.ViewModels
             secRoleDeleteStrategy = roleDeleteStrat;
             alertDeleteStrategy = alertDeleteStrat;
             catDeleteStrategy = catDeleteStrat;
+            userDeleteStrategy = userDeleteStrat;
 
             CreateRole = new RelayCommand((s) => navCoordinator.NavigateToCreateRole(), (s) => true);
             CreateCategory = new RelayCommand((s) => navCoordinator.NavigateToCreateCategory(), (s) => true);
@@ -180,7 +183,8 @@ namespace AssetTracker.ViewModels
             switch (DeletionObject.GetType().BaseType.Name)
             {
                 case "User":
-                    userRepo.Delete(DeletionObject.ID);
+                    var userItem = (User)DeletionObject;
+                    userDeleteStrategy.Delete(unitOfWork, userItem);                    
                     unitOfWork.Commit();
                     NotifyPropertyChanged("Users");
                     break;
@@ -261,6 +265,13 @@ namespace AssetTracker.ViewModels
 
             NotifyPropertyChanged("AlertPrompt_Header");
             NotifyPropertyChanged("AlertPrompt_Contents");
+        }
+
+        private void DeleteAlert(object input)
+        {
+            int id = (int)input;
+            Alert alert = ProjectWideAlerts.FirstOrDefault(x => x.ID == id);
+            CompleteDBOOperation(alert, OperationType.Delete);
         }
     }
 }

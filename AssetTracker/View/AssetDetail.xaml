@@ -393,10 +393,8 @@
                                 <StackPanel Orientation="Vertical">
                                     <TextBlock Text="Assigned To:" />
                                     <local:Searchbox x:Name="Searchbox_AssignedTo"
-                                                     SelectionChange="Searchbox_AssignedTo_SelectionChange" 
-                                                     Items="{Binding Users}"
-                                                     UserFilter="{Binding UserAssignedUserFilter,Mode=TwoWay}"
-                                                     CurrentSelection="{Binding User}"/>
+                                                     Items="{Binding Users}"                                                   
+                                                     CurrentSelection="{Binding AssignedUser, Mode=TwoWay}"/>
                                 </StackPanel>
 
                                 <StackPanel  Orientation="Vertical"
@@ -405,9 +403,7 @@
                                                Foreground="White" />
                                     <local:Searchbox x:Name="Searchbox_Category"
                                                      CurrentSelection="{Binding Category}"
-                                                     Items="{Binding Categories}"
-                                                     UserFilter="{Binding CategoryUserFilter}"
-                                                     SelectionChange="Searchbox_Category_SelectionChange" />
+                                                     Items="{Binding Categories}"       />
                                 </StackPanel>
 
                                 <StackPanel  Orientation="Vertical">
@@ -415,9 +411,9 @@
                                                Text="Current Status:"
                                                IsEnabled="{Binding Category, Converter={StaticResource IsNullInverseConverter}}" />
                                     <local:Searchbox x:Name="Searchbox_Phase"
-                                                     IsEnabled="{Binding ElementName=Status_HeaderText, Path=IsEnabled}"
-                                                     UserFilter="{Binding PhaseUserFilter}"
-                                                     SelectionChange="Searchbox_Phase_SelectionChange" />
+                                                     IsEnabled="{Binding ElementName=Status_HeaderText, Path=IsEnabled}"                                                    
+                                                     Items="{Binding Phases}"
+                                                     CurrentSelection="{Binding CurrentPhase}" />
                                 </StackPanel>
                             </StackPanel>
 

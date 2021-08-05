@@ -110,20 +110,6 @@ namespace AssetTracker.View
             Border selectedObject = sender as Border;
             VM.OnHierarchyAssetSelected((int)selectedObject.Tag );
         }
-
-        private void Searchbox_AssignedTo_SelectionChange(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void Searchbox_Category_SelectionChange(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void Searchbox_Phase_SelectionChange(object sender, RoutedEventArgs e)
-        {
-
-        }
+        
     }
 }

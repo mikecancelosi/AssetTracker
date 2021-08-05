@@ -81,16 +81,8 @@ namespace DataAccessLayer
         }
 
         public virtual void Update(TEntity entityToUpdate)
-        {
-            if (!Exists(entityToUpdate))
-            {
-                Insert(entityToUpdate);
-            }
-            else
-            {
-                dbSet.Attach(entityToUpdate);
-                context.Entry(entityToUpdate).State = EntityState.Modified;
-            }
+        { 
+            context.Entry(entityToUpdate).State = EntityState.Modified;
         }
 
         public virtual TEntity GetDBValues(TEntity localEntity)

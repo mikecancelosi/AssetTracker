@@ -132,49 +132,46 @@ namespace AssetTracker.ViewModels
             }
         }
 
-        public ObservableCollection<User> Users
+        public Phase CurrentPhase
         {
-            get
+            get => myAsset.Phase;
+            set
             {
-                var results = (from u in usersRepo.Get()
-                               where (u.ID.ToString().Contains(UserAssignedUserFilter ?? "") ||
-                               u.Name.Contains(UserAssignedUserFilter ?? ""))
-                               select u);
-
-                return new ObservableCollection<User>(results);
+                myAsset.Phase = value;
+                assetRepo.Update(myAsset);
+                NotifyPropertyChanged("AssignedUser");
+                NotifyPropertyChanged("IsSavable");
             }
         }
 
-        public ObservableCollection<AssetCategory> Categories
+      
+        public List<DatabaseBackedObject> Users
         {
             get
             {
-                var results = (from c in categoryRepo.Get()
-                               where (c.ID.ToString().Contains(CategoryUserFilter ?? "") ||
-                               c.Name.Contains(CategoryUserFilter?? ""))
-                               select c);
-
-                return new ObservableCollection<AssetCategory>(results);
+               return (from u in usersRepo.Get()
+                               select u).ToList<DatabaseBackedObject>();               
             }
         }
 
-        public ObservableCollection<Phase> Phases
+        public List<DatabaseBackedObject> Categories
         {
             get
             {
-                var results = (from p in phaseRepo.Get()
-                               where p.Category.ca_id == (Category?.ca_id ?? 0) &&
-                               (p.ID.ToString().Contains(PhaseUserFilter ?? "") ||
-                               p.Name.Contains(PhaseUserFilter ?? ""))                               
-                               select p);
-
-                return new ObservableCollection<Phase>(results);
+                return (from c in categoryRepo.Get()                              
+                               select c).ToList<DatabaseBackedObject>();
             }
         }
 
-        public string UserAssignedUserFilter { get; set; }
-        public string CategoryUserFilter { get; set; }
-        public string PhaseUserFilter { get; set; }
+        public List<DatabaseBackedObject> Phases
+        {
+            get
+            {
+               return (from p in phaseRepo.Get()
+                               where p.Category.ca_id == (Category?.ca_id ?? 0)         
+                               select p).ToList<DatabaseBackedObject>();
+            }
+        }
 
         public ICommand DiscussionReplyClicked => new RelayCommand((arr) => CreateNewDiscussio(arr), (arr) => { return true; });
 
@@ -214,11 +211,15 @@ namespace AssetTracker.ViewModels
             SaveCommand = new RelayCommand((s) => Save(), (s) => true);
             RefuseSave = new RelayCommand((s) => navCoordinator.NavigateToQueued(), (s) => true);
             DeleteConfirmed = new RelayCommand((s) => DeleteAsset(), (s) => true);
+
+            NotifyPropertyChanged("Users");
+            NotifyPropertyChanged("Categories");
+            NotifyPropertyChanged("Phases");
         }
 
         public void SetAsset(Asset ast)
         {
-            myAsset = ast;
+            myAsset = assetRepo.GetByID(ast.ID);
             Changelog = (from s in changesRepo.Get()
                          where s.ch_recid == myAsset.ID
                          orderby s.ch_datetime descending
@@ -231,6 +232,9 @@ namespace AssetTracker.ViewModels
             NotifyPropertyChanged("DiscussionBoard");
             NotifyPropertyChanged("myAsset");
             NotifyPropertyChanged("Tags");
+            NotifyPropertyChanged("Users");
+            NotifyPropertyChanged("Categories");
+            NotifyPropertyChanged("Phases");
             SetHierarchy();
         }
 

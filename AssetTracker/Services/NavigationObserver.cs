@@ -1,13 +1,5 @@
-﻿using AssetTracker.Model;
-using AssetTracker.Services;
-using AssetTracker.View;
-using AssetTracker.View.Services;
+﻿using AssetTracker.View.Services;
 using AssetTracker.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Navigation;
 

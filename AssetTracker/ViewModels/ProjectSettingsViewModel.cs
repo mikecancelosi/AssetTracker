@@ -1,27 +1,21 @@
-﻿using AssetTracker.Enums;
-using AssetTracker.Extensions;
-using AssetTracker.Model;
-using AssetTracker.Services;
-using AssetTracker.View;
+﻿using AssetTracker.Services;
 using AssetTracker.View.Commands;
+using DataAccessLayer;
+using DomainModel;
+using DomainModel.Enums;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
-using System.Windows.Navigation;
 
 namespace AssetTracker.ViewModels
 {
     public class ProjectSettingsViewModel : ViewModel
     {
-        public ObservableCollection<User> Users => new ObservableCollection<User>(context.Users);
-        public ObservableCollection<SecRole> Roles => new ObservableCollection<SecRole>(context.SecRoles);
-        public ObservableCollection<AssetCategory> Categories => new ObservableCollection<AssetCategory>(context.AssetCategories);
+        public ObservableCollection<User> Users => new ObservableCollection<User>(userRepo.Get());
+        public ObservableCollection<SecRole> Roles => new ObservableCollection<SecRole>(roleRepo.Get());
+        public ObservableCollection<AssetCategory> Categories => new ObservableCollection<AssetCategory>(categoryRepo.Get());
 
         /// <summary>
         /// These are alerts that are visible to everyone. Typically messages
@@ -31,7 +25,7 @@ namespace AssetTracker.ViewModels
         {
             get
             {
-                return (from a in context.Alerts
+                return (from a in alertRepo.Get()
                         where a.ar_usid != null &&
                         a.ar_projectwide
                         select a).ToList();
@@ -91,10 +85,23 @@ namespace AssetTracker.ViewModels
             Delete
         }
 
+        private GenericRepository<User> userRepo;
+        private GenericRepository<SecRole> roleRepo;
+        private GenericRepository<AssetCategory> categoryRepo;
+        private GenericRepository<Alert> alertRepo;
+
+
         private readonly INavigationCoordinator navCoordinator;
-        public ProjectSettingsViewModel(INavigationCoordinator coord)
+        public ProjectSettingsViewModel(INavigationCoordinator coord, GenericUnitOfWork uow)
         {
             navCoordinator = coord;
+            unitOfWork = uow;
+
+            userRepo = unitOfWork.GetRepository<User>();
+            roleRepo = unitOfWork.GetRepository<SecRole>();
+            categoryRepo = unitOfWork.GetRepository<AssetCategory>();
+            alertRepo = unitOfWork.GetRepository<Alert>();
+
             CreateRole = new RelayCommand((s) => navCoordinator.NavigateToCreateRole(), (s) => true);
             CreateCategory = new RelayCommand((s) => navCoordinator.NavigateToCreateCategory(), (s) => true);
             CreateUser = new RelayCommand((s) => navCoordinator.NavigateToCreateUser(), (s) => true);
@@ -148,7 +155,7 @@ namespace AssetTracker.ViewModels
 
         public void Reload()
         {
-            context = new TrackerContext();
+            unitOfWork.Rollback();
             NotifyPropertyChanged("Users");
             NotifyPropertyChanged("Roles");
             NotifyPropertyChanged("Categories");
@@ -156,12 +163,28 @@ namespace AssetTracker.ViewModels
 
         private void DeleteSelectedObject()
         {
-            DeletionObject.Delete(context);
+            switch(DeletionObject.GetType().Name)
+            {
+                case "User":
+                    userRepo.Delete(DeletionObject.ID);
+                    break;
+                case "SecRole":
+                    roleRepo.Delete(DeletionObject.ID);
+                    break;
+                case "AssetCategory":
+                    categoryRepo.Delete(DeletionObject.ID);
+                    break;
+                case "Alert":
+                    alertRepo.Delete(DeletionObject.ID);
+                    break;
+            }
+            
             DeletionObject = null;
             PromptDelete = false;
             NotifyPropertyChanged("Users");
             NotifyPropertyChanged("Roles");
             NotifyPropertyChanged("Categories");
+            NotifyPropertyChanged("ProjectWideAlerts");
         }
 
         private void CreateNewProjectWideAlert()
@@ -173,16 +196,16 @@ namespace AssetTracker.ViewModels
             }
             else
             {
-                alert = context.Alerts.Create();
+                alert = new Alert();
                 alert.ar_projectwide = true; 
                 alert.ar_type = AlertType.ProjectWideAlert;
-                context.Alerts.Add(alert);                    
+                alertRepo.Insert(alert);                    
             }
             alert.ar_header = AlertPrompt_Header;
             alert.ar_content = AlertPrompt_Contents;
             alert.ar_date = DateTime.Now;
             alert.ar_usid = MainViewModel.Instance.CurrentUser.ID;
-            context.SaveChanges();
+            unitOfWork.Commit();
 
             ResetAlertPrompt();
         }
@@ -222,10 +245,9 @@ namespace AssetTracker.ViewModels
             Alert alert = ProjectWideAlerts.FirstOrDefault(x => x.ID == id);
             if(alert != null)
             {
-                alert.Delete(context);
+                alertRepo.Delete(alert);
                 NotifyPropertyChanged("ProjectWideAlerts");
             }
         }
-
     }
 }

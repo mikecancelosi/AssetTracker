@@ -1,23 +1,18 @@
-﻿using AssetTracker.Model;
-using AssetTracker.Services;
-using AssetTracker.View;
+﻿using AssetTracker.Services;
 using AssetTracker.View.Commands;
 using AssetTracker.ViewModels.Interfaces;
+using DataAccessLayer;
+using DomainModel;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
 
 namespace AssetTracker.ViewModels
 {
     public class CategoryEditViewModel : ViewModel,ISavable
     {
-        public AssetCategory Category { get; set; }
-        private List<Phase> phasesToDelete = new List<Phase>();
+        public AssetCategory Category { get; set; }      
 
         public List<Phase> CurrentPhases
         {
@@ -45,7 +40,7 @@ namespace AssetTracker.ViewModels
                 }
             }
         }
-        public bool IsSavable => context.ChangeTracker.HasChanges();
+        public bool IsSavable => unitOfWork.HasChanges;
         private bool promptSave;
         public bool PromptSave
         {
@@ -59,18 +54,25 @@ namespace AssetTracker.ViewModels
         public ICommand DeleteConfirmed { get; set; }
         public ICommand SaveCommand { get; set; }
         public ICommand RefuseSave { get; set; }
+        public ICommand NavigateToProjectSettingsCommand => new RelayCommand((s) => navCoordinator.NavigateToProjectSettings(),
+                                                                             (s) => true);
         public List<Violation> SaveViolations { get; set; }
-
 
         public bool Creating { get; set; }
         public bool Cloning { get; set; }
 
+        private GenericRepository<AssetCategory> categoryRepo;
+        private GenericRepository<Phase> phaseRepo;
+        
         public INavigationCoordinator navCoordinator { get; set; }
-        public CategoryEditViewModel(INavigationCoordinator coord)
+        public CategoryEditViewModel(INavigationCoordinator coord, GenericUnitOfWork uow)
         {
             navCoordinator = coord;
             navCoordinator.UserNavigationAttempt += (s) => PromptSave = true;
-            Category = context.AssetCategories.Create();
+            unitOfWork = uow;
+            categoryRepo = unitOfWork.GetRepository<AssetCategory>();
+            phaseRepo = unitOfWork.GetRepository<Phase>();
+            Category = new AssetCategory();
             Creating = true;
             DeleteConfirmed = new RelayCommand((s) => DeleteCategory(), (s) => true);
             SaveCommand = new RelayCommand((s) => Save(), (s) => true);
@@ -81,11 +83,12 @@ namespace AssetTracker.ViewModels
         {
             if (cat.ca_id > 0)
             {
-                Category = context.AssetCategories.Find(cat.ca_id);
+                Category = categoryRepo.GetByID(cat.ca_id);
             }
             else
             {
-                Category = context.AssetCategories.Add(cat);                
+                Category = cat;
+                categoryRepo.Insert(Category);                
                 Cloning = true;
             }
             Creating = false;
@@ -95,20 +98,26 @@ namespace AssetTracker.ViewModels
 
         public void Save()
         {
-            var violations = new List<Violation>();
-            foreach (var phase in phasesToDelete)
+            categoryRepo.Update(Category);
+            
+
+            if(Category.IsValid(out List<Violation> violations))
             {
-                phase.Delete(context);
-            }
-            if (Category.Save(context, out violations))
-            {
-                context.SaveChanges();
-                Creating = false;
-                Cloning = false;
-                NotifyPropertyChanged("Savable");
-                NotifyPropertyChanged("HeadingContent");
-                NotifyPropertyChanged("CurrentPhases");
-                NotifyPropertyChanged("Category");
+                unitOfWork.Commit();
+
+                if (navCoordinator.WaitingToNavigate)
+                {
+                    navCoordinator.NavigateToQueued();
+                }
+                else
+                {
+                    Creating = false;
+                    Cloning = false;
+                    NotifyPropertyChanged("IsSavable");
+                    NotifyPropertyChanged("HeadingContent");
+                    NotifyPropertyChanged("CurrentPhases");
+                    NotifyPropertyChanged("Category");
+                }
             }
             else
             {
@@ -120,32 +129,35 @@ namespace AssetTracker.ViewModels
 
         public void DeleteCategory()
         {
-            Category.Delete(context);
+            categoryRepo.Delete(Category);
+            unitOfWork.Commit();
             navCoordinator.NavigateToProjectSettings();
         }
 
         public void OnCategoryNameChanged(string newName)
         {
-            context.Entry(Category).Property(x => x.ca_name).CurrentValue = newName;
-            NotifyPropertyChanged("Savable");
+            Category.ca_name = newName;
+            categoryRepo.Update(Category);
+            NotifyPropertyChanged("IsSavable");
         }
 
 
         public void OnNewPhaseClicked()
         {
-            Phase phaseInst = context.Phases.Create();
+            Phase phaseInst = new Phase();
             phaseInst.ph_step = Category.Phases.Count + 1;
-            context.Phases.Add(phaseInst);
+            phaseRepo.Insert(phaseInst);
             Category.Phases.Add(phaseInst);
+            categoryRepo.Update(Category);
             NotifyPropertyChanged("CurrentPhases");
-            NotifyPropertyChanged("Savable");
+            NotifyPropertyChanged("IsSavable");
         }
 
         public void OnPhaseNameChange(int phaseStep, string newValue)
         {
             Phase phase = Category.Phases.FirstOrDefault(x => x.ph_step == phaseStep);
-            context.Entry(phase).Property(x => x.ph_name).CurrentValue = newValue;
             phase.ph_name = newValue;
+            phaseRepo.Update(phase);
         }
 
         public void OnPhaseUpClicked(int phaseId)
@@ -156,16 +168,20 @@ namespace AssetTracker.ViewModels
             {               
                 Phase swapPhase = Category.Phases.FirstOrDefault(x => x.ph_caid == phase.ph_caid &&
                                                                       x.ph_step == (beforeStep - 1));
-                context.Entry(phase).Property(x => x.ph_step).CurrentValue = beforeStep - 1;
-                context.Entry(swapPhase).Property(x => x.ph_step).CurrentValue = beforeStep;
+                phase.ph_step = beforeStep - 1;
+                swapPhase.ph_step = beforeStep;              
 
                 Category.Phases.FirstOrDefault(x => x.ph_id == phase.ph_id).ph_step = beforeStep - 1;
                 Category.Phases.FirstOrDefault(x => x.ph_id == swapPhase.ph_id).ph_step = beforeStep ;
 
+                phaseRepo.Update(phase);
+                phaseRepo.Update(swapPhase);
+                categoryRepo.Update(Category);
+
                 NotifyPropertyChanged("CurrentPhases");
-            }
-            
+            }            
         }
+
         public void OnPhaseDownClicked(int phaseId)
         {
             Phase phase = Category.Phases.FirstOrDefault(x => x.ph_id == phaseId);
@@ -174,11 +190,16 @@ namespace AssetTracker.ViewModels
             {
                 Phase swapPhase = Category.Phases.FirstOrDefault(x => x.ph_caid == phase.ph_caid &&
                                                                       x.ph_step == (beforeStep + 1));
-                context.Entry(phase).Property(x => x.ph_step).CurrentValue = beforeStep  + 1;
-                context.Entry(swapPhase).Property(x => x.ph_step).CurrentValue = beforeStep;
+
+                phase.ph_step = beforeStep + 1;
+                swapPhase.ph_step = beforeStep;
 
                 Category.Phases.FirstOrDefault(x => x.ph_id == phase.ph_id).ph_step = beforeStep + 1;
                 Category.Phases.FirstOrDefault(x => x.ph_id == swapPhase.ph_id).ph_step = beforeStep;
+
+                phaseRepo.Update(phase);
+                phaseRepo.Update(swapPhase);
+                categoryRepo.Update(Category);
 
                 NotifyPropertyChanged("CurrentPhases");
             }
@@ -189,16 +210,18 @@ namespace AssetTracker.ViewModels
             Phase phase = Category.Phases.FirstOrDefault(x => x.ph_id == phaseId);
             int index = phase.ph_step;
             Category.Phases.Remove(phase);
+            phaseRepo.Delete(phase);
+
             for (int i = index; i < Category.Phases.Count+1; i++)
             {
                 Phase phaseToEdit = Category.Phases.FirstOrDefault(x => x.ph_step == i +1);
                 int afterStep = phaseToEdit.ph_step - 1;
-                context.Entry(phaseToEdit).Property(x => x.ph_step).CurrentValue = afterStep;
                 phaseToEdit.ph_step = afterStep;
+                phaseRepo.Update(phaseToEdit);
             }
-            phasesToDelete.Add(phase);
+
             NotifyPropertyChanged("CurrentPhases");
-            NotifyPropertyChanged("Savable");
+            NotifyPropertyChanged("IsSavable");
         }     
     }
 }

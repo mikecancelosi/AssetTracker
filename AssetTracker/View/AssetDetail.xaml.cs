@@ -1,25 +1,8 @@
-﻿using AssetTracker.Model;
-using AssetTracker.Services;
-using AssetTracker.View.Commands;
-using AssetTracker.View.Properties;
-using AssetTracker.ViewModels;
-using AssetTracker.ViewModels.Services;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AssetTracker.ViewModels;
+using DomainModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using static AssetTracker.ViewModels.AssetDetailViewModel;
 
 namespace AssetTracker.View
 {
@@ -33,66 +16,11 @@ namespace AssetTracker.View
             get { return (AssetDetailViewModel)DataContext; }
             set { DataContext = value; }
         }
-
-        /// <summary>
-        /// Factory for creating sub controls
-        /// </summary>
-        private readonly IControlViewModelFactory controlFactory;
-        public AssetDetail(AssetDetailViewModel vm, IControlViewModelFactory conFactory)
+        public AssetDetail(AssetDetailViewModel vm)
         {
             InitializeComponent();
             VM = vm;
-            controlFactory = conFactory;
-            InitializeSearchboxes();
         }
-
-        /// <summary>
-        /// Viewmodel for assigned user searchbox
-        /// </summary>
-        private SearchBoxViewModel assignVM;
-        /// <summary>
-        /// Viewmodel for asset category searchbox
-        /// </summary>
-        private SearchBoxViewModel categoryVM;
-        /// <summary>
-        /// Viewmodel for Phase searchbox
-        /// </summary>
-        private SearchBoxViewModel phaseVM;
-
-        /// <summary>
-        /// Initialize searchboxes and listen to when the selections change
-        /// </summary>
-        private void InitializeSearchboxes()
-        {
-            assignVM = controlFactory.BuildSearchboxViewModel(typeof(User),
-                                                              startingID: VM.myAsset.AssignedToUser?.ID ?? 0);
-            categoryVM = controlFactory.BuildSearchboxViewModel(typeof(AssetCategory),
-                                                                startingID: VM.myAsset.AssetCategory?.ID ?? 0);
-            phaseVM = controlFactory.BuildSearchboxViewModel(typeof(Phase),
-                                                             baseFilter: VM.StatusFilter,
-                                                             startingID: VM.myAsset.Phase?.ID ?? 0);
-
-            assignVM.OnSelectionChanged += () => { VM.ModifyAssignedUser(assignVM.CurrentlySelectedObject.ID); };
-            phaseVM.OnSelectionChanged += () => { VM.ModifyPhase(phaseVM.CurrentlySelectedObject.ID); };
-            categoryVM.OnSelectionChanged += () => { OnCategoryChanged(categoryVM.CurrentlySelectedObject.ID); };
-
-            Searchbox_AssignedTo.SetViewmodel(assignVM);
-            Searchbox_Phase.SetViewmodel(phaseVM);
-            Searchbox_Category.SetViewmodel(categoryVM);
-            
-        }
-
-        /// <summary>
-        /// When a category changes we need to handle the phase selection
-        /// </summary>
-        /// <param name="newID"></param>
-        private void OnCategoryChanged(int newID)
-        {
-            VM.ModifyCategory(newID);
-            phaseVM.ResetDisplay();
-            phaseVM.SetBaseFilter(VM.StatusFilter);
-        }
-
         /// <summary>
         /// Allow changelog button to hide/show the changelog
         /// </summary>
@@ -181,6 +109,21 @@ namespace AssetTracker.View
         {
             Border selectedObject = sender as Border;
             VM.OnHierarchyAssetSelected((int)selectedObject.Tag );
+        }
+
+        private void Searchbox_AssignedTo_SelectionChange(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Searchbox_Category_SelectionChange(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Searchbox_Phase_SelectionChange(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

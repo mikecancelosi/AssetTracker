@@ -9,6 +9,5 @@
 //------------------------------------------------------------------------------
 
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("dbo.context.tt")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("dbo.tt")]
 
 

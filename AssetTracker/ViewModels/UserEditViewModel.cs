@@ -1,32 +1,29 @@
-﻿using AssetTracker.Model;
-using AssetTracker.Services;
-using AssetTracker.View;
+﻿using AssetTracker.Services;
 using AssetTracker.View.Commands;
 using AssetTracker.ViewModels.Interfaces;
+using DataAccessLayer;
+using DomainModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
-using static AssetTracker.Model.SecPermission;
+using static DomainModel.SecPermission;
 
 namespace AssetTracker.ViewModels
 {
     public class UserEditViewModel : ViewModel, ISavable
     {
         public User CurrentUser { get; private set; }
-       
-        private ObservableCollection<PermissionGroup> permissionGrps;
-        public ObservableCollection<PermissionGroup> PermissionGroups
+
+        private ObservableCollection<SecPermission.PermissionGroup> permissionGrps;
+        public ObservableCollection<SecPermission.PermissionGroup> PermissionGroups
         {
             get
             {
                 if (permissionGrps == null)
                 {
-                    List<SecPermission4> permissionGroups = (from grp in context.SecPermission4
+                    List<SecPermission4> permissionGroups = (from grp in roleGroupsRepo.Get()
                                                              select grp).ToList();
 
                     var Grps = new List<PermissionGroup>();
@@ -36,7 +33,7 @@ namespace AssetTracker.ViewModels
                         foreach (var permission in grp.SecPermissions)
                         {
                             bool allowed = permission.pr_default;
-                            SecPermission2 permissionOverride = (from p in context.SecPermission2
+                            SecPermission2 permissionOverride = (from p in userOverrideRepo.Get()
                                                                  where p.p2_prid == permission.pr_id &&
                                                                  p.p2_usid == CurrentUser.ID
                                                                  orderby p.p2_id descending
@@ -48,7 +45,7 @@ namespace AssetTracker.ViewModels
                                 Permission = permission,
                                 Allowed = allowed,
                             };
-                            item.AllowedChanged += (prid,allow) => OnPermissionChanged(prid, allow);
+                            item.AllowedChanged += (prid, allow) => OnPermissionChanged(prid, allow);
                             items.Add(item);
                         }
                         Grps.Add(new PermissionGroup()
@@ -76,10 +73,10 @@ namespace AssetTracker.ViewModels
                 {
                     return "Create User";
                 }
-                else if(Cloning)
+                else if (Cloning)
                 {
                     return "Clone User";
-                } 
+                }
                 else
                 {
                     return "Modify User";
@@ -92,7 +89,8 @@ namespace AssetTracker.ViewModels
             get => CurrentUser?.us_fname ?? "";
             set
             {
-                context.Entry(CurrentUser).Property(x => x.us_fname).CurrentValue = value;
+                CurrentUser.us_fname = value;
+                userRepo.Update(CurrentUser);
                 NotifyPropertyChanged("FirstName");
                 NotifyPropertyChanged("IsSavable");
             }
@@ -103,7 +101,8 @@ namespace AssetTracker.ViewModels
             get => CurrentUser?.us_lname ?? "";
             set
             {
-                context.Entry(CurrentUser).Property(x => x.us_lname).CurrentValue = value;
+                CurrentUser.us_lname = value;
+                userRepo.Update(CurrentUser);
                 NotifyPropertyChanged("LastName");
                 NotifyPropertyChanged("IsSavable");
             }
@@ -114,7 +113,8 @@ namespace AssetTracker.ViewModels
             get => CurrentUser?.us_displayname ?? "";
             set
             {
-                context.Entry(CurrentUser).Property(x => x.us_displayname).CurrentValue = value;
+                CurrentUser.us_displayname = value;
+                userRepo.Update(CurrentUser);
                 NotifyPropertyChanged("DisplayName");
                 NotifyPropertyChanged("IsSavable");
             }
@@ -125,7 +125,8 @@ namespace AssetTracker.ViewModels
             get => CurrentUser?.us_email ?? "";
             set
             {
-                context.Entry(CurrentUser).Property(x => x.us_email).CurrentValue = value;
+                CurrentUser.us_email = value;
+                userRepo.Update(CurrentUser);
                 NotifyPropertyChanged("Email");
                 NotifyPropertyChanged("IsSavable");
             }
@@ -136,7 +137,8 @@ namespace AssetTracker.ViewModels
             get => CurrentUser?.us_password ?? "";
             set
             {
-                context.Entry(CurrentUser).Property(x => x.us_password).CurrentValue = value;
+                CurrentUser.us_password = value;
+                userRepo.Update(CurrentUser);
                 NotifyPropertyChanged("Password");
                 NotifyPropertyChanged("IsSavable");
             }
@@ -144,7 +146,7 @@ namespace AssetTracker.ViewModels
 
         public ICommand SaveCommand { get; set; }
         public ICommand RefuseSave { get; set; }
-        public bool IsSavable => context.ChangeTracker.HasChanges();
+        public bool IsSavable => unitOfWork.HasChanges;
         public List<Violation> SaveViolations { get; set; }
         private bool promptSave;
         public bool PromptSave
@@ -160,11 +162,24 @@ namespace AssetTracker.ViewModels
 
         public ICommand DeleteConfirmed { get; set; }
 
-        public UserEditViewModel(INavigationCoordinator coord)
+        private GenericRepository<User> userRepo;
+        private GenericRepository<SecRole> roleRepo;
+        private GenericRepository<SecPermission2> userOverrideRepo;
+        private GenericRepository<SecPermission4> roleGroupsRepo;
+
+
+
+        public UserEditViewModel(INavigationCoordinator coord, GenericUnitOfWork uow)
         {
             navCoordinator = coord;
             navCoordinator.UserNavigationAttempt += (s) => PromptSave = true;
-            CurrentUser = context.Users.Create();
+
+            unitOfWork = uow;
+            userRepo = unitOfWork.GetRepository<User>();
+            roleRepo = unitOfWork.GetRepository<SecRole>();
+            userOverrideRepo = unitOfWork.GetRepository<SecPermission2>();
+
+            CurrentUser = new User();
             DeleteConfirmed = new RelayCommand((s) => DeleteUser(), (s) => true);
             SaveCommand = new RelayCommand((s) => Save(), (s) => true);
             RefuseSave = new RelayCommand((s) => navCoordinator.NavigateToQueued(), (s) => true);
@@ -176,12 +191,13 @@ namespace AssetTracker.ViewModels
         {
             if (user.us_id > 0)
             {
-                CurrentUser = context.Users.Find(user.us_id);
+                CurrentUser = userRepo.GetByID(user.us_id);
                 Creating = false;
             }
             else
             {
-                CurrentUser = context.Users.Attach(user);
+                CurrentUser = user;
+                userRepo.Insert(CurrentUser);
                 Creating = false;
                 Cloning = true;
             }
@@ -193,18 +209,23 @@ namespace AssetTracker.ViewModels
 
         public void Save()
         {
-            List<Violation> violations;
-            if(CurrentUser.Save(context, out violations))
+            userRepo.Update(CurrentUser);
+
+            if (CurrentUser.IsValid(out List<Violation> violations))
             {
-                context.SaveChanges();
-                Creating = false;
-                Cloning = false;
-                NotifyPropertyChanged("IsSavable");
-                NotifyPropertyChanged("CurrentUser");               
-                NotifyPropertyChanged("HeadingContext");
+                unitOfWork.Commit();
+
                 if (navCoordinator.WaitingToNavigate)
                 {
                     navCoordinator.NavigateToQueued();
+                }
+                else
+                {
+                    Creating = false;
+                    Cloning = false;
+                    NotifyPropertyChanged("IsSavable");
+                    NotifyPropertyChanged("CurrentUser");
+                    NotifyPropertyChanged("HeadingContext");
                 }
             }
             else
@@ -217,14 +238,16 @@ namespace AssetTracker.ViewModels
 
         public void DeleteUser()
         {
-            CurrentUser.Delete(context);
-
+            userRepo.Delete(CurrentUser);
+            unitOfWork.Commit();
+            navCoordinator.NavigateToProjectSettings();
         }
 
         public void OnRoleChanged(int newValue)
         {
-            context.Entry(CurrentUser).Property(x => x.us_roid).CurrentValue = newValue;
-            NotifyPropertyChanged("Savable");
+            CurrentUser.us_roid = newValue;
+            userRepo.Update(CurrentUser);
+            NotifyPropertyChanged("IsSavable");
         }
 
         #region Permissions
@@ -232,7 +255,7 @@ namespace AssetTracker.ViewModels
         {
             SecPermission2 overridePer = GetUserOverride(prid);
             overridePer.p2_allow = newValue;
-            NotifyPropertyChanged("Savable");
+            NotifyPropertyChanged("IsSavable");
         }
 
         public void DeactivateAllPermissions()
@@ -241,7 +264,7 @@ namespace AssetTracker.ViewModels
             {
                 for (int j = 0; j < PermissionGroups[i].Permissions.Count; j++)
                 {
-                    PermissionItem item = PermissionGroups[i].Permissions[j];
+                    SecPermission.PermissionItem item = PermissionGroups[i].Permissions[j];
                     item.Allowed = false;
                     PermissionGroups[i].Permissions[j] = item;
 
@@ -257,7 +280,7 @@ namespace AssetTracker.ViewModels
             {
                 for (int j = 0; j < PermissionGroups[i].Permissions.Count; j++)
                 {
-                    PermissionItem item = PermissionGroups[i].Permissions[j];
+                    SecPermission.PermissionItem item = PermissionGroups[i].Permissions[j];
                     item.Allowed = true;
                     PermissionGroups[i].Permissions[j] = item;
 
@@ -269,17 +292,19 @@ namespace AssetTracker.ViewModels
 
         public SecPermission2 GetUserOverride(int prid)
         {
-            SecPermission2 overridePer = (from p in context.SecPermission2
+            SecPermission2 overridePer = (from p in userOverrideRepo.Get()
                                           where p.p2_prid == prid
                                           && p.p2_usid == CurrentUser.us_id
                                           select p).FirstOrDefault();
             if (overridePer == null)
             {
-                overridePer = context.SecPermission2.Create();
-                overridePer.p2_prid = prid;
-                overridePer.p2_usid = CurrentUser.ID;
-                overridePer.p2_allow = true;
-                context.SecPermission2.Add(overridePer);                
+                overridePer = new SecPermission2()
+                {
+                    p2_prid = prid,
+                    p2_usid = CurrentUser.ID,
+                    p2_allow = true
+                };
+                userOverrideRepo.Insert(overridePer);
             }
 
             return overridePer;

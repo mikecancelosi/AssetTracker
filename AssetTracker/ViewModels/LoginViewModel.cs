@@ -1,10 +1,7 @@
-﻿using AssetTracker.Model;
-using AssetTracker.Services;
-using System;
-using System.Collections.Generic;
+﻿using AssetTracker.Services;
+using DataAccessLayer;
+using DomainModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AssetTracker.ViewModels
 {
@@ -15,7 +12,7 @@ namespace AssetTracker.ViewModels
 
         public LoginCode LoginUser()
         {
-            User user = (from u in context.Users
+            User user = (from u in userRepo.Get()
                          where u.us_email == Email
                          select u).FirstOrDefault();
             if(user != null)
@@ -36,12 +33,16 @@ namespace AssetTracker.ViewModels
                         
         }
 
-        private NavigationCoordinator navCoordinator;
-        public LoginViewModel(NavigationCoordinator coord)
+        private GenericRepository<User> userRepo;
+
+        private INavigationCoordinator navCoordinator;
+        public LoginViewModel(INavigationCoordinator coord, GenericUnitOfWork uow)
         {
             Email = "";
             Password = "";
             navCoordinator = coord;
+            unitOfWork = uow;
+            userRepo = unitOfWork.GetRepository<User>();
         }
 
         public enum LoginCode

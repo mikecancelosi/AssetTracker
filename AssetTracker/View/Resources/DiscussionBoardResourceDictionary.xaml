@@ -1,6 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:model="clr-namespace:AssetTracker.Model"
+                    xmlns:model="clr-namespace:DomainModel;assembly=DomainModel"
                     xmlns:prop="clr-namespace:AssetTracker.View.Properties"
                     xmlns:conv="clr-namespace:AssetTracker.View.Converters"
                     xmlns:mi="clr-namespace:MaterialIcons;assembly=MaterialIcons">

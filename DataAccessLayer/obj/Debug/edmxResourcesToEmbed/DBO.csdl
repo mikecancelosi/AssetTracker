@@ -1,0 +1,525 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Asset">
+    <Key>
+      <PropertyRef Name="as_id" />
+    </Key>
+    <Property Name="as_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="as_displayname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="as_description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="as_parentid" Type="Int32" />
+    <Property Name="as_caid" Type="Int32" />
+    <Property Name="as_usid" Type="Int32" />
+    <Property Name="as_phid" Type="Int32" />
+    <NavigationProperty Name="AssetCategory" Relationship="Self.FK_asset_assetcategory" FromRole="Asset" ToRole="AssetCategory" />
+    <NavigationProperty Name="Phase" Relationship="Model.FK_asset_phase" FromRole="Asset" ToRole="Phase" />
+    <NavigationProperty Name="AssignedToUser" Relationship="Self.FK_asset_user" FromRole="Asset" ToRole="User" />
+    <NavigationProperty Name="AssetLink" Relationship="Self.FK_assetlink_asset" FromRole="Asset" ToRole="AssetLink" />
+    <NavigationProperty Name="Discussions" Relationship="Model.FK_discussion_asset" FromRole="Asset" ToRole="Discussion1" />
+    <NavigationProperty Name="Children" Relationship="Model.FK_Asset_Parent" FromRole="Asset" ToRole="Asset1" />
+    <NavigationProperty Name="Parent" Relationship="Model.FK_Asset_Parent" FromRole="Asset1" ToRole="Asset" />
+    <NavigationProperty Name="Alerts" Relationship="Model.FK_Alert_Asset" FromRole="Asset" ToRole="Alert" />
+    <NavigationProperty Name="Metadata" Relationship="Model.FK_Metadata_Asset" FromRole="Asset" ToRole="Metadata" />
+  </EntityType>
+  <EntityType Name="AssetCategory">
+    <Key>
+      <PropertyRef Name="ca_id" />
+    </Key>
+    <Property Name="ca_id" Type="Int32" Nullable="false" />
+    <Property Name="ca_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="AssetsInCategory" Relationship="Self.FK_asset_assetcategory" FromRole="AssetCategory" ToRole="Asset" />
+    <NavigationProperty Name="Phases" Relationship="Model.FK_Phase_AssetCategory1" FromRole="AssetCategory" ToRole="Phase" />
+  </EntityType>
+  <EntityType Name="AssetLink">
+    <Key>
+      <PropertyRef Name="li_id" />
+    </Key>
+    <Property Name="li_id" Type="Int32" Nullable="false" />
+    <Property Name="li_location" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="li_asid" Type="Int32" Nullable="false" />
+    <Property Name="li_ltid" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Asset" Relationship="Self.FK_assetlink_asset" FromRole="AssetLink" ToRole="Asset" />
+    <NavigationProperty Name="AssetLinkType" Relationship="Self.FK_assetlink_assetlinktype" FromRole="AssetLink" ToRole="AssetLinkType" />
+  </EntityType>
+  <EntityType Name="AssetLinkType">
+    <Key>
+      <PropertyRef Name="lt_id" />
+    </Key>
+    <Property Name="lt_id" Type="Int32" Nullable="false" />
+    <Property Name="lt_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="AssetLinks" Relationship="Self.FK_assetlink_assetlinktype" FromRole="AssetLinkType" ToRole="AssetLink" />
+  </EntityType>
+  <EntityType Name="Phase">
+    <Key>
+      <PropertyRef Name="ph_id" />
+    </Key>
+    <Property Name="ph_id" Type="Int32" Nullable="false" />
+    <Property Name="ph_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="AssetsInPhase" Relationship="Self.FK_asset_phase" FromRole="Phase" ToRole="Asset" />
+    <Property Name="ph_step" Type="Int32" Nullable="false" />
+    <Property Name="ph_caid" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Category" Relationship="Model.FK_Phase_AssetCategory1" FromRole="Phase" ToRole="AssetCategory" />
+  </EntityType>
+  <EntityType Name="SecPermission">
+    <Key>
+      <PropertyRef Name="pr_id" />
+    </Key>
+    <Property Name="pr_id" Type="Int32" Nullable="false" />
+    <Property Name="pr_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="UserPermissions" Relationship="Self.FK_secpermission2_secpermission" FromRole="SecPermission" ToRole="SecPermission2" />
+    <NavigationProperty Name="RolePermissions" Relationship="Self.FK_secpermission3_secpermission" FromRole="SecPermission" ToRole="SecPermission3" />
+    <Property Name="pr_p4id" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="PermissionHeader" Relationship="Model.FK_SecPermission_SecPermission4" FromRole="SecPermission" ToRole="SecPermission4" />
+    <Property Name="pr_default" Type="Boolean" Nullable="false" />
+  </EntityType>
+  <EntityType Name="SecPermission2">
+    <Key>
+      <PropertyRef Name="p2_id" />
+    </Key>
+    <Property Name="p2_id" Type="Int32" Nullable="false" />
+    <Property Name="p2_usid" Type="Int32" Nullable="false" />
+    <Property Name="p2_prid" Type="Int32" Nullable="false" />
+    <Property Name="p2_allow" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="SecPermission" Relationship="Self.FK_secpermission2_secpermission" FromRole="SecPermission2" ToRole="SecPermission" />
+    <NavigationProperty Name="User" Relationship="Self.FK_secpermission2_user" FromRole="SecPermission2" ToRole="User" />
+  </EntityType>
+  <EntityType Name="SecPermission3">
+    <Key>
+      <PropertyRef Name="p3_id" />
+    </Key>
+    <Property Name="p3_id" Type="Int32" Nullable="false" />
+    <Property Name="p3_roid" Type="Int32" Nullable="false" />
+    <Property Name="p3_prid" Type="Int32" Nullable="false" />
+    <Property Name="p3_allow" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="SecPermission" Relationship="Self.FK_secpermission3_secpermission" FromRole="SecPermission3" ToRole="SecPermission" />
+    <NavigationProperty Name="SecRole" Relationship="Self.FK_secpermission3_secrole" FromRole="SecPermission3" ToRole="SecRole" />
+  </EntityType>
+  <EntityType Name="SecRole">
+    <Key>
+      <PropertyRef Name="ro_id" />
+    </Key>
+    <Property Name="ro_id" Type="Int32" Nullable="false" />
+    <Property Name="ro_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="SecPermission3" Relationship="Self.FK_secpermission3_secrole" FromRole="SecRole" ToRole="SecPermission3" />
+    <NavigationProperty Name="Users" Relationship="Self.FK_user_secrole" FromRole="SecRole" ToRole="User" />
+  </EntityType>
+  <EntityType Name="Setting">
+    <Key>
+      <PropertyRef Name="sc_id" />
+    </Key>
+    <Property Name="sc_id" Type="Int32" Nullable="false" />
+    <Property Name="sc_allowmultiassign" Type="Boolean" Nullable="false" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="us_id" />
+    </Key>
+    <Property Name="us_id" Type="Int32" Nullable="false" />
+    <Property Name="us_displayname" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="us_roid" Type="Int32" Nullable="false" />
+    <Property Name="us_fname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="us_lname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="us_email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="AssetsAssigned" Relationship="Self.FK_asset_user" FromRole="User" ToRole="Asset" />
+    <NavigationProperty Name="SecPermission2" Relationship="Self.FK_secpermission2_user" FromRole="User" ToRole="SecPermission2" />
+    <NavigationProperty Name="SecRole" Relationship="Self.FK_user_secrole" FromRole="User" ToRole="SecRole" />
+    <NavigationProperty Name="Discussions" Relationship="Model.FK_Discussion_User" FromRole="User" ToRole="Discussion" />
+    <NavigationProperty Name="Alerts" Relationship="Model.FK_Alert_User" FromRole="User" ToRole="Alert" />
+    <Property Name="us_password" Type="String" Nullable="false" MaxLength="16" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <Association Name="FK_asset_assetcategory">
+    <End Role="AssetCategory" Type="Self.AssetCategory" Multiplicity="0..1" />
+    <End Role="Asset" Type="Self.Asset" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AssetCategory">
+        <PropertyRef Name="ca_id" />
+      </Principal>
+      <Dependent Role="Asset">
+        <PropertyRef Name="as_caid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_asset_phase">
+    <End Role="Phase" Type="Self.Phase" Multiplicity="0..1" />
+    <End Role="Asset" Type="Self.Asset" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Phase">
+        <PropertyRef Name="ph_id" />
+      </Principal>
+      <Dependent Role="Asset">
+        <PropertyRef Name="as_phid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_asset_user">
+    <End Role="User" Type="Self.User" Multiplicity="0..1" />
+    <End Role="Asset" Type="Self.Asset" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="us_id" />
+      </Principal>
+      <Dependent Role="Asset">
+        <PropertyRef Name="as_usid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_assetlink_asset">
+    <End Role="Asset" Type="Self.Asset" Multiplicity="1" />
+    <End Role="AssetLink" Type="Self.AssetLink" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Asset">
+        <PropertyRef Name="as_id" />
+      </Principal>
+      <Dependent Role="AssetLink">
+        <PropertyRef Name="li_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_assetlink_assetlinktype">
+    <End Role="AssetLinkType" Type="Self.AssetLinkType" Multiplicity="1" />
+    <End Role="AssetLink" Type="Self.AssetLink" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AssetLinkType">
+        <PropertyRef Name="lt_id" />
+      </Principal>
+      <Dependent Role="AssetLink">
+        <PropertyRef Name="li_ltid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_secpermission2_secpermission">
+    <End Role="SecPermission" Type="Self.SecPermission" Multiplicity="1" />
+    <End Role="SecPermission2" Type="Self.SecPermission2" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SecPermission">
+        <PropertyRef Name="pr_id" />
+      </Principal>
+      <Dependent Role="SecPermission2">
+        <PropertyRef Name="p2_prid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_secpermission3_secpermission">
+    <End Role="SecPermission" Type="Self.SecPermission" Multiplicity="1" />
+    <End Role="SecPermission3" Type="Self.SecPermission3" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SecPermission">
+        <PropertyRef Name="pr_id" />
+      </Principal>
+      <Dependent Role="SecPermission3">
+        <PropertyRef Name="p3_prid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_secpermission2_user">
+    <End Role="User" Type="Self.User" Multiplicity="1" />
+    <End Role="SecPermission2" Type="Self.SecPermission2" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="us_id" />
+      </Principal>
+      <Dependent Role="SecPermission2">
+        <PropertyRef Name="p2_usid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_secpermission3_secrole">
+    <End Role="SecRole" Type="Self.SecRole" Multiplicity="1" />
+    <End Role="SecPermission3" Type="Self.SecPermission3" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SecRole">
+        <PropertyRef Name="ro_id" />
+      </Principal>
+      <Dependent Role="SecPermission3">
+        <PropertyRef Name="p3_roid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_user_secrole">
+    <End Role="SecRole" Type="Self.SecRole" Multiplicity="1" />
+    <End Role="User" Type="Self.User" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SecRole">
+        <PropertyRef Name="ro_id" />
+      </Principal>
+      <Dependent Role="User">
+        <PropertyRef Name="us_roid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="TrackerContext" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Assets" EntityType="Self.Asset" />
+    <EntitySet Name="AssetCategories" EntityType="Self.AssetCategory" />
+    <EntitySet Name="AssetLinks" EntityType="Self.AssetLink" />
+    <EntitySet Name="AssetLinkTypes" EntityType="Self.AssetLinkType" />
+    <EntitySet Name="Phases" EntityType="Self.Phase" />
+    <EntitySet Name="SecPermissions" EntityType="Self.SecPermission" />
+    <EntitySet Name="SecPermission2" EntityType="Self.SecPermission2" />
+    <EntitySet Name="SecPermission3" EntityType="Self.SecPermission3" />
+    <EntitySet Name="SecRoles" EntityType="Self.SecRole" />
+    <EntitySet Name="Settings" EntityType="Self.Setting" />
+    <EntitySet Name="Users" EntityType="Self.User" />
+    <AssociationSet Name="FK_asset_assetcategory" Association="Self.FK_asset_assetcategory">
+      <End Role="AssetCategory" EntitySet="AssetCategories" />
+      <End Role="Asset" EntitySet="Assets" />
+    </AssociationSet>
+    <AssociationSet Name="FK_asset_phase" Association="Self.FK_asset_phase">
+      <End Role="Phase" EntitySet="Phases" />
+      <End Role="Asset" EntitySet="Assets" />
+    </AssociationSet>
+    <AssociationSet Name="FK_asset_user" Association="Self.FK_asset_user">
+      <End Role="User" EntitySet="Users" />
+      <End Role="Asset" EntitySet="Assets" />
+    </AssociationSet>
+    <AssociationSet Name="FK_assetlink_asset" Association="Self.FK_assetlink_asset">
+      <End Role="Asset" EntitySet="Assets" />
+      <End Role="AssetLink" EntitySet="AssetLinks" />
+    </AssociationSet>
+    <AssociationSet Name="FK_assetlink_assetlinktype" Association="Self.FK_assetlink_assetlinktype">
+      <End Role="AssetLinkType" EntitySet="AssetLinkTypes" />
+      <End Role="AssetLink" EntitySet="AssetLinks" />
+    </AssociationSet>
+    <AssociationSet Name="FK_secpermission2_secpermission" Association="Self.FK_secpermission2_secpermission">
+      <End Role="SecPermission" EntitySet="SecPermissions" />
+      <End Role="SecPermission2" EntitySet="SecPermission2" />
+    </AssociationSet>
+    <AssociationSet Name="FK_secpermission3_secpermission" Association="Self.FK_secpermission3_secpermission">
+      <End Role="SecPermission" EntitySet="SecPermissions" />
+      <End Role="SecPermission3" EntitySet="SecPermission3" />
+    </AssociationSet>
+    <AssociationSet Name="FK_secpermission2_user" Association="Self.FK_secpermission2_user">
+      <End Role="User" EntitySet="Users" />
+      <End Role="SecPermission2" EntitySet="SecPermission2" />
+    </AssociationSet>
+    <AssociationSet Name="FK_secpermission3_secrole" Association="Self.FK_secpermission3_secrole">
+      <End Role="SecRole" EntitySet="SecRoles" />
+      <End Role="SecPermission3" EntitySet="SecPermission3" />
+    </AssociationSet>
+    <AssociationSet Name="FK_user_secrole" Association="Self.FK_user_secrole">
+      <End Role="SecRole" EntitySet="SecRoles" />
+      <End Role="User" EntitySet="Users" />
+    </AssociationSet>
+    <FunctionImport Name="assetGetInformation" ReturnType="Collection(Model.assetGetInformation_Result)" />
+    <EntitySet Name="Changes" EntityType="Model.Change" />
+    <EntitySet Name="Discussions" EntityType="Model.Discussion" />
+    <AssociationSet Name="FK_discussion_asset" Association="Model.FK_discussion_asset">
+      <End Role="Asset" EntitySet="Assets" />
+      <End Role="Discussion1" EntitySet="Discussions" />
+    </AssociationSet>
+    <AssociationSet Name="FK_discussion_discussion" Association="Model.FK_discussion_discussion">
+      <End Role="Discussion1" EntitySet="Discussions" />
+      <End Role="Discussion11" EntitySet="Discussions" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Asset_Parent" Association="Model.FK_Asset_Parent">
+      <End Role="Asset" EntitySet="Assets" />
+      <End Role="Asset1" EntitySet="Assets" />
+    </AssociationSet>
+    <EntitySet Name="Metadata" EntityType="Model.Metadata" />
+    <AssociationSet Name="FK_Discussion_User" Association="Model.FK_Discussion_User">
+      <End Role="User" EntitySet="Users" />
+      <End Role="Discussion" EntitySet="Discussions" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Phase_AssetCategory1" Association="Model.FK_Phase_AssetCategory1">
+      <End Role="AssetCategory" EntitySet="AssetCategories" />
+      <End Role="Phase" EntitySet="Phases" />
+    </AssociationSet>
+    <EntitySet Name="Alerts" EntityType="Model.Alert" />
+    <AssociationSet Name="FK_Alert_Asset" Association="Model.FK_Alert_Asset">
+      <End Role="Asset" EntitySet="Assets" />
+      <End Role="Alert" EntitySet="Alerts" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Alert_User" Association="Model.FK_Alert_User">
+      <End Role="User" EntitySet="Users" />
+      <End Role="Alert" EntitySet="Alerts" />
+    </AssociationSet>
+    <EntitySet Name="SecPermission4" EntityType="Model.SecPermission4" />
+    <AssociationSet Name="FK_SecPermission_SecPermission4" Association="Model.FK_SecPermission_SecPermission4">
+      <End Role="SecPermission4" EntitySet="SecPermission4" />
+      <End Role="SecPermission" EntitySet="SecPermissions" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Metadata_Asset" Association="Model.FK_Metadata_Asset">
+      <End Role="Asset" EntitySet="Assets" />
+      <End Role="Metadata" EntitySet="Metadata" />
+    </AssociationSet>
+  </EntityContainer>
+  <ComplexType Name="assetGetInformation_Result">
+    <Property Type="Int32" Name="as_id" Nullable="false" />
+    <Property Type="String" Name="as_displayname" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="as_description" Nullable="true" MaxLength="1000" />
+    <Property Type="Int32" Name="as_parentid" Nullable="true" />
+    <Property Type="Int32" Name="as_caid" Nullable="false" />
+    <Property Type="Int32" Name="as_usid" Nullable="true" />
+    <Property Type="Int32" Name="as_phid" Nullable="false" />
+  </ComplexType>
+  <EntityType Name="Change">
+    <Key>
+      <PropertyRef Name="ch_id" />
+    </Key>
+    <Property Name="ch_id" Type="Int32" Nullable="false" />
+    <Property Name="ch_description" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ch_datetime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="ch_oldvalue" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ch_newvalue" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ch_field" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ch_recid" Type="Int32" Nullable="false" />
+    <Property Name="ch_usid" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Discussion">
+    <Key>
+      <PropertyRef Name="di_id" />
+    </Key>
+    <Property Name="di_id" Type="Int32" Nullable="false" />
+    <Property Name="di_contents" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="di_asid" Type="Int32" Nullable="false" />
+    <Property Name="di_parentid" Type="Int32" />
+    <Property Name="di_usid" Type="Int32" />
+    <Property Name="di_date" Type="DateTime" Nullable="false" Precision="3" />
+    <NavigationProperty Name="Asset" Relationship="Model.FK_discussion_asset" FromRole="Discussion1" ToRole="Asset" />
+    <NavigationProperty Name="Children" Relationship="Model.FK_discussion_discussion" FromRole="Discussion1" ToRole="Discussion11" />
+    <NavigationProperty Name="Parent" Relationship="Model.FK_discussion_discussion" FromRole="Discussion11" ToRole="Discussion1" />
+    <NavigationProperty Name="User" Relationship="Model.FK_Discussion_User" FromRole="Discussion" ToRole="User" />
+  </EntityType>
+  <Association Name="FK_discussion_asset">
+    <End Type="Model.Asset" Role="Asset" Multiplicity="1" />
+    <End Type="Model.Discussion" Role="Discussion1" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Asset">
+        <PropertyRef Name="as_id" />
+      </Principal>
+      <Dependent Role="Discussion1">
+        <PropertyRef Name="di_asid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_discussion_discussion">
+    <End Type="Model.Discussion" Role="Discussion1" Multiplicity="0..1" />
+    <End Type="Model.Discussion" Role="Discussion11" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Discussion1">
+        <PropertyRef Name="di_id" />
+      </Principal>
+      <Dependent Role="Discussion11">
+        <PropertyRef Name="di_parentid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Asset_Parent">
+    <End Type="Model.Asset" Role="Asset" Multiplicity="0..1" />
+    <End Type="Model.Asset" Role="Asset1" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Asset">
+        <PropertyRef Name="as_id" />
+      </Principal>
+      <Dependent Role="Asset1">
+        <PropertyRef Name="as_parentid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Metadata">
+    <Key>
+      <PropertyRef Name="md_id" />
+    </Key>
+    <Property Name="md_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="md_value" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="md_asid" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Asset" Relationship="Model.FK_Metadata_Asset" FromRole="Metadata" ToRole="Asset" />
+  </EntityType>
+  <Association Name="FK_Discussion_User">
+    <End Type="Model.User" Role="User" Multiplicity="0..1" />
+    <End Type="Model.Discussion" Role="Discussion" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="us_id" />
+      </Principal>
+      <Dependent Role="Discussion">
+        <PropertyRef Name="di_usid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Phase_AssetCategory1">
+    <End Type="Model.AssetCategory" Role="AssetCategory" Multiplicity="1" />
+    <End Type="Model.Phase" Role="Phase" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AssetCategory">
+        <PropertyRef Name="ca_id" />
+      </Principal>
+      <Dependent Role="Phase">
+        <PropertyRef Name="ph_caid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Alert">
+    <Key>
+      <PropertyRef Name="ar_id" />
+    </Key>
+    <Property Name="ar_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ar_type" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ar_asid" Type="Int32" />
+    <Property Name="ar_usid" Type="Int32" />
+    <Property Name="ar_priority" Type="Boolean" />
+    <Property Name="ar_recid" Type="Int32" />
+    <Property Name="ar_date" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="ar_viewed" Type="Boolean" Nullable="false" />
+    <Property Name="ar_projectwide" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="Asset" Relationship="Model.FK_Alert_Asset" FromRole="Alert" ToRole="Asset" />
+    <NavigationProperty Name="User" Relationship="Model.FK_Alert_User" FromRole="Alert" ToRole="User" />
+    <Property Name="ar_content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="ar_header" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <Association Name="FK_Alert_Asset">
+    <End Type="Model.Asset" Role="Asset" Multiplicity="0..1" />
+    <End Type="Model.Alert" Role="Alert" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Asset">
+        <PropertyRef Name="as_id" />
+      </Principal>
+      <Dependent Role="Alert">
+        <PropertyRef Name="ar_asid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Alert_User">
+    <End Type="Model.User" Role="User" Multiplicity="0..1" />
+    <End Type="Model.Alert" Role="Alert" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="us_id" />
+      </Principal>
+      <Dependent Role="Alert">
+        <PropertyRef Name="ar_usid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="SecPermission4">
+    <Key>
+      <PropertyRef Name="p4_id" />
+    </Key>
+    <Property Name="p4_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="p4_name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="SecPermissions" Relationship="Model.FK_SecPermission_SecPermission4" FromRole="SecPermission4" ToRole="SecPermission" />
+  </EntityType>
+  <Association Name="FK_SecPermission_SecPermission4">
+    <End Type="Model.SecPermission4" Role="SecPermission4" Multiplicity="1" />
+    <End Type="Model.SecPermission" Role="SecPermission" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SecPermission4">
+        <PropertyRef Name="p4_id" />
+      </Principal>
+      <Dependent Role="SecPermission">
+        <PropertyRef Name="pr_p4id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Metadata_Asset">
+    <End Type="Model.Asset" Role="Asset" Multiplicity="1" />
+    <End Type="Model.Metadata" Role="Metadata" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Asset">
+        <PropertyRef Name="as_id" />
+      </Principal>
+      <Dependent Role="Metadata">
+        <PropertyRef Name="md_asid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

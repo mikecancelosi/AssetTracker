@@ -1,14 +1,11 @@
-﻿using AssetTracker.Enums;
-using AssetTracker.Model;
-using AssetTracker.Services;
+﻿using AssetTracker.Services;
 using AssetTracker.View.Commands;
+using DataAccessLayer;
+using DomainModel;
+using DomainModel.Enums;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
 
 namespace AssetTracker.ViewModels
@@ -21,7 +18,7 @@ namespace AssetTracker.ViewModels
         {
             get
             {
-                return (from a in context.Alerts
+                return (from a in alertsRepo.Get()
                         where a.ar_usid == myUser.us_id &&
                         !a.ar_projectwide
                         orderby a.ar_viewed, a.ar_date
@@ -37,7 +34,7 @@ namespace AssetTracker.ViewModels
         {
             get
             {
-                return (from a in context.Alerts
+                return (from a in alertsRepo.Get()
                         where a.ar_usid != null &&
                         a.ar_projectwide
                         select a).ToList();
@@ -52,7 +49,7 @@ namespace AssetTracker.ViewModels
         {
             get
             {
-                return (from a in context.Alerts
+                return (from a in alertsRepo.Get()
                         where a.ar_asid == 0 &&
                         !a.ar_projectwide
                         select a).ToList();
@@ -68,11 +65,21 @@ namespace AssetTracker.ViewModels
         public ICommand PrioritizeAlertCommand { get; set; }
         public ICommand ArchiveAlertCommand { get; set; }
         public ICommand MarkAlertsAsRead => new RelayCommand((s) => MarkAsRead(), (s) => true);
+
+        private GenericRepository<Alert> alertsRepo;
+        private GenericRepository<Asset> assetRepo;
+
         private readonly INavigationCoordinator navCoordinator;
-        public UserDashboardViewModel(INavigationCoordinator coord)
+        public UserDashboardViewModel(INavigationCoordinator coord, GenericUnitOfWork uow)
         {          
             myUser = MainViewModel.Instance.CurrentUser;
             navCoordinator = coord;
+            unitOfWork = uow;
+
+            alertsRepo = unitOfWork.GetRepository<Alert>();
+            assetRepo = unitOfWork.GetRepository<Asset>();
+
+
             PrioritizeAlertCommand = new RelayCommand((s) => PrioritizeAlert((int)s), (s) => true);
             ArchiveAlertCommand = new RelayCommand((s) => ArchiveAlert((int)s), (s) => true);
         }
@@ -82,9 +89,10 @@ namespace AssetTracker.ViewModels
             Alert selectedAlert = UserAlerts.FirstOrDefault(x => x.ID == alertid);
             if (selectedAlert != null)
             {
-                context.Entry(selectedAlert).Property(x => x.ar_viewed).CurrentValue = true;
-                context.SaveChanges();
-                Asset connectedAsset = context.Assets.Find(selectedAlert.ar_asid);
+                selectedAlert.ar_viewed = true;
+                alertsRepo.Update(selectedAlert);
+                unitOfWork.Commit();
+                Asset connectedAsset = assetRepo.GetByID(selectedAlert.ar_asid);
                 navCoordinator.NavigateToAssetDetail(connectedAsset);
             }
             else
@@ -98,8 +106,9 @@ namespace AssetTracker.ViewModels
             Alert selectedAlert = UserAlerts.FirstOrDefault(x => x.ID == alertid);
             if (selectedAlert != null)
             {
-                context.Entry(selectedAlert).Property(x => x.ar_priority).CurrentValue = !selectedAlert.ar_priority;
-                context.SaveChanges();
+                selectedAlert.ar_priority = !selectedAlert.ar_priority;
+                alertsRepo.Update(selectedAlert);
+                unitOfWork.Commit();
                 NotifyPropertyChanged("UserAlerts");
             }
         }
@@ -109,11 +118,11 @@ namespace AssetTracker.ViewModels
             Alert selectedAlert = UserAlerts.FirstOrDefault(x => x.ID == alertid);
             if (selectedAlert != null)
             {
-                context.Entry(selectedAlert).Property(x => x.ar_viewed).CurrentValue = !selectedAlert.ar_viewed;
-                context.SaveChanges();
+                selectedAlert.ar_viewed = !selectedAlert.ar_viewed;
+                alertsRepo.Update(selectedAlert);
+                unitOfWork.Commit();
                 NotifyPropertyChanged("UserAlerts");
             }
-
         }
 
         private void MarkAsRead()
@@ -121,8 +130,11 @@ namespace AssetTracker.ViewModels
             foreach(Alert a in UserAlerts)
             {
                 a.ar_viewed = true;
+                alertsRepo.Update(a);
             }
-            context.SaveChanges();
+
+            unitOfWork.Commit();
+
             NotifyPropertyChanged("UserAlerts");
         }
 

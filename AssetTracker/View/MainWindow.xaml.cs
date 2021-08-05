@@ -1,27 +1,10 @@
-﻿using AssetTracker.Model;
-using AssetTracker.Services;
-using AssetTracker.View;
+﻿using AssetTracker.Services;
 using AssetTracker.View.Services;
 using AssetTracker.ViewModels;
-using AssetTracker.ViewModels.Services;
-using Castle.Core.Resource;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
-using Castle.Windsor.Configuration.Interpreters;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace AssetTracker
 {
@@ -105,8 +88,6 @@ namespace AssetTracker
                                         .ImplementedBy<NavigationCoordinator>()
                                         .LifeStyle.Singleton);
             container.Register(Component.For<NavigationObserver>());
-            container.Register(Component.For<IControlViewModelFactory>()
-                                        .ImplementedBy<ControlViewModelFactory>());
 
 
             navObserver = container.Resolve<NavigationObserver>();

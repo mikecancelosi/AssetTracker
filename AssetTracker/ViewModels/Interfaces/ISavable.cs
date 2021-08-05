@@ -1,10 +1,6 @@
-﻿using AssetTracker.Model;
-using AssetTracker.Services;
-using System;
+﻿using AssetTracker.Services;
+using DomainModel;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace AssetTracker.ViewModels.Interfaces

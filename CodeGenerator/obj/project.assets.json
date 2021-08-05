@@ -1,0 +1,128 @@
+{
+  "version": 3,
+  "targets": {
+    "net5.0": {
+      "AssetTracker/1.0.0": {
+        "type": "project",
+        "dependencies": {
+          "DataAccessLayer": "1.0.0",
+          "DomainModel": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/AssetTracker.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/AssetTracker.dll": {}
+        }
+      },
+      "DataAccessLayer/1.0.0": {
+        "type": "project",
+        "dependencies": {
+          "DomainModel": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/DataAccessLayer.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/DataAccessLayer.dll": {}
+        }
+      },
+      "DomainModel/1.0.0": {
+        "type": "project",
+        "compile": {
+          "bin/placeholder/DomainModel.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/DomainModel.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "AssetTracker/1.0.0": {
+      "type": "project",
+      "path": "../AssetTracker/AssetTracker.csproj",
+      "msbuildProject": "../AssetTracker/AssetTracker.csproj"
+    },
+    "DataAccessLayer/1.0.0": {
+      "type": "project",
+      "path": "../DataAccessLayer/DataAccessLayer.csproj",
+      "msbuildProject": "../DataAccessLayer/DataAccessLayer.csproj"
+    },
+    "DomainModel/1.0.0": {
+      "type": "project",
+      "path": "../DomainModel/DomainModel.csproj",
+      "msbuildProject": "../DomainModel/DomainModel.csproj"
+    }
+  },
+  "projectFileDependencyGroups": {
+    "net5.0": [
+      "AssetTracker >= 1.0.0"
+    ]
+  },
+  "packageFolders": {
+    "C:\\Users\\mikec\\.nuget\\packages\\": {},
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "C:\\Users\\mikec\\Documents\\Projects\\AssetTrackerProjects\\CodeGenerator\\CodeGenerator.csproj",
+      "projectName": "CodeGenerator",
+      "projectPath": "C:\\Users\\mikec\\Documents\\Projects\\AssetTrackerProjects\\CodeGenerator\\CodeGenerator.csproj",
+      "packagesPath": "C:\\Users\\mikec\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\mikec\\Documents\\Projects\\AssetTrackerProjects\\CodeGenerator\\obj\\",
+      "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+      ],
+      "configFilePaths": [
+        "C:\\Users\\mikec\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+      ],
+      "originalTargetFrameworks": [
+        "net5.0"
+      ],
+      "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "projectReferences": {
+            "C:\\Users\\mikec\\Documents\\Projects\\AssetTrackerProjects\\AssetTracker\\AssetTracker.csproj": {
+              "projectPath": "C:\\Users\\mikec\\Documents\\Projects\\AssetTrackerProjects\\AssetTracker\\AssetTracker.csproj"
+            }
+          }
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      }
+    },
+    "frameworks": {
+      "net5.0": {
+        "targetAlias": "net5.0",
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "frameworkReferences": {
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          }
+        },
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.201\\RuntimeIdentifierGraph.json"
+      }
+    }
+  }
+}

@@ -5,10 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:view="clr-namespace:AssetTracker.View"
              xmlns:viewmodel="clr-namespace:AssetTracker.ViewModels"
-             xmlns:model="clr-namespace:AssetTracker.Model"
              xmlns:materialicons="clr-namespace:MaterialIcons;assembly=MaterialIcons"
-             mc:Ignorable="d"
-             d:DataContext="{d:DesignInstance viewmodel:SearchBoxViewModel, IsDesignTimeCreatable=True}">
+             mc:Ignorable="d">
 
     <Grid x:Name="FieldGrid"
           Height="24">

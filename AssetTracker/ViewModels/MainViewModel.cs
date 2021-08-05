@@ -1,17 +1,9 @@
-﻿using AssetTracker.Model;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using DomainModel;
 
 namespace AssetTracker.ViewModels
 {
     public class MainViewModel : ViewModel
     {
-
         public User CurrentUser { get; set; }
 
         private static MainViewModel instance;

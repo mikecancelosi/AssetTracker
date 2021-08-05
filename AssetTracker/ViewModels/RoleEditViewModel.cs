@@ -1,15 +1,14 @@
-﻿using AssetTracker.Model;
-using AssetTracker.Services;
+﻿using AssetTracker.Services;
 using AssetTracker.View.Commands;
 using AssetTracker.ViewModels.Interfaces;
+using DataAccessLayer;
+using DomainModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
-using static AssetTracker.Model.SecPermission;
+using static DomainModel.SecPermission;
 
 namespace AssetTracker.ViewModels
 {
@@ -24,7 +23,7 @@ namespace AssetTracker.ViewModels
             {
                 if (permissionGrps == null)
                 {
-                    List<SecPermission4> permissionGroups = (from grp in context.SecPermission4
+                    List<SecPermission4> permissionGroups = (from grp in roleGroupsRepo.Get()
                                                              select grp).ToList();
 
                     var Grps = new List<PermissionGroup>();
@@ -34,7 +33,7 @@ namespace AssetTracker.ViewModels
                         foreach (var permission in grp.SecPermissions)
                         {
                             bool allowed = permission.pr_default;
-                            SecPermission3 permissionOverride = (from p in context.SecPermission3
+                            SecPermission3 permissionOverride = (from p in roleOverrideRepo.Get()
                                                                     where p.p3_prid == permission.pr_id &&
                                                                     p.p3_roid == Role.ro_id
                                                                     orderby p.p3_id descending
@@ -85,7 +84,7 @@ namespace AssetTracker.ViewModels
             }
         }
 
-        public bool IsSavable => context.ChangeTracker.HasChanges();
+        public bool IsSavable => unitOfWork.HasChanges;
         public ICommand DeleteConfirmed { get; set; }
         public ICommand SaveCommand { get; set; }
         public ICommand RefuseSave { get; set; }
@@ -101,12 +100,21 @@ namespace AssetTracker.ViewModels
             }
         }
 
+        private GenericRepository<SecPermission4> roleGroupsRepo;
+        private GenericRepository<SecPermission3> roleOverrideRepo;
+        private GenericRepository<SecRole> roleRepo;
+
+
         public INavigationCoordinator navCoordinator { get; set; }
-        public RoleEditViewModel(INavigationCoordinator coord)
+        public RoleEditViewModel(INavigationCoordinator coord, GenericUnitOfWork uow)
         {
             navCoordinator = coord;
             navCoordinator.UserNavigationAttempt += (s) => PromptSave = true;
-            Role = context.SecRoles.Create();
+
+            unitOfWork = uow;
+
+
+            Role = new SecRole();
             DeleteConfirmed = new RelayCommand((s) => DeleteRole(), (s) => true);
             SaveCommand = new RelayCommand((s) => Save(), (s) => true);
             RefuseSave = new RelayCommand((s) => navCoordinator.NavigateToQueued(), (s) => true);
@@ -117,11 +125,12 @@ namespace AssetTracker.ViewModels
         {
             if (role.ro_id > 0)
             {
-                Role = context.SecRoles.Find(role.ro_id);               
+                Role = roleRepo.GetByID(role.ro_id);   
             }
             else
             {
-                Role = context.SecRoles.Attach(role);
+                Role = role;
+                roleRepo.Insert(Role);
                 Cloning = true;
             }
             Creating = false;
@@ -131,11 +140,12 @@ namespace AssetTracker.ViewModels
 
         public void Save()
         {
-            List<Violation> violations;     
-            if (Role.Save(context, out violations))
+            roleRepo.Update(Role);
+
+            if (Role.IsValid(out List<Violation> violations))
             {
-                context.SaveChanges();
-                NotifyPropertyChanged("Savable");
+                unitOfWork.Commit();
+                NotifyPropertyChanged("IsSavable");
                 NotifyPropertyChanged("Role");
                 Creating = false;
                 Cloning = false;
@@ -151,21 +161,22 @@ namespace AssetTracker.ViewModels
 
         public void DeleteRole()
         {
-            Role.Delete(context);
+            roleRepo.Delete(Role);      
             navCoordinator.NavigateToProjectSettings();
         }
 
         public void OnRoleNameChanged(string newValue)
         {
-            context.Entry(Role).Property(x => x.ro_name).CurrentValue = newValue;
-            NotifyPropertyChanged("Savable");
+            Role.ro_name = newValue;
+            roleRepo.Update(Role);
+            NotifyPropertyChanged("IsSavable");
         }
 
         public void OnPermissionChanged(int permissionId, bool newValue)
         {
             SecPermission3 overridePermission = GetRoleOverride(permissionId);
             overridePermission.p3_allow = newValue;
-            NotifyPropertyChanged("Savable");
+            NotifyPropertyChanged("IsSavable");
         }
 
         public void DeactivateAllPermissions()
@@ -202,17 +213,17 @@ namespace AssetTracker.ViewModels
 
         public SecPermission3 GetRoleOverride(int prid)
         {
-            SecPermission3 overridePer = (from p in context.SecPermission3
+            SecPermission3 overridePer = (from p in roleOverrideRepo.Get()
                                           where p.p3_prid == prid
                                           && p.p3_roid ==  Role.ID
                                           select p).FirstOrDefault();
             if (overridePer == null)
             {
-                overridePer = context.SecPermission3.Create();
+                overridePer = new SecPermission3();
                 overridePer.p3_prid = prid;
                 overridePer.p3_roid = Role.ID;
                 overridePer.p3_allow = true;
-                context.SecPermission3.Add(overridePer);
+                roleOverrideRepo.Insert(overridePer);
             }
 
             return overridePer;

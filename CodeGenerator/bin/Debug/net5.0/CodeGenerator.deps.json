@@ -1,0 +1,102 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v5.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v5.0": {
+      "CodeGenerator/1.0.0": {
+        "dependencies": {
+          "AssetTracker": "1.0.0"
+        },
+        "runtime": {
+          "CodeGenerator.dll": {}
+        }
+      },
+      "AssetTracker/1.0.0": {
+        "dependencies": {
+          "DataAccessLayer": "1.0.0",
+          "DomainModel": "1.0.0"
+        },
+        "runtime": {
+          "AssetTracker.exe": {}
+        }
+      },
+      "DataAccessLayer/1.0.0": {
+        "dependencies": {
+          "DomainModel": "1.0.0"
+        },
+        "runtime": {
+          "DataAccessLayer.dll": {}
+        }
+      },
+      "DomainModel/1.0.0": {
+        "runtime": {
+          "DomainModel.dll": {}
+        }
+      },
+      "Castle.Windsor/5.0.0.0": {
+        "runtime": {
+          "Castle.Windsor.dll": {
+            "assemblyVersion": "5.0.0.0",
+            "fileVersion": "5.1.1.0"
+          }
+        }
+      },
+      "EntityFramework/6.0.0.0": {
+        "runtime": {
+          "EntityFramework.dll": {
+            "assemblyVersion": "6.0.0.0",
+            "fileVersion": "6.400.420.21404"
+          }
+        }
+      },
+      "Castle.Core/4.0.0.0": {
+        "runtime": {
+          "Castle.Core.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "4.4.1.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "CodeGenerator/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "AssetTracker/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "DataAccessLayer/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "DomainModel/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Castle.Windsor/5.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "EntityFramework/6.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Castle.Core/4.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

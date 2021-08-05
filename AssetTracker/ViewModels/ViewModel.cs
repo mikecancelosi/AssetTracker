@@ -1,13 +1,9 @@
-﻿using AssetTracker.Model;
+﻿using DataAccessLayer;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AssetTracker.ViewModels
-{   
+{
     public abstract class ViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
@@ -26,7 +22,7 @@ namespace AssetTracker.ViewModels
         /// <summary>
         /// Context reference
         /// </summary>
-        protected TrackerContext context = new TrackerContext();
+        protected GenericUnitOfWork unitOfWork;
 
     }
 }

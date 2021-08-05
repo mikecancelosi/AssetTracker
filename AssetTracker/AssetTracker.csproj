@@ -80,92 +80,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Alert.cs">
-      <DependentUpon>DBO.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Asset.cs">
-      <DependentUpon>DBO.tt</DependentUpon>
-    </Compile>
-    <Compile Include="AssetCategory.cs">
-      <DependentUpon>DBO.tt</DependentUpon>
-    </Compile>
-    <Compile Include="assetGetInformation_Result.cs">
-      <DependentUpon>DBO.tt</DependentUpon>
-    </Compile>
-    <Compile Include="AssetLink.cs">
-      <DependentUpon>DBO.tt</DependentUpon>
-    </Compile>
-    <Compile Include="AssetLinkType.cs">
-      <DependentUpon>DBO.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Change.cs">
-      <DependentUpon>DBO.tt</DependentUpon>
-    </Compile>
     <Compile Include="Services\NavigationObserver.cs" />
-    <Compile Include="DBO.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>DBO.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DBO.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>DBO.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DBO.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>DBO.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="Discussion.cs">
-      <DependentUpon>DBO.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Enums\AlertType.cs" />
-    <Compile Include="Enums\ChangeType.cs" />
     <Compile Include="Extensions\ObservableCollectionExtensions.cs" />
-    <Compile Include="Metadata.cs">
-      <DependentUpon>DBO.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Model\Alert.cs" />
-    <Compile Include="Model\Asset.cs" />
-    <Compile Include="Model\AssetCategory.cs" />
-    <Compile Include="Model\AssetLink.cs" />
-    <Compile Include="Model\Change.cs" />
-    <Compile Include="Model\DatabaseBackedObject.cs" />
-    <Compile Include="Model\Discussion.cs" />
-    <Compile Include="Model\Phase.cs" />
-    <Compile Include="Model\SecPermission.cs" />
-    <Compile Include="Model\SecPermission3.cs" />
-    <Compile Include="Model\SecRole.cs" />
-    <Compile Include="Model\User.cs" />
-    <Compile Include="Model\Violation.cs" />
-    <Compile Include="Phase.cs">
-      <DependentUpon>DBO.tt</DependentUpon>
-    </Compile>
-    <Compile Include="SecPermission.cs">
-      <DependentUpon>DBO.tt</DependentUpon>
-    </Compile>
-    <Compile Include="SecPermission2.cs">
-      <DependentUpon>DBO.tt</DependentUpon>
-    </Compile>
-    <Compile Include="SecPermission3.cs">
-      <DependentUpon>DBO.tt</DependentUpon>
-    </Compile>
-    <Compile Include="SecPermission4.cs">
-      <DependentUpon>DBO.tt</DependentUpon>
-    </Compile>
-    <Compile Include="SecRole.cs">
-      <DependentUpon>DBO.tt</DependentUpon>
-    </Compile>
     <Compile Include="Services\DefaultRepositoryData.cs" />
     <Compile Include="Services\INavigationCoordinator.cs" />
     <Compile Include="Services\NavigationCoordinator.cs" />
-    <Compile Include="Setting.cs">
-      <DependentUpon>DBO.tt</DependentUpon>
-    </Compile>
-    <Compile Include="User.cs">
-      <DependentUpon>DBO.tt</DependentUpon>
-    </Compile>
     <Compile Include="ViewModels\AssetDetailViewModel.cs" />
     <Compile Include="ViewModels\AssetListViewModel.cs" />
     <Compile Include="ViewModels\CategoryEditViewModel.cs" />
@@ -174,7 +93,6 @@
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ProjectSettingsViewModel.cs" />
     <Compile Include="ViewModels\RoleEditViewModel.cs" />
-    <Compile Include="ViewModels\SearchBoxViewModel.cs" />
     <Compile Include="ViewModels\UserDashboardViewModel.cs" />
     <Compile Include="ViewModels\UserEditViewModel.cs" />
     <Compile Include="ViewModels\ViewModel.cs" />
@@ -217,8 +135,6 @@
     <Compile Include="View\Searchbox.xaml.cs">
       <DependentUpon>Searchbox.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\Services\ControlViewModelFactory.cs" />
-    <Compile Include="ViewModels\Services\IControlViewModelFactory.cs" />
     <Compile Include="View\Services\IViewFactory.cs" />
     <Compile Include="View\Services\ViewFactory.cs" />
     <Compile Include="View\UserDashboard.xaml.cs">
@@ -326,14 +242,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EntityDeploy Include="DBO.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>DBO.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>Model</CustomToolNamespace>
-    </EntityDeploy>
-    <None Include="DBO.edmx.diagram">
-      <DependentUpon>DBO.edmx</DependentUpon>
-    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -347,20 +255,15 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="DBO.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>DBO.edmx</DependentUpon>
-      <LastGenOutput>DBO.Context.cs</LastGenOutput>
-      <CustomToolNamespace>AssetTracker.Model</CustomToolNamespace>
-    </Content>
-    <Content Include="DBO.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>DBO.edmx</DependentUpon>
-      <LastGenOutput>DBO.cs</LastGenOutput>
-      <CustomToolNamespace>AssetTracker.Model</CustomToolNamespace>
-    </Content>
+    <ProjectReference Include="..\DataAccessLayer\DataAccessLayer.csproj">
+      <Project>{32e92e03-80bb-4f81-9605-a76de48145d6}</Project>
+      <Name>DataAccessLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DomainModel\DomainModel.csproj">
+      <Project>{6e5f6ca5-49ca-4fe9-8a21-9bec8f0def8b}</Project>
+      <Name>DomainModel</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

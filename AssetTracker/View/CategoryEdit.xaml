@@ -102,7 +102,7 @@
                     <StackPanel x:Name="Breadcrumbs"
                                 Orientation="Horizontal">
                         <Button Content="Project Settings"
-                                Click="NavigateToProjectSettings" />
+                                Command="{Binding NavigateToProjectSettingsCommand}" />
                         <TextBlock Text=">" />
                         <TextBlock Text="{Binding HeadingContent}" />
 

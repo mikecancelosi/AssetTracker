@@ -1,17 +1,13 @@
-﻿using AssetTracker.Enums;
-using AssetTracker.Model;
-using AssetTracker.Services;
+﻿using AssetTracker.Services;
 using AssetTracker.View.Commands;
 using AssetTracker.ViewModels.Interfaces;
+using DataAccessLayer;
+using DomainModel;
+using DomainModel.Enums;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Input;
 
 namespace AssetTracker.ViewModels
@@ -20,33 +16,16 @@ namespace AssetTracker.ViewModels
     {
         public Asset myAsset { get; private set; }
 
-        public List<Metadata> Tags
-        {
-            get
-            {
-                return myAsset.Metadata.Count > 0 ? myAsset.Metadata.ToList() : null;
-            }
-        }
-
+        public List<Metadata> Tags =>  myAsset.Metadata.Count > 0 ? myAsset.Metadata.ToList() : null;
         public List<Change> Changelog { get; set; }
         public ObservableCollection<AssetHierarchyObject> Hierarchy { get; set; }
 
-        public string StatusFilter
-        {
-            get
-            {
-                if (myAsset.AssetCategory != null)
-                {
-                    return "select * from Phase where ph_caid = " + myAsset.AssetCategory.ca_id;
-                }
-                return "";
-            }
-        }
+      
         public List<Discussion> DiscussionBoard
         {
             get
             {
-                return (from d in context.Discussions
+                return (from d in discussionRepo.Get()
                         where (d.di_asid == myAsset.ID
                         && d.di_parentid == null)
                         select d).ToList();
@@ -59,7 +38,7 @@ namespace AssetTracker.ViewModels
         }
 
         //ISavable Properties
-        public bool IsSavable => context.ChangeTracker.HasChanges();
+        public bool IsSavable => unitOfWork.HasChanges;
         public ICommand SaveCommand { get; set; }
         public ICommand RefuseSave { get; set; }
         public List<Violation> SaveViolations { get; set; }
@@ -104,7 +83,8 @@ namespace AssetTracker.ViewModels
             }
             set
             {
-                context.Entry(myAsset).Property(x => x.as_displayname).CurrentValue = value;
+                myAsset.as_displayname = value;
+                assetRepo.Update(myAsset);
                 NotifyPropertyChanged("AssetTitle");
                 NotifyPropertyChanged("IsSavable");
             }
@@ -119,7 +99,8 @@ namespace AssetTracker.ViewModels
             }
             set
             {
-                context.Entry(myAsset).Property(x => x.as_description).CurrentValue = value;
+                myAsset.as_description = value;
+                assetRepo.Update(myAsset);
                 NotifyPropertyChanged("Description");
                 NotifyPropertyChanged("IsSavable");
             }
@@ -130,24 +111,104 @@ namespace AssetTracker.ViewModels
             get => myAsset.AssetCategory;
             set
             {
-                context.Entry(myAsset).Property(x => x.as_caid).CurrentValue = value.ID;
-                context.Entry(myAsset).Property(x => x.as_phid).CurrentValue = null;
                 myAsset.AssetCategory = value;
+                myAsset.Phase = null;
+                assetRepo.Update(myAsset);
                 NotifyPropertyChanged("Category");
                 NotifyPropertyChanged("IsSavable");
                 NotifyPropertyChanged("PhaseTimelineObjects");
             }
         }
 
+        public User AssignedUser
+        {
+            get => myAsset.AssignedToUser;
+            set
+            {
+                myAsset.AssignedToUser = value;
+                assetRepo.Update(myAsset);
+                NotifyPropertyChanged("AssignedUser");
+                NotifyPropertyChanged("IsSavable");
+            }
+        }
+
+        public ObservableCollection<User> Users
+        {
+            get
+            {
+                var results = (from u in usersRepo.Get()
+                               where (u.ID.ToString().Contains(UserAssignedUserFilter ?? "") ||
+                               u.Name.Contains(UserAssignedUserFilter ?? ""))
+                               select u);
+
+                return new ObservableCollection<User>(results);
+            }
+        }
+
+        public ObservableCollection<AssetCategory> Categories
+        {
+            get
+            {
+                var results = (from c in categoryRepo.Get()
+                               where (c.ID.ToString().Contains(CategoryUserFilter ?? "") ||
+                               c.Name.Contains(CategoryUserFilter?? ""))
+                               select c);
+
+                return new ObservableCollection<AssetCategory>(results);
+            }
+        }
+
+        public ObservableCollection<Phase> Phases
+        {
+            get
+            {
+                var results = (from p in phaseRepo.Get()
+                               where p.Category.ca_id == (Category?.ca_id ?? 0) &&
+                               (p.ID.ToString().Contains(PhaseUserFilter ?? "") ||
+                               p.Name.Contains(PhaseUserFilter ?? ""))                               
+                               select p);
+
+                return new ObservableCollection<Phase>(results);
+            }
+        }
+
+        public string UserAssignedUserFilter { get; set; }
+        public string CategoryUserFilter { get; set; }
+        public string PhaseUserFilter { get; set; }
+
         public ICommand DiscussionReplyClicked => new RelayCommand((arr) => CreateNewDiscussio(arr), (arr) => { return true; });
+
+        private GenericRepository<Asset> assetRepo;
+        private GenericRepository<Discussion> discussionRepo;
+        private GenericRepository<Change> changesRepo;
+        private GenericRepository<Alert> alertsRepo;
+        private GenericRepository<Metadata> tagsRepo;
+        private GenericRepository<User> usersRepo;
+        private GenericRepository<Phase> phaseRepo;
+        private GenericRepository<AssetCategory> categoryRepo;
+
+        private User CurrentUser;
 
 
         //TODO : Add back in hierarchy selected command
-        public AssetDetailViewModel(INavigationCoordinator coord)
+        public AssetDetailViewModel(INavigationCoordinator coord, GenericUnitOfWork uow)
         {
             navCoordinator = coord;
             navCoordinator.UserNavigationAttempt += (s) => PromptSave = true;
-            myAsset = context.Assets.Create();
+
+            unitOfWork = uow;
+            assetRepo = unitOfWork.GetRepository<Asset>();
+            discussionRepo = unitOfWork.GetRepository<Discussion>();
+            changesRepo = unitOfWork.GetRepository<Change>();
+            alertsRepo = unitOfWork.GetRepository<Alert>();
+            tagsRepo = unitOfWork.GetRepository<Metadata>();
+            usersRepo = unitOfWork.GetRepository<User>();
+            phaseRepo = unitOfWork.GetRepository<Phase>();
+            categoryRepo = unitOfWork.GetRepository<AssetCategory>();
+
+            CurrentUser = MainViewModel.Instance.CurrentUser;
+
+            myAsset = new Asset();
             Creating = true;
             Cloning = false;
             SaveCommand = new RelayCommand((s) => Save(), (s) => true);
@@ -157,8 +218,8 @@ namespace AssetTracker.ViewModels
 
         public void SetAsset(Asset ast)
         {
-            myAsset = context.Assets.Find(ast.ID);
-            Changelog = (from s in context.Changes
+            myAsset = ast;
+            Changelog = (from s in changesRepo.Get()
                          where s.ch_recid == myAsset.ID
                          orderby s.ch_datetime descending
                          select s).ToList();
@@ -175,18 +236,19 @@ namespace AssetTracker.ViewModels
 
         public void DeleteAsset()
         {
-            myAsset.Delete(context);
+            assetRepo.Delete(myAsset);
+            unitOfWork.Commit();
             navCoordinator.NavigateToAssetList();
         }
 
         #region SetNewValuesFromSearchboxes
         public void ModifyAssignedUser(int userID)
         {
-            User user = context.Users.Find(userID);
+            User user = usersRepo.GetByID(userID);
             if (user != null)
-            {
-                context.Entry(myAsset).Property(x => x.as_usid).CurrentValue = userID;
+            {               
                 myAsset.AssignedToUser = user;
+                usersRepo.Update(user);
                 NotifyPropertyChanged("IsSavable");
                 NotifyPropertyChanged("myAsset");
             }
@@ -194,11 +256,11 @@ namespace AssetTracker.ViewModels
 
         public void ModifyPhase(int phaseID)
         {
-            Phase phase = context.Phases.Find(phaseID);
+            Phase phase = phaseRepo.GetByID(phaseID);
             if (phase != null)
-            {
-                context.Entry(myAsset).Property(x => x.as_phid).CurrentValue = phase.ID;
+            {              
                 myAsset.Phase = phase;
+                assetRepo.Update(myAsset);
                 NotifyPropertyChanged("IsSavable");
                 NotifyPropertyChanged("myAsset");
             }
@@ -206,7 +268,7 @@ namespace AssetTracker.ViewModels
 
         public void ModifyCategory(int catID)
         {
-            AssetCategory cat = context.AssetCategories.Find(catID);
+            AssetCategory cat = categoryRepo.GetByID(catID);
             if (cat != null)
             {
                 Category = cat;
@@ -216,19 +278,27 @@ namespace AssetTracker.ViewModels
 
         public void Save()
         {
-            if (context.Entry(myAsset).State == System.Data.Entity.EntityState.Detached)
-            {
-                context.Assets.Add(myAsset);
-            }
+            assetRepo.Update(myAsset);
 
-            if (myAsset.Save(context, out List<Violation> violations))
+            if (myAsset.IsValid(out List<Violation> violations))
             {
-                NotifyPropertyChanged("IsSavable");
-                NotifyPropertyChanged("Changelog");
-                NotifyPropertyChanged("PhaseTimelineObjects");
+                Asset beforeAsset = assetRepo.GetDBValues(myAsset);
+                List<Change> changesToSave = myAsset.GetChanges(beforeAsset, CurrentUser);
+                List<Alert> alertsToSave = myAsset.GetAlerts(beforeAsset, CurrentUser);
+
+                changesRepo.Insert(changesToSave);
+                alertsRepo.Insert(alertsToSave);
+                unitOfWork.Commit();
+
                 if (navCoordinator.WaitingToNavigate)
                 {
                     navCoordinator.NavigateToQueued();
+                }
+                else
+                {
+                    NotifyPropertyChanged("IsSavable");
+                    NotifyPropertyChanged("Changelog");
+                    NotifyPropertyChanged("PhaseTimelineObjects");
                 }
             }
             else
@@ -237,26 +307,26 @@ namespace AssetTracker.ViewModels
                 NotifyPropertyChanged("Violations");
                 throw new NotImplementedException();
             }
-
         }
 
         #region Tags
         public void DeleteTag(int id)
         {
-            Metadata data = context.Metadata.Find(id);
+            Metadata data = tagsRepo.GetByID(id);
             myAsset.Metadata.Remove(data);
-            context.Metadata.Remove(data);
+            tagsRepo.Delete(data);
             NotifyPropertyChanged("IsSavable");
             NotifyPropertyChanged("Tags");
         }
 
         public void AddMetadata(string text)
         {
-            Metadata dataInst = context.Metadata.Create();
+            Metadata dataInst = new Metadata();
             dataInst.md_asid = myAsset.as_id;
             dataInst.md_value = text;
             myAsset.Metadata.Add(dataInst);
-            context.Metadata.Add(dataInst);
+            assetRepo.Update(myAsset);
+            tagsRepo.Insert(dataInst);
             NotifyPropertyChanged("IsSavable");
             NotifyPropertyChanged("Tags");
         }
@@ -316,7 +386,7 @@ namespace AssetTracker.ViewModels
         {
             if (id != myAsset.ID)
             {
-                Asset newAsset = context.Assets.Find(id);
+                Asset newAsset = assetRepo.GetByID(id);
                 SetAsset(newAsset);
             }
         }
@@ -384,14 +454,14 @@ namespace AssetTracker.ViewModels
             get
             {
                 var phaseTimelineObjects = new List<PhaseTimelineObject>();
-                List<Phase> phases = (from p in context.Phases
+                List<Phase> phases = (from p in phaseRepo.Get()
                                       where p.ph_caid == myAsset.as_caid
                                       orderby p.ph_step ascending
                                       select p).ToList();
 
                 if (phases.Count > 0)
                 {
-                    List<Change> phaseChanges = (from c in context.Changes
+                    List<Change> phaseChanges = (from c in changesRepo.Get()
                                                  where c.ch_recid == myAsset.as_id
                                                  && (c.ch_description == ChangeType.CreatedAsset
                                                  || c.ch_description == ChangeType.ChangedPhase
@@ -441,7 +511,7 @@ namespace AssetTracker.ViewModels
                                     {
                                         Change userAssignChange = userAssignsInPeriod.FirstOrDefault();
                                         int userID = int.Parse(userAssignChange.ch_newvalue);
-                                        User userassigned = context.Users.Find(userID);
+                                        User userassigned = usersRepo.GetByID(userID);
                                         username = userassigned.Name;
                                     }
                                 }
@@ -475,7 +545,7 @@ namespace AssetTracker.ViewModels
             string content = values[1] as string;
             if (content != defaultText && content != "")
             {
-                Discussion newDiscussion = context.Discussions.Create();
+                Discussion newDiscussion = new Discussion();
                 newDiscussion.di_contents = content;
                 newDiscussion.di_date = DateTime.Now;
                 newDiscussion.di_asid = myAsset.ID;
@@ -484,14 +554,14 @@ namespace AssetTracker.ViewModels
                 {
                     newDiscussion.di_parentid = parentID;
 
-                    Discussion parentDiscussion = context.Discussions.Find(parentID);
+                    Discussion parentDiscussion = discussionRepo.GetByID(parentID);
                     int parentUserId = parentDiscussion.di_usid ?? 0;
                     if (parentUserId > 0 &&
                         parentUserId != MainViewModel.Instance.CurrentUser.us_id)
                     {
                         //TODO: Create an alert for all users that have replied on the discussion
-                        User parentUser = context.Users.Find(parentUserId);
-                        Alert newAlert = context.Alerts.Create();
+                        User parentUser = usersRepo.GetByID(parentUserId);
+                        Alert newAlert = new Alert();
                         newAlert.ar_usid = parentDiscussion.di_usid;
                         newAlert.ar_projectwide = false;
                         newAlert.ar_asid = myAsset.as_id;
@@ -500,12 +570,12 @@ namespace AssetTracker.ViewModels
                         newAlert.ar_header = parentUser.us_displayname + " continued the conversation on #" + myAsset.as_id;
                         newAlert.ar_content = content.Substring(0, Math.Min(content.Length, 47)) + "...";
 
-                        context.Alerts.Add(newAlert);
+                        alertsRepo.Insert(newAlert);
                     }
                 }
 
-                context.Discussions.Add(newDiscussion);
-                context.SaveChanges();
+                discussionRepo.Insert(newDiscussion);
+                unitOfWork.Commit();
                 NotifyPropertyChanged("DiscussionBoard");
             }
         }

@@ -1,14 +1,10 @@
-﻿using AssetTracker.Model;
-using AssetTracker.Services;
-using AssetTracker.View;
-using System;
+﻿using AssetTracker.Services;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Text;
 using System.Linq;
 using System.Windows.Input;
 using AssetTracker.View.Commands;
+using DomainModel;
+using DataAccessLayer;
 
 namespace AssetTracker.ViewModels
 {
@@ -18,17 +14,20 @@ namespace AssetTracker.ViewModels
         {
             get
             {
-                return (from a in context.Assets
+                return (from a in assetRepo.Get()
                         select a).ToList();
             }
         }
 
         public ICommand CreateAssetCommand { get; set; }
 
+        private GenericRepository<Asset> assetRepo;
         private readonly INavigationCoordinator navCoordinator;
-        public AssetListViewModel(INavigationCoordinator coord)
+        public AssetListViewModel(INavigationCoordinator coord, GenericUnitOfWork uow)
         {
             navCoordinator = coord;
+            unitOfWork = uow;
+            assetRepo = unitOfWork.GetRepository<Asset>();
             CreateAssetCommand = new RelayCommand((p) => navCoordinator.NavigateToCreateAsset(), (p) => true);
         }
 
@@ -36,8 +35,6 @@ namespace AssetTracker.ViewModels
         {
             navCoordinator.NavigateToAssetDetail(ast);
         }
-
-
 
         #region DeleteAsset
         public Asset CurrentSelectedAsset { get; set; }
@@ -49,7 +46,8 @@ namespace AssetTracker.ViewModels
 
         public void DeleteCurrentlySelectedAsset()
         {
-            CurrentSelectedAsset.Delete(context);
+            assetRepo.Delete(CurrentSelectedAsset);
+            unitOfWork.Commit();
             NotifyPropertyChanged("CurrentSelectedAsset");
             NotifyPropertyChanged("Assets");
         }

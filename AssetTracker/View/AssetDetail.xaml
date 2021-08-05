@@ -8,10 +8,10 @@
       xmlns:converters="clr-namespace:AssetTracker.View.Converters"
       xmlns:prop="clr-namespace:AssetTracker.View.Properties"
       xmlns:materialicons="clr-namespace:MaterialIcons;assembly=MaterialIcons"
-      mc:Ignorable="d"     
+      mc:Ignorable="d"
       d:DataContext="{d:DesignInstance viewmodel:AssetDetailViewModel, IsDesignTimeCreatable=True}">
     <Page.Resources>
-        <ResourceDictionary>            
+        <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary x:Name="DiscussDictionary"
                                     Source="Resources/DiscussionBoardResourceDictionary.xaml" />
@@ -30,11 +30,11 @@
                              Handler="OnModifyTitleOpen_Clicked" />
                 <Setter Property="Foreground"
                         Value="{StaticResource Text_Dark}" />
-                <Style.Triggers>                   
+                <Style.Triggers>
                     <Trigger Property="IsMouseOver"
                              Value="True">
                         <Setter Property="Cursor"
-                                Value="Hand" />                        
+                                Value="Hand" />
                     </Trigger>
                     <Trigger Property="IsMouseOver"
                              Value="False">
@@ -109,7 +109,7 @@
                              Style="{StaticResource EditableText}"
                              Margin="0,40,0,10"
                              FontSize="24"
-                             FontWeight="Bold"/>
+                             FontWeight="Bold" />
 
                 <!--#region Metadata -->
                 <ItemsControl ItemsSource="{Binding Tags}"
@@ -197,7 +197,7 @@
                         Padding="5"
                         BorderThickness="2"
                         BorderBrush="{StaticResource Text_Dark}"
-                        HorizontalAlignment="Left"                       
+                        HorizontalAlignment="Left"
                         VerticalAlignment="Center"
                         Click="OnMetadataAdd_Clicked"
                         Visibility="{Binding Tags.Count, Converter={StaticResource nullToVizConverter}}"
@@ -217,7 +217,7 @@
 
 
                 <!--#endregion-->
-                
+
                 <TextBlock Text="{Binding Description}"
                            Style="{StaticResource EditableText}"
                            Foreground="White"
@@ -236,7 +236,8 @@
                             <Border x:Name="HierarchyBorder"
                                     Padding="{Binding marginFactor}"
                                     Tag="{Binding asset.as_id}"
-                                    Cursor="Hand" MouseUp="HierarchyObject_MouseUp">
+                                    Cursor="Hand"
+                                    MouseUp="HierarchyObject_MouseUp">
 
                                 <Grid>
 
@@ -391,22 +392,32 @@
 
                                 <StackPanel Orientation="Vertical">
                                     <TextBlock Text="Assigned To:" />
-                                    <local:Searchbox x:Name="Searchbox_AssignedTo" />
+                                    <local:Searchbox x:Name="Searchbox_AssignedTo"
+                                                     SelectionChange="Searchbox_AssignedTo_SelectionChange" 
+                                                     Items="{Binding Users}"
+                                                     UserFilter="{Binding UserAssignedUserFilter,Mode=TwoWay}"
+                                                     CurrentSelection="{Binding User}"/>
                                 </StackPanel>
 
                                 <StackPanel  Orientation="Vertical"
                                              Margin="100,0">
                                     <TextBlock Text="Category:"
                                                Foreground="White" />
-                                    <local:Searchbox x:Name="Searchbox_Category" />
+                                    <local:Searchbox x:Name="Searchbox_Category"
+                                                     CurrentSelection="{Binding Category}"
+                                                     Items="{Binding Categories}"
+                                                     UserFilter="{Binding CategoryUserFilter}"
+                                                     SelectionChange="Searchbox_Category_SelectionChange" />
                                 </StackPanel>
 
-                                <StackPanel  Orientation="Vertical">                                    
+                                <StackPanel  Orientation="Vertical">
                                     <TextBlock x:Name="Status_HeaderText"
                                                Text="Current Status:"
                                                IsEnabled="{Binding Category, Converter={StaticResource IsNullInverseConverter}}" />
                                     <local:Searchbox x:Name="Searchbox_Phase"
-                                                     IsEnabled="{Binding ElementName=Status_HeaderText, Path=IsEnabled}" />
+                                                     IsEnabled="{Binding ElementName=Status_HeaderText, Path=IsEnabled}"
+                                                     UserFilter="{Binding PhaseUserFilter}"
+                                                     SelectionChange="Searchbox_Phase_SelectionChange" />
                                 </StackPanel>
                             </StackPanel>
 
@@ -421,10 +432,10 @@
                                     </ItemsPanelTemplate>
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplate>
-                                    <DataTemplate>                                       
-                                        <Border x:Name="PhaseBorder"                                                
+                                    <DataTemplate>
+                                        <Border x:Name="PhaseBorder"
                                                 Margin="0,20,20,20"
-                                                Width="200"                                               
+                                                Width="200"
                                                 CornerRadius="15">
                                             <Border.Style>
                                                 <Style TargetType="Border">
@@ -440,7 +451,7 @@
                                                                      Value="True">
                                                             <Setter Property="Background"
                                                                     Value="#9a6" />
-                                                        </DataTrigger>                                                       
+                                                        </DataTrigger>
 
                                                     </Style.Triggers>
                                                 </Style>
@@ -458,15 +469,15 @@
                                                                FontSize="20"
                                                                VerticalAlignment="Center" />
                                                     <Grid HorizontalAlignment="Right">
-                                                         <Border Background="{StaticResource   Text_Dark}"                                                            
-                                                                 Width="25"
-                                                                 Height="25" />
-                                                        <materialicons:MaterialIcon Icon="ic_check" 
-                                                                                    VerticalAlignment="Center" 
+                                                        <Border Background="{StaticResource   Text_Dark}"
+                                                                Width="25"
+                                                                Height="25" />
+                                                        <materialicons:MaterialIcon Icon="ic_check"
+                                                                                    VerticalAlignment="Center"
                                                                                     HorizontalAlignment="Center"
-                                                                                    Height="40" 
-                                                                                    Margin="0,-10,-10,0" 
-                                                                                    Visibility="{Binding IsCompleted, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                                                                    Height="40"
+                                                                                    Margin="0,-10,-10,0"
+                                                                                    Visibility="{Binding IsCompleted, Converter={StaticResource BooleanToVisibilityConverter}}" />
                                                     </Grid>
 
                                                 </Grid>
@@ -619,12 +630,12 @@
                                  Grid.Column="1"
                                  Grid.Row="0"
                                  Margin="10,0"
-                                 Text="{Binding myAsset.as_displayname}"/>
+                                 Text="{Binding myAsset.as_displayname}" />
                         <TextBlock Text="Description:"
                                    Grid.Column="0"
                                    Grid.Row="1"
                                    Margin="0,10,0,0" />
-                        <TextBox x:Name="EditDescription_Value"                                 
+                        <TextBox x:Name="EditDescription_Value"
                                  Grid.Column="1"
                                  Grid.Row="1"
                                  Width="300"
@@ -632,7 +643,8 @@
                                  TextWrapping="Wrap"
                                  AcceptsTab="True"
                                  AcceptsReturn="True"
-                                 Margin="10" Text="{Binding myAsset.as_description}"/>
+                                 Margin="10"
+                                 Text="{Binding myAsset.as_description}" />
                     </Grid>
                     <StackPanel Orientation="Horizontal"
                                 HorizontalAlignment="Right"
@@ -654,7 +666,7 @@
                                 Padding="5"
                                 BorderThickness="0"
                                 Click="OnModifyTitleSave_Clicked">
-                            
+
                         </Button>
                     </StackPanel>
                 </Grid>
@@ -798,7 +810,7 @@
                                            FontWeight="SemiBold"
                                            FontSize="14" />
                             </Button>
-                        </Border>                       
+                        </Border>
 
                         <Border Margin="0,10,20,0"
                                 Padding="5"

@@ -94,6 +94,7 @@
     <Compile Include="Model\SecRole.cs" />
     <Compile Include="Model\User.cs" />
     <Compile Include="Model\Violation.cs" />
+    <Compile Include="Permission.cs" />
     <Compile Include="Phase.cs">
       <DependentUpon>DBO.tt</DependentUpon>
     </Compile>

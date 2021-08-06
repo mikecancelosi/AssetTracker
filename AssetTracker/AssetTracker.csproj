@@ -85,6 +85,7 @@
     <Compile Include="Services\DefaultRepositoryData.cs" />
     <Compile Include="Services\INavigationCoordinator.cs" />
     <Compile Include="Services\NavigationCoordinator.cs" />
+    <Compile Include="Services\PermissionsManager.cs" />
     <Compile Include="ViewModels\AssetDetailViewModel.cs" />
     <Compile Include="ViewModels\AssetListViewModel.cs" />
     <Compile Include="ViewModels\CategoryEditViewModel.cs" />

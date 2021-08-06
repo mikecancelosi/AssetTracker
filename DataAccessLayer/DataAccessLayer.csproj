@@ -85,6 +85,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="DBO.edmx.diagram">
       <DependentUpon>DBO.edmx</DependentUpon>
     </None>
@@ -97,6 +98,9 @@
       <Project>{6e5f6ca5-49ca-4fe9-8a21-9bec8f0def8b}</Project>
       <Name>DomainModel</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -11,3 +11,4 @@ C:\Users\mikec\Documents\Projects\AssetTrackerProjects\DataAccessLayer\obj\Debug
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\DataAccessLayer\obj\Debug\DataAccessLayer.csproj.CopyComplete
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\DataAccessLayer\obj\Debug\DataAccessLayer.dll
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\DataAccessLayer\obj\Debug\DataAccessLayer.pdb
+C:\Users\mikec\Documents\Projects\AssetTrackerProjects\DataAccessLayer\bin\Debug\DataAccessLayer.dll.config

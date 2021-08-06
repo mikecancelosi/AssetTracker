@@ -56,3 +56,4 @@ C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\As
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\AssetTracker.csproj.GenerateResource.cache
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\AssetTracker.csproj.CoreCompileInputs.cache
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\AssetTracker.csproj.CopyComplete
+C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\bin\Debug\DataAccessLayer.dll.config

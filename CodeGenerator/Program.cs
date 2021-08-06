@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataAccessLayer;
+using System;
 
 namespace CodeGenerator
 {
@@ -6,7 +7,9 @@ namespace CodeGenerator
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            GenericUnitOfWork uow = new GenericUnitOfWork(new TrackerContext());
+
+            PermissionsBuilder.BuildFile(uow);
         }
     }
 }

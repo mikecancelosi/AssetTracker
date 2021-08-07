@@ -151,10 +151,9 @@
                 Value="Bold" />
     </Style>  
     <!--#endregion-->
-    
-    <Style x:Key="AssetList_ListViewItem" TargetType="ListViewItem">
-        <Setter Property="Background"
-                Value="{StaticResource Layer3_Dark}" />
+
+    <Style x:Key="AssetList_ListViewItem"
+           TargetType="ListViewItem">
         <Setter Property="Height"
                 Value="50" />
         <Setter Property="FontWeight"
@@ -305,6 +304,32 @@
            BasedOn="{StaticResource HoverBtn_Content}">
         <Setter Property="Height"
                 Value="40" />
+    </Style>
+
+    <Style TargetType="ToolTip" x:Key="{x:Type ToolTip}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToolTip">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="10" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Rectangle Fill="Transparent"
+                                   Stroke="Transparent"
+                                   RadiusX="4"
+                                   RadiusY="4" />
+                        <Polygon Fill="{StaticResource Accent_Dark}"
+                                 Points="0,10 0,0 15,10 0,10" />
+                        <Border Background="{StaticResource Accent_Dark}"
+                                Padding="5"
+                                Grid.Row="1">
+                            <ContentPresenter />
+                        </Border>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
 

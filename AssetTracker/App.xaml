@@ -18,6 +18,7 @@
             <converters:MatchesUserIDConverter x:Key="MatchUser" />
             <converters:DatetimeToTimeElapsedConverter x:Key="TimeDisplayConv" />
             <converters:IsNullToThicknessConverter x:Key="IsNullToThick" />
+            <converters:InverseVisibilityConverter x:Key="InvertViz" />
 
             <converters:ValueConverterGroup x:Key="MatchUserConv">
                 <converters:MatchesUserIDConverter />

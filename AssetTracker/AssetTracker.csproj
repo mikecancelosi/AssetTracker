@@ -111,6 +111,7 @@
     <Compile Include="View\Converters\BooleanToVizConverter.cs" />
     <Compile Include="View\Converters\DatetimeToTimeElapsedConverter.cs" />
     <Compile Include="View\Converters\InverseBooleanConverter.cs" />
+    <Compile Include="View\Converters\InverseVisibilityConverter.cs" />
     <Compile Include="View\Converters\IsNullConverter.cs" />
     <Compile Include="View\Converters\IsNullToThicknessConverter.cs" />
     <Compile Include="View\Converters\IsNullToVisibilityConverter.cs" />
@@ -274,4 +275,10 @@
     <Error Condition="!Exists('packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
   </Target>
   <Import Project="packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
+  <PropertyGroup>
+    <PreBuildEvent>cd $(SolutionDir)
+cd ..\
+cd CodeGenerator\bin\Debug\net5.0\
+CodeGenerator.exe</PreBuildEvent>
+  </PropertyGroup>
 </Project>

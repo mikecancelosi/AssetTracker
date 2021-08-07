@@ -23,17 +23,30 @@
 
                     <Button Style="{StaticResource HoverBtn}"
                             Command="{Binding CreateAssetCommand}"
-                            Margin="0,0,15,10">
+                            Margin="0,0,15,10"
+                            ToolTipService.ShowOnDisabled="True"
+                            ToolTipService.IsEnabled="{Binding IsEnabled, RelativeSource={RelativeSource Mode=Self},Converter={StaticResource inverseBooleanConverter}}"
+                            IsEnabled="{Binding IsAbleToCreateAsset}">
                         <StackPanel Orientation="Vertical">
                             <materialicons:MaterialIcon Icon="ic_add"
                                                         Style="{StaticResource ListHeaderBtn_Image}" />
                             <TextBlock Text="Add"
                                        Style="{StaticResource ListHeaderBtn_Text}" />
                         </StackPanel>
+                        <Button.ToolTip>
+                            <ToolTip BorderThickness="0">
+                                <TextBlock Text="You do not have permission to create assets"
+                                           Foreground="{StaticResource Text_Dark}" />
+                            </ToolTip>
+                        </Button.ToolTip>
+
                     </Button>
 
                     <Button Style="{StaticResource HoverBtn}"
-                            Click="DeleteAsset_Clicked">
+                            Click="DeleteAsset_Clicked"
+                            ToolTipService.IsEnabled="{Binding IsEnabled, RelativeSource={RelativeSource Mode=Self},Converter={StaticResource inverseBooleanConverter}}"
+                            IsEnabled="{Binding IsAbleToDeleteAsset}"
+                            ToolTipService.ShowOnDisabled="False">
                         <StackPanel Orientation="Vertical"
                                     MouseLeftButtonUp="DeleteAsset_Clicked">
                             <materialicons:MaterialIcon Icon="ic_delete"
@@ -41,6 +54,12 @@
                             <TextBlock Text="Delete"
                                        Style="{StaticResource ListHeaderBtn_Text}" />
                         </StackPanel>
+                        <Button.ToolTip>
+                            <ToolTip BorderThickness="0">
+                                <TextBlock Text="You do not have permission to delete assets"
+                                           Foreground="{StaticResource Text_Dark}" />
+                            </ToolTip>
+                        </Button.ToolTip>
 
                     </Button>
                 </StackPanel>

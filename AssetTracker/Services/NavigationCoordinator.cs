@@ -135,14 +135,14 @@ namespace AssetTracker.Services
         public void NavigateToProjectSettings()
         {
             GenericUnitOfWork uow = new GenericUnitOfWork(new TrackerContext());
-            ProjectSettingsViewModel vm = new ProjectSettingsViewModel(this, uow, roleDeleteStrategy, alertDeleteStrategy, userDeleteStrategy, catDeleteStrategy);
+            ProjectSettingsViewModel vm = new ProjectSettingsViewModel(this, uow, MainViewModel.Instance.CurrentUser, roleDeleteStrategy, alertDeleteStrategy, userDeleteStrategy, catDeleteStrategy);
             RequestNavigationTo(vm);
         }
 
         public void NavigateToAssetList()
         {
             GenericUnitOfWork uow = new GenericUnitOfWork(new TrackerContext());
-            AssetListViewModel vm = new AssetListViewModel(this, uow, assetDeleteStrategy);
+            AssetListViewModel vm = new AssetListViewModel(this, uow, MainViewModel.Instance.CurrentUser, assetDeleteStrategy);
             RequestNavigationTo(vm);
         }
 

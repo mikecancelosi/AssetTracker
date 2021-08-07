@@ -33,15 +33,16 @@ namespace AssetTracker.ViewModels
             }
         }
 
+        #region Commands
         public ICommand CreateRole { get; set; }
         public ICommand CreateCategory { get; set; }
         public ICommand CreateUser { get; set; }
-
         public ICommand CreateAlert => new RelayCommand((s) => CreateNewProjectWideAlert(), (s) => true);
         public ICommand OpenNewAlert => new RelayCommand((s) => PromptNewAlert = true, (s) => true);
         public ICommand CloseNewAlert => new RelayCommand((s) => PromptNewAlert = false, (s) => true);
         public ICommand EditAlertCommand => new RelayCommand((s) => EditAlert(s), (s) => true);
         public ICommand DeleteAlertCommand => new RelayCommand((s) => DeleteAlert(s), (s) => true);
+        #endregion
 
         private bool promptNewAlert;
         public bool PromptNewAlert
@@ -86,20 +87,46 @@ namespace AssetTracker.ViewModels
             Delete
         }
 
+        #region Repositories
         private GenericRepository<User> userRepo;
         private GenericRepository<SecRole> roleRepo;
         private GenericRepository<AssetCategory> categoryRepo;
         private GenericRepository<Alert> alertRepo;
         private GenericRepository<SecPermission3> roleOverrideRepo;
+        #endregion
 
+        #region DeleteStrategies
         private IDeleteStrategy<SecRole> secRoleDeleteStrategy;
         private IDeleteStrategy<Alert> alertDeleteStrategy;
         private IDeleteStrategy<AssetCategory> catDeleteStrategy;
         private IDeleteStrategy<User> userDeleteStrategy;
+        #endregion
+
+        #region Permissions
+        public bool UserCanCreateUsers => PermissionsManager.HasPermission(LoggedInUser, Permission.CreateUser, unitOfWork);
+        public bool UserCanDeleteUsers => PermissionsManager.HasPermission(LoggedInUser, Permission.DeleteUser, unitOfWork);
+        public bool UserCanEditUsers => PermissionsManager.HasPermission(LoggedInUser, Permission.EditUser, unitOfWork);
+        public bool UserCanCloneUsers => PermissionsManager.HasPermission(LoggedInUser, Permission.CloneUser, unitOfWork);
+        public bool UserCanCreateRoles => PermissionsManager.HasPermission(LoggedInUser, Permission.CreateUserRole, unitOfWork);
+        public bool UserCanDeleteRoles => PermissionsManager.HasPermission(LoggedInUser, Permission.DeleteUserRole, unitOfWork);
+        public bool UserCanEditRoles => PermissionsManager.HasPermission(LoggedInUser, Permission.ModifyUserRole, unitOfWork);
+        public bool UserCanCloneRoles => PermissionsManager.HasPermission(LoggedInUser, Permission.CloneUserRole, unitOfWork);
+        public bool UserCanCreateCategories => PermissionsManager.HasPermission(LoggedInUser, Permission.CreateAssetCategory, unitOfWork);
+        public bool UserCanDeleteCategories => PermissionsManager.HasPermission(LoggedInUser, Permission.DeleteAssetCategory, unitOfWork);
+        public bool UserCanEditCategories => PermissionsManager.HasPermission(LoggedInUser, Permission.ModifyAssetCategory, unitOfWork);
+        public bool UserCanCloneCategories => PermissionsManager.HasPermission(LoggedInUser, Permission.CloneAssetCategory, unitOfWork);
+        public bool UserCanPostAlerts => PermissionsManager.HasPermission(LoggedInUser, Permission.CreateAlert, unitOfWork);
+        public bool UserCanEditAlerts => PermissionsManager.HasPermission(LoggedInUser, Permission.ModifyAlert, unitOfWork);
+        public bool UserCanDeleteAlerts => PermissionsManager.HasPermission(LoggedInUser, Permission.DeleteAlert, unitOfWork);
+        #endregion
+
+
+        private User LoggedInUser;
 
         private readonly INavigationCoordinator navCoordinator;
         public ProjectSettingsViewModel(INavigationCoordinator coord, 
                                         GenericUnitOfWork uow,
+                                        User loggedInUser,
                                         IDeleteStrategy<SecRole> roleDeleteStrat,
                                         IDeleteStrategy<Alert> alertDeleteStrat,
                                         IDeleteStrategy<User> userDeleteStrat,
@@ -107,6 +134,7 @@ namespace AssetTracker.ViewModels
         {
             navCoordinator = coord;
             unitOfWork = uow;
+            LoggedInUser = loggedInUser;
 
             userRepo = unitOfWork.GetRepository<User>();
             roleRepo = unitOfWork.GetRepository<SecRole>();

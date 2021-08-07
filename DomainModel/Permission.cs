@@ -49,6 +49,39 @@ namespace DomainModel
 		[Description("Post Discussion")]
 		PostDiscussion = 13,
 
+		[Description("Edit User")]
+		EditUser = 14,
+
+		[Description("Clone User")]
+		CloneUser = 15,
+
+		[Description("Clone User Role")]
+		CloneUserRole = 16,
+
+		[Description("Delete User Role")]
+		DeleteUserRole = 17,
+
+		[Description("Delete Asset Category")]
+		DeleteAssetCategory = 18,
+
+		[Description("Clone Asset Category")]
+		CloneAssetCategory = 19,
+
+		[Description("Create Asset Category")]
+		CreateAssetCategory = 20,
+
+		[Description("Create User Role")]
+		CreateUserRole = 21,
+
+		[Description("Create Alert")]
+		CreateAlert = 22,
+
+		[Description("Modify Alert")]
+		ModifyAlert = 23,
+
+		[Description("Delete Alert")]
+		DeleteAlert = 24,
+
 	}
 	#endregion
 }

@@ -58,7 +58,8 @@
                                     CornerRadius="5"
                                     RenderTransformOrigin="0.5,0.5"
                                     Margin="1,1,1,1"
-                                    Background="White">
+                                    Background="White"
+                                    Cursor="Hand">
                                 <Border.RenderTransform>
                                     <TransformGroup>
                                         <ScaleTransform ScaleX="1"
@@ -134,7 +135,7 @@
                                             <CheckBox  x:Name="PermissionCheck"
                                                        HorizontalAlignment="Right"
                                                        IsChecked="{Binding Allowed}"
-                                                       Style="{StaticResource PermissionsCheckbox}"/>
+                                                       Style="{StaticResource PermissionsCheckbox}" />
                                         </Grid>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>

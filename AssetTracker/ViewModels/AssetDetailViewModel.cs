@@ -20,7 +20,6 @@ namespace AssetTracker.ViewModels
         public List<Metadata> Tags =>  myAsset.Metadata.Count > 0 ? myAsset.Metadata.ToList() : null;
         public List<Change> Changelog { get; set; }
         public ObservableCollection<AssetHierarchyObject> Hierarchy { get; set; }
-
       
         public List<Discussion> DiscussionBoard
         {
@@ -147,7 +146,6 @@ namespace AssetTracker.ViewModels
                 NotifyPropertyChanged("IsSavable");
             }
         }
-
       
         public List<DatabaseBackedObject> Users
         {
@@ -187,6 +185,10 @@ namespace AssetTracker.ViewModels
         private GenericRepository<User> usersRepo;
         private GenericRepository<Phase> phaseRepo;
         private GenericRepository<AssetCategory> categoryRepo;
+
+        #region Permissions
+        public bool UserCanDeleteAssets => PermissionsManager.HasPermission(CurrentUser, Permission.DeleteAsset, unitOfWork);
+        #endregion
 
         private User CurrentUser;
 

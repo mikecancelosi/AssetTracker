@@ -61,7 +61,7 @@
                          TextChanged="InputText_TextChanged" />
 
                 
-                <materialicons:MaterialIcon Icon="ic_search" Foreground="{StaticResource Text_Dark}" HorizontalAlignment="Right">
+                <materialicons:MaterialIcon Icon="ic_search" HorizontalAlignment="Right">
                     <materialicons:MaterialIcon.Resources>
                         <Style TargetType="materialicons:MaterialIcon">
                             <Style.Triggers>

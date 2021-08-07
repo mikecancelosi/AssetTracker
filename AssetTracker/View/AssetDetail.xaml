@@ -83,7 +83,8 @@
                         </Button>
 
                         <Button Style="{StaticResource HoverBtn}"
-                                Height="30">
+                                Height="30"
+                                IsEnabled="{Binding UserCanDeleteAssets}">
                             <Button.Triggers>
                                 <EventTrigger RoutedEvent="Button.Click">
                                     <BeginStoryboard>

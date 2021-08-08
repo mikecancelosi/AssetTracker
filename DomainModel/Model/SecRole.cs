@@ -23,9 +23,14 @@ namespace DomainModel
         }
 
         public override bool IsValid(out List<Violation> violations)
-        {
-            violations = new List<Violation>();
+        {          
             base.IsValid(out violations);
+
+            if(ro_name == "")
+            {
+                violations.Add(new Violation("You need to set the role name!", "ro_name"));
+            }
+
             return violations.Count() == 0;
         }      
     }

@@ -1,5 +1,6 @@
 ﻿using AssetTracker.Services;
 using AssetTracker.View.Commands;
+using AssetTracker.View.Services;
 using AssetTracker.ViewModels.Interfaces;
 using DataAccessLayer;
 using DataAccessLayer.Strategies;
@@ -15,12 +16,13 @@ namespace AssetTracker.ViewModels
 {
     public class AssetDetailViewModel : ViewModel, ISavable
     {
+        #region ModelAccessors
         public Asset myAsset { get; private set; }
-
-        public List<Metadata> Tags =>  myAsset.Metadata.Count > 0 ? myAsset.Metadata.ToList() : null;
+        public List<Metadata> Tags => myAsset.Metadata.Count > 0 ? myAsset.Metadata.ToList() : null;
         public List<Change> Changelog { get; set; }
-        public ObservableCollection<AssetHierarchyObject> Hierarchy { get; set; }
-      
+        public List<AssetHierachyObjectBuilder.AssetHierarchyObject> Hierarchy => AssetHierachyObjectBuilder.CreateHierarchy(myAsset);
+        private Asset QueuedHierarchyObject;
+        
         public List<Discussion> DiscussionBoard
         {
             get
@@ -37,29 +39,6 @@ namespace AssetTracker.ViewModels
             }
         }
 
-        //ISavable Properties
-        public bool IsSavable => unitOfWork.HasChanges;
-        public ICommand SaveCommand { get; set; }
-        public ICommand RefuseSave { get; set; }
-        public List<Violation> SaveViolations { get; set; }
-        public INavigationCoordinator navCoordinator { get; set; }
-        private IDeleteStrategy<Asset> assetDeleteStrategy;
-        private IDeleteStrategy<Metadata> tagDeleteStrategy;
-        private bool promptSave;
-        public bool PromptSave
-        {
-            get => promptSave;
-            set
-            {
-                promptSave = value;
-                NotifyPropertyChanged("PromptSave");
-            }
-        }
-
-        public ICommand DeleteConfirmed { get; set; }
-
-        private bool Creating;
-        private bool Cloning;
         public string HeadingText
         {
             get
@@ -146,13 +125,13 @@ namespace AssetTracker.ViewModels
                 NotifyPropertyChanged("IsSavable");
             }
         }
-      
+
         public List<DatabaseBackedObject> Users
         {
             get
             {
-               return (from u in usersRepo.Get()
-                               select u).ToList<DatabaseBackedObject>();               
+                return (from u in usersRepo.Get()
+                        select u).ToList<DatabaseBackedObject>();
             }
         }
 
@@ -160,8 +139,8 @@ namespace AssetTracker.ViewModels
         {
             get
             {
-                return (from c in categoryRepo.Get()                              
-                               select c).ToList<DatabaseBackedObject>();
+                return (from c in categoryRepo.Get()
+                        select c).ToList<DatabaseBackedObject>();
             }
         }
 
@@ -169,14 +148,99 @@ namespace AssetTracker.ViewModels
         {
             get
             {
-               return (from p in phaseRepo.Get()
-                               where p.Category.ca_id == (Category?.ca_id ?? 0)         
-                               select p).ToList<DatabaseBackedObject>();
+                return (from p in phaseRepo.Get()
+                        where p.Category.ca_id == (Category?.ca_id ?? 0)
+                        select p).ToList<DatabaseBackedObject>();
             }
         }
+        #endregion
 
-        public ICommand DiscussionReplyClicked => new RelayCommand((arr) => CreateNewDiscussio(arr), (arr) => { return true; });
+        #region ViewState
+        /// <summary>
+        /// Is myAsset a new asset we are generating?
+        /// </summary>
+        private bool Creating;
+        /// <summary>
+        /// Are we just copying a prexisting asset
+        /// </summary>
+        private bool Cloning;
+        #endregion
 
+        #region ISavable Properties
+        /// <summary>
+        /// If the user has made changes we can save them
+        /// </summary>
+        public bool IsSavable => unitOfWork.HasChanges;
+        /// <summary>
+        /// When the user has determined to save, this command should execute save
+        /// </summary>
+        public ICommand SaveCommand => new RelayCommand((s) => Save(), (s) => true);
+        /// <summary>
+        /// When user rejects a save after selecting to navigate away, we just ignore changes and continue navigation
+        /// </summary>
+        public ICommand RefuseSave => new RelayCommand((s) => SaveRefused(), (s) => true);
+        /// <summary>
+        /// Denotes any violations found when attempting to save.
+        /// </summary>
+        public List<Violation> SaveViolations { get; set; }
+        /// <summary>
+        /// Nav coordinator to use to navigate away from the current view
+        /// </summary>
+        public INavigationCoordinator navCoordinator { get; set; }
+
+        /// <summary>
+        /// Should the user be prompted to save
+        /// </summary>
+        private bool promptSave;
+        /// <summary>
+        /// Should the user be prompted to save
+        /// </summary>
+        public bool PromptSave
+        {
+            get => promptSave;
+            set
+            {
+                promptSave = value;
+                NotifyPropertyChanged("PromptSave");
+            }
+        }
+        #endregion
+
+        #region Delete Properties    
+        private bool promptDelete;
+        public bool PromptDelete
+        {
+            get => promptDelete;
+            set
+            {
+                promptDelete = value;
+                NotifyPropertyChanged("PromptDelete");
+            }
+        }
+        /// <summary>
+        /// The user has selected to delete, we need them to confirm before deleting.
+        /// </summary>
+        public ICommand PromptDeleteCommand => new RelayCommand((s) => PromptDelete = true, (s) => true);
+        /// <summary>
+        /// Deletion was confirmed, progress to delete.
+        /// </summary>
+        public ICommand DeleteConfirmed => new RelayCommand((s) => DeleteAsset(), (s) => true);
+        /// <summary>
+        /// Deletion was rejected, hide the prompt
+        /// </summary>
+        public ICommand DeleteCancelled => new RelayCommand((s) =>  PromptDelete = false, (s) => true);
+        /// <summary>
+        /// Strategy to handle deleting the asset
+        /// </summary>
+        private IDeleteStrategy<Asset> assetDeleteStrategy;
+        /// <summary>
+        /// Strategy to handle deleting a tag.
+        /// </summary>
+        private IDeleteStrategy<Metadata> tagDeleteStrategy;
+
+        #endregion
+
+        #region Repositories
         private GenericRepository<Asset> assetRepo;
         private GenericRepository<Discussion> discussionRepo;
         private GenericRepository<Change> changesRepo;
@@ -185,23 +249,31 @@ namespace AssetTracker.ViewModels
         private GenericRepository<User> usersRepo;
         private GenericRepository<Phase> phaseRepo;
         private GenericRepository<AssetCategory> categoryRepo;
+        #endregion
+
+        /// <summary>
+        /// User currently logged in
+        /// </summary>
+        private User CurrentUser;
+
+        /// <summary>
+        /// Command when a discussion reply, or a new discussion was made.
+        /// </summary>
+        public ICommand DiscussionReplyClicked => new RelayCommand((arr) => CreateNewDiscussio(arr), (arr) => { return true; });
 
         #region Permissions
         public bool UserCanDeleteAssets => PermissionsManager.HasPermission(CurrentUser, Permission.DeleteAsset, unitOfWork);
         #endregion
 
-        private User CurrentUser;
-
-
-        //TODO : Add back in hierarchy selected command
         public AssetDetailViewModel(INavigationCoordinator coord, GenericUnitOfWork uow, IDeleteStrategy<Asset> assetDeleteStrat, IDeleteStrategy<Metadata> tagDeleteStrat)
         {
             navCoordinator = coord;
             assetDeleteStrategy = assetDeleteStrat;
             tagDeleteStrategy = tagDeleteStrat;
+            unitOfWork = uow;
+
             navCoordinator.UserNavigationAttempt += (s) => PromptSave = true;
 
-            unitOfWork = uow;
             assetRepo = unitOfWork.GetRepository<Asset>();
             discussionRepo = unitOfWork.GetRepository<Discussion>();
             changesRepo = unitOfWork.GetRepository<Change>();
@@ -216,15 +288,16 @@ namespace AssetTracker.ViewModels
             myAsset = new Asset();
             Creating = true;
             Cloning = false;
-            SaveCommand = new RelayCommand((s) => Save(), (s) => true);
-            RefuseSave = new RelayCommand((s) => navCoordinator.NavigateToQueued(), (s) => true);
-            DeleteConfirmed = new RelayCommand((s) => DeleteAsset(), (s) => true);
 
             NotifyPropertyChanged("Users");
             NotifyPropertyChanged("Categories");
             NotifyPropertyChanged("Phases");
         }
 
+        /// <summary>
+        /// Change the asset this viewmodel is bound to
+        /// </summary>
+        /// <param name="ast">Asset to set the viewmodel to</param>
         public void SetAsset(Asset ast)
         {
             myAsset = assetRepo.GetByID(ast.ID);
@@ -234,62 +307,37 @@ namespace AssetTracker.ViewModels
                          select s).ToList();
             Creating = false;
             Cloning = ast.ID == 0;
+            unitOfWork.Rollback();
 
             NotifyPropertyChanged("myAsset");
             NotifyPropertyChanged("Changelog");
             NotifyPropertyChanged("DiscussionBoard");
-            NotifyPropertyChanged("myAsset");
+            NotifyPropertyChanged("AssetTitle");
             NotifyPropertyChanged("Tags");
             NotifyPropertyChanged("Users");
             NotifyPropertyChanged("Categories");
             NotifyPropertyChanged("Phases");
-            SetHierarchy();
+            NotifyPropertyChanged("Hierarchy");
+            NotifyPropertyChanged("IsSavable");
+            NotifyPropertyChanged("PhaseTimelineObjects");
         }
 
+        /// <summary>
+        /// Delete this asset and navigate back to the asset list
+        /// </summary>
         public void DeleteAsset()
         {
             assetDeleteStrategy.Delete(unitOfWork, myAsset);
             unitOfWork.Commit();
             navCoordinator.NavigateToAssetList();
-        }
+        }       
 
-        #region SetNewValuesFromSearchboxes
-        public void ModifyAssignedUser(int userID)
-        {
-            User user = usersRepo.GetByID(userID);
-            if (user != null)
-            {               
-                myAsset.AssignedToUser = user;
-                usersRepo.Update(user);
-                NotifyPropertyChanged("IsSavable");
-                NotifyPropertyChanged("myAsset");
-            }
-        }
-
-        public void ModifyPhase(int phaseID)
-        {
-            Phase phase = phaseRepo.GetByID(phaseID);
-            if (phase != null)
-            {              
-                myAsset.Phase = phase;
-                assetRepo.Update(myAsset);
-                NotifyPropertyChanged("IsSavable");
-                NotifyPropertyChanged("myAsset");
-            }
-        }
-
-        public void ModifyCategory(int catID)
-        {
-            AssetCategory cat = categoryRepo.GetByID(catID);
-            if (cat != null)
-            {
-                Category = cat;
-            }
-        }
-        #endregion
-
+        /// <summary>
+        /// Save this asset, if valid
+        /// </summary>
         public void Save()
         {
+            PromptSave = false;
             assetRepo.Update(myAsset);
 
             if (myAsset.IsValid(out List<Violation> violations))
@@ -311,6 +359,12 @@ namespace AssetTracker.ViewModels
                     NotifyPropertyChanged("IsSavable");
                     NotifyPropertyChanged("Changelog");
                     NotifyPropertyChanged("PhaseTimelineObjects");
+
+                    if(QueuedHierarchyObject != null)
+                    {
+                        SetAsset(QueuedHierarchyObject);
+                        QueuedHierarchyObject = null;
+                    }
                 }
             }
             else
@@ -321,7 +375,29 @@ namespace AssetTracker.ViewModels
             }
         }
 
+        /// <summary>
+        /// When the user has been prompted to save and refuses, we either want to navigate away or change the asset
+        /// </summary>
+        private void SaveRefused()
+        {
+            PromptSave = false;
+
+            if (QueuedHierarchyObject != null)
+            {
+                SetAsset(QueuedHierarchyObject);
+                QueuedHierarchyObject = null;
+            }
+            else
+            {
+                navCoordinator.NavigateToQueued();
+            }
+        }
+
         #region Tags
+        /// <summary>
+        /// Delete the selected tag
+        /// </summary>
+        /// <param name="id"></param>
         public void DeleteTag(int id)
         {
             Metadata data = tagsRepo.GetByID(id);
@@ -332,7 +408,11 @@ namespace AssetTracker.ViewModels
             NotifyPropertyChanged("Tags");
         }
 
-        public void AddMetadata(string text)
+        /// <summary>
+        /// Add new tag with given text to this asset
+        /// </summary>
+        /// <param name="text">Text to set the new tag to use</param>
+        public void AddTag(string text)
         {
             Metadata dataInst = new Metadata();
             dataInst.md_asid = myAsset.as_id;
@@ -344,67 +424,27 @@ namespace AssetTracker.ViewModels
             NotifyPropertyChanged("Tags");
         }
         #endregion
-
-        #region Hierarchy
-        public struct AssetHierarchyObject
-        {
-            public Asset asset { get; set; }
-            public int level { get; set; }
-            public System.Windows.Thickness marginFactor => new System.Windows.Thickness(level * 10, 0, 0, 10);
-            public bool currentObject { get; set; }
-        }
-
-
-        private void SetHierarchy()
-        {
-            if (Hierarchy == null)
-            {
-                Hierarchy = new ObservableCollection<AssetHierarchyObject>();
-            }
-
-            Hierarchy.Clear();
-
-            Asset parentAsset = myAsset;
-            while (parentAsset.Parent != null)
-            {
-                parentAsset = parentAsset.Parent;
-            }
-
-            if (parentAsset.Children.Count > 0)
-            {
-                CreateHierarchyFromParent(parentAsset, 0).ForEach(x => Hierarchy.Add(x));
-            }
-            NotifyPropertyChanged("Hierarchy");
-        }
-
-        private List<AssetHierarchyObject> CreateHierarchyFromParent(Asset refAsset, int level)
-        {
-            List<AssetHierarchyObject> objectList = new List<AssetHierarchyObject>();
-            objectList.Add(new AssetHierarchyObject()
-            {
-                asset = refAsset,
-                level = level,
-                currentObject = refAsset.ID == myAsset.ID
-            });
-
-            foreach (Asset child in refAsset.Children)
-            {
-                objectList.AddRange(CreateHierarchyFromParent(child, level + 1));
-            }
-
-            return objectList;
-        }
-
+        
+        /// <summary>
+        /// When a hierarchy object is selected, we want to change the current asset to the new one.
+        /// </summary>
+        /// <param name="id">ID of the selected asset.</param>
         public void OnHierarchyAssetSelected(int id)
-        {
+        {       
             if (id != myAsset.ID)
             {
                 Asset newAsset = assetRepo.GetByID(id);
-                SetAsset(newAsset);
+                if (IsSavable)
+                {
+                    PromptSave = true;
+                    QueuedHierarchyObject = newAsset;
+                }
+                else
+                {                   
+                    SetAsset(newAsset);
+                }
             }
         }
-
-        #endregion
 
         #region PhaseTimeline
         public struct PhaseTimelineObject
@@ -550,47 +590,49 @@ namespace AssetTracker.ViewModels
 
         #endregion
 
+        /// <summary>
+        /// We are either creating a brand new dicussion or replying to an existing one
+        /// </summary>
+        /// <param name="input">array object holding parent ID and discussion content</param>
         public void CreateNewDiscussio(object input)
         {
-            string defaultText = "Start a new discussion..";
             object[] values = input as object[];
             int parentID = (int)values[0];
             string content = values[1] as string;
-            if (content != defaultText && content != "")
+
+            Discussion newDiscussion = new Discussion();
+            newDiscussion.di_contents = content;
+            newDiscussion.di_date = DateTime.Now;
+            newDiscussion.di_asid = myAsset.ID;
+            newDiscussion.di_usid = MainViewModel.Instance.CurrentUser.us_id;
+            if (parentID > 0)
             {
-                Discussion newDiscussion = new Discussion();
-                newDiscussion.di_contents = content;
-                newDiscussion.di_date = DateTime.Now;
-                newDiscussion.di_asid = myAsset.ID;
-                newDiscussion.di_usid = MainViewModel.Instance.CurrentUser.us_id;
-                if (parentID > 0)
+                newDiscussion.di_parentid = parentID;
+
+                Discussion parentDiscussion = discussionRepo.GetByID(parentID);
+                int parentUserId = parentDiscussion.di_usid ?? 0;
+                if (parentUserId > 0 &&
+                    parentUserId != MainViewModel.Instance.CurrentUser.us_id)
                 {
-                    newDiscussion.di_parentid = parentID;
+                    //TODO: Create an alert for all users that have replied on the discussion
+                    User parentUser = usersRepo.GetByID(parentUserId);
+                    Alert newAlert = new Alert();
+                    newAlert.ar_usid = parentDiscussion.di_usid;
+                    newAlert.ar_projectwide = false;
+                    newAlert.ar_asid = myAsset.as_id;
+                    newAlert.ar_date = DateTime.Now;
+                    newAlert.ar_type = AlertType.DiscussionReply;
+                    newAlert.ar_header = parentUser.us_displayname + " continued the conversation on #" + myAsset.as_id;
+                    newAlert.ar_content = content.Substring(0, Math.Min(content.Length, 47)) + "...";
 
-                    Discussion parentDiscussion = discussionRepo.GetByID(parentID);
-                    int parentUserId = parentDiscussion.di_usid ?? 0;
-                    if (parentUserId > 0 &&
-                        parentUserId != MainViewModel.Instance.CurrentUser.us_id)
-                    {
-                        //TODO: Create an alert for all users that have replied on the discussion
-                        User parentUser = usersRepo.GetByID(parentUserId);
-                        Alert newAlert = new Alert();
-                        newAlert.ar_usid = parentDiscussion.di_usid;
-                        newAlert.ar_projectwide = false;
-                        newAlert.ar_asid = myAsset.as_id;
-                        newAlert.ar_date = DateTime.Now;
-                        newAlert.ar_type = AlertType.DiscussionReply;
-                        newAlert.ar_header = parentUser.us_displayname + " continued the conversation on #" + myAsset.as_id;
-                        newAlert.ar_content = content.Substring(0, Math.Min(content.Length, 47)) + "...";
-
-                        alertsRepo.Insert(newAlert);
-                    }
+                    alertsRepo.Insert(newAlert);
                 }
-
-                discussionRepo.Insert(newDiscussion);
-                unitOfWork.Commit();
-                NotifyPropertyChanged("DiscussionBoard");
             }
+
+            discussionRepo.Insert(newDiscussion);
+            unitOfWork.Commit();
+            NotifyPropertyChanged("DiscussionBoard");
+
         }
 
     }

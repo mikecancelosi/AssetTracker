@@ -174,7 +174,7 @@
                                                 Width="200">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <Grid Margin="30,0">
+                                            <Grid>
                                                 <StackPanel Orientation="Horizontal">
                                                     <Button Style="{StaticResource HoverBtn }"
                                                             Tag="copy"
@@ -283,7 +283,7 @@
                                                 Width="200">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <Grid Margin="30,0">
+                                            <Grid>
                                                 <StackPanel Orientation="Horizontal">
                                                     <Button Style="{StaticResource HoverBtn }"
                                                             Tag="copy"
@@ -390,7 +390,7 @@
                                                 Width="200">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <Grid Margin="30,0">
+                                            <Grid>
                                                 <StackPanel Orientation="Horizontal">
                                                     <Button Style="{StaticResource HoverBtn }"
                                                             Tag="copy"

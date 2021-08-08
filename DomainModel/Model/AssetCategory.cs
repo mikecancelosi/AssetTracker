@@ -33,9 +33,14 @@ namespace DomainModel
         }
 
         public override bool IsValid(out List<Violation> violations)
-        {
-            violations = new List<Violation>();
+        {         
             base.IsValid(out violations);
+
+            if(ca_name == "" )
+            {
+                violations.Add(new Violation("You need to set a name!", "ca_name"));
+            }
+
             return violations.Count() == 0;
         }
     }

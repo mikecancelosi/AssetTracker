@@ -84,20 +84,8 @@
 
                         <Button Style="{StaticResource HoverBtn}"
                                 Height="30"
-                                IsEnabled="{Binding UserCanDeleteAssets}">
-                            <Button.Triggers>
-                                <EventTrigger RoutedEvent="Button.Click">
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DeletePrompt"
-                                                                           Storyboard.TargetProperty="Visibility">
-                                                <DiscreteObjectKeyFrame KeyTime="0:0:0"
-                                                                        Value="{x:Static Visibility.Visible}" />
-                                            </ObjectAnimationUsingKeyFrames>
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </EventTrigger>
-                            </Button.Triggers>
+                                IsEnabled="{Binding UserCanDeleteAssets}"
+                                Command="{Binding PromptDeleteCommand}">
                             <materialicons:MaterialIcon Icon="ic_delete"
                                                         Style="{StaticResource HoverBtn_Content}" />
                         </Button>
@@ -414,7 +402,7 @@
                                     <local:Searchbox x:Name="Searchbox_Phase"
                                                      IsEnabled="{Binding ElementName=Status_HeaderText, Path=IsEnabled}"                                                    
                                                      Items="{Binding Phases}"
-                                                     CurrentSelection="{Binding CurrentPhase}" />
+                                                     CurrentSelection="{Binding CurrentPhase,Mode=TwoWay}" />
                                 </StackPanel>
                             </StackPanel>
 
@@ -747,7 +735,7 @@
             <!--#endregion-->
 
             <Border x:Name="DeletePrompt"
-                    Visibility="Collapsed"
+                    Visibility="{Binding PromptDelete, Converter={StaticResource BooleanToVisibilityConverter}}"
                     Background="{StaticResource Overlay}"
                     VerticalAlignment="Center"
                     HorizontalAlignment="Center"
@@ -814,20 +802,9 @@
                                 BorderThickness="5"
                                 BorderBrush="{StaticResource RejectOverlay_Dark}"
                                 Width="150">
-                            <Button Style="{StaticResource HoverBtn}">
-                                <Button.Triggers>
-                                    <EventTrigger RoutedEvent="Button.Click">
-                                        <BeginStoryboard>
-                                            <Storyboard>
-                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DeletePrompt"
-                                                                               Storyboard.TargetProperty="Visibility">
-                                                    <DiscreteObjectKeyFrame KeyTime="0:0:0"
-                                                                            Value="{x:Static Visibility.Collapsed}" />
-                                                </ObjectAnimationUsingKeyFrames>
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </EventTrigger>
-                                </Button.Triggers>
+                            <Button Style="{StaticResource HoverBtn}"
+                                    Command="{Binding DeleteCancelled}">
+                                
                                 <TextBlock Text="Cancel"
                                            Style="{StaticResource HoverBtn_TextContent}"
                                            HorizontalAlignment="Center"

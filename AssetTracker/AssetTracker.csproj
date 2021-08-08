@@ -80,6 +80,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="View\Services\AssetHierachyObjectBuilder.cs" />
     <Compile Include="Services\NavigationObserver.cs" />
     <Compile Include="Extensions\ObservableCollectionExtensions.cs" />
     <Compile Include="Services\DefaultRepositoryData.cs" />

@@ -62,7 +62,7 @@ namespace AssetTracker.View
         /// </summary>
         private void AddTagConfirm_Clicked(object sender, RoutedEventArgs e)
         {
-            VM.AddMetadata(TagAdd_Content.Text);
+            VM.AddTag(TagAdd_Content.Text);
             TagAdd_Content.Text = "";
             TagAdd_Window.Visibility = Visibility.Collapsed;
         }

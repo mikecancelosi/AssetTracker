@@ -25,8 +25,23 @@ namespace DomainModel
 
         public override bool IsValid(out List<Violation> violations)
         {
-            violations = new List<Violation>();
             base.IsValid(out violations);
+
+            if(us_password == "")
+            {
+                violations.Add(new Violation("You need to set this user's password!", "us_password"));
+            }
+
+            if(us_roid <= 0)
+            {
+                violations.Add(new Violation("You need to set this user's role!", "us_roid"));
+            }
+
+            if(us_displayname == "")
+            {
+                violations.Add(new Violation("You need to set this user's displayname!", "us_displayname"));
+            }
+
             return violations.Count() == 0;
         }       
 

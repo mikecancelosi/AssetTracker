@@ -93,7 +93,7 @@
         </Style.Triggers>
     </Style>
 
-    <!--#region Page Layout Styles-->
+
     <Style TargetType="TextBlock"
            x:Key="LeftPanel_Header">
         <Setter Property="Foreground"
@@ -150,7 +150,6 @@
         <Setter Property="FontWeight"
                 Value="Bold" />
     </Style>  
-    <!--#endregion-->
 
     <Style x:Key="AssetList_ListViewItem"
            TargetType="ListViewItem">
@@ -245,39 +244,13 @@
                                         Padding="5"
                                         Width="100"
                                         Margin="0,0,30,0"
-                                        Command="{Binding RefuseSave}">
-                                    <Button.Triggers>
-                                        <EventTrigger RoutedEvent="Button.Click">
-                                            <BeginStoryboard>
-                                                <Storyboard>
-                                                    <ObjectAnimationUsingKeyFrames Storyboard.Target="{Binding RelativeSource={RelativeSource AncestorLevel=1,AncestorType=Border}}"
-                                                                                   Storyboard.TargetProperty="Visibility">
-                                                        <DiscreteObjectKeyFrame KeyTime="0:0:0"
-                                                                                Value="{x:Static Visibility.Collapsed}" />
-                                                    </ObjectAnimationUsingKeyFrames>
-                                                </Storyboard>
-                                            </BeginStoryboard>
-                                        </EventTrigger>
-                                    </Button.Triggers>
-                                </Button>
+                                        Command="{Binding RefuseSave}" />
+
                                 <Button Content="Yes"
                                         Padding="5"
                                         Width="100"
-                                        Command="{Binding SaveCommand}">
-                                    <Button.Triggers>
-                                        <EventTrigger RoutedEvent="Button.Click">
-                                            <BeginStoryboard>
-                                                <Storyboard>
-                                                    <ObjectAnimationUsingKeyFrames Storyboard.Target="{Binding RelativeSource={RelativeSource AncestorLevel=1,AncestorType=Control}}"
-                                                                                   Storyboard.TargetProperty="Visibility">
-                                                        <DiscreteObjectKeyFrame KeyTime="0:0:0"
-                                                                                Value="{x:Static Visibility.Collapsed}" />
-                                                    </ObjectAnimationUsingKeyFrames>
-                                                </Storyboard>
-                                            </BeginStoryboard>
-                                        </EventTrigger>
-                                    </Button.Triggers>
-                                </Button>
+                                        Command="{Binding SaveCommand}" />
+
                             </StackPanel>
                         </StackPanel>
                     </Border>

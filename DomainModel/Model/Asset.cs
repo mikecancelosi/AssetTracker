@@ -26,6 +26,17 @@ namespace DomainModel
         public override bool IsValid(out List<Violation> violations)
         {
             base.IsValid(out violations);
+
+            if(as_description == "")
+            {
+                violations.Add(new Violation("You need to add a description!", "as_description"));
+            }
+
+            if (as_displayname == "")
+            {
+                violations.Add(new Violation("You need to set the name!", "as_displayname"));
+            }
+
             return violations.Count() == 0;
         }
 

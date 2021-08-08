@@ -20,12 +20,5 @@ namespace DomainModel
             get => ch_field;
             set => ch_field = value;
         }
-
-        public override bool IsValid(out List<Violation> violations)
-        {
-            violations = new List<Violation>();
-            base.IsValid(out violations);
-            return violations.Count() == 0;
-        }
     }
 }

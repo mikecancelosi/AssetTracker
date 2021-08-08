@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data.Entity.Infrastructure;
 
 namespace DataAccessLayer
 {
@@ -26,7 +27,17 @@ namespace DataAccessLayer
 
         public void Rollback()
         {
-            context.ChangeTracker.Entries().ToList().ForEach(x => x.Reload());
+            foreach(DbEntityEntry entity in context.ChangeTracker.Entries().ToList())
+            {
+                if(entity.State == System.Data.Entity.EntityState.Added)
+                {
+                    entity.State = System.Data.Entity.EntityState.Detached;
+                }
+                else
+                {
+                    entity.Reload();
+                }
+            }
         }
         
         public void Dispose()

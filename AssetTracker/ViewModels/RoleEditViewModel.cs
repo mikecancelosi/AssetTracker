@@ -74,8 +74,8 @@ namespace AssetTracker.ViewModels
             }
         }
 
-        public bool Creating { get; set; }
-        public bool Cloning { get; set; }
+        public bool Creating { get; private set; }
+        public bool Cloning { get; private set; }
         public string HeadingContext
         {
             get
@@ -96,9 +96,9 @@ namespace AssetTracker.ViewModels
         }
 
         public bool IsSavable => unitOfWork.HasChanges;
-        public ICommand DeleteConfirmed { get; set; }
-        public ICommand SaveCommand { get; set; }
-        public ICommand RefuseSave { get; set; }
+        public ICommand DeleteConfirmed => new RelayCommand((s) => DeleteRole(), (s) => true);
+        public ICommand SaveCommand => new RelayCommand((s) => Save(), (s) => true);
+        public ICommand RefuseSave => new RelayCommand((s) => navCoordinator.NavigateToQueued(), (s) => true);
         public List<Violation> SaveViolations { get; set; }
         private bool promptSave;
         public bool PromptSave
@@ -114,10 +114,15 @@ namespace AssetTracker.ViewModels
         public ICommand NavigateToProjectSettingsCommand => new RelayCommand((s) => navCoordinator.NavigateToProjectSettings(),
                                                                              (s) => true);
 
+        #region Repositories
         private GenericRepository<SecPermission4> roleGroupsRepo;
         private GenericRepository<SecPermission3> roleOverrideRepo;
         private GenericRepository<SecRole> roleRepo;
+        #endregion
 
+        #region ErrorHandling
+        public bool IsRoleNameMissing => SaveViolations?.Any(x => x.PropertyName == "ro_name") ?? false;
+        #endregion
 
         public INavigationCoordinator navCoordinator { get; set; }
         private IDeleteStrategy<SecRole> roleDeleteStrategy;
@@ -126,17 +131,15 @@ namespace AssetTracker.ViewModels
         {
             navCoordinator = coord;
             roleDeleteStrategy = roleDeleteStrat;
-            navCoordinator.UserNavigationAttempt += (s) => PromptSave = true;
-
             unitOfWork = uow;
+
+            navCoordinator.UserNavigationAttempt += (s) => PromptSave = true;
             roleGroupsRepo = unitOfWork.GetRepository<SecPermission4>();
             roleOverrideRepo = unitOfWork.GetRepository<SecPermission3>();
             roleRepo = unitOfWork.GetRepository<SecRole>();
 
             Role = new SecRole();
-            DeleteConfirmed = new RelayCommand((s) => DeleteRole(), (s) => true);
-            SaveCommand = new RelayCommand((s) => Save(), (s) => true);
-            RefuseSave = new RelayCommand((s) => navCoordinator.NavigateToQueued(), (s) => true);
+            Creating = true;
         }
 
         public void SetRole(SecRole role)
@@ -163,17 +166,28 @@ namespace AssetTracker.ViewModels
             if (Role.IsValid(out List<Violation> violations))
             {
                 unitOfWork.Commit();
-                NotifyPropertyChanged("IsSavable");
-                NotifyPropertyChanged("Role");
-                Creating = false;
-                Cloning = false;
-                NotifyPropertyChanged("HeadingContext");
+
+                if (navCoordinator.WaitingToNavigate)
+                {
+                    navCoordinator.NavigateToQueued();
+                }
+                else
+                {
+                    NotifyPropertyChanged("IsSavable");
+                    NotifyPropertyChanged("Role");
+                    Creating = false;
+                    Cloning = false;
+                    SaveViolations = null;
+                    NotifyPropertyChanged("SaveViolations");
+                    NotifyPropertyChanged("IsRoleNameMissing");
+                    NotifyPropertyChanged("HeadingContext");
+                }
             }
             else
             {
                 SaveViolations = violations;
                 NotifyPropertyChanged("SaveViolations");
-                throw new NotImplementedException();
+                NotifyPropertyChanged("IsRoleNameMissing");
             }
         }
 

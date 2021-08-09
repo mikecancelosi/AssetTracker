@@ -27,12 +27,12 @@ namespace DomainModel
         {
             base.IsValid(out violations);
 
-            if(as_description == "")
+            if(as_description == "" || as_description == null)
             {
                 violations.Add(new Violation("You need to add a description!", "as_description"));
             }
 
-            if (as_displayname == "")
+            if (as_displayname == "" || as_description == null)
             {
                 violations.Add(new Violation("You need to set the name!", "as_displayname"));
             }

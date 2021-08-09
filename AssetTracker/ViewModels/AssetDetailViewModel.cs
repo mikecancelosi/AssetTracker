@@ -164,6 +164,10 @@ namespace AssetTracker.ViewModels
         /// Are we just copying a prexisting asset
         /// </summary>
         private bool Cloning;
+
+        public bool IsDescriptionMissing => SaveViolations?.Any(x => x.PropertyName == "as_description") ?? false;
+        public bool IsNameMissing => SaveViolations?.Any(x => x.PropertyName == "as_displayname") ?? false;
+
         #endregion
 
         #region ISavable Properties
@@ -356,6 +360,10 @@ namespace AssetTracker.ViewModels
                 }
                 else
                 {
+                    SaveViolations = new List<Violation>();
+                    NotifyPropertyChanged("SaveViolations");
+                    NotifyPropertyChanged("IsDescriptionMissing");
+                    NotifyPropertyChanged("IsNameMissing");
                     NotifyPropertyChanged("IsSavable");
                     NotifyPropertyChanged("Changelog");
                     NotifyPropertyChanged("PhaseTimelineObjects");
@@ -370,8 +378,10 @@ namespace AssetTracker.ViewModels
             else
             {
                 SaveViolations = violations;
-                NotifyPropertyChanged("Violations");
-                throw new NotImplementedException();
+                NotifyPropertyChanged("SaveViolations");
+                NotifyPropertyChanged("IsDescriptionMissing");
+                NotifyPropertyChanged("IsNameMissing");
+                
             }
         }
 

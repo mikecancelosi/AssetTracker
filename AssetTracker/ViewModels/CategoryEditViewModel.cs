@@ -41,6 +41,17 @@ namespace AssetTracker.ViewModels
                 }
             }
         }
+        public string CategoryName
+        {
+            get => Category.ca_name;
+            set
+            {
+                Category.ca_name = value;
+                categoryRepo.Update(Category);
+                NotifyPropertyChanged("IsSavable");
+            }
+        }
+
         public bool IsSavable => unitOfWork.HasChanges;
         private bool promptSave;
         public bool PromptSave
@@ -67,6 +78,9 @@ namespace AssetTracker.ViewModels
         
         public INavigationCoordinator navCoordinator { get; set; }
         private IDeleteStrategy<AssetCategory> catDeleteStrategy;
+
+        public bool IsCategoryNameMissing => SaveViolations?.Any(x => x.PropertyName=="ca_name") ?? false;
+        public bool IsPhasesEmpty => SaveViolations?.Any(x => x.PropertyName=="Phases" || x.PropertyName== "ph_name") ?? false;
 
         public CategoryEditViewModel(INavigationCoordinator coord, GenericUnitOfWork uow, IDeleteStrategy<AssetCategory> catDeleteStrat)
         {
@@ -117,17 +131,21 @@ namespace AssetTracker.ViewModels
                 {
                     Creating = false;
                     Cloning = false;
+                    SaveViolations = null;
                     NotifyPropertyChanged("IsSavable");
                     NotifyPropertyChanged("HeadingContent");
                     NotifyPropertyChanged("CurrentPhases");
                     NotifyPropertyChanged("Category");
+                    NotifyPropertyChanged("IsCategoryNameMissing");
+                    NotifyPropertyChanged("IsPhasesEmpty");
                 }
             }
             else
             {
                 SaveViolations = violations;
                 NotifyPropertyChanged("SaveViolations");
-                throw new NotImplementedException();
+                NotifyPropertyChanged("IsCategoryNameMissing");
+                NotifyPropertyChanged("IsPhasesEmpty");
             }
         }
 
@@ -137,14 +155,6 @@ namespace AssetTracker.ViewModels
             unitOfWork.Commit();
             navCoordinator.NavigateToProjectSettings();
         }
-
-        public void OnCategoryNameChanged(string newName)
-        {
-            Category.ca_name = newName;
-            categoryRepo.Update(Category);
-            NotifyPropertyChanged("IsSavable");
-        }
-
 
         public void OnNewPhaseClicked()
         {

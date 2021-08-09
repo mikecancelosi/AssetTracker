@@ -52,11 +52,5 @@ namespace AssetTracker.View
             Phase senderPhase = senderText.DataContext as Phase;
             VM.OnPhaseNameChange(senderPhase.ph_step, senderText.Text);
         }
-
-        private void CategoryName_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            TextBox senderText = sender as TextBox;
-            VM.OnCategoryNameChanged(senderText.Text);
-        }
     }
 }

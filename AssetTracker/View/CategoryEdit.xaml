@@ -113,16 +113,22 @@
                                Margin="0,20" />
 
                     <TextBlock Text="Category Name" />
-                    <TextBox Text="{Binding Category.ca_name}"
+                    <StackPanel Orientation="Horizontal"
+                                Margin="0,0,0,20">
+                        <TextBox Text="{Binding CategoryName , Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                              Width="275"
                              HorizontalAlignment="Left"
                              FontSize="16"
-                             Margin="0,0,0,20"
-                             TextChanged="CategoryName_TextChanged"
                              Background="{StaticResource Layer3_Dark}"
                              BorderBrush="{StaticResource Text_Dark}" />
+                        <Control Style="{StaticResource Error}" 
+                                 VerticalAlignment="Center"
+                                 Margin="5,0,0,0"
+                                 Visibility="{Binding IsCategoryNameMissing, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    </StackPanel>
 
-                    <Button Content="+ Add Phase"
+                    <StackPanel Orientation="Horizontal" >
+                        <Button Content="+ Add Phase"
                             Click="OnPhaseAdd"
                             Width="275"
                             HorizontalAlignment="Left"
@@ -130,6 +136,11 @@
                             Background="{StaticResource Layer3_Dark}"
                             Foreground="{StaticResource Text_Dark}"
                             FontWeight="SemiBold" />
+                        
+                        <Control Style="{StaticResource Error}" Margin="5,0,0,0"
+                                 Visibility="{Binding IsPhasesEmpty, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    </StackPanel>
+
                     <ItemsControl x:Name="PhaseList"
                                   ItemsSource="{Binding CurrentPhases}"
                                   Background="Transparent"

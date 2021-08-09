@@ -93,12 +93,20 @@
                     </StackPanel>
                 </Border>
 
-                <TextBlock   x:Name="DisplayName"
-                             Text="{Binding AssetTitle}"
-                             Style="{StaticResource EditableText}"
-                             Margin="0,40,0,10"
-                             FontSize="24"
-                             FontWeight="Bold" />
+                <StackPanel Orientation="Horizontal"
+                            Margin="0,40,0,20">
+
+                    <TextBlock   x:Name="DisplayName"
+                                 Text="{Binding AssetTitle}"
+                                 Style="{StaticResource EditableText}"
+                                 Margin="0,0,10,0"
+                                 FontSize="24"
+                                 FontWeight="Bold" />
+
+                    <Control Style="{StaticResource Error}"
+                             Visibility="{Binding IsNameMissing,Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+                </StackPanel>
 
                 <!--#region Metadata -->
                 <ItemsControl ItemsSource="{Binding Tags}"
@@ -210,7 +218,10 @@
                 <TextBlock Text="{Binding Description}"
                            Style="{StaticResource EditableText}"
                            Foreground="White"
-                           Margin="0,20" />
+                           Margin="0,20,0,5" />
+
+                <Control Style="{StaticResource Error}"
+                         Visibility="{Binding IsDescriptionMissing,Converter={StaticResource BooleanToVisibilityConverter}}" />
 
                 <!--#region Hierarchy-->
                 <ItemsControl ItemsSource="{Binding Hierarchy}"
@@ -382,8 +393,8 @@
                                 <StackPanel Orientation="Vertical">
                                     <TextBlock Text="Assigned To:" />
                                     <local:Searchbox x:Name="Searchbox_AssignedTo"
-                                                     Items="{Binding Users}"                                                   
-                                                     CurrentSelection="{Binding AssignedUser, Mode=TwoWay}"/>
+                                                     Items="{Binding Users}"
+                                                     CurrentSelection="{Binding AssignedUser, Mode=TwoWay}" />
                                 </StackPanel>
 
                                 <StackPanel  Orientation="Vertical"
@@ -392,7 +403,7 @@
                                                Foreground="White" />
                                     <local:Searchbox x:Name="Searchbox_Category"
                                                      CurrentSelection="{Binding Category}"
-                                                     Items="{Binding Categories}"       />
+                                                     Items="{Binding Categories}" />
                                 </StackPanel>
 
                                 <StackPanel  Orientation="Vertical">
@@ -400,7 +411,7 @@
                                                Text="Current Status:"
                                                IsEnabled="{Binding Category, Converter={StaticResource IsNullInverseConverter}}" />
                                     <local:Searchbox x:Name="Searchbox_Phase"
-                                                     IsEnabled="{Binding ElementName=Status_HeaderText, Path=IsEnabled}"                                                    
+                                                     IsEnabled="{Binding ElementName=Status_HeaderText, Path=IsEnabled}"
                                                      Items="{Binding Phases}"
                                                      CurrentSelection="{Binding CurrentPhase,Mode=TwoWay}" />
                                 </StackPanel>
@@ -804,7 +815,7 @@
                                 Width="150">
                             <Button Style="{StaticResource HoverBtn}"
                                     Command="{Binding DeleteCancelled}">
-                                
+
                                 <TextBlock Text="Cancel"
                                            Style="{StaticResource HoverBtn_TextContent}"
                                            HorizontalAlignment="Center"

@@ -26,7 +26,7 @@ namespace DomainModel
         {          
             base.IsValid(out violations);
 
-            if(ro_name == "")
+            if(ro_name == "" || ro_name == null)
             {
                 violations.Add(new Violation("You need to set the role name!", "ro_name"));
             }

@@ -163,10 +163,22 @@ namespace AssetTracker.ViewModels
         private IDeleteStrategy<User> userDeleteStrategy;
         public ICommand DeleteConfirmed { get; set; }
 
+        #region Repositories
         private GenericRepository<User> userRepo;
         private GenericRepository<SecRole> roleRepo;
         private GenericRepository<SecPermission2> userOverrideRepo;
         private GenericRepository<SecPermission4> roleGroupsRepo;
+        #endregion
+
+        #region ErrorChecks
+        public bool IsFirstNameMissing => SaveViolations?.Any(x => x.PropertyName =="us_fname") ?? false;
+        public bool IsLastNameMissing => SaveViolations?.Any(x => x.PropertyName =="us_lname") ?? false;
+        public bool IsDisplayNameMissing => SaveViolations?.Any(x => x.PropertyName == "us_displayname") ?? false;
+        public bool IsEmailMissing => SaveViolations?.Any(x => x.PropertyName =="us_email") ?? false;
+        public bool IsPasswordMissing => SaveViolations?.Any(x => x.PropertyName =="us_password") ?? false;
+        public bool IsRoleUnassigned => SaveViolations?.Any(x => x.PropertyName =="us_roid") ?? false;
+        #endregion
+
 
         public List<DatabaseBackedObject> Roles
         {
@@ -189,8 +201,6 @@ namespace AssetTracker.ViewModels
                 NotifyPropertyChanged("IsSavable");
             }
         }
-
-
 
         public UserEditViewModel(INavigationCoordinator coord, GenericUnitOfWork uow, IDeleteStrategy<User> userDeleteStrat)
         {
@@ -261,13 +271,18 @@ namespace AssetTracker.ViewModels
             {
                 SaveViolations = violations;
                 NotifyPropertyChanged("SaveViolations");
-                throw new NotImplementedException();
+                NotifyPropertyChanged("IsFirstNameMissing");
+                NotifyPropertyChanged("IsLastNameMissing");
+                NotifyPropertyChanged("IsDisplayNameMissing");
+                NotifyPropertyChanged("IsEmailMissing");
+                NotifyPropertyChanged("IsPasswordMissing");
+                NotifyPropertyChanged("IsRoleUnassigned");
             }
         }
 
         public void DeleteUser()
         {
-            userRepo.Delete(CurrentUser);
+            userDeleteStrategy.Delete(unitOfWork, CurrentUser);
             unitOfWork.Commit();
             navCoordinator.NavigateToProjectSettings();
         }

@@ -305,5 +305,25 @@
         </Setter>
     </Style>
 
+    <Style x:Key="Error"
+           TargetType="Control">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <materialicons:MaterialIcon Icon="ic_error_outline"
+                                                    Foreground="{StaticResource Error2_Dark}"
+                                                    Height="25"
+                                                    Margin="0,0,5,0" />
+                        <TextBlock Text="Required!"
+                                   Foreground="{StaticResource Error2_Dark}"
+                                   FontWeight="SemiBold"
+                                   VerticalAlignment="Center" />
+                    </StackPanel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
 
 </ResourceDictionary>

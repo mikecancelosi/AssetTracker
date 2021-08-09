@@ -165,8 +165,8 @@ namespace AssetTracker.ViewModels
         /// </summary>
         private bool Cloning;
 
-        public bool IsDescriptionMissing => SaveViolations?.Any(x => x.PropertyName == "as_description") ?? false;
-        public bool IsNameMissing => SaveViolations?.Any(x => x.PropertyName == "as_displayname") ?? false;
+        public Violation DescriptionViolation => SaveViolations?.FirstOrDefault(x => x.PropertyName == "as_description") ?? null;
+        public Violation NameViolation => SaveViolations?.FirstOrDefault(x => x.PropertyName == "as_displayname") ?? null;
 
         #endregion
 
@@ -362,8 +362,8 @@ namespace AssetTracker.ViewModels
                 {
                     SaveViolations = new List<Violation>();
                     NotifyPropertyChanged("SaveViolations");
-                    NotifyPropertyChanged("IsDescriptionMissing");
-                    NotifyPropertyChanged("IsNameMissing");
+                    NotifyPropertyChanged("DescriptionViolation");
+                    NotifyPropertyChanged("NameViolation");
                     NotifyPropertyChanged("IsSavable");
                     NotifyPropertyChanged("Changelog");
                     NotifyPropertyChanged("PhaseTimelineObjects");
@@ -379,8 +379,8 @@ namespace AssetTracker.ViewModels
             {
                 SaveViolations = violations;
                 NotifyPropertyChanged("SaveViolations");
-                NotifyPropertyChanged("IsDescriptionMissing");
-                NotifyPropertyChanged("IsNameMissing");
+                NotifyPropertyChanged("DescriptionViolation");
+                NotifyPropertyChanged("NameViolation");
                 
             }
         }

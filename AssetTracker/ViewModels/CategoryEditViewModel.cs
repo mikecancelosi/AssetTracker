@@ -79,8 +79,10 @@ namespace AssetTracker.ViewModels
         public INavigationCoordinator navCoordinator { get; set; }
         private IDeleteStrategy<AssetCategory> catDeleteStrategy;
 
-        public bool IsCategoryNameMissing => SaveViolations?.Any(x => x.PropertyName=="ca_name") ?? false;
-        public bool IsPhasesEmpty => SaveViolations?.Any(x => x.PropertyName=="Phases" || x.PropertyName== "ph_name") ?? false;
+        public Violation CategoryNameViolation => SaveViolations?.FirstOrDefault(x => x.PropertyName == "ca_name") ?? null;
+        public Violation PhasesViolation => SaveViolations?.FirstOrDefault(x => x.PropertyName == "Phases" || 
+                                                                                x.PropertyName =="ph_name") ?? null;
+
 
         public CategoryEditViewModel(INavigationCoordinator coord, GenericUnitOfWork uow, IDeleteStrategy<AssetCategory> catDeleteStrat)
         {
@@ -136,16 +138,16 @@ namespace AssetTracker.ViewModels
                     NotifyPropertyChanged("HeadingContent");
                     NotifyPropertyChanged("CurrentPhases");
                     NotifyPropertyChanged("Category");
-                    NotifyPropertyChanged("IsCategoryNameMissing");
-                    NotifyPropertyChanged("IsPhasesEmpty");
+                    NotifyPropertyChanged("CategoryNameViolation");
+                    NotifyPropertyChanged("PhasesViolation");
                 }
             }
             else
             {
                 SaveViolations = violations;
                 NotifyPropertyChanged("SaveViolations");
-                NotifyPropertyChanged("IsCategoryNameMissing");
-                NotifyPropertyChanged("IsPhasesEmpty");
+                NotifyPropertyChanged("CategoryNameViolation");
+                NotifyPropertyChanged("PhasesViolation");
             }
         }
 

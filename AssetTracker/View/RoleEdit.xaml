@@ -121,9 +121,11 @@
                                                  Width="200"
                                                  Height="25"
                                                  FontSize="16" />
-                                        <Control Style="{StaticResource Error}"
+                                        <ContentControl  ContentTemplate="{StaticResource Error}"
+                                                         Content="{Binding RoleNameViolation}"
                                                  VerticalAlignment="Center"
-                                                 Margin="10,0,0,0" Visibility="{Binding IsRoleNameMissing, Converter= {StaticResource BooleanToVisibilityConverter}}" />
+                                                 Margin="10,0,0,0"
+                                                 Visibility="{Binding RoleNameViolation, Converter= {StaticResource IsNullInvertToVizConverter}}" />
                                     </StackPanel>
                                     
                                 </StackPanel>

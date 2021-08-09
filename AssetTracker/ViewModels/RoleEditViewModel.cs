@@ -121,7 +121,7 @@ namespace AssetTracker.ViewModels
         #endregion
 
         #region ErrorHandling
-        public bool IsRoleNameMissing => SaveViolations?.Any(x => x.PropertyName == "ro_name") ?? false;
+        public Violation RoleNameViolation => SaveViolations?.FirstOrDefault(x => x.PropertyName == "ro_name") ?? null;
         #endregion
 
         public INavigationCoordinator navCoordinator { get; set; }
@@ -179,7 +179,7 @@ namespace AssetTracker.ViewModels
                     Cloning = false;
                     SaveViolations = null;
                     NotifyPropertyChanged("SaveViolations");
-                    NotifyPropertyChanged("IsRoleNameMissing");
+                    NotifyPropertyChanged("RoleNameViolation");
                     NotifyPropertyChanged("HeadingContext");
                 }
             }
@@ -187,7 +187,7 @@ namespace AssetTracker.ViewModels
             {
                 SaveViolations = violations;
                 NotifyPropertyChanged("SaveViolations");
-                NotifyPropertyChanged("IsRoleNameMissing");
+                NotifyPropertyChanged("RoleNameViolation");
             }
         }
 

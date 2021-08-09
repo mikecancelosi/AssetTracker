@@ -91,26 +91,22 @@
                         </Button>
 
                     </StackPanel>
-                </Border>
-
-                <StackPanel Orientation="Horizontal"
-                            Margin="0,40,0,20">
+                </Border>              
 
                     <TextBlock   x:Name="DisplayName"
                                  Text="{Binding AssetTitle}"
                                  Style="{StaticResource EditableText}"
-                                 Margin="0,0,10,0"
+                                 Margin="0,40,10,5"
                                  FontSize="24"
                                  FontWeight="Bold" />
+                    <ContentControl ContentTemplate="{StaticResource Error}"
+                                Content="{Binding NameViolation}"
+                                Visibility="{Binding NameViolation,Converter={StaticResource IsNullInvertToVizConverter}}" />
 
-                    <Control Style="{StaticResource Error}"
-                             Visibility="{Binding IsNameMissing,Converter={StaticResource BooleanToVisibilityConverter}}" />
-
-                </StackPanel>
 
                 <!--#region Metadata -->
                 <ItemsControl ItemsSource="{Binding Tags}"
-                              Margin="0,0,0,10"
+                              Margin="0,30,0,10"
                               AlternationCount="{Binding RelativeSource={RelativeSource Self}, Path=ItemsSource.Count}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -220,8 +216,9 @@
                            Foreground="White"
                            Margin="0,20,0,5" />
 
-                <Control Style="{StaticResource Error}"
-                         Visibility="{Binding IsDescriptionMissing,Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <ContentControl ContentTemplate="{StaticResource Error}"
+                                Content="{Binding DescriptionViolation}"
+                                Visibility="{Binding DescriptionViolation,Converter={StaticResource IsNullInvertToVizConverter}}" />
 
                 <!--#region Hierarchy-->
                 <ItemsControl ItemsSource="{Binding Hierarchy}"

@@ -171,12 +171,12 @@ namespace AssetTracker.ViewModels
         #endregion
 
         #region ErrorChecks
-        public bool IsFirstNameMissing => SaveViolations?.Any(x => x.PropertyName =="us_fname") ?? false;
-        public bool IsLastNameMissing => SaveViolations?.Any(x => x.PropertyName =="us_lname") ?? false;
-        public bool IsDisplayNameMissing => SaveViolations?.Any(x => x.PropertyName == "us_displayname") ?? false;
-        public bool IsEmailMissing => SaveViolations?.Any(x => x.PropertyName =="us_email") ?? false;
-        public bool IsPasswordMissing => SaveViolations?.Any(x => x.PropertyName =="us_password") ?? false;
-        public bool IsRoleUnassigned => SaveViolations?.Any(x => x.PropertyName =="us_roid") ?? false;
+        public Violation FirstNameViolation => SaveViolations?.FirstOrDefault(x => x.PropertyName == "us_fname") ?? null;
+        public Violation LastNameViolation => SaveViolations?.FirstOrDefault(x => x.PropertyName == "us_lname") ?? null;
+        public Violation DisplayNameViolation => SaveViolations?.FirstOrDefault(x => x.PropertyName == "us_displayname") ?? null;
+        public Violation EmailViolation => SaveViolations?.FirstOrDefault(x => x.PropertyName == "us_email") ?? null;
+        public Violation PasswordViolation => SaveViolations?.FirstOrDefault(x => x.PropertyName == "us_password") ?? null;
+        public Violation RoleUnassignedViolation => SaveViolations?.FirstOrDefault(x => x.PropertyName == "us_roid") ?? null;
         #endregion
 
 
@@ -262,21 +262,29 @@ namespace AssetTracker.ViewModels
                 {
                     Creating = false;
                     Cloning = false;
+                    SaveViolations = null;
                     NotifyPropertyChanged("IsSavable");
                     NotifyPropertyChanged("CurrentUser");
                     NotifyPropertyChanged("HeadingContext");
+                    NotifyPropertyChanged("SaveViolations");
+                    NotifyPropertyChanged("FirstNameViolation");
+                    NotifyPropertyChanged("LastNameViolation");
+                    NotifyPropertyChanged("DisplayNameViolation");
+                    NotifyPropertyChanged("EmailViolation");
+                    NotifyPropertyChanged("PasswordViolation");
+                    NotifyPropertyChanged("RoleUnassignedViolation");
                 }
             }
             else
             {
                 SaveViolations = violations;
                 NotifyPropertyChanged("SaveViolations");
-                NotifyPropertyChanged("IsFirstNameMissing");
-                NotifyPropertyChanged("IsLastNameMissing");
-                NotifyPropertyChanged("IsDisplayNameMissing");
-                NotifyPropertyChanged("IsEmailMissing");
-                NotifyPropertyChanged("IsPasswordMissing");
-                NotifyPropertyChanged("IsRoleUnassigned");
+                NotifyPropertyChanged("FirstNameViolation");
+                NotifyPropertyChanged("LastNameViolation");
+                NotifyPropertyChanged("DisplayNameViolation");
+                NotifyPropertyChanged("EmailViolation");
+                NotifyPropertyChanged("PasswordViolation");
+                NotifyPropertyChanged("RoleUnassignedViolation");
             }
         }
 

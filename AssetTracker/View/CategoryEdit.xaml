@@ -121,10 +121,10 @@
                              FontSize="16"
                              Background="{StaticResource Layer3_Dark}"
                              BorderBrush="{StaticResource Text_Dark}" />
-                        <Control Style="{StaticResource Error}" 
+                        <ContentControl ContentTemplate="{StaticResource Error}" Content="{Binding CategoryNameViolation}"
                                  VerticalAlignment="Center"
                                  Margin="5,0,0,0"
-                                 Visibility="{Binding IsCategoryNameMissing, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                      Visibility="{Binding CategoryNameViolation, Converter={StaticResource IsNullInvertToVizConverter}}"/>
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" >
@@ -136,9 +136,9 @@
                             Background="{StaticResource Layer3_Dark}"
                             Foreground="{StaticResource Text_Dark}"
                             FontWeight="SemiBold" />
-                        
-                        <Control Style="{StaticResource Error}" Margin="5,0,0,0"
-                                 Visibility="{Binding IsPhasesEmpty, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+                        <ContentControl ContentTemplate="{StaticResource Error}" Margin="5,0,0,0" Content="{Binding PhasesViolation}"
+                                        Visibility="{Binding PhasesViolation,Converter={StaticResource IsNullInvertToVizConverter}}"/>
                     </StackPanel>
 
                     <ItemsControl x:Name="PhaseList"

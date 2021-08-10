@@ -38,7 +38,7 @@ namespace AssetTracker.View
             }
         }          
 
-        //TODO: Remove discrepency between usage of 'Tags' and 'Metadata'
+        //TODO: Remove discrepency between usage of 'Tags' and 'Metadata' -- ASP
         #region Tags
         /// <summary>
         /// Display the tag add window

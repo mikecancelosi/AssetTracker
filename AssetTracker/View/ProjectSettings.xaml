@@ -132,30 +132,122 @@
                     <TextBlock Text="Users"
                                Style="{StaticResource RightPanel_Header}" />
 
-                    <Button Style="{StaticResource HoverBtn}"
-                            Command="{Binding CreateUser}"
-                            HorizontalAlignment="Left"
-                            Margin="0,40,0,10"
-                            ToolTipService.ShowOnDisabled="True"
-                            ToolTipService.IsEnabled="{Binding IsEnabled, RelativeSource={RelativeSource Mode=Self},Converter={StaticResource inverseBooleanConverter}}"
-                            IsEnabled="{Binding RelativeSource={RelativeSource AncestorLevel=1,AncestorType=Page}, Path=DataContext.UserCanCreateUsers}">
-                        <StackPanel Orientation="Vertical"
-                                    Margin="0,0,15,0">
-                            <materialicons:MaterialIcon Icon="ic_add"
-                                                        Style="{StaticResource ListHeaderBtn_Image}" />
-                            <TextBlock Text="Add"
-                                       Style="{StaticResource ListHeaderBtn_Text}" />
-                        </StackPanel>
-                        <Button.ToolTip>
-                            <ToolTip BorderThickness="0">
-                                <TextBlock Text="You do not have permission to create users"
-                                           Foreground="{StaticResource Text_Dark}" />
-                            </ToolTip>
-                        </Button.ToolTip>
-                    </Button>
+                    <!--#region Operation Buttons-->
+                    <StackPanel Orientation="Horizontal">
+                        <Button Style="{StaticResource HoverBtn}"
+                                Command="{Binding CreateUser}"
+                                HorizontalAlignment="Left"
+                                Margin="0,40,0,10"
+                                ToolTipService.ShowOnDisabled="True"
+                                ToolTipService.IsEnabled="{Binding IsEnabled, RelativeSource={RelativeSource Mode=Self},Converter={StaticResource inverseBooleanConverter}}"
+                                IsEnabled="{Binding RelativeSource={RelativeSource AncestorLevel=1,AncestorType=Page}, Path=DataContext.UserCanCreateUsers}">
+                            <StackPanel Orientation="Vertical"
+                                        Margin="0,0,15,0">
+                                <materialicons:MaterialIcon Icon="ic_add"
+                                                            Style="{StaticResource ListHeaderBtn_Image}" />
+                                <TextBlock Text="Add"
+                                           Style="{StaticResource ListHeaderBtn_Text}" />
+                            </StackPanel>
+                            <Button.ToolTip>
+                                <ToolTip BorderThickness="0">
+                                    <TextBlock Text="You do not have permission to create users"
+                                               Foreground="{StaticResource Text_Dark}" />
+                                </ToolTip>
+                            </Button.ToolTip>
+                        </Button>
+
+                        <Button Style="{StaticResource HoverBtn}"
+                                Command="{Binding CopySelectedUser}"
+                                HorizontalAlignment="Left"
+                                Margin="0,40,0,10"
+                                ToolTipService.ShowOnDisabled="True"
+                                ToolTipService.IsEnabled="{Binding ElementName=ProjectSettingsPage, Path=DataContext.UserCanCloneUsers, Converter={StaticResource inverseBooleanConverter}}"
+                               >
+                            <Button.IsEnabled>
+                                <MultiBinding Converter="{StaticResource multiBoolAllConverter}">
+                                    <Binding ElementName="ProjectSettingsPage"
+                                             Path="DataContext.UserCanCloneUsers" />
+                                    <Binding ElementName="ProjectSettingsPage"
+                                             Path="DataContext.SelectedUser"
+                                             Converter="{StaticResource IsNullInverseConverter}" />
+                                </MultiBinding>
+                            </Button.IsEnabled>
+                            <StackPanel Orientation="Vertical"
+                                        Margin="0,0,15,0">
+                                <materialicons:MaterialIcon Icon="ic_content_copy"
+                                                            Style="{StaticResource ListHeaderBtn_Image}" />
+                                <TextBlock Text="Copy"
+                                           Style="{StaticResource ListHeaderBtn_Text}" />
+                            </StackPanel>
+                            <Button.ToolTip>
+                                <ToolTip BorderThickness="0">
+                                    <TextBlock Text="You do not have permission to edit users"
+                                               Foreground="{StaticResource Text_Dark}" />
+                                </ToolTip>
+                            </Button.ToolTip>
+                        </Button>
+
+                        <Button Style="{StaticResource HoverBtn}"
+                                Command="{Binding EditSelectedUser}"
+                                HorizontalAlignment="Left"
+                                Margin="0,40,0,10"
+                                ToolTipService.ShowOnDisabled="True"
+                                ToolTipService.IsEnabled="{Binding ElementName=ProjectSettingsPage, Path=DataContext.UserCanEditUsers, Converter={StaticResource inverseBooleanConverter}}">
+                            <Button.IsEnabled>
+                                <MultiBinding Converter="{StaticResource multiBoolAllConverter}">
+                                    <Binding ElementName="ProjectSettingsPage" Path="DataContext.UserCanEditUsers"/>
+                                    <Binding ElementName="ProjectSettingsPage" Path="DataContext.SelectedUser" Converter="{StaticResource IsNullInverseConverter}"/>
+                                </MultiBinding>
+                            </Button.IsEnabled>
+                            <StackPanel Orientation="Vertical"
+                                        Margin="0,0,15,0">
+                                <materialicons:MaterialIcon Icon="ic_edit"
+                                                            Style="{StaticResource ListHeaderBtn_Image}" />
+                                <TextBlock Text="Edit"
+                                           Style="{StaticResource ListHeaderBtn_Text}" />
+                            </StackPanel>
+                            <Button.ToolTip>
+                                <ToolTip BorderThickness="0">
+                                    <TextBlock Text="You do not have permission to edit users"
+                                               Foreground="{StaticResource Text_Dark}" />
+                                </ToolTip>
+                            </Button.ToolTip>
+                        </Button>
+
+                        <Button Style="{StaticResource HoverBtn}"
+                                Command="{Binding DeleteSelectedUser}"
+                                HorizontalAlignment="Left"
+                                Margin="0,40,0,10"
+                                ToolTipService.ShowOnDisabled="True"
+                                ToolTipService.IsEnabled="{Binding ElementName=ProjectSettingsPage, Path=DataContext.UserCanDeleteUsers, Converter={StaticResource inverseBooleanConverter}}">
+                            <Button.IsEnabled>
+                                <MultiBinding Converter="{StaticResource multiBoolAllConverter}">
+                                    <Binding ElementName="ProjectSettingsPage"
+                                             Path="DataContext.UserCanDeleteUsers" />
+                                    <Binding ElementName="ProjectSettingsPage"
+                                             Path="DataContext.SelectedUser"
+                                             Converter="{StaticResource IsNullInverseConverter}" />
+                                </MultiBinding>
+                            </Button.IsEnabled>
+                            <StackPanel Orientation="Vertical"
+                                        Margin="0,0,15,0">
+                                <materialicons:MaterialIcon Icon="ic_delete"
+                                                            Style="{StaticResource ListHeaderBtn_Image}" />
+                                <TextBlock Text="Delete"
+                                           Style="{StaticResource ListHeaderBtn_Text}" />
+                            </StackPanel>
+                            <Button.ToolTip>
+                                <ToolTip BorderThickness="0">
+                                    <TextBlock Text="You do not have permission to edit users"
+                                               Foreground="{StaticResource Text_Dark}" />
+                                </ToolTip>
+                            </Button.ToolTip>
+                        </Button>
+                    </StackPanel>
+                    <!--#endregion-->
 
 
-                    <ListView ItemsSource="{Binding Users}">
+                    <ListView x:Name="UserList" SelectedItem="{Binding SelectedUser, Mode=TwoWay, NotifyOnSourceUpdated=True}" ItemsSource="{Binding Users}">
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn Header="ID"
@@ -169,70 +261,7 @@
                                                 DisplayMemberBinding="{Binding SecRole.ro_name}" />
                                 <GridViewColumn Header="Email"
                                                 Width="200"
-                                                DisplayMemberBinding="{Binding us_email}" />
-                                <GridViewColumn Header="Operation"
-                                                Width="200">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <Grid>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <Button Style="{StaticResource HoverBtn }"
-                                                            Tag="copy"
-                                                            Click="OnOperationClicked"
-                                                            Width="24"
-                                                            ToolTipService.ShowOnDisabled="True"
-                                                            ToolTipService.IsEnabled="{Binding IsEnabled, RelativeSource={RelativeSource Mode=Self},Converter={StaticResource inverseBooleanConverter}}"
-                                                            IsEnabled="{Binding RelativeSource={RelativeSource AncestorLevel=1,AncestorType=Page}, Path=DataContext.UserCanCloneUsers}">
-                                                        <Button.Content>
-                                                            <materialicons:MaterialIcon Icon="ic_content_copy" />
-                                                        </Button.Content>
-                                                        <Button.ToolTip>
-                                                            <ToolTip BorderThickness="0">                                                                
-                                                                    <TextBlock Text="You do not have permission to copy users"
-                                                                               Foreground="{StaticResource Text_Dark}" />
-                                                            </ToolTip>
-                                                        </Button.ToolTip>
-                                                    </Button>
-                                                    <Button Style="{StaticResource HoverBtn}"
-                                                            Margin="10,0"
-                                                            Click="OnOperationClicked"
-                                                            Tag="edit"
-                                                            Width="24"
-                                                            ToolTipService.ShowOnDisabled="True"
-                                                            ToolTipService.IsEnabled="{Binding IsEnabled, RelativeSource={RelativeSource Mode=Self},Converter={StaticResource inverseBooleanConverter}}"
-                                                            IsEnabled="{Binding RelativeSource={RelativeSource AncestorLevel=1,AncestorType=Page}, Path=DataContext.UserCanEditUsers}">
-                                                        <Button.Content>
-                                                            <materialicons:MaterialIcon Icon="ic_edit" />
-                                                        </Button.Content>
-                                                        <Button.ToolTip>
-                                                            <ToolTip BorderThickness="0">
-                                                                <TextBlock Text="You do not have permission to edit users"
-                                                                           Foreground="{StaticResource Text_Dark}" />
-                                                            </ToolTip>
-                                                        </Button.ToolTip>
-                                                    </Button>
-                                                    <Button Style="{StaticResource HoverBtn}"
-                                                            Click="OnOperationClicked"
-                                                            Tag="delete"
-                                                            Width="24"
-                                                            ToolTipService.ShowOnDisabled="True"
-                                                            ToolTipService.IsEnabled="{Binding IsEnabled, RelativeSource={RelativeSource Mode=Self},Converter={StaticResource inverseBooleanConverter}}"
-                                                            IsEnabled="{Binding RelativeSource={RelativeSource AncestorLevel=1,AncestorType=Page}, Path=DataContext.UserCanDeleteCategories}">
-                                                        <materialicons:MaterialIcon Icon="ic_delete" />
-                                                        <Button.ToolTip>
-                                                            <ToolTip BorderThickness="0">
-                                                                <TextBlock Text="You do not have permission to delete users"
-                                                                           Foreground="{StaticResource Text_Dark}" />
-                                                            </ToolTip>
-                                                        </Button.ToolTip>
-                                                    </Button>
-                                                </StackPanel>
-                                            </Grid>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-
-
+                                                DisplayMemberBinding="{Binding us_email}" /> 
                             </GridView>
                         </ListView.View>
                     </ListView>
@@ -246,31 +275,124 @@
                     <TextBlock Text="Roles"
                                Style="{StaticResource RightPanel_Header}" />
 
-                    <Button Style="{StaticResource HoverBtn}"
-                            Command="{Binding CreateRole}"
-                            HorizontalAlignment="Left"
-                            Margin="0,40,0,10"
-                            ToolTipService.ShowOnDisabled="True"
-                            ToolTipService.IsEnabled="{Binding IsEnabled, RelativeSource={RelativeSource Mode=Self},Converter={StaticResource inverseBooleanConverter}}"
-                            IsEnabled="{Binding RelativeSource={RelativeSource AncestorLevel=1,AncestorType=Page}, Path=DataContext.UserCanCreateRoles}">
-                        <StackPanel Orientation="Vertical"
-                                    Margin="0,0,15,0">
-                            <materialicons:MaterialIcon Icon="ic_add"
-                                                        Style="{StaticResource ListHeaderBtn_Image}" />
-                            <TextBlock Text="Add"
-                                       Style="{StaticResource ListHeaderBtn_Text}" />
-                        </StackPanel>
-                        <Button.ToolTip>
-                            <ToolTip BorderThickness="0">
-                                <TextBlock Text="You do not have permission to create roles"
-                                           Foreground="{StaticResource Text_Dark}" />
-                            </ToolTip>
-                        </Button.ToolTip>
-                    </Button>
+                    <!--#region Operation Buttons-->
+                    <StackPanel Orientation="Horizontal">
+                        <Button Style="{StaticResource HoverBtn}"
+                                Command="{Binding CreateRole}"
+                                HorizontalAlignment="Left"
+                                Margin="0,40,0,10"
+                                ToolTipService.ShowOnDisabled="True"
+                                ToolTipService.IsEnabled="{Binding IsEnabled, RelativeSource={RelativeSource Mode=Self},Converter={StaticResource inverseBooleanConverter}}"
+                                IsEnabled="{Binding RelativeSource={RelativeSource AncestorLevel=1,AncestorType=Page}, Path=DataContext.UserCanCreateRoles}">
+                            <StackPanel Orientation="Vertical"
+                                        Margin="0,0,15,0">
+                                <materialicons:MaterialIcon Icon="ic_add"
+                                                            Style="{StaticResource ListHeaderBtn_Image}" />
+                                <TextBlock Text="Add"
+                                           Style="{StaticResource ListHeaderBtn_Text}" />
+                            </StackPanel>
+                            <Button.ToolTip>
+                                <ToolTip BorderThickness="0">
+                                    <TextBlock Text="You do not have permission to create Roles"
+                                               Foreground="{StaticResource Text_Dark}" />
+                                </ToolTip>
+                            </Button.ToolTip>
+                        </Button>
+
+                        <Button Style="{StaticResource HoverBtn}"
+                                Command="{Binding CopySelectedRole}"
+                                HorizontalAlignment="Left"
+                                Margin="0,40,0,10"
+                                ToolTipService.ShowOnDisabled="True"
+                                ToolTipService.IsEnabled="{Binding ElementName=ProjectSettingsPage, Path=DataContext.UserCanCloneRoles, Converter={StaticResource inverseBooleanConverter}}">
+                            <Button.IsEnabled>
+                                <MultiBinding Converter="{StaticResource multiBoolAllConverter}">
+                                    <Binding ElementName="ProjectSettingsPage"
+                                             Path="DataContext.UserCanCloneRoles" />
+                                    <Binding ElementName="ProjectSettingsPage"
+                                             Path="DataContext.SelectedRole"
+                                             Converter="{StaticResource IsNullInverseConverter}" />
+                                </MultiBinding>
+                            </Button.IsEnabled>
+                            <StackPanel Orientation="Vertical"
+                                        Margin="0,0,15,0">
+                                <materialicons:MaterialIcon Icon="ic_content_copy"
+                                                            Style="{StaticResource ListHeaderBtn_Image}" />
+                                <TextBlock Text="Copy"
+                                           Style="{StaticResource ListHeaderBtn_Text}" />
+                            </StackPanel>
+                            <Button.ToolTip>
+                                <ToolTip BorderThickness="0">
+                                    <TextBlock Text="You do not have permission to edit Roles"
+                                               Foreground="{StaticResource Text_Dark}" />
+                                </ToolTip>
+                            </Button.ToolTip>
+                        </Button>
+
+                        <Button Style="{StaticResource HoverBtn}"
+                                Command="{Binding EditSelectedRole}"
+                                HorizontalAlignment="Left"
+                                Margin="0,40,0,10"
+                                ToolTipService.ShowOnDisabled="True"
+                                ToolTipService.IsEnabled="{Binding ElementName=ProjectSettingsPage, Path=DataContext.UserCanEditRoles, Converter={StaticResource inverseBooleanConverter}}">
+                            <Button.IsEnabled>
+                                <MultiBinding Converter="{StaticResource multiBoolAllConverter}">
+                                    <Binding ElementName="ProjectSettingsPage"
+                                             Path="DataContext.UserCanEditRoles" />
+                                    <Binding ElementName="ProjectSettingsPage"
+                                             Path="DataContext.SelectedRole"
+                                             Converter="{StaticResource IsNullInverseConverter}" />
+                                </MultiBinding>
+                            </Button.IsEnabled>
+                            <StackPanel Orientation="Vertical"
+                                        Margin="0,0,15,0">
+                                <materialicons:MaterialIcon Icon="ic_edit"
+                                                            Style="{StaticResource ListHeaderBtn_Image}" />
+                                <TextBlock Text="Edit"
+                                           Style="{StaticResource ListHeaderBtn_Text}" />
+                            </StackPanel>
+                            <Button.ToolTip>
+                                <ToolTip BorderThickness="0">
+                                    <TextBlock Text="You do not have permission to edit Roles"
+                                               Foreground="{StaticResource Text_Dark}" />
+                                </ToolTip>
+                            </Button.ToolTip>
+                        </Button>
+
+                        <Button Style="{StaticResource HoverBtn}"
+                                Command="{Binding DeleteSelectedRole}"
+                                HorizontalAlignment="Left"
+                                Margin="0,40,0,10"
+                                ToolTipService.ShowOnDisabled="True"
+                                ToolTipService.IsEnabled="{Binding ElementName=ProjectSettingsPage, Path=DataContext.UserCanDeleteRoles, Converter={StaticResource inverseBooleanConverter}}">
+                            <Button.IsEnabled>
+                                <MultiBinding Converter="{StaticResource multiBoolAllConverter}">
+                                    <Binding ElementName="ProjectSettingsPage"
+                                             Path="DataContext.UserCanDeleteRoles" />
+                                    <Binding ElementName="ProjectSettingsPage"
+                                             Path="DataContext.SelectedRole"
+                                             Converter="{StaticResource IsNullInverseConverter}" />
+                                </MultiBinding>
+                            </Button.IsEnabled>
+                            <StackPanel Orientation="Vertical"
+                                        Margin="0,0,15,0">
+                                <materialicons:MaterialIcon Icon="ic_delete"
+                                                            Style="{StaticResource ListHeaderBtn_Image}" />
+                                <TextBlock Text="Delete"
+                                           Style="{StaticResource ListHeaderBtn_Text}" />
+                            </StackPanel>
+                            <Button.ToolTip>
+                                <ToolTip BorderThickness="0">
+                                    <TextBlock Text="You do not have permission to edit Roles"
+                                               Foreground="{StaticResource Text_Dark}" />
+                                </ToolTip>
+                            </Button.ToolTip>
+                        </Button>
+                    </StackPanel>
+                    <!--#endregion-->
 
 
-                    <ListView ItemsSource="{Binding Roles}">
-
+                    <ListView SelectedItem="{Binding SelectedRole,Mode=TwoWay,NotifyOnSourceUpdated=True}" ItemsSource="{Binding Roles}">
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn Header="ID"
@@ -279,65 +401,6 @@
                                 <GridViewColumn Header="Name"
                                                 Width="300"
                                                 DisplayMemberBinding="{Binding ro_name}" />
-                                <GridViewColumn Header="Operation"
-                                                Width="200">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <Grid>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <Button Style="{StaticResource HoverBtn }"
-                                                            Tag="copy"
-                                                            Click="OnOperationClicked"
-                                                            Width="24"
-                                                            ToolTipService.ShowOnDisabled="True"
-                                                            ToolTipService.IsEnabled="{Binding IsEnabled, RelativeSource={RelativeSource Mode=Self},Converter={StaticResource inverseBooleanConverter}}"
-                                                            IsEnabled="{Binding RelativeSource={RelativeSource AncestorLevel=1,AncestorType=Page}, Path=DataContext.UserCanCloneRoles}">
-                                                        <materialicons:MaterialIcon Icon="ic_content_copy" />
-                                                        <Button.ToolTip>
-                                                            <ToolTip BorderThickness="0">
-                                                                <TextBlock Text="You do not have permission to clone roles"
-                                                                           Foreground="{StaticResource Text_Dark}" />
-                                                            </ToolTip>
-                                                        </Button.ToolTip>
-                                                    </Button>
-                                                    <Button Style="{StaticResource HoverBtn}"
-                                                            Margin="10,0"
-                                                            Click="OnOperationClicked"
-                                                            Tag="edit"
-                                                            Width="24"
-                                                            ToolTipService.ShowOnDisabled="True"
-                                                            ToolTipService.IsEnabled="{Binding IsEnabled, RelativeSource={RelativeSource Mode=Self},Converter={StaticResource inverseBooleanConverter}}"
-                                                            IsEnabled="{Binding RelativeSource={RelativeSource AncestorLevel=1,AncestorType=Page}, Path=DataContext.UserCanEditRoles}">
-                                                        <materialicons:MaterialIcon Icon="ic_edit" />
-                                                        <Button.ToolTip>
-                                                            <ToolTip BorderThickness="0">
-                                                                <TextBlock Text="You do not have permission to edit roles"
-                                                                           Foreground="{StaticResource Text_Dark}" />
-                                                            </ToolTip>
-                                                        </Button.ToolTip>
-                                                    </Button>
-                                                    <Button Style="{StaticResource HoverBtn}"
-                                                            Click="OnOperationClicked"
-                                                            Tag="delete"
-                                                            Width="24"
-                                                            ToolTipService.ShowOnDisabled="True"
-                                                            ToolTipService.IsEnabled="{Binding IsEnabled, RelativeSource={RelativeSource Mode=Self},Converter={StaticResource inverseBooleanConverter}}"
-                                                            IsEnabled="{Binding RelativeSource={RelativeSource AncestorLevel=1,AncestorType=Page}, Path=DataContext.UserCanDeleteRoles}">
-                                                        <materialicons:MaterialIcon Icon="ic_delete" />
-                                                        <Button.ToolTip>
-                                                            <ToolTip BorderThickness="0">
-                                                                <TextBlock Text="You do not have permission to delete roles"
-                                                                           Foreground="{StaticResource Text_Dark}" />
-                                                            </ToolTip>
-                                                        </Button.ToolTip>
-                                                    </Button>
-                                                </StackPanel>
-                                            </Grid>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-
-
 
                             </GridView>
                         </ListView.View>
@@ -354,30 +417,124 @@
                     <TextBlock Text="Categories"
                                Style="{StaticResource RightPanel_Header}" />
 
-                    <Button Style="{StaticResource HoverBtn}"
-                            Command="{Binding CreateCategory}"
-                            HorizontalAlignment="Left"
-                            Margin="0,40,0,10"
-                            ToolTipService.ShowOnDisabled="True"
-                            ToolTipService.IsEnabled="{Binding IsEnabled, RelativeSource={RelativeSource Mode=Self},Converter={StaticResource inverseBooleanConverter}}"
-                            IsEnabled="{Binding RelativeSource={RelativeSource AncestorLevel=1,AncestorType=Page}, Path=DataContext.UserCanCreateCategories}">
-                        <StackPanel Orientation="Vertical"
-                                    Margin="0,0,15,0">
-                            <materialicons:MaterialIcon Icon="ic_add"
-                                                        Style="{StaticResource ListHeaderBtn_Image}" />
-                            <TextBlock Text="Add"
-                                       Style="{StaticResource ListHeaderBtn_Text}" />
-                        </StackPanel>
-                        <Button.ToolTip>
-                            <ToolTip BorderThickness="0">
-                                <TextBlock Text="You do not have permission to create categories"
-                                           Foreground="{StaticResource Text_Dark}" />
-                            </ToolTip>
-                        </Button.ToolTip>
-                    </Button>
+                    <!--#region Operation Buttons-->
+                    <StackPanel Orientation="Horizontal">
+                        <Button Style="{StaticResource HoverBtn}"
+                                Command="{Binding CreateCategory}"
+                                HorizontalAlignment="Left"
+                                Margin="0,40,0,10"
+                                ToolTipService.ShowOnDisabled="True"
+                                ToolTipService.IsEnabled="{Binding IsEnabled, RelativeSource={RelativeSource Mode=Self},Converter={StaticResource inverseBooleanConverter}}"
+                                IsEnabled="{Binding RelativeSource={RelativeSource AncestorLevel=1,AncestorType=Page}, Path=DataContext.UserCanCreateCategories}">
+                            <StackPanel Orientation="Vertical"
+                                        Margin="0,0,15,0">
+                                <materialicons:MaterialIcon Icon="ic_add"
+                                                            Style="{StaticResource ListHeaderBtn_Image}" />
+                                <TextBlock Text="Add"
+                                           Style="{StaticResource ListHeaderBtn_Text}" />
+                            </StackPanel>
+                            <Button.ToolTip>
+                                <ToolTip BorderThickness="0">
+                                    <TextBlock Text="You do not have permission to create Categories"
+                                               Foreground="{StaticResource Text_Dark}" />
+                                </ToolTip>
+                            </Button.ToolTip>
+                        </Button>
+
+                        <Button Style="{StaticResource HoverBtn}"
+                                Command="{Binding CopySelectedCategory}"
+                                HorizontalAlignment="Left"
+                                Margin="0,40,0,10"
+                                ToolTipService.ShowOnDisabled="True"
+                                ToolTipService.IsEnabled="{Binding ElementName=ProjectSettingsPage, Path=DataContext.UserCanCloneCategories, Converter={StaticResource inverseBooleanConverter}}">
+                            <Button.IsEnabled>
+                                <MultiBinding Converter="{StaticResource multiBoolAllConverter}">
+                                    <Binding ElementName="ProjectSettingsPage"
+                                             Path="DataContext.UserCanCloneCategories" />
+                                    <Binding ElementName="ProjectSettingsPage"
+                                             Path="DataContext.SelectedCategory"
+                                             Converter="{StaticResource IsNullInverseConverter}" />
+                                </MultiBinding>
+                            </Button.IsEnabled>
+                            <StackPanel Orientation="Vertical"
+                                        Margin="0,0,15,0">
+                                <materialicons:MaterialIcon Icon="ic_content_copy"
+                                                            Style="{StaticResource ListHeaderBtn_Image}" />
+                                <TextBlock Text="Copy"
+                                           Style="{StaticResource ListHeaderBtn_Text}" />
+                            </StackPanel>
+                            <Button.ToolTip>
+                                <ToolTip BorderThickness="0">
+                                    <TextBlock Text="You do not have permission to edit Categories"
+                                               Foreground="{StaticResource Text_Dark}" />
+                                </ToolTip>
+                            </Button.ToolTip>
+                        </Button>
+
+                        <Button Style="{StaticResource HoverBtn}"
+                                Command="{Binding EditSelectedCategory}"
+                                HorizontalAlignment="Left"
+                                Margin="0,40,0,10"
+                                ToolTipService.ShowOnDisabled="True"
+                                ToolTipService.IsEnabled="{Binding ElementName=ProjectSettingsPage, Path=DataContext.UserCanEditCategories, Converter={StaticResource inverseBooleanConverter}}">
+                            <Button.IsEnabled>
+                                <MultiBinding Converter="{StaticResource multiBoolAllConverter}">
+                                    <Binding ElementName="ProjectSettingsPage"
+                                             Path="DataContext.UserCanEditCategories" />
+                                    <Binding ElementName="ProjectSettingsPage"
+                                             Path="DataContext.SelectedCategory"
+                                             Converter="{StaticResource IsNullInverseConverter}" />
+                                </MultiBinding>
+                            </Button.IsEnabled>
+                            <StackPanel Orientation="Vertical"
+                                        Margin="0,0,15,0">
+                                <materialicons:MaterialIcon Icon="ic_edit"
+                                                            Style="{StaticResource ListHeaderBtn_Image}" />
+                                <TextBlock Text="Edit"
+                                           Style="{StaticResource ListHeaderBtn_Text}" />
+                            </StackPanel>
+                            <Button.ToolTip>
+                                <ToolTip BorderThickness="0">
+                                    <TextBlock Text="You do not have permission to edit Categories"
+                                               Foreground="{StaticResource Text_Dark}" />
+                                </ToolTip>
+                            </Button.ToolTip>
+                        </Button>
+
+                        <Button Style="{StaticResource HoverBtn}"
+                                Command="{Binding DeleteSelectedCategory}"
+                                HorizontalAlignment="Left"
+                                Margin="0,40,0,10"
+                                ToolTipService.ShowOnDisabled="True"
+                                ToolTipService.IsEnabled="{Binding ElementName=ProjectSettingsPage, Path=DataContext.UserCanDeleteCategories, Converter={StaticResource inverseBooleanConverter}}">
+                            <Button.IsEnabled>
+                                <MultiBinding Converter="{StaticResource multiBoolAllConverter}">
+                                    <Binding ElementName="ProjectSettingsPage"
+                                             Path="DataContext.UserCanDeleteCategories" />
+                                    <Binding ElementName="ProjectSettingsPage"
+                                             Path="DataContext.SelectedCategory"
+                                             Converter="{StaticResource IsNullInverseConverter}" />
+                                </MultiBinding>
+                            </Button.IsEnabled>
+                            <StackPanel Orientation="Vertical"
+                                        Margin="0,0,15,0">
+                                <materialicons:MaterialIcon Icon="ic_delete"
+                                                            Style="{StaticResource ListHeaderBtn_Image}" />
+                                <TextBlock Text="Delete"
+                                           Style="{StaticResource ListHeaderBtn_Text}" />
+                            </StackPanel>
+                            <Button.ToolTip>
+                                <ToolTip BorderThickness="0">
+                                    <TextBlock Text="You do not have permission to edit Categories"
+                                               Foreground="{StaticResource Text_Dark}" />
+                                </ToolTip>
+                            </Button.ToolTip>
+                        </Button>
+                    </StackPanel>
+                    <!--#endregion-->
 
 
-                    <ListView ItemsSource="{Binding Categories}">
+                    <ListView SelectedItem="{Binding SelectedCategory,Mode=TwoWay,NotifyOnSourceUpdated=True}"  ItemsSource="{Binding Categories}">
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn Header="ID"
@@ -385,64 +542,7 @@
                                                 DisplayMemberBinding="{Binding ca_id}" />
                                 <GridViewColumn Header="Name"
                                                 Width="300"
-                                                DisplayMemberBinding="{Binding ca_name}" />
-                                <GridViewColumn Header="Operation"
-                                                Width="200">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <Grid>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <Button Style="{StaticResource HoverBtn }"
-                                                            Tag="copy"
-                                                            Click="OnOperationClicked"
-                                                            Width="24"
-                                                            ToolTipService.ShowOnDisabled="True"
-                                                            ToolTipService.IsEnabled="{Binding IsEnabled, RelativeSource={RelativeSource Mode=Self},Converter={StaticResource inverseBooleanConverter}}"
-                                                            IsEnabled="{Binding RelativeSource={RelativeSource AncestorLevel=1,AncestorType=Page}, Path=DataContext.UserCanCloneCategories}">
-                                                        <materialicons:MaterialIcon Icon="ic_content_copy" />
-                                                        <Button.ToolTip>
-                                                            <ToolTip BorderThickness="0">
-                                                                <TextBlock Text="You do not have permission to copy categories"
-                                                                           Foreground="{StaticResource Text_Dark}" />
-                                                            </ToolTip>
-                                                        </Button.ToolTip>
-                                                    </Button>
-                                                    <Button Style="{StaticResource HoverBtn}"
-                                                            Margin="10,0"
-                                                            Click="OnOperationClicked"
-                                                            Tag="edit"
-                                                            Width="24"
-                                                            ToolTipService.ShowOnDisabled="True"
-                                                            ToolTipService.IsEnabled="{Binding IsEnabled, RelativeSource={RelativeSource Mode=Self},Converter={StaticResource inverseBooleanConverter}}"
-                                                            IsEnabled="{Binding RelativeSource={RelativeSource AncestorLevel=1,AncestorType=Page}, Path=DataContext.UserCanEditCategories}">
-                                                        <materialicons:MaterialIcon Icon="ic_edit" />
-                                                        <Button.ToolTip>
-                                                            <ToolTip BorderThickness="0">
-                                                                <TextBlock Text="You do not have permission to edit categories"
-                                                                           Foreground="{StaticResource Text_Dark}" />
-                                                            </ToolTip>
-                                                        </Button.ToolTip>
-                                                    </Button>
-                                                    <Button Style="{StaticResource HoverBtn}"
-                                                            Click="OnOperationClicked"
-                                                            Tag="delete"
-                                                            Width="24"
-                                                            ToolTipService.ShowOnDisabled="True"
-                                                            ToolTipService.IsEnabled="{Binding IsEnabled, RelativeSource={RelativeSource Mode=Self},Converter={StaticResource inverseBooleanConverter}}"
-                                                            IsEnabled="{Binding RelativeSource={RelativeSource AncestorLevel=1,AncestorType=Page}, Path=DataContext.UserCanDeleteCategories}">
-                                                        <materialicons:MaterialIcon Icon="ic_delete" />
-                                                        <Button.ToolTip>
-                                                            <ToolTip BorderThickness="0">
-                                                                <TextBlock Text="You do not have permission to delete categories"
-                                                                           Foreground="{StaticResource Text_Dark}" />
-                                                            </ToolTip>
-                                                        </Button.ToolTip>
-                                                    </Button>
-                                                </StackPanel>
-                                            </Grid>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
+                                                DisplayMemberBinding="{Binding ca_name}" />                             
 
 
 

@@ -11,7 +11,7 @@
         <ResourceDictionary>            
             <converters:InverseBooleanConverter x:Key="inverseBooleanConverter" />
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-            <converters:MultiBooleanToVisibilityConverter x:Key="multiBoolToVisConvert" />
+            
             <converters:AlternationEqualityConverter x:Key="alternationConverter" />
             <converters:IsNullToVisibilityConverter x:Key="nullToVizConverter" />
             <converters:IsNullConverter x:Key="nullConverter" />
@@ -19,7 +19,14 @@
             <converters:DatetimeToTimeElapsedConverter x:Key="TimeDisplayConv" />
             <converters:IsNullToThicknessConverter x:Key="IsNullToThick" />
             <converters:InverseVisibilityConverter x:Key="InvertViz" />
-
+            
+            <!--#region MultiConverters-->
+            <converters:MultiBooleanToVisibilityConverter x:Key="multiBoolToVisConvert" />
+            <converters:MultiBoolAllConverter x:Key="multiBoolAllConverter" />
+            <converters:MultiBoolAnyConverter x:Key="multiBoolAnyConverter" />
+            <!--#endregion-->
+            
+            <!--#region Converter Groups-->
             <converters:ValueConverterGroup x:Key="MatchUserConv">
                 <converters:MatchesUserIDConverter />
                 <converters:BooleanToVizConverter />
@@ -37,7 +44,6 @@
                 <converters:IsNullConverter />
                 <converters:InverseBooleanConverter />
             </converters:ValueConverterGroup>
-
             <converters:ValueConverterGroup x:Key="IsNullInvertToVizConverter">
                  <converters:IsNullConverter />
                  <converters:InverseBooleanConverter />
@@ -47,6 +53,9 @@
                 <converters:IsNullConverter />
                 <converters:BooleanToVizConverter />
             </converters:ValueConverterGroup>
+            <!--#endregion-->
+            
+            
             <ResourceDictionary.MergedDictionaries>               
                 <ResourceDictionary x:Name="ColorScheme"
                                     Source="View/Resources/ColorSchemeResourceDictionary.xaml" />

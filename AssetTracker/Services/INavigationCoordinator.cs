@@ -12,7 +12,7 @@ namespace AssetTracker.Services
     /// to allow them to send a message to navigate away, ideally this will
     /// be removed/split from this class in order to have a singular responsbility
     /// 
-    /// TODO: Split storing queue from calling navigatetoView
+    /// TODO: Split storing queue from calling navigatetoView -- ASP
     /// </summary>
     public interface INavigationCoordinator
     {

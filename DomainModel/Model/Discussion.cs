@@ -1,4 +1,9 @@
-﻿namespace DomainModel
+﻿using DomainModel.Enums;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace DomainModel
 {
     /// <summary>
     /// Discussions are displayed under an asset detail. There will be 
@@ -23,6 +28,30 @@
         {
             get => di_contents;
             set => di_contents = value;
+        }
+
+        public List<Alert> GetAlerts(List<Discussion> relatedDiscussions)
+        {
+            List<Alert> output = new List<Alert>();
+
+            List<User> usersToAlert = relatedDiscussions.Select(x => x.User).Distinct().ToList();            
+            foreach (User u in usersToAlert)
+            {
+                Alert newAlert = new Alert()
+                {
+                    ar_usid = u.ID,
+                    ar_projectwide = false,
+                    ar_asid = this.di_asid,
+                    ar_date = DateTime.Now,
+                    ar_type = AlertType.DiscussionReply,
+                    ar_header = User.us_displayname + " continued the conversation on #" + Asset.as_id,
+                    ar_content = di_contents.Substring(0, Math.Min(di_contents.Length, 47)) + "..."
+                };
+                output.Add(newAlert);
+            }
+
+            return output;
+
         }
     }
 }

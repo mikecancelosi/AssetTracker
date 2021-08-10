@@ -596,8 +596,6 @@ namespace AssetTracker.ViewModels
 
             }
         }
-
-
         #endregion
 
         /// <summary>
@@ -610,32 +608,26 @@ namespace AssetTracker.ViewModels
             int parentID = (int)values[0];
             string content = values[1] as string;
 
-            Discussion newDiscussion = new Discussion();
-            newDiscussion.di_contents = content;
-            newDiscussion.di_date = DateTime.Now;
-            newDiscussion.di_asid = myAsset.ID;
-            newDiscussion.di_usid = MainViewModel.Instance.CurrentUser.us_id;
-            if (parentID > 0)
+            Discussion newDiscussion = new Discussion()
             {
-                newDiscussion.di_parentid = parentID;
-
+                di_contents = content,
+                di_date = DateTime.Now,
+                di_asid = myAsset.ID,
+                di_usid = CurrentUser.us_id,
+                di_parentid = parentID
+            };
+            //If we are adding this to a prexisting discussion ,we need to alert all other users to new content
+            if (newDiscussion.di_parentid > 0)
+            {                
                 Discussion parentDiscussion = discussionRepo.GetByID(parentID);
-                int parentUserId = parentDiscussion.di_usid ?? 0;
-                if (parentUserId > 0 &&
-                    parentUserId != MainViewModel.Instance.CurrentUser.us_id)
+                List<Discussion> otherDiscussions = (from d in discussionRepo.Get()
+                                                     where d.di_parentid == parentDiscussion.di_id
+                                                     select d).ToList();
+                otherDiscussions.Add(parentDiscussion);
+                List<Alert> alertsToPost = newDiscussion.GetAlerts(otherDiscussions);
+                foreach(Alert al in alertsToPost)
                 {
-                    //TODO: Create an alert for all users that have replied on the discussion
-                    User parentUser = usersRepo.GetByID(parentUserId);
-                    Alert newAlert = new Alert();
-                    newAlert.ar_usid = parentDiscussion.di_usid;
-                    newAlert.ar_projectwide = false;
-                    newAlert.ar_asid = myAsset.as_id;
-                    newAlert.ar_date = DateTime.Now;
-                    newAlert.ar_type = AlertType.DiscussionReply;
-                    newAlert.ar_header = parentUser.us_displayname + " continued the conversation on #" + myAsset.as_id;
-                    newAlert.ar_content = content.Substring(0, Math.Min(content.Length, 47)) + "...";
-
-                    alertsRepo.Insert(newAlert);
+                    alertsRepo.Insert(al);
                 }
             }
 

@@ -108,7 +108,7 @@ namespace DomainModel
 
         public override DatabaseBackedObject Clone()
         {
-            //TODO : Copy with children
+            //TODO : Copy with children -- ASP
             Asset copy = new Asset()
             {
                 as_caid = this.as_caid,

@@ -38,14 +38,59 @@ namespace AssetTracker.ViewModels
         }
 
         #region Commands
-        public ICommand CreateRole { get; set; }
-        public ICommand CreateCategory { get; set; }
-        public ICommand CreateUser { get; set; }
-        public ICommand CreateAlert => new RelayCommand((s) => CreateNewProjectWideAlert(), (s) => true);
+        public ICommand CreateUser => new RelayCommand((s) => navCoordinator.NavigateToCreateUser(), (s) => true);
+        public ICommand CopySelectedUser => new RelayCommand((s) => CompleteDBOOperation(SelectedUser, OperationType.Copy), (s) => true);
+        public ICommand EditSelectedUser => new RelayCommand((s) => CompleteDBOOperation(SelectedUser, OperationType.Edit), (s) => true);
+        public ICommand DeleteSelectedUser => new RelayCommand((s) => CompleteDBOOperation(SelectedUser, OperationType.Delete), (s) => true);
+
+        public ICommand CreateRole => new RelayCommand((s) => navCoordinator.NavigateToCreateRole(), (s) => true);
+        public ICommand CopySelectedRole => new RelayCommand((s) => CompleteDBOOperation(SelectedRole, OperationType.Copy), (s) => true);
+        public ICommand EditSelectedRole => new RelayCommand((s) => CompleteDBOOperation(SelectedRole, OperationType.Edit), (s) => true);
+        public ICommand DeleteSelectedRole => new RelayCommand((s) => CompleteDBOOperation(SelectedRole, OperationType.Delete), (s) => true);
+        public ICommand CreateCategory => new RelayCommand((s) => navCoordinator.NavigateToCreateCategory(), (s) => true);
+
+        public ICommand CopySelectedCategory => new RelayCommand((s) => CompleteDBOOperation(SelectedCategory, OperationType.Copy), (s) => true);
+        public ICommand EditSelectedCategory => new RelayCommand((s) => CompleteDBOOperation(SelectedCategory, OperationType.Edit), (s) => true);
+        public ICommand DeleteSelectedCategory => new RelayCommand((s) => CompleteDBOOperation(SelectedCategory, OperationType.Delete), (s) => true);
+
         public ICommand OpenNewAlert => new RelayCommand((s) => PromptNewAlert = true, (s) => true);
         public ICommand CloseNewAlert => new RelayCommand((s) => PromptNewAlert = false, (s) => true);
+        public ICommand CreateAlert => new RelayCommand((s) => CreateNewProjectWideAlert(), (s) => true);
         public ICommand EditAlertCommand => new RelayCommand((s) => EditAlert(s), (s) => true);
         public ICommand DeleteAlertCommand => new RelayCommand((s) => DeleteAlert(s), (s) => true);
+        #endregion
+
+        #region ListSelections
+        private User selectedUser;
+        public User SelectedUser
+        {
+            get => selectedUser;
+            set
+            {
+                selectedUser = value;
+                NotifyPropertyChanged("SelectedUser");
+            }
+        }
+        private SecRole selectedRole;
+        public SecRole SelectedRole
+        {
+            get => selectedRole;
+            set
+            {
+                selectedRole = value;
+                NotifyPropertyChanged("SelectedRole");
+            }
+        }
+        private AssetCategory selectedCategory;
+        public AssetCategory SelectedCategory
+        {
+            get => selectedCategory;
+            set
+            {
+                selectedCategory = value;
+                NotifyPropertyChanged("SelectedCategory");
+            }
+        }
         #endregion
 
         private bool promptNewAlert;
@@ -80,8 +125,8 @@ namespace AssetTracker.ViewModels
                 NotifyPropertyChanged("PromptDelete");
             }
         }
-        public ICommand DeleteConfirmed { get; set; }
-        public ICommand DeleteCanceled { get; set; }
+        public ICommand DeleteConfirmed => new RelayCommand((s) => DeleteSelectedObject(), (s) => true);
+        public ICommand DeleteCanceled => new RelayCommand((s) => { PromptDelete = false; }, (s) => true);
         public DatabaseBackedObject DeletionObject { get; private set; }
 
         public enum OperationType
@@ -125,10 +170,11 @@ namespace AssetTracker.ViewModels
         #endregion
 
 
+
         private User LoggedInUser;
 
         private readonly INavigationCoordinator navCoordinator;
-        public ProjectSettingsViewModel(INavigationCoordinator coord, 
+        public ProjectSettingsViewModel(INavigationCoordinator coord,
                                         GenericUnitOfWork uow,
                                         User loggedInUser,
                                         IDeleteStrategy<SecRole> roleDeleteStrat,
@@ -150,12 +196,6 @@ namespace AssetTracker.ViewModels
             alertDeleteStrategy = alertDeleteStrat;
             catDeleteStrategy = catDeleteStrat;
             userDeleteStrategy = userDeleteStrat;
-
-            CreateRole = new RelayCommand((s) => navCoordinator.NavigateToCreateRole(), (s) => true);
-            CreateCategory = new RelayCommand((s) => navCoordinator.NavigateToCreateCategory(), (s) => true);
-            CreateUser = new RelayCommand((s) => navCoordinator.NavigateToCreateUser(), (s) => true);
-            DeleteConfirmed = new RelayCommand((s) => DeleteSelectedObject(), (s) => true);
-            DeleteCanceled = new RelayCommand((s) => { PromptDelete = false; }, (s) => true);
         }
 
         public void CompleteDBOOperation(DatabaseBackedObject dbo, OperationType operation)
@@ -216,12 +256,12 @@ namespace AssetTracker.ViewModels
             {
                 case "User":
                     var userItem = (User)DeletionObject;
-                    userDeleteStrategy.Delete(unitOfWork, userItem);                    
+                    userDeleteStrategy.Delete(unitOfWork, userItem);
                     unitOfWork.Commit();
                     NotifyPropertyChanged("Users");
                     break;
                 case "SecRole":
-                    var roleItem =(SecRole)DeletionObject;
+                    var roleItem = (SecRole)DeletionObject;
                     secRoleDeleteStrategy.Delete(unitOfWork, roleItem);
                     unitOfWork.Commit();
                     NotifyPropertyChanged("Roles");
@@ -268,7 +308,7 @@ namespace AssetTracker.ViewModels
             unitOfWork.Commit();
 
             ResetAlertPrompt();
-        }       
+        }
 
         private void ResetAlertPrompt()
         {

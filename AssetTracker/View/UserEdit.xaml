@@ -101,15 +101,7 @@
                 </Style>
             </Border.Resources>
             <Grid>
-                <StackPanel Margin="50">
-
-                    <StackPanel x:Name="Breadcrumbs"
-                                Orientation="Horizontal">
-                        <Button Content="Project Settings" />
-                        <TextBlock Text=">" />
-                        <TextBlock Text="{Binding HeadingContext}" />
-
-                    </StackPanel>
+                <StackPanel Margin="50">                   
 
                     <Grid x:Name="UserSetup"
                           Margin="0,10"

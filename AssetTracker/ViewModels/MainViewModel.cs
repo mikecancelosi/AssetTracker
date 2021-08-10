@@ -2,6 +2,9 @@
 
 namespace AssetTracker.ViewModels
 {
+    /// <summary>
+    /// TODO: Fix bug of profile edit menu not disappearing after selection.
+    /// </summary>
     public class MainViewModel : ViewModel
     {
         public User CurrentUser { get; set; }

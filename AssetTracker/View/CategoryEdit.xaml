@@ -97,16 +97,7 @@
             
             <Grid>
                 <StackPanel Orientation="Vertical"
-                            Margin="50">
-
-                    <StackPanel x:Name="Breadcrumbs"
-                                Orientation="Horizontal">
-                        <Button Content="Project Settings"
-                                Command="{Binding NavigateToProjectSettingsCommand}" />
-                        <TextBlock Text=">" />
-                        <TextBlock Text="{Binding HeadingContent}" />
-
-                    </StackPanel>
+                            Margin="50">                  
 
                     <TextBlock Text="Setup information"
                                Style="{StaticResource RightPanel_Header}"

@@ -66,8 +66,7 @@ namespace AssetTracker.ViewModels
         public ICommand DeleteConfirmed { get; set; }
         public ICommand SaveCommand { get; set; }
         public ICommand RefuseSave { get; set; }
-        public ICommand NavigateToProjectSettingsCommand => new RelayCommand((s) => navCoordinator.NavigateToProjectSettings(),
-                                                                             (s) => true);
+
         public List<Violation> SaveViolations { get; set; }
 
         public bool Creating { get; set; }

@@ -13,6 +13,11 @@ using static DomainModel.SecPermission;
 
 namespace AssetTracker.ViewModels
 {
+    /// <summary>
+    /// TODO: Improve override visuals to show vs default/ role override
+    /// TODO: Allow setting of profile picture
+    /// TODO: Change icon for Permissions tab
+    /// </summary>
     public class UserEditViewModel : ViewModel, ISavable
     {
         public User CurrentUser { get; private set; }
@@ -145,8 +150,8 @@ namespace AssetTracker.ViewModels
             }
         }
 
-        public ICommand SaveCommand { get; set; }
-        public ICommand RefuseSave { get; set; }
+        public ICommand SaveCommand => new RelayCommand((s) => Save(), (s) => true);
+        public ICommand RefuseSave => new RelayCommand((s) => navCoordinator.NavigateToQueued(), (s) => true);
         public bool IsSavable => unitOfWork.HasChanges;
         public List<Violation> SaveViolations { get; set; }
         private bool promptSave;
@@ -161,7 +166,7 @@ namespace AssetTracker.ViewModels
         }
         public INavigationCoordinator navCoordinator { get; set; }
         private IDeleteStrategy<User> userDeleteStrategy;
-        public ICommand DeleteConfirmed { get; set; }
+        public ICommand DeleteConfirmed => new RelayCommand((s) => DeleteUser(), (s) => true);
 
         #region Repositories
         private GenericRepository<User> userRepo;
@@ -206,23 +211,21 @@ namespace AssetTracker.ViewModels
         {
             navCoordinator = coord;
             userDeleteStrategy = userDeleteStrat;
-            navCoordinator.UserNavigationAttempt += (s) => PromptSave = true;
-
             unitOfWork = uow;
+
+            navCoordinator.UserNavigationAttempt += (s) => PromptSave = true;            
             userRepo = unitOfWork.GetRepository<User>();
             roleRepo = unitOfWork.GetRepository<SecRole>();
             userOverrideRepo = unitOfWork.GetRepository<SecPermission2>();
             roleGroupsRepo = unitOfWork.GetRepository<SecPermission4>();
 
             CurrentUser = new User();
-            DeleteConfirmed = new RelayCommand((s) => DeleteUser(), (s) => true);
-            SaveCommand = new RelayCommand((s) => Save(), (s) => true);
-            RefuseSave = new RelayCommand((s) => navCoordinator.NavigateToQueued(), (s) => true);
+            Creating = true;
+            Cloning = false;
 
             NotifyPropertyChanged("UserRole");
             NotifyPropertyChanged("Roles");
 
-            //TODO: Implement breadcrumbs
         }
 
         public void SetUser(User user)

@@ -13,6 +13,11 @@ using static DomainModel.SecPermission;
 
 namespace AssetTracker.ViewModels
 {
+    /// <summary>
+    /// TODO: Change visuals for Activate/Deactivate all
+    /// TODO: Add 'Reset' option
+    /// TODO: Visual improvements to the override changes from default.
+    /// </summary>
     public class RoleEditViewModel : ViewModel, ISavable
     {
         public SecRole Role { get; private set; }
@@ -110,9 +115,6 @@ namespace AssetTracker.ViewModels
                 NotifyPropertyChanged("PromptSave");
             }
         }
-
-        public ICommand NavigateToProjectSettingsCommand => new RelayCommand((s) => navCoordinator.NavigateToProjectSettings(),
-                                                                             (s) => true);
 
         #region Repositories
         private GenericRepository<SecPermission4> roleGroupsRepo;

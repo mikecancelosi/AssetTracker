@@ -12,6 +12,10 @@ using System.Windows.Input;
 
 namespace AssetTracker.ViewModels
 {
+    /// <summary>
+    /// TODO: Set operation icons to be at the top, next to Add
+    /// TODO: Change icon for each tab.
+    /// </summary>
     public class ProjectSettingsViewModel : ViewModel
     {
         public ObservableCollection<User> Users => new ObservableCollection<User>(userRepo.Get());

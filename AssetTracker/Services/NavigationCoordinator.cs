@@ -1,5 +1,6 @@
 ﻿using AssetTracker.ViewModels;
 using AssetTracker.ViewModels.Interfaces;
+using AssetTracker.ViewModels.Services;
 using DataAccessLayer;
 using DataAccessLayer.Strategies;
 using DomainModel;
@@ -30,26 +31,14 @@ namespace AssetTracker.Services
             }
         }
 
-        private IDeleteStrategy<User> userDeleteStrategy;
-        private IDeleteStrategy<Asset> assetDeleteStrategy;
-        private IDeleteStrategy<SecRole> roleDeleteStrategy;
-        private IDeleteStrategy<AssetCategory> catDeleteStrategy;
-        private IDeleteStrategy<Alert> alertDeleteStrategy;
-        private IDeleteStrategy<Metadata> tagDeleteStrategy;
+        /// <summary>
+        /// Factory to build viewmodels for when user requests to navigate away
+        /// </summary>
+        private IViewModelFactory viewModelFactory;
 
-        public NavigationCoordinator(IDeleteStrategy<User> userDeleteStrat,
-                                     IDeleteStrategy<Asset> assetDeleteStrat,
-                                     IDeleteStrategy<SecRole> roleDeleteStrat,
-                                     IDeleteStrategy<AssetCategory> catDeleteStrat,
-                                     IDeleteStrategy<Alert> alertDeleteStrat,
-                                     IDeleteStrategy<Metadata> tagDeleteStrat)
+        public NavigationCoordinator(IViewModelFactory vmFactory)
         {
-            userDeleteStrategy = userDeleteStrat;
-            assetDeleteStrategy = assetDeleteStrat;
-            roleDeleteStrategy = roleDeleteStrat;
-            catDeleteStrategy = catDeleteStrat;
-            alertDeleteStrategy = alertDeleteStrat;
-            tagDeleteStrategy = tagDeleteStrat;
+            viewModelFactory = vmFactory;
         }
 
 
@@ -78,94 +67,74 @@ namespace AssetTracker.Services
             }
         }
 
-
-
-        #region BuildViewmodels
         public void NavigateToLogin()
         {
-            GenericUnitOfWork uow = new GenericUnitOfWork(new TrackerContext());
-            LoginViewModel vm = new LoginViewModel(this, uow);
+            LoginViewModel vm = viewModelFactory.CreateLoginViewModel(this);
             RequestNavigationTo(vm);
         }
 
         public void NavigateToCreateUser()
         {
-            GenericUnitOfWork uow = new GenericUnitOfWork(new TrackerContext());
-            UserEditViewModel vm = new UserEditViewModel(this, uow, userDeleteStrategy);
+            UserEditViewModel vm = viewModelFactory.CreateUserEditViewModel(this);
             RequestNavigationTo(vm);
 
         }
         public void NavigateToUserEdit(User userToEdit)
         {
-            GenericUnitOfWork uow = new GenericUnitOfWork(new TrackerContext());
-            UserEditViewModel vm = new UserEditViewModel(this, uow, userDeleteStrategy);
-            vm.SetUser(userToEdit);
+            UserEditViewModel vm = viewModelFactory.CreateUserEditViewModel(this, userToEdit);
             RequestNavigationTo(vm);
         }
 
         public void NavigateToAssetDetail(Asset asset)
         {
-            GenericUnitOfWork uow = new GenericUnitOfWork(new TrackerContext());
-            AssetDetailViewModel vm = new AssetDetailViewModel(this, uow, assetDeleteStrategy, tagDeleteStrategy);
-            vm.SetAsset(asset);
+            AssetDetailViewModel vm = viewModelFactory.CreateAssetDetailViewModel(this, asset);
             RequestNavigationTo(vm);
         }
 
         public void NavigateToUserDashboard()
         {
-            GenericUnitOfWork uow = new GenericUnitOfWork(new TrackerContext());
-            UserDashboardViewModel vm = new UserDashboardViewModel(this, uow);
+            UserDashboardViewModel vm = viewModelFactory.CreateUserDashboardViewModel(this);
             RequestNavigationTo(vm);
         }
 
         public void NavigateToCreateRole()
         {
-            GenericUnitOfWork uow = new GenericUnitOfWork(new TrackerContext());
-            RoleEditViewModel vm = new RoleEditViewModel(this, uow, roleDeleteStrategy);
+            RoleEditViewModel vm = viewModelFactory.CreateRoleEditViewModel(this);
             RequestNavigationTo(vm);
         }
         public void NavigateToRoleEdit(SecRole roleToEdit)
         {
-            GenericUnitOfWork uow = new GenericUnitOfWork(new TrackerContext());
-            RoleEditViewModel vm = new RoleEditViewModel(this, uow, roleDeleteStrategy);
-            vm.Role = roleToEdit;
+            RoleEditViewModel vm = viewModelFactory.CreateRoleEditViewModel(this, roleToEdit);
             RequestNavigationTo(vm);
         }
 
         public void NavigateToProjectSettings()
         {
-            GenericUnitOfWork uow = new GenericUnitOfWork(new TrackerContext());
-            ProjectSettingsViewModel vm = new ProjectSettingsViewModel(this, uow, MainViewModel.Instance.CurrentUser, roleDeleteStrategy, alertDeleteStrategy, userDeleteStrategy, catDeleteStrategy);
+            ProjectSettingsViewModel vm = viewModelFactory.CreateProjectSettingsViewModel(this);
             RequestNavigationTo(vm);
         }
 
         public void NavigateToAssetList()
         {
-            GenericUnitOfWork uow = new GenericUnitOfWork(new TrackerContext());
-            AssetListViewModel vm = new AssetListViewModel(this, uow, MainViewModel.Instance.CurrentUser, assetDeleteStrategy);
+            AssetListViewModel vm = viewModelFactory.CreateAssetListViewModel(this);
             RequestNavigationTo(vm);
         }
 
         public void NavigateToCreateCategory()
         {
-            GenericUnitOfWork uow = new GenericUnitOfWork(new TrackerContext());
-            CategoryEditViewModel vm = new CategoryEditViewModel(this, uow, catDeleteStrategy);
+            CategoryEditViewModel vm = viewModelFactory.CreateCategoryEditViewModel(this);
             RequestNavigationTo(vm);
         }
         public void NavigatetoCategoryEdit(AssetCategory cat)
         {
-            GenericUnitOfWork uow = new GenericUnitOfWork(new TrackerContext());
-            CategoryEditViewModel vm = new CategoryEditViewModel(this, uow, catDeleteStrategy);
-            vm.Category = cat;
+            CategoryEditViewModel vm = viewModelFactory.CreateCategoryEditViewModel(this, cat);
             RequestNavigationTo(vm);
         }
 
         public void NavigateToCreateAsset()
         {
-            GenericUnitOfWork uow = new GenericUnitOfWork(new TrackerContext());
-            AssetDetailViewModel vm = new AssetDetailViewModel(this, uow, assetDeleteStrategy, tagDeleteStrategy);
+            AssetDetailViewModel vm = viewModelFactory.CreateAssetDetailViewModel(this);
             RequestNavigationTo(vm);
         }
-        #endregion
     }
 }

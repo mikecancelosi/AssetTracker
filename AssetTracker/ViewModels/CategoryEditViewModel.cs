@@ -13,7 +13,7 @@ namespace AssetTracker.ViewModels
 {
     public class CategoryEditViewModel : ViewModel,ISavable
     {
-        public AssetCategory Category { get; set; }      
+        public AssetCategory Category { get; private set; }      
 
         public List<Phase> CurrentPhases
         {

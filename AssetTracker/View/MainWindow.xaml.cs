@@ -1,10 +1,12 @@
 ﻿using AssetTracker.Services;
 using AssetTracker.View.Services;
 using AssetTracker.ViewModels;
+using AssetTracker.ViewModels.Services;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using DataAccessLayer.Strategies;
 using DomainModel;
+using System;
 using System.Windows;
 using System.Windows.Navigation;
 
@@ -37,7 +39,7 @@ namespace AssetTracker
 
         public void NavigateToProjectStatus(object sender, RoutedEventArgs e)
         {
-            
+            throw new NotImplementedException();
         }
 
         private void NavigateToProjectConfig(object sender, RoutedEventArgs e)
@@ -75,13 +77,11 @@ namespace AssetTracker
         {
             VM.LogoutUser();
             ProfileBtn_Popup.IsOpen = false;
-            navCoordinator.NavigateToLogin();
-            
+            navCoordinator.NavigateToLogin();            
         }
 
         private void setServices()
-        {
-            
+        {            
             WindsorContainer container = new WindsorContainer();
             container.Register(Component.For<IViewFactory>()
                                         .ImplementedBy<ViewFactory>());
@@ -111,6 +111,9 @@ namespace AssetTracker
 
             container.Register(Component.For<IDeleteStrategy<Alert>>()
                                        .ImplementedBy<AlertDeleteStrategy>());
+
+            container.Register(Component.For<IViewModelFactory>()
+                                        .ImplementedBy<ViewModelFactory>());
 
             navObserver = container.Resolve<NavigationObserver>();
             navCoordinator = container.Resolve<INavigationCoordinator>();

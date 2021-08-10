@@ -80,6 +80,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ViewModels\Services\IViewModelFactory.cs" />
+    <Compile Include="ViewModels\Services\ViewModelFactory.cs" />
     <Compile Include="View\Services\AssetHierachyObjectBuilder.cs" />
     <Compile Include="Services\NavigationObserver.cs" />
     <Compile Include="Extensions\ObservableCollectionExtensions.cs" />

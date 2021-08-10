@@ -15,7 +15,7 @@ namespace AssetTracker.ViewModels
 {
     public class RoleEditViewModel : ViewModel, ISavable
     {
-        public SecRole Role { get; set; }
+        public SecRole Role { get; private set; }
 
         public string RoleName
         {

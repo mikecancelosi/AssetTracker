@@ -13,8 +13,7 @@ using System.Windows.Input;
 namespace AssetTracker.ViewModels
 {
     /// <summary>
-    /// TODO: Set operation icons to be at the top, next to Add
-    /// TODO: Change icon for each tab.
+    /// 
     /// </summary>
     public class ProjectSettingsViewModel : ViewModel
     {
@@ -93,6 +92,7 @@ namespace AssetTracker.ViewModels
         }
         #endregion
 
+        #region Alert Properties
         private bool promptNewAlert;
         public bool PromptNewAlert
         {
@@ -114,7 +114,9 @@ namespace AssetTracker.ViewModels
         public string AlertPrompt_Header { get; set; }
         public string AlertPrompt_Contents { get; set; }
         public int AlertPrompt_ID { get; set; }
+        #endregion
 
+        #region Deleting
         private bool promptDelete;
         public bool PromptDelete
         {
@@ -128,6 +130,12 @@ namespace AssetTracker.ViewModels
         public ICommand DeleteConfirmed => new RelayCommand((s) => DeleteSelectedObject(), (s) => true);
         public ICommand DeleteCanceled => new RelayCommand((s) => { PromptDelete = false; }, (s) => true);
         public DatabaseBackedObject DeletionObject { get; private set; }
+
+        private IDeleteStrategy<SecRole> secRoleDeleteStrategy;
+        private IDeleteStrategy<Alert> alertDeleteStrategy;
+        private IDeleteStrategy<AssetCategory> catDeleteStrategy;
+        private IDeleteStrategy<User> userDeleteStrategy;
+        #endregion
 
         public enum OperationType
         {
@@ -144,12 +152,7 @@ namespace AssetTracker.ViewModels
         private GenericRepository<SecPermission3> roleOverrideRepo;
         #endregion
 
-        #region DeleteStrategies
-        private IDeleteStrategy<SecRole> secRoleDeleteStrategy;
-        private IDeleteStrategy<Alert> alertDeleteStrategy;
-        private IDeleteStrategy<AssetCategory> catDeleteStrategy;
-        private IDeleteStrategy<User> userDeleteStrategy;
-        #endregion
+       
 
         #region Permissions
         public bool UserCanCreateUsers => PermissionsManager.HasPermission(LoggedInUser, Permission.CreateUser, unitOfWork);
@@ -169,11 +172,9 @@ namespace AssetTracker.ViewModels
         public bool UserCanDeleteAlerts => PermissionsManager.HasPermission(LoggedInUser, Permission.DeleteAlert, unitOfWork);
         #endregion
 
-
-
         private User LoggedInUser;
-
         private readonly INavigationCoordinator navCoordinator;
+
         public ProjectSettingsViewModel(INavigationCoordinator coord,
                                         GenericUnitOfWork uow,
                                         User loggedInUser,
@@ -185,17 +186,16 @@ namespace AssetTracker.ViewModels
             navCoordinator = coord;
             unitOfWork = uow;
             LoggedInUser = loggedInUser;
+            secRoleDeleteStrategy = roleDeleteStrat;
+            alertDeleteStrategy = alertDeleteStrat;
+            catDeleteStrategy = catDeleteStrat;
+            userDeleteStrategy = userDeleteStrat;
 
             userRepo = unitOfWork.GetRepository<User>();
             roleRepo = unitOfWork.GetRepository<SecRole>();
             categoryRepo = unitOfWork.GetRepository<AssetCategory>();
             alertRepo = unitOfWork.GetRepository<Alert>();
             roleOverrideRepo = unitOfWork.GetRepository<SecPermission3>();
-
-            secRoleDeleteStrategy = roleDeleteStrat;
-            alertDeleteStrategy = alertDeleteStrat;
-            catDeleteStrategy = catDeleteStrat;
-            userDeleteStrategy = userDeleteStrat;
         }
 
         public void CompleteDBOOperation(DatabaseBackedObject dbo, OperationType operation)

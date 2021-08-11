@@ -2,9 +2,9 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:materialicons="clr-namespace:MaterialIcons;assembly=MaterialIcons"
                     xmlns:model="clr-namespace:DomainModel;assembly=DomainModel">
-    
-    <Style TargetType="Button"
-           x:Key="HoverBtn">
+
+    <Style x:Key="HoverBtn"
+           TargetType="Button">
         <Setter Property="Background"
                 Value="Transparent" />
         <Setter Property="BorderThickness"
@@ -43,8 +43,8 @@
         </Style.Triggers>
     </Style>
 
-    <Style TargetType="materialicons:MaterialIcon"
-           x:Key="HoverBtn_Content">
+    <Style x:Key="HoverBtn_Content"
+           TargetType="materialicons:MaterialIcon">
         <Style.Triggers>            
             <Trigger Property="IsEnabled"
                      Value="True">
@@ -71,8 +71,8 @@
         </Style.Triggers>
     </Style>
 
-    <Style TargetType="TextBlock"
-           x:Key="HoverBtn_TextContent">
+    <Style x:Key="HoverBtn_TextContent"
+           TargetType="TextBlock">
         <Style.Triggers>
             <Trigger Property="IsEnabled"
                      Value="True">
@@ -94,9 +94,8 @@
         </Style.Triggers>
     </Style>
 
-
-    <Style TargetType="TextBlock"
-           x:Key="LeftPanel_Header">
+    <Style x:Key="LeftPanel_Header" 
+             TargetType="TextBlock">
         <Setter Property="Foreground"
                 Value="{StaticResource Text_Dark}" />
         <Setter Property="FontSize"
@@ -105,16 +104,16 @@
                 Value="Bold" />
     </Style>
 
-    <Style TargetType="Border"
-           x:Key="LeftPanel">
+    <Style x:Key="LeftPanel"
+           TargetType="Border">
         <Setter Property="Padding"
                 Value="20" />
         <Setter Property="Background"
                 Value="{StaticResource Layer1_Dark}" />
     </Style>
 
-    <Style TargetType="Border"
-           x:Key="ControlBtns">
+    <Style x:Key="ControlBtns"
+           TargetType="Border">
         <Setter Property="Padding"
                 Value="20,10,20,20" />
         <Setter Property="HorizontalAlignment"
@@ -125,25 +124,26 @@
                 Value="{StaticResource BackgroundColor_Dark}" />
 
     </Style>
-    <Style TargetType="Button"
-           BasedOn="{StaticResource HoverBtn}"
-           x:Key="ControlBtn">
+
+    <Style x:Key="ControlBtn"
+           TargetType="Button"
+           BasedOn="{StaticResource HoverBtn}">
         <Setter Property="Height"
                 Value="30" />
         <Setter Property="Width"
                 Value="30" />
-    </Style> 
+    </Style>
 
-    <Style TargetType="Border"
-           x:Key="RightPanel">
+    <Style x:Key="RightPanel"
+           TargetType="Border">
         <Setter Property="Margin"
                 Value="50,0,0,0" />
         <Setter Property="Background"
                 Value="{StaticResource Layer1_Dark}" />
     </Style>
 
-    <Style TargetType="TextBlock"
-           x:Key="RightPanel_Header">
+    <Style x:Key="RightPanel_Header"
+           TargetType="TextBlock">
         <Setter Property="Foreground"
                 Value="{StaticResource Text_Dark}" />
         <Setter Property="FontSize"

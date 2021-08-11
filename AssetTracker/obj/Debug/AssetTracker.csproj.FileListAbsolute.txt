@@ -1,6 +1,5 @@
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\View\Resources\ColorSchemeResourceDictionary.baml
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\View\Resources\CommonResourceDictionary.baml
-C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\View\Resources\ProjectSettingsResourceDictionary.baml
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\View\Resources\ScrollbarDictionary.baml
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\View\CategoryEdit.g.cs
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\View\Login.g.cs
@@ -57,3 +56,5 @@ C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\As
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\AssetTracker.csproj.CoreCompileInputs.cache
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\AssetTracker.csproj.CopyComplete
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\bin\Debug\DataAccessLayer.dll.config
+C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\View\Controls\SubNavRadioButton.g.cs
+C:\Users\mikec\Documents\Projects\AssetTrackerProjects\AssetTracker\obj\Debug\View\Controls\SubNavRadioButton.baml

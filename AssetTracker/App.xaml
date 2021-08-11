@@ -61,8 +61,6 @@
                                     Source="View/Resources/ColorSchemeResourceDictionary.xaml" />
                 <ResourceDictionary x:Name="Common"
                                     Source="View/Resources/CommonResourceDictionary.xaml" />
-                <ResourceDictionary x:Name="ProjectSettingsDictionary"
-                                    Source="View/Resources/ProjectSettingsResourceDictionary.xaml" />
                 <ResourceDictionary x:Name="PermissionsDictionary"
                                     Source="View/Resources/PermissionsResourceDictionary.xaml" />
                 <ResourceDictionary x:Name="ScrollBarDictionary"

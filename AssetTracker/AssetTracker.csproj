@@ -82,6 +82,9 @@
     </ApplicationDefinition>
     <Compile Include="ViewModels\Services\IViewModelFactory.cs" />
     <Compile Include="ViewModels\Services\ViewModelFactory.cs" />
+    <Compile Include="View\Controls\SubNavRadioButton.xaml.cs">
+      <DependentUpon>SubNavRadioButton.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Converters\MultiBoolAllConverter.cs" />
     <Compile Include="View\Converters\MultiBoolAnyConverter.cs" />
     <Compile Include="View\Services\AssetHierachyObjectBuilder.cs" />
@@ -154,6 +157,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\Controls\SubNavRadioButton.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="View\Login.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -203,10 +210,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Resources\PermissionsResourceDictionary.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Resources\ProjectSettingsResourceDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -7,20 +7,13 @@
       xmlns:viewmodel="clr-namespace:AssetTracker.ViewModels"
       xmlns:materialicons="clr-namespace:MaterialIcons;assembly=MaterialIcons"
       xmlns:conv="clr-namespace:AssetTracker.View.Converters"
+      xmlns:controls="clr-namespace:AssetTracker.View.Controls"
       mc:Ignorable="d"
       Title="ProjectSettings"
       ShowsNavigationUI="False"
       Loaded="Page_Loaded"
       x:Name="ProjectSettingsPage"
       d:DataContext="{d:DesignInstance viewmodel:ProjectSettingsViewModel, IsDesignTimeCreatable=True}">
-    <Page.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary x:Name="ProjectSettingsDictionary"
-                                    Source="Resources/ProjectSettingsResourceDictionary.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Page.Resources>
 
     <Grid Margin="100,0">
         <Grid.ColumnDefinitions>
@@ -37,34 +30,33 @@
                            Style="{StaticResource LeftPanel_Header}"
                            Foreground="{StaticResource Text_Dark}" />
                 <StackPanel Margin="0,100">
-
-                    <RadioButton x:Name="UsersBtn"
-                                 Content="Users"
-                                 GroupName="Navigation"
-                                 IsChecked="True"
-                                 Style="{StaticResource SubNavRadio}" />
-
-                    <RadioButton x:Name="RolesBtn"
-                                 Content="Roles"
-                                 GroupName="Navigation"
-                                 Margin="0,20,0,0"
-                                 Style="{StaticResource SubNavRadio}" />
-
-                    <RadioButton x:Name="CategoriesBtn"
-                                 Content="Categories"
-                                 Margin="0,20"
-                                 GroupName="Navigation"
-                                 Style="{StaticResource SubNavRadio}" />
-
-                    <RadioButton x:Name="AlertsBtn"
-                                 Content="Alerts"
-                                 GroupName="Navigation"
-                                 Style="{StaticResource SubNavRadio}" />
+                    <controls:SubNavRadioButton x:Name="UsersBtn"
+                                                IconChoice="ic_person"
+                                                LabelContent="Users"
+                                                Margin="0,0,0,20"
+                                                GroupName="Navigation"
+                                                IsChecked="True" />
+                    <controls:SubNavRadioButton x:Name="RolesBtn"
+                                                IconChoice="ic_group"
+                                                LabelContent="Roles"
+                                                Margin="0,0,0,20"
+                                                GroupName="Navigation" />
+                    <controls:SubNavRadioButton x:Name="CategoriesBtn"
+                                                IconChoice="ic_group_work"
+                                                LabelContent="Categories"
+                                                Margin="0,0,0,20"
+                                                GroupName="Navigation" />
+                    <controls:SubNavRadioButton x:Name="AlertsBtn"
+                                                IconChoice="ic_priority_high"
+                                                LabelContent="Alerts"
+                                                Margin="0,0,0,20"
+                                                GroupName="Navigation" />
                 </StackPanel>
             </Grid>
         </Border>
 
-        <Border Grid.Column="1"
+        <Border x:Name="RightPanel"
+                Grid.Column="1"
                 Style="{StaticResource RightPanel}">
             <Grid>
                 <Grid.Resources>
@@ -120,7 +112,7 @@
                                         Value="{StaticResource Layer2_Dark}" />
                             </Trigger>
                         </Style.Triggers>
-                    </Style>         
+                    </Style>
 
                 </Grid.Resources>
 
@@ -161,8 +153,7 @@
                                 HorizontalAlignment="Left"
                                 Margin="0,40,0,10"
                                 ToolTipService.ShowOnDisabled="True"
-                                ToolTipService.IsEnabled="{Binding ElementName=ProjectSettingsPage, Path=DataContext.UserCanCloneUsers, Converter={StaticResource inverseBooleanConverter}}"
-                               >
+                                ToolTipService.IsEnabled="{Binding ElementName=ProjectSettingsPage, Path=DataContext.UserCanCloneUsers, Converter={StaticResource inverseBooleanConverter}}">
                             <Button.IsEnabled>
                                 <MultiBinding Converter="{StaticResource multiBoolAllConverter}">
                                     <Binding ElementName="ProjectSettingsPage"
@@ -195,8 +186,11 @@
                                 ToolTipService.IsEnabled="{Binding ElementName=ProjectSettingsPage, Path=DataContext.UserCanEditUsers, Converter={StaticResource inverseBooleanConverter}}">
                             <Button.IsEnabled>
                                 <MultiBinding Converter="{StaticResource multiBoolAllConverter}">
-                                    <Binding ElementName="ProjectSettingsPage" Path="DataContext.UserCanEditUsers"/>
-                                    <Binding ElementName="ProjectSettingsPage" Path="DataContext.SelectedUser" Converter="{StaticResource IsNullInverseConverter}"/>
+                                    <Binding ElementName="ProjectSettingsPage"
+                                             Path="DataContext.UserCanEditUsers" />
+                                    <Binding ElementName="ProjectSettingsPage"
+                                             Path="DataContext.SelectedUser"
+                                             Converter="{StaticResource IsNullInverseConverter}" />
                                 </MultiBinding>
                             </Button.IsEnabled>
                             <StackPanel Orientation="Vertical"
@@ -247,7 +241,9 @@
                     <!--#endregion-->
 
 
-                    <ListView x:Name="UserList" SelectedItem="{Binding SelectedUser, Mode=TwoWay, NotifyOnSourceUpdated=True}" ItemsSource="{Binding Users}">
+                    <ListView x:Name="UserList"
+                              SelectedItem="{Binding SelectedUser, Mode=TwoWay, NotifyOnSourceUpdated=True}"
+                              ItemsSource="{Binding Users}">
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn Header="ID"
@@ -261,7 +257,7 @@
                                                 DisplayMemberBinding="{Binding SecRole.ro_name}" />
                                 <GridViewColumn Header="Email"
                                                 Width="200"
-                                                DisplayMemberBinding="{Binding us_email}" /> 
+                                                DisplayMemberBinding="{Binding us_email}" />
                             </GridView>
                         </ListView.View>
                     </ListView>
@@ -392,7 +388,8 @@
                     <!--#endregion-->
 
 
-                    <ListView SelectedItem="{Binding SelectedRole,Mode=TwoWay,NotifyOnSourceUpdated=True}" ItemsSource="{Binding Roles}">
+                    <ListView SelectedItem="{Binding SelectedRole,Mode=TwoWay,NotifyOnSourceUpdated=True}"
+                              ItemsSource="{Binding Roles}">
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn Header="ID"
@@ -534,7 +531,8 @@
                     <!--#endregion-->
 
 
-                    <ListView SelectedItem="{Binding SelectedCategory,Mode=TwoWay,NotifyOnSourceUpdated=True}"  ItemsSource="{Binding Categories}">
+                    <ListView SelectedItem="{Binding SelectedCategory,Mode=TwoWay,NotifyOnSourceUpdated=True}"
+                              ItemsSource="{Binding Categories}">
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn Header="ID"
@@ -542,7 +540,7 @@
                                                 DisplayMemberBinding="{Binding ca_id}" />
                                 <GridViewColumn Header="Name"
                                                 Width="300"
-                                                DisplayMemberBinding="{Binding ca_name}" />                             
+                                                DisplayMemberBinding="{Binding ca_name}" />
 
 
 
@@ -642,7 +640,7 @@
                                                     <materialicons:MaterialIcon Icon="ic_delete"
                                                                                 Style="{StaticResource HoverBtn_Content}" />
                                                     <Button.ToolTip>
-                                                        <ToolTip BorderThickness="0" >
+                                                        <ToolTip BorderThickness="0">
                                                             <TextBlock Text="You do not have permission to delete alerts"
                                                                        Foreground="{StaticResource Text_Dark}" />
                                                         </ToolTip>
@@ -667,6 +665,7 @@
 
                 </StackPanel>
 
+                <!--#region Free Standing Controls-->
                 <Border x:Name="AddAlertPanel"
                         Background="{StaticResource Overlay}"
                         HorizontalAlignment="Center"
@@ -735,7 +734,6 @@
 
                     </StackPanel>
                 </Border>
-
                 <Border x:Name="DeletePrompt"
                         Visibility="{Binding PromptDelete, Converter={StaticResource BooleanToVisibilityConverter}}"
                         Background="{StaticResource Overlay}"
@@ -800,7 +798,7 @@
 
                     </StackPanel>
                 </Border>
-
+                <!--#endregion-->
             </Grid>
         </Border>
     </Grid>

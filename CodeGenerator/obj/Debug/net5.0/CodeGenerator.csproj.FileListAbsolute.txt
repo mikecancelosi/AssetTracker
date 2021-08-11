@@ -48,3 +48,4 @@ C:\Users\mikec\Documents\Projects\AssetTrackerProjects\CodeGenerator\bin\Debug\n
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\CodeGenerator\bin\Debug\net5.0\CodeGenerator.dll.config
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\CodeGenerator\bin\Debug\net5.0\EntityFramework.SqlServer.dll
 C:\Users\mikec\Documents\Projects\AssetTrackerProjects\CodeGenerator\bin\Debug\net5.0\System.CodeDom.dll
+C:\Users\mikec\Documents\Projects\AssetTrackerProjects\CodeGenerator\bin\Debug\net5.0\MaterialIcons.dll

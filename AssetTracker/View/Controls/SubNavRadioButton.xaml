@@ -1,0 +1,69 @@
+﻿<RadioButton x:Class="AssetTracker.View.Controls.SubNavRadioButton"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:AssetTracker.View.Controls"
+             xmlns:materialicons="clr-namespace:MaterialIcons;assembly=MaterialIcons"
+             mc:Ignorable="d"
+             d:DesignHeight="30"
+             d:DesignWidth="300"
+             x:Name="SubNavRadioButtonInstance">
+    <RadioButton.Style>
+        <Style TargetType="RadioButton">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RadioButton}">
+                        <Border Name="BorderParent"
+                                CornerRadius="10"
+                                MinHeight="30" >
+                            <Grid>                                
+                                <materialicons:MaterialIcon Height="20"
+                                                            HorizontalAlignment="Left"
+                                                            Icon="{Binding RelativeSource={RelativeSource TemplatedParent}, 
+                                                                           Path=IconChoice}"
+                                                            Foreground="{StaticResource Text_Dark}"
+                                                            Margin="10,0">
+                                    <materialicons:MaterialIcon.Style>
+                                        <Style TargetType="materialicons:MaterialIcon">
+                                            <Setter Property="Foreground"
+                                                    Value="AliceBlue" />
+                                        </Style>
+                                    </materialicons:MaterialIcon.Style>
+                                </materialicons:MaterialIcon>
+
+                                <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent}, 
+                                                          Path=LabelContent}"
+                                           Foreground="{StaticResource Text_Dark}"
+                                           Margin="40,0"
+                                           VerticalAlignment="Center"
+                                           FontWeight="SemiBold"
+                                           FontSize="16" />
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled"
+                                     Value="false">
+                                <Setter Property="Foreground"
+                                        Value="AliceBlue" />
+                            </Trigger>
+                            <Trigger Property="IsChecked"
+                                     Value="True">
+                                <Setter Property="Background"
+                                        TargetName="BorderParent"
+                                        Value="{StaticResource Accent_Dark}" />
+                            </Trigger>
+
+                            <Trigger Property="IsChecked"
+                                     Value="False">
+                                <Setter Property="Background"
+                                        TargetName="BorderParent"
+                                        Value="{StaticResource Layer3_Dark}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </RadioButton.Style>
+</RadioButton>

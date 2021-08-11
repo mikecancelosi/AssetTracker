@@ -12,54 +12,115 @@ using System.Windows.Input;
 
 namespace AssetTracker.ViewModels
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public class ProjectSettingsViewModel : ViewModel
     {
+        #region List Values
+        /// <summary>
+        /// Object that the user list is bound to
+        /// </summary>
         public ObservableCollection<User> Users => new ObservableCollection<User>(userRepo.Get());
+        /// <summary>
+        /// Object that the role list is bound to
+        /// </summary>
         public ObservableCollection<SecRole> Roles => new ObservableCollection<SecRole>(roleRepo.Get());
+        /// <summary>
+        /// Object that the category list is bound to
+        /// </summary>
         public ObservableCollection<AssetCategory> Categories => new ObservableCollection<AssetCategory>(categoryRepo.Get());
 
         /// <summary>
         /// These are alerts that are visible to everyone. Typically messages
         /// like 'Remember to keep your assets updated with the current status'
         /// </summary>
-        public List<Alert> ProjectWideAlerts
+        public ObservableCollection<Alert> ProjectWideAlerts
         {
             get
             {
-                return (from a in alertRepo.Get()
-                        where a.ar_usid != null &&
-                        a.ar_projectwide
-                        select a).ToList();
+                var listResults = (from a in alertRepo.Get()
+                                   where a.ar_usid != null &&
+                                   a.ar_projectwide
+                                   select a).ToList();
+
+                return new ObservableCollection<Alert>(listResults);
             }
         }
+        #endregion 
 
-        #region Commands
+        #region List Commands
+        /// <summary>
+        /// 'Add' button was selected, we want to navigate to the create user page
+        /// </summary>
         public ICommand CreateUser => new RelayCommand((s) => navCoordinator.NavigateToCreateUser(), (s) => true);
+        /// <summary>
+        /// 'Copy' button was selected, we want to copy the SelectedUser and then navigate to the clone user page
+        /// </summary>
         public ICommand CopySelectedUser => new RelayCommand((s) => CompleteDBOOperation(SelectedUser, OperationType.Copy), (s) => true);
+        /// <summary>
+        /// 'Edit' button was selected, we want to modify the SelectedUser at the EditUser page
+        /// </summary>
         public ICommand EditSelectedUser => new RelayCommand((s) => CompleteDBOOperation(SelectedUser, OperationType.Edit), (s) => true);
+        /// <summary>
+        /// 'Delete button was selected, we want to delete the user using our delete user strategy
+        /// </summary>
         public ICommand DeleteSelectedUser => new RelayCommand((s) => CompleteDBOOperation(SelectedUser, OperationType.Delete), (s) => true);
 
+        /// <summary>
+        /// 'Add' button was selected, we want to navigate to the create role page
+        /// </summary>
         public ICommand CreateRole => new RelayCommand((s) => navCoordinator.NavigateToCreateRole(), (s) => true);
+        /// <summary>
+        /// 'Copy' button was selected, we want to copy the SelectedRole and then navigate to the clone role page
+        /// </summary>
         public ICommand CopySelectedRole => new RelayCommand((s) => CompleteDBOOperation(SelectedRole, OperationType.Copy), (s) => true);
+        /// <summary>
+        /// 'Edit' button was selected, we want to modify the SelectedRole at the EditRole page
+        /// </summary>
         public ICommand EditSelectedRole => new RelayCommand((s) => CompleteDBOOperation(SelectedRole, OperationType.Edit), (s) => true);
+        /// <summary>
+        /// 'Delete button was selected, we want to delete the SelectedRole using our delete role strategy
+        /// </summary>
         public ICommand DeleteSelectedRole => new RelayCommand((s) => CompleteDBOOperation(SelectedRole, OperationType.Delete), (s) => true);
+
+        /// <summary>
+        /// 'Add' button was selected, we want to navigate to the create category page
+        /// </summary>
         public ICommand CreateCategory => new RelayCommand((s) => navCoordinator.NavigateToCreateCategory(), (s) => true);
-
+        /// <summary>
+        /// 'Copy' button was selected, we want to copy the SelectedCategory and then navigate to the clone category page
+        /// </summary>
         public ICommand CopySelectedCategory => new RelayCommand((s) => CompleteDBOOperation(SelectedCategory, OperationType.Copy), (s) => true);
+        /// <summary>
+        /// 'Edit' button was selected, we want to modify the SelectedCategory at the EditCategory page
+        /// </summary>
         public ICommand EditSelectedCategory => new RelayCommand((s) => CompleteDBOOperation(SelectedCategory, OperationType.Edit), (s) => true);
+        /// <summary>
+        /// 'Delete button was selected, we want to delete the SelectedCategory using our delete category strategy
+        /// </summary>
         public ICommand DeleteSelectedCategory => new RelayCommand((s) => CompleteDBOOperation(SelectedCategory, OperationType.Delete), (s) => true);
-
+        
+        /// <summary>
+        /// Create alert button was selected, we want to open up the popup to allow user to create a new alert
+        /// </summary>
         public ICommand OpenNewAlert => new RelayCommand((s) => PromptNewAlert = true, (s) => true);
+        /// <summary>
+        /// Creation of a new alert was cancelled, just close the creation popup
+        /// </summary>
         public ICommand CloseNewAlert => new RelayCommand((s) => PromptNewAlert = false, (s) => true);
+        /// <summary>
+        /// Creation of a new alert was confirmed
+        /// </summary>
         public ICommand CreateAlert => new RelayCommand((s) => CreateNewProjectWideAlert(), (s) => true);
+        /// <summary>
+        /// User wants to edit existing alert
+        /// </summary>
         public ICommand EditAlertCommand => new RelayCommand((s) => EditAlert(s), (s) => true);
+        /// <summary>
+        /// User wants to delete an alert.
+        /// </summary>
         public ICommand DeleteAlertCommand => new RelayCommand((s) => DeleteAlert(s), (s) => true);
         #endregion
 
-        #region ListSelections
+        #region List Current Selections
         private User selectedUser;
         public User SelectedUser
         {
@@ -151,9 +212,7 @@ namespace AssetTracker.ViewModels
         private GenericRepository<Alert> alertRepo;
         private GenericRepository<SecPermission3> roleOverrideRepo;
         #endregion
-
-       
-
+              
         #region Permissions
         public bool UserCanCreateUsers => PermissionsManager.HasPermission(LoggedInUser, Permission.CreateUser, unitOfWork);
         public bool UserCanDeleteUsers => PermissionsManager.HasPermission(LoggedInUser, Permission.DeleteUser, unitOfWork);
@@ -172,7 +231,13 @@ namespace AssetTracker.ViewModels
         public bool UserCanDeleteAlerts => PermissionsManager.HasPermission(LoggedInUser, Permission.DeleteAlert, unitOfWork);
         #endregion
 
+        /// <summary>
+        /// User currently logged into the system.
+        /// </summary>
         private User LoggedInUser;
+        /// <summary>
+        /// Nav coordinator used to navigate away to other pages.
+        /// </summary>
         private readonly INavigationCoordinator navCoordinator;
 
         public ProjectSettingsViewModel(INavigationCoordinator coord,
@@ -198,9 +263,14 @@ namespace AssetTracker.ViewModels
             roleOverrideRepo = unitOfWork.GetRepository<SecPermission3>();
         }
 
+        /// <summary>
+        /// Copy,Edit, or Delete the given dbo
+        /// </summary>
+        /// <param name="dbo"> object to perform crud operation on</param>
+        /// <param name="operation">What kind of operation should be performed on the object</param>
         public void CompleteDBOOperation(DatabaseBackedObject dbo, OperationType operation)
         {
-            //TODO : Fix this monstrosity
+            //TODO : Fix this monstrosity -- ASP 
             string typeName = dbo.GetType().BaseType.Name;
             switch (operation)
             {
@@ -242,14 +312,9 @@ namespace AssetTracker.ViewModels
             }
         }
 
-        public void Reload()
-        {
-            unitOfWork.Rollback();
-            NotifyPropertyChanged("Users");
-            NotifyPropertyChanged("Roles");
-            NotifyPropertyChanged("Categories");
-        }
-
+        /// <summary>
+        /// After deletion is confirmed, actually go through with the deleting the current object
+        /// </summary>
         private void DeleteSelectedObject()
         {
             switch (DeletionObject.GetType().BaseType.Name)
@@ -284,6 +349,9 @@ namespace AssetTracker.ViewModels
             PromptDelete = false;
         }
 
+        /// <summary>
+        /// If the user has filled in all required values in the alert prompt, then create the new object
+        /// </summary>
         private void CreateNewProjectWideAlert()
         {
             Alert alert;
@@ -310,6 +378,9 @@ namespace AssetTracker.ViewModels
             ResetAlertPrompt();
         }
 
+        /// <summary>
+        /// Reset visuals for creating new alert prompts 
+        /// </summary>
         private void ResetAlertPrompt()
         {
             AlertPrompt_ID = 0;
@@ -323,9 +394,13 @@ namespace AssetTracker.ViewModels
             NotifyPropertyChanged("ProjectWideAlerts");
         }
 
-        private void EditAlert(object input)
+        /// <summary>
+        /// Edit alert by filling the editalert prompt with this alert's content
+        /// </summary>
+        /// <param name="alertID">alert id as object</param>
+        private void EditAlert(object alertID)
         {
-            int id = (int)input;
+            int id = (int)alertID;
             Alert alert = ProjectWideAlerts.FirstOrDefault(x => x.ID == id);
             if (alert != null)
             {
@@ -339,9 +414,13 @@ namespace AssetTracker.ViewModels
             NotifyPropertyChanged("AlertPrompt_Contents");
         }
 
-        private void DeleteAlert(object input)
+        /// <summary>
+        /// Delete alert with id matching input
+        /// </summary>
+        /// <param name="alertID">alert id as object</param>
+        private void DeleteAlert(object alertID)
         {
-            int id = (int)input;
+            int id = (int)alertID;
             Alert alert = ProjectWideAlerts.FirstOrDefault(x => x.ID == id);
             CompleteDBOOperation(alert, OperationType.Delete);
         }

@@ -21,10 +21,5 @@ namespace AssetTracker.View
             InitializeComponent();
             VM = vm;
         }
-
-        private void Page_Loaded(object sender, RoutedEventArgs e)
-        {
-            VM.Reload();
-        }
     }
 }

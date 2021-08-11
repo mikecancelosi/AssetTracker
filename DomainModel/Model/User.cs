@@ -52,6 +52,8 @@ namespace DomainModel
                 violations.Add(new Violation("You need to set this user's password!", "us_password"));
             }
 
+            //TODO: Handle violation of having an email match another users
+
             if(us_roid <= 0)
             {
                 violations.Add(new Violation("You need to set this user's role!", "us_roid"));
@@ -65,7 +67,6 @@ namespace DomainModel
             return new User()
             {
                 us_displayname = us_displayname,
-                us_email = us_email,
                 us_fname = us_fname,
                 us_lname = us_lname,
                 us_roid = us_roid

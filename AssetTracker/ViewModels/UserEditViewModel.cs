@@ -16,7 +16,6 @@ namespace AssetTracker.ViewModels
     /// <summary>
     /// TODO: Improve override visuals to show vs default/ role override
     /// TODO: Allow setting of profile picture
-    /// TODO: Change icon for Permissions tab
     /// </summary>
     public class UserEditViewModel : ViewModel, ISavable
     {

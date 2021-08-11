@@ -23,6 +23,8 @@ namespace DataAccessLayer.Strategies
                 post.di_usid = null;
             }
 
+            userRepo.Delete(item);
+
         }
     }
 }

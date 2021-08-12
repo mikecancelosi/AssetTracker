@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace DomainModel
 {
@@ -24,9 +25,8 @@ namespace DomainModel
         public struct PermissionGroup
         {
             public string Name { get; set; }
-            public double Height { get; set; }
 
-            public ObservableCollection<PermissionItem> Permissions { get; set; }
+            public List<PermissionItem> Permissions { get; set; }
         }
 
         public struct PermissionItem

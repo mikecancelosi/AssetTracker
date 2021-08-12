@@ -56,10 +56,9 @@ namespace AssetTracker.ViewModels
             }
         }
 
-        //TODO: Add 'nonviewed' count in upper right of each count
-        public int DiscussionAlertCount => UserAlerts.Where(x => x.ar_type == AlertType.DiscussionReply).Count();
-        public int AssetAlertCount => UserAlerts.Where(x => x.ar_type == AlertType.AssetAssigned).Count();
-        public int ReviewAlertCount => UserAlerts.Where(x => x.ar_type == AlertType.ReviewAssigned).Count();
+        public int DiscussionAlertCount => UserAlerts.Where(x => x.ar_type == AlertType.DiscussionReply && !x.ar_viewed).Count();
+        public int AssetAlertCount => UserAlerts.Where(x => x.ar_type == AlertType.AssetAssigned && !x.ar_viewed).Count();
+        public int ReviewAlertCount => UserAlerts.Where(x => x.ar_type == AlertType.ReviewAssigned && !x.ar_viewed).Count();
         public bool EmptyAlerts => UserAlerts.Count == 0;
 
         public ICommand PrioritizeAlertCommand { get; set; }

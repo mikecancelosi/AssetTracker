@@ -32,7 +32,7 @@
 
                     <StackPanel  Orientation="Horizontal"
                                  HorizontalAlignment="Center">
-
+                      
                         <Button IsEnabled="{Binding IsSavable}"
                                 Command="{Binding SaveCommand}"
                                 Style="{StaticResource ControlBtn }"
@@ -126,18 +126,45 @@
 
                                 
 
-                                <Button Content="Activate All"
-                                        FontSize="18"
-                                        FontWeight="SemiBold"
-                                        Click="OnActivateAllClicked"
-                                        Padding="5"
-                                        Margin="100,0,0,0"/>
-                                <Button Content="Deactivate All"
-                                        Margin="10,0"
-                                        FontSize="18"
-                                        FontWeight="SemiBold"
-                                        Click="OnDeactivateAllClicked"
-                                        Padding="5" />
+                               
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal">
+                                <Button Style="{StaticResource HoverBtn}"
+                                        Command="{Binding ResetAllPermissionsCommand}"
+                                        Margin="0,0,15,10">
+                                    <StackPanel Orientation="Vertical">
+                                        <mi:MaterialIcon Icon="ic_refresh"
+                                                         Style="{StaticResource ListHeaderBtn_Image}" />
+                                        <TextBlock Text="Reset"
+                                                   Style="{StaticResource ListHeaderBtn_Text}" />
+                                    </StackPanel>
+
+                                </Button>
+
+                                <Button Style="{StaticResource HoverBtn}"
+                                        Command="{Binding ActivateAllPermissionsCommand}"
+                                        Margin="0,0,15,10">
+                                    <StackPanel Orientation="Vertical">
+                                        <mi:MaterialIcon Icon="ic_radio_button_checked"
+                                                         Style="{StaticResource ListHeaderBtn_Image}" />
+                                        <TextBlock Text="Activate All"
+                                                   Style="{StaticResource ListHeaderBtn_Text}" />
+                                    </StackPanel>
+
+                                </Button>
+
+                                <Button Style="{StaticResource HoverBtn}"
+                                        Command="{Binding DeactivateAllPermissionsCommand}"
+                                        Margin="0,0,15,10">
+                                    <StackPanel Orientation="Vertical">
+                                        <mi:MaterialIcon Icon="ic_radio_button_unchecked"
+                                                         Style="{StaticResource ListHeaderBtn_Image}" />
+                                        <TextBlock Text="Deactivate All"
+                                                   Style="{StaticResource ListHeaderBtn_Text}" />
+                                    </StackPanel>
+                                </Button>
+
                             </StackPanel>
 
 

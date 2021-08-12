@@ -21,53 +21,6 @@ namespace AssetTracker.ViewModels
     {
         public User CurrentUser { get; private set; }
 
-        private ObservableCollection<SecPermission.PermissionGroup> permissionGrps;
-        public ObservableCollection<SecPermission.PermissionGroup> PermissionGroups
-        {
-            get
-            {
-                if (permissionGrps == null)
-                {
-                    List<SecPermission4> permissionGroups = (from grp in roleGroupsRepo.Get()
-                                                             select grp).ToList();
-
-                    var Grps = new List<PermissionGroup>();
-                    foreach (SecPermission4 grp in permissionGroups)
-                    {
-                        ObservableCollection<PermissionItem> items = new ObservableCollection<PermissionItem>();
-                        foreach (var permission in grp.SecPermissions)
-                        {
-                            bool allowed = permission.pr_default;
-                            SecPermission2 permissionOverride = (from p in userOverrideRepo.Get()
-                                                                 where p.p2_prid == permission.pr_id &&
-                                                                 p.p2_usid == CurrentUser.ID
-                                                                 orderby p.p2_id descending
-                                                                 select p)?.FirstOrDefault() ?? null;
-
-                            allowed = permissionOverride?.p2_allow ?? allowed;
-                            PermissionItem item = new PermissionItem()
-                            {
-                                Permission = permission,
-                                Allowed = allowed,
-                            };
-                            item.AllowedChanged += (prid, allow) => OnPermissionChanged(prid, allow);
-                            items.Add(item);
-                        }
-                        Grps.Add(new PermissionGroup()
-                        {
-                            Name = grp.p4_name,
-                            Height = 100 * (new Random().NextDouble()),
-                            Permissions = items
-                        });
-                    }
-                    permissionGrps = new ObservableCollection<PermissionGroup>();
-                    Grps.ForEach(x => permissionGrps.Add(x));
-                }
-
-                return permissionGrps;
-            }
-        }
-
         public bool Creating { get; set; }
         private bool Cloning { get; set; }
         public string HeadingContext
@@ -149,6 +102,7 @@ namespace AssetTracker.ViewModels
             }
         }
 
+        #region Saving
         public ICommand SaveCommand => new RelayCommand((s) => Save(), (s) => true);
         public ICommand RefuseSave => new RelayCommand((s) => navCoordinator.NavigateToQueued(), (s) => true);
         public bool IsSavable => unitOfWork.HasChanges;
@@ -163,15 +117,26 @@ namespace AssetTracker.ViewModels
                 NotifyPropertyChanged("PromptSave");
             }
         }
+        #endregion
+
         public INavigationCoordinator navCoordinator { get; set; }
+
+        #region Deleting
         private IDeleteStrategy<User> userDeleteStrategy;
         public ICommand DeleteConfirmed => new RelayCommand((s) => DeleteUser(), (s) => true);
+        #endregion
+
+        public List<PermissionGroup> PermissionGroups => permissionsProvider.PermissionGroups;
+        public ICommand ResetAllPermissionsCommand => new RelayCommand((s) => ResetAllPermissions(), (s) => true);
+        public ICommand ActivateAllPermissionsCommand => new RelayCommand((s) => ActivateAllPermissions(), (s) => true);
+        public ICommand DeactivateAllPermissionsCommand => new RelayCommand((s) => DeactivateAllPermissions(), (s) => true);
+        public ICommand PermissionChanged => new RelayCommand((s) => NotifyPropertyChanged("IsSavable"), (s) => true);
+        private UserPermissionsProvider permissionsProvider;
+
 
         #region Repositories
         private GenericRepository<User> userRepo;
         private GenericRepository<SecRole> roleRepo;
-        private GenericRepository<SecPermission2> userOverrideRepo;
-        private GenericRepository<SecPermission4> roleGroupsRepo;
         #endregion
 
         #region ErrorChecks
@@ -215,12 +180,11 @@ namespace AssetTracker.ViewModels
             navCoordinator.UserNavigationAttempt += (s) => PromptSave = true;            
             userRepo = unitOfWork.GetRepository<User>();
             roleRepo = unitOfWork.GetRepository<SecRole>();
-            userOverrideRepo = unitOfWork.GetRepository<SecPermission2>();
-            roleGroupsRepo = unitOfWork.GetRepository<SecPermission4>();
 
             CurrentUser = new User();
             Creating = true;
             Cloning = false;
+            permissionsProvider = new UserPermissionsProvider(unitOfWork, CurrentUser);
 
             NotifyPropertyChanged("UserRole");
             NotifyPropertyChanged("Roles");
@@ -241,6 +205,7 @@ namespace AssetTracker.ViewModels
                 Creating = false;
                 Cloning = true;
             }
+            permissionsProvider = new UserPermissionsProvider(unitOfWork, CurrentUser);
             NotifyPropertyChanged("CurrentUser");
             NotifyPropertyChanged("HeadingContext");
             NotifyPropertyChanged("IsSavable");
@@ -305,64 +270,28 @@ namespace AssetTracker.ViewModels
         }
 
         #region Permissions
-        public void OnPermissionChanged(int prid, bool newValue)
+
+        private void ResetAllPermissions()
         {
-            SecPermission2 overridePer = GetUserOverride(prid);
-            overridePer.p2_allow = newValue;
+            permissionsProvider.ResetAllPermissions();
+            NotifyPropertyChanged("PermissionGroups");
             NotifyPropertyChanged("IsSavable");
         }
 
         public void DeactivateAllPermissions()
         {
-            for (int i = 0; i < PermissionGroups.Count; i++)
-            {
-                for (int j = 0; j < PermissionGroups[i].Permissions.Count; j++)
-                {
-                    SecPermission.PermissionItem item = PermissionGroups[i].Permissions[j];
-                    item.Allowed = false;
-                    PermissionGroups[i].Permissions[j] = item;
-
-                    SecPermission2 overridePermission = GetUserOverride(item.Permission.ID);
-                    overridePermission.p2_allow = false;
-                }
-            }
+            permissionsProvider.DeactivateAllPermissions();
+            NotifyPropertyChanged("PermissionGroups");
+            NotifyPropertyChanged("IsSavable");
         }
 
         public void ActivateAllPermissions()
         {
-            for (int i = 0; i < PermissionGroups.Count; i++)
-            {
-                for (int j = 0; j < PermissionGroups[i].Permissions.Count; j++)
-                {
-                    SecPermission.PermissionItem item = PermissionGroups[i].Permissions[j];
-                    item.Allowed = true;
-                    PermissionGroups[i].Permissions[j] = item;
-
-                    SecPermission2 overridePermission = GetUserOverride(item.Permission.ID);
-                    overridePermission.p2_allow = true;
-                }
-            }
+            permissionsProvider.ActivateAllPermissions();
+            NotifyPropertyChanged("PermissionGroups");
+            NotifyPropertyChanged("IsSavable");
         }
-
-        public SecPermission2 GetUserOverride(int prid)
-        {
-            SecPermission2 overridePer = (from p in userOverrideRepo.Get()
-                                          where p.p2_prid == prid
-                                          && p.p2_usid == CurrentUser.us_id
-                                          select p).FirstOrDefault();
-            if (overridePer == null)
-            {
-                overridePer = new SecPermission2()
-                {
-                    p2_prid = prid,
-                    p2_usid = CurrentUser.ID,
-                    p2_allow = true
-                };
-                userOverrideRepo.Insert(overridePer);
-            }
-
-            return overridePer;
-        }
+      
         #endregion
     }
 }

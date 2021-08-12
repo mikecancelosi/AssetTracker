@@ -1,4 +1,5 @@
 ﻿using AssetTracker.ViewModels;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -21,14 +22,14 @@ namespace AssetTracker.View
             VM = vm;
         }
 
-        public void OnActivateAllClicked(object sender, RoutedEventArgs e)
+        public void PermissionChecked(object sender, EventArgs e)
         {
-            VM.ActivateAllPermissions();
+
         }
 
-        public void OnDeactivateAllClicked(object sender, RoutedEventArgs e)
+        public void PermissionUnchecked(object sender,EventArgs e)
         {
-            VM.DeactivateAllPermissions();
+
         }
     }
 }

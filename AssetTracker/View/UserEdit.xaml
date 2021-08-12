@@ -202,22 +202,44 @@
                                 Visibility="{Binding ElementName=PermissionsNav, Path=IsChecked,Converter={StaticResource BooleanToVisibilityConverter}}">
                         <TextBlock Text="Modify Permissions"
                                    FontSize="16"
-                                   FontWeight="SemiBold" />
+                                   FontWeight="SemiBold" Margin="0,0,0,50"/>
 
-                        <StackPanel Orientation="Horizontal"
-                                    Margin="0,80,0,30"
-                                    VerticalAlignment="Top">
-                            <Button Content="Activate All"
-                                    FontSize="16"
-                                    FontWeight="SemiBold"
-                                    Padding="5"
-                                    Click="OnActivateAllClicked" />
-                            <Button Content="Deactivate All"
-                                    Margin="10,0"
-                                    FontSize="16"
-                                    FontWeight="SemiBold"
-                                    Padding="5"
-                                    Click="OnDeactivateAllClicked" />
+                        <StackPanel Orientation="Horizontal">
+                            <Button Style="{StaticResource HoverBtn}"
+                                    Command="{Binding ResetAllPermissionsCommand}"
+                                    Margin="0,0,15,10">
+                                <StackPanel Orientation="Vertical">
+                                    <mi:MaterialIcon Icon="ic_refresh"
+                                                     Style="{StaticResource ListHeaderBtn_Image}" />
+                                    <TextBlock Text="Reset"
+                                               Style="{StaticResource ListHeaderBtn_Text}" />
+                                </StackPanel>
+
+                            </Button>
+
+                            <Button Style="{StaticResource HoverBtn}"
+                                    Command="{Binding ActivateAllPermissionsCommand}"
+                                    Margin="0,0,15,10">
+                                <StackPanel Orientation="Vertical">
+                                    <mi:MaterialIcon Icon="ic_radio_button_checked"
+                                                     Style="{StaticResource ListHeaderBtn_Image}" />
+                                    <TextBlock Text="Activate All"
+                                               Style="{StaticResource ListHeaderBtn_Text}" />
+                                </StackPanel>
+
+                            </Button>
+
+                            <Button Style="{StaticResource HoverBtn}"
+                                    Command="{Binding DeactivateAllPermissionsCommand}"
+                                    Margin="0,0,15,10">
+                                <StackPanel Orientation="Vertical">
+                                    <mi:MaterialIcon Icon="ic_radio_button_unchecked"
+                                                     Style="{StaticResource ListHeaderBtn_Image}" />
+                                    <TextBlock Text="Deactivate All"
+                                               Style="{StaticResource ListHeaderBtn_Text}" />
+                                </StackPanel>
+                            </Button>
+
                         </StackPanel>
 
                         <ItemsControl ItemsSource="{Binding PermissionGroups}"

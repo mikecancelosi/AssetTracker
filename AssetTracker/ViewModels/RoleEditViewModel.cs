@@ -32,52 +32,7 @@ namespace AssetTracker.ViewModels
             }
         }
 
-        private ObservableCollection<PermissionGroup> permissionGrps;
-        public ObservableCollection<PermissionGroup> PermissionGroups
-        {
-            get
-            {
-                if (permissionGrps == null)
-                {
-                    List<SecPermission4> permissionGroups = (from grp in roleGroupsRepo.Get()
-                                                             select grp).ToList();
-
-                    var Grps = new List<PermissionGroup>();
-                    foreach (SecPermission4 grp in permissionGroups)
-                    {
-                        ObservableCollection<PermissionItem> items = new ObservableCollection<PermissionItem>();
-                        foreach (var permission in grp.SecPermissions)
-                        {
-                            bool allowed = permission.pr_default;
-                            SecPermission3 permissionOverride = (from p in roleOverrideRepo.Get()
-                                                                 where p.p3_prid == permission.pr_id &&
-                                                                 p.p3_roid == Role.ro_id
-                                                                 orderby p.p3_id descending
-                                                                 select p)?.FirstOrDefault() ?? null;
-
-                            allowed = permissionOverride?.p3_allow ?? allowed;
-                            PermissionItem item = new PermissionItem()
-                            {
-                                Permission = permission,
-                                Allowed = allowed,
-                            };
-                            item.AllowedChanged += (prid, allow) => OnPermissionChanged(prid, allow);
-                            items.Add(item); ;
-                        }
-                        Grps.Add(new PermissionGroup()
-                        {
-                            Name = grp.p4_name,
-                            Height = 100 * (new Random().NextDouble()),
-                            Permissions = items
-                        });
-                    }
-                    permissionGrps = new ObservableCollection<PermissionGroup>();
-                    Grps.ForEach(x => permissionGrps.Add(x));
-                }
-
-                return permissionGrps;
-            }
-        }
+        public List<PermissionGroup> PermissionGroups => permissionProvider.PermissionGroups;
 
         public bool Creating { get; private set; }
         public bool Cloning { get; private set; }
@@ -115,10 +70,15 @@ namespace AssetTracker.ViewModels
                 NotifyPropertyChanged("PromptSave");
             }
         }
+        #region Commands
+        public ICommand ResetAllPermissionsCommand => new RelayCommand((s) => ResetAllPermissions(), (s) => true);
+        public ICommand ActivateAllPermissionsCommand => new RelayCommand((s) => ActivateAllPermissions(), (s) => true);
+        public ICommand DeactivateAllPermissionsCommand => new RelayCommand((s) => DeactivateAllPermissions(), (s) => true);
+        public ICommand PermissionChanged => new RelayCommand((s) => NotifyPropertyChanged("IsSavable"), (s) => true);
+        #endregion
+
 
         #region Repositories
-        private GenericRepository<SecPermission4> roleGroupsRepo;
-        private GenericRepository<SecPermission3> roleOverrideRepo;
         private GenericRepository<SecRole> roleRepo;
         #endregion
 
@@ -129,6 +89,8 @@ namespace AssetTracker.ViewModels
         public INavigationCoordinator navCoordinator { get; set; }
         private IDeleteStrategy<SecRole> roleDeleteStrategy;
 
+        private RolePermissionsProvider permissionProvider;
+
         public RoleEditViewModel(INavigationCoordinator coord, GenericUnitOfWork uow, IDeleteStrategy<SecRole> roleDeleteStrat)
         {
             navCoordinator = coord;
@@ -136,11 +98,10 @@ namespace AssetTracker.ViewModels
             unitOfWork = uow;
 
             navCoordinator.UserNavigationAttempt += (s) => PromptSave = true;
-            roleGroupsRepo = unitOfWork.GetRepository<SecPermission4>();
-            roleOverrideRepo = unitOfWork.GetRepository<SecPermission3>();
             roleRepo = unitOfWork.GetRepository<SecRole>();
 
             Role = new SecRole();
+            permissionProvider = new RolePermissionsProvider(unitOfWork, Role);
             Creating = true;
         }
 
@@ -156,6 +117,7 @@ namespace AssetTracker.ViewModels
                 roleRepo.Insert(Role);
                 Cloning = true;
             }
+            permissionProvider = new RolePermissionsProvider(unitOfWork, Role);
             Creating = false;
             NotifyPropertyChanged("Role");
             NotifyPropertyChanged("HeadingContext");
@@ -205,63 +167,27 @@ namespace AssetTracker.ViewModels
             Role.ro_name = newValue;
             roleRepo.Update(Role);
             NotifyPropertyChanged("IsSavable");
-        }
+        } 
 
-        public void OnPermissionChanged(int permissionId, bool newValue)
+        private void ResetAllPermissions()
         {
-            SecPermission3 overridePermission = GetRoleOverride(permissionId);
-            overridePermission.p3_allow = newValue;
+            permissionProvider.ResetAllPermissions();
+            NotifyPropertyChanged("PermissionGroups");
             NotifyPropertyChanged("IsSavable");
         }
 
-        public void DeactivateAllPermissions()
+        private void ActivateAllPermissions()
         {
-            for (int i = 0; i < PermissionGroups.Count; i++)
-            {
-                for (int j = 0; j < PermissionGroups[i].Permissions.Count; j++)
-                {
-                    PermissionItem item = PermissionGroups[i].Permissions[j];
-                    item.Allowed = false;
-                    PermissionGroups[i].Permissions[j] = item;
-
-                    SecPermission3 overridePermission = GetRoleOverride(item.Permission.ID);
-                    overridePermission.p3_allow = false;
-                }
-            }
+            permissionProvider.ActivateAllPermissions();
+            NotifyPropertyChanged("PermissionGroups");
+            NotifyPropertyChanged("IsSavable");
         }
 
-        public void ActivateAllPermissions()
+        private void DeactivateAllPermissions()
         {
-            for (int i = 0; i < PermissionGroups.Count; i++)
-            {
-                for (int j = 0; j < PermissionGroups[i].Permissions.Count; j++)
-                {
-                    PermissionItem item = PermissionGroups[i].Permissions[j];
-                    item.Allowed = true;
-                    PermissionGroups[i].Permissions[j] = item;
-
-                    SecPermission3 overridePermission = GetRoleOverride(item.Permission.ID);
-                    overridePermission.p3_allow = true;
-                }
-            }
-        }
-
-        public SecPermission3 GetRoleOverride(int prid)
-        {
-            SecPermission3 overridePer = (from p in roleOverrideRepo.Get()
-                                          where p.p3_prid == prid
-                                          && p.p3_roid == Role.ID
-                                          select p).FirstOrDefault();
-            if (overridePer == null)
-            {
-                overridePer = new SecPermission3();
-                overridePer.p3_prid = prid;
-                overridePer.p3_roid = Role.ID;
-                overridePer.p3_allow = true;
-                roleOverrideRepo.Insert(overridePer);
-            }
-
-            return overridePer;
+            permissionProvider.DeactivateAllPermissions();
+            NotifyPropertyChanged("PermissionGroups");
+            NotifyPropertyChanged("IsSavable");
         }
     }
 }

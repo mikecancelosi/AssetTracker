@@ -1,9 +1,12 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:extensions="clr-namespace:AssetTracker.View.Extensions">
+                    xmlns:extensions="clr-namespace:AssetTracker.View.Extensions"
+                    xmlns:conv="clr-namespace:AssetTracker.View.Converters"
+                    xmlns:prop="clr-namespace:AssetTracker.View.Properties">
 
 
-    <Style x:Key="PermissionsCheckbox" TargetType="{x:Type CheckBox}">
+    <Style x:Key="PermissionsCheckbox"
+           TargetType="{x:Type CheckBox}">
         <Setter Property="Foreground"
                 Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" />
         <Setter Property="Background"
@@ -104,7 +107,7 @@
     </Style>
     <Style x:Key="PermissionsList"
            TargetType="ItemsControl">
-        <Setter Property="ItemsPanel">            
+        <Setter Property="ItemsPanel">
             <Setter.Value>
                 <ItemsPanelTemplate>
                     <extensions:TilePanel Orientation="Horizontal"
@@ -113,34 +116,52 @@
                                           HorizontalAlignment="Left"
                                           Width="900" />
                 </ItemsPanelTemplate>
-            </Setter.Value>            
+            </Setter.Value>
         </Setter>
         <Setter Property="ItemTemplate">
-            <Setter.Value>                
+            <Setter.Value>
                 <DataTemplate>
-                        <StackPanel Width="350"
-                                    Margin="0,10,100,0">
-                            <TextBlock Text="{Binding Name}"
-                                       Typography.Capitals="AllSmallCaps"
-                                       FontSize="20"
-                                       FontWeight="SemiBold" Foreground="{StaticResource Text_Dark}" />
-                            <ItemsControl ItemsSource="{Binding Permissions}"
-                                          Margin="10,0">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <Grid Margin="0,0,0,5">
-                                            <TextBlock Text="{Binding Permission.pr_name}"
-                                                       VerticalAlignment="Center"
-                                                       FontSize="14" Foreground="{StaticResource Text_Dark}"/>
-                                            <CheckBox  x:Name="PermissionCheck"
-                                                       HorizontalAlignment="Right"
-                                                       IsChecked="{Binding Allowed}"
-                                                       Style="{StaticResource PermissionsCheckbox}" />
-                                        </Grid>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                        </StackPanel>
+                    <StackPanel Width="350"
+                                Margin="0,10,100,0">
+                        <TextBlock Text="{Binding Name}"
+                                   Typography.Capitals="AllSmallCaps"
+                                   FontSize="20"
+                                   FontWeight="SemiBold"
+                                   Foreground="{StaticResource Text_Dark}" />
+                        <ItemsControl ItemsSource="{Binding Permissions}"
+                                      Margin="10,0">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="0,0,0,5">
+                                        <TextBlock Text="{Binding Permission.pr_name}"
+                                                   VerticalAlignment="Center"
+                                                   FontSize="14"
+                                                   Foreground="{StaticResource Text_Dark}" />
+                                        <CheckBox  x:Name="PermissionCheck"
+                                                   HorizontalAlignment="Right"
+                                                   IsChecked="{Binding Allowed}"
+                                                   Command="{Binding DataContext.PermissionChanged, RelativeSource={RelativeSource AncestorLevel=1, AncestorType=Page}}"
+                                                   Style="{StaticResource PermissionsCheckbox}">
+                                            <CheckBox.CommandParameter>
+                                                <MultiBinding>
+                                                    <MultiBinding.Converter>
+                                                        <conv:MultiValueConverter />
+                                                    </MultiBinding.Converter>
+                                                    <Binding Path="(prop:DBOPropertyExtension.IDSource)">
+                                                        <Binding.RelativeSource>
+                                                            <RelativeSource Mode="TemplatedParent" />
+                                                        </Binding.RelativeSource>
+                                                    </Binding>
+                                                    <Binding ElementName="PermissionCheck"
+                                                             Path="IsChecked" />
+                                                </MultiBinding>
+                                            </CheckBox.CommandParameter>
+                                        </CheckBox>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
                 </DataTemplate>
             </Setter.Value>
         </Setter>

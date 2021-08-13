@@ -14,30 +14,6 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type CheckBox}">
-                    <ControlTemplate.Resources>
-                        <Storyboard x:Key="OnChecking">
-                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00"
-                                                           Storyboard.TargetName="slider"
-                                                           Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)">
-                                <SplineDoubleKeyFrame KeyTime="00:00:00.3000000"
-                                                      Value="25" />
-                            </DoubleAnimationUsingKeyFrames>
-                        </Storyboard>
-                        <Storyboard x:Key="OnUnchecking">
-                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00"
-                                                           Storyboard.TargetName="slider"
-                                                           Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)">
-                                <SplineDoubleKeyFrame KeyTime="00:00:00.3000000"
-                                                      Value="0" />
-                            </DoubleAnimationUsingKeyFrames>
-                            <ThicknessAnimationUsingKeyFrames BeginTime="00:00:00"
-                                                              Storyboard.TargetName="slider"
-                                                              Storyboard.TargetProperty="(FrameworkElement.Margin)">
-                                <SplineThicknessKeyFrame KeyTime="00:00:00.3000000"
-                                                         Value="1,1,1,1" />
-                            </ThicknessAnimationUsingKeyFrames>
-                        </Storyboard>
-                    </ControlTemplate.Resources>
 
                     <DockPanel x:Name="dockPanel">
                         <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
@@ -47,12 +23,13 @@
                                           RecognizesAccessKey="True"
                                           VerticalAlignment="Center" />
 
-                        <Border Margin="5,5,0,5"
-                                Width="50"
-                                Background="#FFC0CCD9"
-                                x:Name="SliderBck"
-                                CornerRadius="5"
-                                Padding="2">
+
+                        <Border    Margin="5,5,0,5"
+                                   Width="50"
+                                   Background="#FFC0CCD9"
+                                   x:Name="SliderBck"
+                                   CornerRadius="5"
+                                   Padding="2">
                             <Border HorizontalAlignment="Left"
                                     x:Name="slider"
                                     Width="20"
@@ -60,7 +37,7 @@
                                     BorderThickness="1"
                                     CornerRadius="5"
                                     RenderTransformOrigin="0.5,0.5"
-                                    Margin="1,1,1,1"
+                                    Margin="1"
                                     Background="White"
                                     Cursor="Hand">
                                 <Border.RenderTransform>
@@ -80,25 +57,46 @@
 
                     </DockPanel>
 
-                    <ControlTemplate.Triggers>
+                    <ControlTemplate.Triggers>                        
                         <Trigger Property="IsChecked"
-                                 Value="True">
-                            <Trigger.ExitActions>
-                                <BeginStoryboard Storyboard="{StaticResource OnUnchecking}"
-                                                 x:Name="OnUnchecking_BeginStoryboard" />
-                            </Trigger.ExitActions>
-                            <Trigger.EnterActions>
-                                <BeginStoryboard Storyboard="{StaticResource OnChecking}"
-                                                 x:Name="OnChecking_BeginStoryboard" />
-                            </Trigger.EnterActions>
+                                 Value="True">                           
+                            
                             <Setter Property="Background"
                                     TargetName="SliderBck"
-                                    Value="#3a5" />
+                                    Value="#3a5" />                           
+                            
+                            <Setter Property="RenderTransform" TargetName="slider">
+                                <Setter.Value>
+                                    <TransformGroup>
+                                        <ScaleTransform ScaleX="1"
+                                                        ScaleY="1" />
+                                        <SkewTransform AngleX="0"
+                                                       AngleY="0" />
+                                        <RotateTransform Angle="0" />
+                                        <TranslateTransform X="25"
+                                                            Y="0" />
+                                    </TransformGroup>
+                                </Setter.Value>
+                            </Setter>
                         </Trigger>
                         <Trigger Property="IsEnabled"
                                  Value="False">
                             <Setter Property="Foreground"
                                     Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+                            <Setter Property="RenderTransform"
+                                    TargetName="slider">
+                                <Setter.Value>
+                                    <TransformGroup>
+                                        <ScaleTransform ScaleX="1"
+                                                        ScaleY="1" />
+                                        <SkewTransform AngleX="0"
+                                                       AngleY="0" />
+                                        <RotateTransform Angle="0" />
+                                        <TranslateTransform X="25"
+                                                            Y="0" />
+                                    </TransformGroup>
+                                </Setter.Value>
+                            </Setter>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -132,11 +130,12 @@
                                       Margin="10,0">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
+                                   
                                     <Grid Margin="0,0,0,5">
-                                        <TextBlock Text="{Binding Permission.pr_name}"
+                                        <TextBlock x:Name="LabelText"
+                                                   Text="{Binding Permission.pr_name}"
                                                    VerticalAlignment="Center"
-                                                   FontSize="14"
-                                                   Foreground="{StaticResource Text_Dark}" />
+                                                   FontSize="14" />
                                         <CheckBox  x:Name="PermissionCheck"
                                                    HorizontalAlignment="Right"
                                                    IsChecked="{Binding Allowed}"
@@ -157,7 +156,22 @@
                                                 </MultiBinding>
                                             </CheckBox.CommandParameter>
                                         </CheckBox>
+                                        
                                     </Grid>
+                                    <DataTemplate.Triggers>
+                                        <DataTrigger Binding="{Binding IsOverride}"
+                                                     Value="True">
+                                            <Setter Property="Foreground"
+                                                    TargetName="LabelText"
+                                                    Value="{StaticResource Accent_Dark}" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsOverride}"
+                                                     Value="False">
+                                            <Setter Property="Foreground"
+                                                    TargetName="LabelText"
+                                                    Value="{StaticResource Text_Dark}" />
+                                        </DataTrigger>
+                                    </DataTemplate.Triggers>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>

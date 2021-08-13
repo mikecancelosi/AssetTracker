@@ -12,10 +12,12 @@ namespace AssetTracker.Services
 {
     public class UserPermissionsProvider : IPermissionsProvider
     {
+
         public List<PermissionGroup> PermissionGroups
         {
             get
             {
+
                 var Grps = new List<PermissionGroup>();
                 foreach (SecPermission4 grp in PermissionGrps.ToList())
                 {
@@ -23,21 +25,24 @@ namespace AssetTracker.Services
                     foreach (var permission in grp.SecPermissions)
                     {
                         bool allowed = permission.pr_default;
+                        bool userOverride = false;
                         SecPermission2 userPermissionOverride = userOverrides.FirstOrDefault(x => x.p2_prid == permission.pr_id);
-                        if(userPermissionOverride != null)
+                        if (userPermissionOverride != null)
                         {
                             allowed = userPermissionOverride.p2_allow;
+                            userOverride = true;
                         }
                         else
                         {
                             SecPermission3 permissionOverride = roleOverrides.FirstOrDefault(x => x.p3_prid == permission.pr_id);
                             allowed = permissionOverride?.p3_allow ?? allowed;
                         }
-                       
+
                         PermissionItem item = new PermissionItem()
                         {
                             Permission = permission,
                             Allowed = allowed,
+                            IsOverride = userOverride
                         };
                         item.AllowedChanged += (prid, allow) => ChangePermission(prid, allow);
                         items.Add(item); ;
@@ -47,7 +52,9 @@ namespace AssetTracker.Services
                         Name = grp.p4_name,
                         Permissions = items
                     });
+
                 }
+
                 return Grps;
             }
         }
@@ -67,7 +74,7 @@ namespace AssetTracker.Services
 
         private GenericUnitOfWork unitOfWork;
         private User myUser;
-        
+
         private GenericRepository<SecPermission2> userOverrideRepo;
         private GenericRepository<SecPermission3> roleOverrideRepo;
         private GenericRepository<SecPermission4> permissionHeaderRepo;
@@ -81,6 +88,7 @@ namespace AssetTracker.Services
             permissionHeaderRepo = unitOfWork.GetRepository<SecPermission4>();
             userOverrideRepo = unitOfWork.GetRepository<SecPermission2>();
 
+
             userOverrides = (from o in userOverrideRepo.Get()
                              where o.p2_usid == user.ID
                              select o).ToList();
@@ -89,16 +97,28 @@ namespace AssetTracker.Services
                              where o.p3_roid == user.us_roid
                              select o).ToList();
 
-            
+
 
         }
 
-
-
         public void ChangePermission(int permissionId, bool newValue)
         {
-            SecPermission2 overridePermission = GetUserOverride(permissionId);
-            overridePermission.p2_allow = newValue;
+            SecPermission3 roleOverride = roleOverrides.FirstOrDefault(x => x.p3_prid == permissionId);
+
+            if (roleOverride != null && roleOverride.p3_allow != newValue)
+            {
+                SecPermission2 overridePermission = GetUserOverride(permissionId);
+                overridePermission.p2_allow = newValue;
+            }
+            else 
+            {
+                SecPermission2 userOverride = userOverrides.FirstOrDefault(x => x.p2_prid == permissionId);
+                if(userOverride != null)
+                {
+                    userOverrides.Remove(userOverride);
+                    userOverrideRepo.Delete(userOverride);
+                }
+            }
         }
 
         public void ResetAllPermissions()
@@ -124,8 +144,23 @@ namespace AssetTracker.Services
                     item.Allowed = true;
                     PermissionGroups[i].Permissions[j] = item;
 
-                    SecPermission2 overridePermission = GetUserOverride(item.Permission.ID);
-                    overridePermission.p2_allow = true;
+                    SecPermission3 roleOverride = roleOverrides.FirstOrDefault(x=>x.p3_prid ==item.Permission.ID);
+
+                    if (roleOverride != null && !roleOverride.p3_allow)
+                    {
+                        SecPermission2 overridePermission = GetUserOverride(item.Permission.ID);
+                        overridePermission.p2_allow = true;
+                        userOverrideRepo.Update(overridePermission);
+                    }
+                    else
+                    {
+                        SecPermission2 userOverride = userOverrides.FirstOrDefault(x => x.p2_prid == item.Permission.ID);
+                        if (userOverride != null)
+                        {
+                            userOverrides.Remove(userOverride);
+                            userOverrideRepo.Delete(userOverride);
+                        }
+                    }
                 }
             }
         }
@@ -140,9 +175,23 @@ namespace AssetTracker.Services
                     item.Allowed = false;
                     PermissionGroups[i].Permissions[j] = item;
 
-                    SecPermission2 overridePermission = GetUserOverride(item.Permission.ID);
-                    overridePermission.p2_allow = false;
-                    userOverrideRepo.Update(overridePermission);
+                    SecPermission3 roleOverride = roleOverrides.FirstOrDefault(x => x.p3_prid == item.Permission.ID);
+
+                    if (roleOverride != null && roleOverride.p3_allow)
+                    {
+                        SecPermission2 overridePermission = GetUserOverride(item.Permission.ID);
+                        overridePermission.p2_allow = false;
+                        userOverrideRepo.Update(overridePermission);
+                    }             
+                    else
+                    {
+                        SecPermission2 userOverride = userOverrides.FirstOrDefault(x => x.p2_prid == item.Permission.ID);
+                        if (userOverride != null)
+                        {
+                            userOverrides.Remove(userOverride);
+                            userOverrideRepo.Delete(userOverride);
+                        }
+                    }
                 }
             }
         }

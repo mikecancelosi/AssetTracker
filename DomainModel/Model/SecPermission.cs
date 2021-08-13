@@ -43,9 +43,14 @@ namespace DomainModel
                 set
                 {
                     allowed = value;
+                    if((AllowedChanged?.GetInvocationList().Length ?? 0) > 0)
+                    {
+                        IsOverride = true;
+                    }
                     AllowedChanged?.Invoke(Permission.ID,Allowed);
                 }
             }
+            public bool IsOverride { get; set; }
 
             public delegate void ValueChange(int prid, bool allowed);
             public event ValueChange AllowedChanged; 

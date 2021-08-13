@@ -12,12 +12,7 @@ using System.Windows.Input;
 using static DomainModel.SecPermission;
 
 namespace AssetTracker.ViewModels
-{
-    /// <summary>
-    /// TODO: Change visuals for Activate/Deactivate all
-    /// TODO: Add 'Reset' option
-    /// TODO: Visual improvements to the override changes from default.
-    /// </summary>
+{   
     public class RoleEditViewModel : ViewModel, ISavable
     {
         public SecRole Role { get; private set; }
@@ -74,7 +69,7 @@ namespace AssetTracker.ViewModels
         public ICommand ResetAllPermissionsCommand => new RelayCommand((s) => ResetAllPermissions(), (s) => true);
         public ICommand ActivateAllPermissionsCommand => new RelayCommand((s) => ActivateAllPermissions(), (s) => true);
         public ICommand DeactivateAllPermissionsCommand => new RelayCommand((s) => DeactivateAllPermissions(), (s) => true);
-        public ICommand PermissionChanged => new RelayCommand((s) => NotifyPropertyChanged("IsSavable"), (s) => true);
+        public ICommand PermissionChanged => new RelayCommand((s) => PermissionUpdated(), (s) => true);
         #endregion
 
 
@@ -167,7 +162,13 @@ namespace AssetTracker.ViewModels
             Role.ro_name = newValue;
             roleRepo.Update(Role);
             NotifyPropertyChanged("IsSavable");
-        } 
+        }
+
+        private void PermissionUpdated()
+        {
+            NotifyPropertyChanged("PermissionGroups");
+            NotifyPropertyChanged("IsSavable");
+        }
 
         private void ResetAllPermissions()
         {

@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-namespace DomainModel
+﻿namespace DomainModel
 {
     /// <summary>
     /// Assets are given a category they belong to. This helps

@@ -28,12 +28,6 @@ namespace AssetTracker.View
             VM.NavigateToAssetDetail(ast);
         }
 
-        private void MainGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            Asset ast = MainGrid.SelectedItem as Asset;
-            VM.ChangeSelectedAsset(ast);
-        }
-
         private void DeleteAsset_Clicked(object sender, RoutedEventArgs e)
         {
             if (MainGrid.SelectedItem != null)

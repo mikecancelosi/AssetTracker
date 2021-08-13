@@ -1,8 +1,6 @@
 ﻿using AssetTracker.ViewModels;
 using AssetTracker.ViewModels.Interfaces;
 using AssetTracker.ViewModels.Services;
-using DataAccessLayer;
-using DataAccessLayer.Strategies;
 using DomainModel;
 using System;
 using System.Linq;

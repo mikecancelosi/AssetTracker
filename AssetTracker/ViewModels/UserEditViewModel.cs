@@ -5,9 +5,7 @@ using AssetTracker.ViewModels.Services;
 using DataAccessLayer;
 using DataAccessLayer.Strategies;
 using DomainModel;
-using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using static DomainModel.SecPermission;
@@ -16,10 +14,21 @@ namespace AssetTracker.ViewModels
 {
     public class UserEditViewModel : ViewModel, ISavable
     {
+        /// <summary>
+        /// User to edit
+        /// </summary>
         public User CurrentUser { get; private set; }
-
+        /// <summary>
+        /// Is the user new?
+        /// </summary>
         public bool Creating { get; set; }
+        /// <summary>
+        /// Is the user a clone?
+        /// </summary>
         private bool Cloning { get; set; }
+        /// <summary>
+        /// Display title based on whether we are modifying,cloning, or creating this user
+        /// </summary>
         public string HeadingContext
         {
             get
@@ -39,6 +48,9 @@ namespace AssetTracker.ViewModels
             }
         }
 
+        /// <summary>
+        /// First name of the user
+        /// </summary>
         public string FirstName
         {
             get => CurrentUser?.us_fname ?? "";
@@ -50,7 +62,9 @@ namespace AssetTracker.ViewModels
                 NotifyPropertyChanged("IsSavable");
             }
         }
-
+        /// <summary>
+        /// Last name of the user
+        /// </summary>
         public string LastName
         {
             get => CurrentUser?.us_lname ?? "";
@@ -62,7 +76,9 @@ namespace AssetTracker.ViewModels
                 NotifyPropertyChanged("IsSavable");
             }
         }
-
+        /// <summary>
+        /// Display name of the user
+        /// </summary>
         public string DisplayName
         {
             get => CurrentUser?.us_displayname ?? "";
@@ -74,7 +90,9 @@ namespace AssetTracker.ViewModels
                 NotifyPropertyChanged("IsSavable");
             }
         }
-
+        /// <summary>
+        /// Email of the user
+        /// </summary>
         public string Email
         {
             get => CurrentUser?.us_email ?? "";
@@ -86,7 +104,9 @@ namespace AssetTracker.ViewModels
                 NotifyPropertyChanged("IsSavable");
             }
         }
-
+        /// <summary>
+        /// Password of the user
+        /// </summary>
         public string Password
         {
             get => CurrentUser?.us_password ?? "";
@@ -98,13 +118,46 @@ namespace AssetTracker.ViewModels
                 NotifyPropertyChanged("IsSavable");
             }
         }
+        /// <summary>
+        /// Role of the user
+        /// </summary>
+        public SecRole UserRole
+        {
+            get => CurrentUser.SecRole;
+            set
+            {
+                CurrentUser.SecRole = value;
+                CurrentUser.us_roid = value.ID;
+                userRepo.Update(CurrentUser);
+                NotifyPropertyChanged("CurrentUser");
+                NotifyPropertyChanged("IsSavable");
+            }
+        }
 
         #region Saving
+        /// <summary>
+        /// Execute save functionality
+        /// </summary>
         public ICommand SaveCommand => new RelayCommand((s) => Save(), (s) => true);
+        /// <summary>
+        /// After being prompted to save, the user has refused. Navigate away to queued page
+        /// </summary>
         public ICommand RefuseSave => new RelayCommand((s) => navCoordinator.NavigateToQueued(), (s) => true);
+        /// <summary>
+        /// Does the uow have any changes to save to the db
+        /// </summary>
         public bool IsSavable => unitOfWork.HasChanges;
+        /// <summary>
+        /// Save violations detected on attempting to save
+        /// </summary>
         public List<Violation> SaveViolations { get; set; }
+        /// <summary>
+        /// Backing field for PromptSave
+        /// </summary>
         private bool promptSave;
+        /// <summary>
+        /// Should the user be prompted to save.
+        /// </summary>
         public bool PromptSave
         {
             get => promptSave;
@@ -114,8 +167,15 @@ namespace AssetTracker.ViewModels
                 NotifyPropertyChanged("PromptSave");
             }
         }
+        /// <summary>
+        /// Validator to use when saving the user
+        /// </summary>
+        private IModelValidator<User> userValidator;
         #endregion
 
+        /// <summary>
+        /// Coordinator to use when navigating away
+        /// </summary>
         public INavigationCoordinator navCoordinator { get; set; }
 
         #region Deleting
@@ -147,6 +207,9 @@ namespace AssetTracker.ViewModels
         public Violation RoleUnassignedViolation => SaveViolations?.FirstOrDefault(x => x.PropertyName == "us_roid") ?? null;
         #endregion
 
+        /// <summary>
+        /// Roles available to set the user to
+        /// </summary>
         public List<DatabaseBackedObject> Roles
         {
             get
@@ -155,21 +218,6 @@ namespace AssetTracker.ViewModels
                         select r).ToList<DatabaseBackedObject>();
             }
         }
-
-        public SecRole UserRole
-        {
-            get => CurrentUser.SecRole;
-            set
-            {
-                CurrentUser.SecRole = value;
-                CurrentUser.us_roid = value.ID;
-                userRepo.Update(CurrentUser);
-                NotifyPropertyChanged("CurrentUser");
-                NotifyPropertyChanged("IsSavable");
-            }
-        }
-
-        private IModelValidator<User> userValidator;
 
         public UserEditViewModel(INavigationCoordinator coord, GenericUnitOfWork uow, IDeleteStrategy<User> userDeleteStrat, IModelValidator<User> userValidatorService)
         {
@@ -192,20 +240,24 @@ namespace AssetTracker.ViewModels
 
         }
 
+        /// <summary>
+        /// Set the user to modify
+        /// </summary>
+        /// <param name="user"></param>
         public void SetUser(User user)
         {
-            if (user.us_id > 0)
+            if (user.us_id > 0) // Modifying
             {
                 CurrentUser = userRepo.GetByID(user.us_id);
-                Creating = false;
+                Cloning = false;
             }
-            else
+            else // Cloning
             {
                 CurrentUser = user;
                 userRepo.Insert(CurrentUser);
-                Creating = false;
                 Cloning = true;
             }
+            Creating = false;
             permissionsProvider = new UserPermissionsProvider(unitOfWork, CurrentUser);
             NotifyPropertyChanged("CurrentUser");
             NotifyPropertyChanged("HeadingContext");
@@ -213,7 +265,9 @@ namespace AssetTracker.ViewModels
             NotifyPropertyChanged("UserRole");
         }
 
-
+        /// <summary>
+        /// Save the user to the database
+        /// </summary>
         public void Save()
         {
             userRepo.Update(CurrentUser);
@@ -256,6 +310,9 @@ namespace AssetTracker.ViewModels
             }
         }
 
+        /// <summary>
+        /// Delete user from the database
+        /// </summary>
         public void DeleteUser()
         {
             userDeleteStrategy.Delete(unitOfWork, CurrentUser);
@@ -263,6 +320,10 @@ namespace AssetTracker.ViewModels
             navCoordinator.NavigateToProjectSettings();
         }
 
+        /// <summary>
+        /// Role changed, update the user
+        /// </summary>
+        /// <param name="newValue"></param>
         public void OnRoleChanged(int newValue)
         {
             CurrentUser.us_roid = newValue;
@@ -271,13 +332,17 @@ namespace AssetTracker.ViewModels
         }
 
         #region Permissions
-
+        /// <summary>
+        /// Permissions was changed from the control
+        /// </summary>
         private void PermissionUpdated()
         {
             NotifyPropertyChanged("PermissionGroups");
             NotifyPropertyChanged("IsSavable");
         }
-
+        /// <summary>
+        /// Reset all permissions to role's defaults
+        /// </summary>
         private void ResetAllPermissions()
         {
             permissionsProvider.ResetAllPermissions();
@@ -285,6 +350,9 @@ namespace AssetTracker.ViewModels
             NotifyPropertyChanged("IsSavable");
         }
 
+        /// <summary>
+        /// Deactivate all permissions and apply overrides where necessary
+        /// </summary>
         public void DeactivateAllPermissions()
         {
             permissionsProvider.DeactivateAllPermissions();
@@ -292,6 +360,9 @@ namespace AssetTracker.ViewModels
             NotifyPropertyChanged("IsSavable");
         }
 
+        /// <summary>
+        /// Activate all permissions, applying overrides where necesary
+        /// </summary>
         public void ActivateAllPermissions()
         {
             permissionsProvider.ActivateAllPermissions();

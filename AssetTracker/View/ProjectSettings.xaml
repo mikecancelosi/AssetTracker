@@ -130,7 +130,7 @@
                                 HorizontalAlignment="Left"
                                 Margin="0,40,0,10"
                                 ToolTipService.ShowOnDisabled="True"
-                                ToolTipService.IsEnabled="{Binding IsEnabled, RelativeSource={RelativeSource Mode=Self},Converter={StaticResource inverseBooleanConverter}}"
+                                ToolTipService.IsEnabled="{Binding IsEnabled, RelativeSource={RelativeSource Mode=Self},Converter={StaticResource InvertBoolConverter}}"
                                 IsEnabled="{Binding RelativeSource={RelativeSource AncestorLevel=1,AncestorType=Page}, Path=DataContext.UserCanCreateUsers}">
                             <StackPanel Orientation="Vertical"
                                         Margin="0,0,15,0">
@@ -152,7 +152,7 @@
                                 HorizontalAlignment="Left"
                                 Margin="0,40,0,10"
                                 ToolTipService.ShowOnDisabled="True"
-                                ToolTipService.IsEnabled="{Binding ElementName=ProjectSettingsPage, Path=DataContext.UserCanCloneUsers, Converter={StaticResource inverseBooleanConverter}}">
+                                ToolTipService.IsEnabled="{Binding ElementName=ProjectSettingsPage, Path=DataContext.UserCanCloneUsers, Converter={StaticResource InvertBoolConverter}}">
                             <Button.IsEnabled>
                                 <MultiBinding Converter="{StaticResource multiBoolAllConverter}">
                                     <Binding ElementName="ProjectSettingsPage"
@@ -182,7 +182,7 @@
                                 HorizontalAlignment="Left"
                                 Margin="0,40,0,10"
                                 ToolTipService.ShowOnDisabled="True"
-                                ToolTipService.IsEnabled="{Binding ElementName=ProjectSettingsPage, Path=DataContext.UserCanEditUsers, Converter={StaticResource inverseBooleanConverter}}">
+                                ToolTipService.IsEnabled="{Binding ElementName=ProjectSettingsPage, Path=DataContext.UserCanEditUsers, Converter={StaticResource InvertBoolConverter}}">
                             <Button.IsEnabled>
                                 <MultiBinding Converter="{StaticResource multiBoolAllConverter}">
                                     <Binding ElementName="ProjectSettingsPage"
@@ -212,7 +212,7 @@
                                 HorizontalAlignment="Left"
                                 Margin="0,40,0,10"
                                 ToolTipService.ShowOnDisabled="True"
-                                ToolTipService.IsEnabled="{Binding ElementName=ProjectSettingsPage, Path=DataContext.UserCanDeleteUsers, Converter={StaticResource inverseBooleanConverter}}">
+                                ToolTipService.IsEnabled="{Binding ElementName=ProjectSettingsPage, Path=DataContext.UserCanDeleteUsers, Converter={StaticResource InvertBoolConverter}}">
                             <Button.IsEnabled>
                                 <MultiBinding Converter="{StaticResource multiBoolAllConverter}">
                                     <Binding ElementName="ProjectSettingsPage"
@@ -277,7 +277,7 @@
                                 HorizontalAlignment="Left"
                                 Margin="0,40,0,10"
                                 ToolTipService.ShowOnDisabled="True"
-                                ToolTipService.IsEnabled="{Binding IsEnabled, RelativeSource={RelativeSource Mode=Self},Converter={StaticResource inverseBooleanConverter}}"
+                                ToolTipService.IsEnabled="{Binding IsEnabled, RelativeSource={RelativeSource Mode=Self},Converter={StaticResource InvertBoolConverter}}"
                                 IsEnabled="{Binding RelativeSource={RelativeSource AncestorLevel=1,AncestorType=Page}, Path=DataContext.UserCanCreateRoles}">
                             <StackPanel Orientation="Vertical"
                                         Margin="0,0,15,0">
@@ -299,7 +299,7 @@
                                 HorizontalAlignment="Left"
                                 Margin="0,40,0,10"
                                 ToolTipService.ShowOnDisabled="True"
-                                ToolTipService.IsEnabled="{Binding ElementName=ProjectSettingsPage, Path=DataContext.UserCanCloneRoles, Converter={StaticResource inverseBooleanConverter}}">
+                                ToolTipService.IsEnabled="{Binding ElementName=ProjectSettingsPage, Path=DataContext.UserCanCloneRoles, Converter={StaticResource InvertBoolConverter}}">
                             <Button.IsEnabled>
                                 <MultiBinding Converter="{StaticResource multiBoolAllConverter}">
                                     <Binding ElementName="ProjectSettingsPage"
@@ -329,7 +329,7 @@
                                 HorizontalAlignment="Left"
                                 Margin="0,40,0,10"
                                 ToolTipService.ShowOnDisabled="True"
-                                ToolTipService.IsEnabled="{Binding ElementName=ProjectSettingsPage, Path=DataContext.UserCanEditRoles, Converter={StaticResource inverseBooleanConverter}}">
+                                ToolTipService.IsEnabled="{Binding ElementName=ProjectSettingsPage, Path=DataContext.UserCanEditRoles, Converter={StaticResource InvertBoolConverter}}">
                             <Button.IsEnabled>
                                 <MultiBinding Converter="{StaticResource multiBoolAllConverter}">
                                     <Binding ElementName="ProjectSettingsPage"
@@ -359,7 +359,7 @@
                                 HorizontalAlignment="Left"
                                 Margin="0,40,0,10"
                                 ToolTipService.ShowOnDisabled="True"
-                                ToolTipService.IsEnabled="{Binding ElementName=ProjectSettingsPage, Path=DataContext.UserCanDeleteRoles, Converter={StaticResource inverseBooleanConverter}}">
+                                ToolTipService.IsEnabled="{Binding ElementName=ProjectSettingsPage, Path=DataContext.UserCanDeleteRoles, Converter={StaticResource InvertBoolConverter}}">
                             <Button.IsEnabled>
                                 <MultiBinding Converter="{StaticResource multiBoolAllConverter}">
                                     <Binding ElementName="ProjectSettingsPage"
@@ -420,7 +420,7 @@
                                 HorizontalAlignment="Left"
                                 Margin="0,40,0,10"
                                 ToolTipService.ShowOnDisabled="True"
-                                ToolTipService.IsEnabled="{Binding IsEnabled, RelativeSource={RelativeSource Mode=Self},Converter={StaticResource inverseBooleanConverter}}"
+                                ToolTipService.IsEnabled="{Binding IsEnabled, RelativeSource={RelativeSource Mode=Self},Converter={StaticResource InvertBoolConverter}}"
                                 IsEnabled="{Binding RelativeSource={RelativeSource AncestorLevel=1,AncestorType=Page}, Path=DataContext.UserCanCreateCategories}">
                             <StackPanel Orientation="Vertical"
                                         Margin="0,0,15,0">
@@ -442,7 +442,7 @@
                                 HorizontalAlignment="Left"
                                 Margin="0,40,0,10"
                                 ToolTipService.ShowOnDisabled="True"
-                                ToolTipService.IsEnabled="{Binding ElementName=ProjectSettingsPage, Path=DataContext.UserCanCloneCategories, Converter={StaticResource inverseBooleanConverter}}">
+                                ToolTipService.IsEnabled="{Binding ElementName=ProjectSettingsPage, Path=DataContext.UserCanCloneCategories, Converter={StaticResource InvertBoolConverter}}">
                             <Button.IsEnabled>
                                 <MultiBinding Converter="{StaticResource multiBoolAllConverter}">
                                     <Binding ElementName="ProjectSettingsPage"
@@ -472,7 +472,7 @@
                                 HorizontalAlignment="Left"
                                 Margin="0,40,0,10"
                                 ToolTipService.ShowOnDisabled="True"
-                                ToolTipService.IsEnabled="{Binding ElementName=ProjectSettingsPage, Path=DataContext.UserCanEditCategories, Converter={StaticResource inverseBooleanConverter}}">
+                                ToolTipService.IsEnabled="{Binding ElementName=ProjectSettingsPage, Path=DataContext.UserCanEditCategories, Converter={StaticResource InvertBoolConverter}}">
                             <Button.IsEnabled>
                                 <MultiBinding Converter="{StaticResource multiBoolAllConverter}">
                                     <Binding ElementName="ProjectSettingsPage"
@@ -502,7 +502,7 @@
                                 HorizontalAlignment="Left"
                                 Margin="0,40,0,10"
                                 ToolTipService.ShowOnDisabled="True"
-                                ToolTipService.IsEnabled="{Binding ElementName=ProjectSettingsPage, Path=DataContext.UserCanDeleteCategories, Converter={StaticResource inverseBooleanConverter}}">
+                                ToolTipService.IsEnabled="{Binding ElementName=ProjectSettingsPage, Path=DataContext.UserCanDeleteCategories, Converter={StaticResource InvertBoolConverter}}">
                             <Button.IsEnabled>
                                 <MultiBinding Converter="{StaticResource multiBoolAllConverter}">
                                     <Binding ElementName="ProjectSettingsPage"
@@ -565,7 +565,7 @@
                             Margin="0,40,0,10"
                             Command="{Binding OpenNewAlert}"
                             ToolTipService.ShowOnDisabled="True"
-                            ToolTipService.IsEnabled="{Binding IsEnabled, RelativeSource={RelativeSource Mode=Self},Converter={StaticResource inverseBooleanConverter}}"
+                            ToolTipService.IsEnabled="{Binding IsEnabled, RelativeSource={RelativeSource Mode=Self},Converter={StaticResource InvertBoolConverter}}"
                             IsEnabled="{Binding RelativeSource={RelativeSource AncestorLevel=1,AncestorType=Page}, Path=DataContext.UserCanPostAlerts}">
                         <StackPanel Orientation="Vertical"
                                     Margin="0,0,15,0">
@@ -619,7 +619,7 @@
                                                         Command="{Binding RelativeSource={RelativeSource AncestorLevel=1,AncestorType=Page}, Path=DataContext.EditAlertCommand}"
                                                         CommandParameter="{Binding ar_id}"
                                                         ToolTipService.ShowOnDisabled="True"
-                                                        ToolTipService.IsEnabled="{Binding IsEnabled, RelativeSource={RelativeSource Mode=Self},Converter={StaticResource inverseBooleanConverter}}"
+                                                        ToolTipService.IsEnabled="{Binding IsEnabled, RelativeSource={RelativeSource Mode=Self},Converter={StaticResource InvertBoolConverter}}"
                                                         IsEnabled="{Binding RelativeSource={RelativeSource AncestorLevel=1,AncestorType=Page}, Path=DataContext.UserCanEditAlerts}">
                                                     <materialicons:MaterialIcon Icon="ic_edit"
                                                                                 Style="{StaticResource HoverBtn_Content}" />
@@ -634,7 +634,7 @@
                                                         Command="{Binding RelativeSource={RelativeSource AncestorLevel=1,AncestorType=Page}, Path=DataContext.DeleteAlertCommand}"
                                                         CommandParameter="{Binding ar_id}"
                                                         ToolTipService.ShowOnDisabled="True"
-                                                        ToolTipService.IsEnabled="{Binding IsEnabled, RelativeSource={RelativeSource Mode=Self},Converter={StaticResource inverseBooleanConverter}}"
+                                                        ToolTipService.IsEnabled="{Binding IsEnabled, RelativeSource={RelativeSource Mode=Self},Converter={StaticResource InvertBoolConverter}}"
                                                         IsEnabled="{Binding RelativeSource={RelativeSource AncestorLevel=1,AncestorType=Page}, Path=DataContext.UserCanDeleteAlerts}">
                                                     <materialicons:MaterialIcon Icon="ic_delete"
                                                                                 Style="{StaticResource HoverBtn_Content}" />

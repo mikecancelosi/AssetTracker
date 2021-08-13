@@ -1,6 +1,4 @@
 ﻿using AssetTracker.ViewModels;
-using DomainModel;
-using System.Windows;
 using System.Windows.Controls;
 
 namespace AssetTracker.View

@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-namespace DomainModel
+﻿namespace DomainModel
 {
     /// <summary>
     /// Each user is assigned a role. This gives the user default permissions

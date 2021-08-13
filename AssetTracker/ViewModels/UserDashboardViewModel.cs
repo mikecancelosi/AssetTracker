@@ -12,8 +12,14 @@ namespace AssetTracker.ViewModels
 {
     public class UserDashboardViewModel : ViewModel
     {     
+        /// <summary>
+        /// User to bind to
+        /// </summary>
         public User myUser { get; set; }
 
+        /// <summary>
+        /// Alerts for just this user to see
+        /// </summary>
         public List<Alert> UserAlerts
         {
             get
@@ -56,19 +62,39 @@ namespace AssetTracker.ViewModels
             }
         }
 
+        /// <summary>
+        /// The amount of unviewed discussion alerts this user has
+        /// </summary>
         public int DiscussionAlertCount => UserAlerts.Where(x => x.ar_type == AlertType.DiscussionReply && !x.ar_viewed).Count();
+        /// <summary>
+        /// The amount of unviewed assigned to asset alerts this user has
+        /// </summary>
         public int AssetAlertCount => UserAlerts.Where(x => x.ar_type == AlertType.AssetAssigned && !x.ar_viewed).Count();
+        /// <summary>
+        /// The amount of unviewed reviews assigned to this user
+        /// </summary>
         public int ReviewAlertCount => UserAlerts.Where(x => x.ar_type == AlertType.ReviewAssigned && !x.ar_viewed).Count();
+        /// <summary>
+        /// Whether or not this user has no alerts.
+        /// </summary>
         public bool EmptyAlerts => UserAlerts.Count == 0;
 
-        public ICommand PrioritizeAlertCommand { get; set; }
-        public ICommand ArchiveAlertCommand { get; set; }
+        #region Commands
+        public ICommand PrioritizeAlertCommand => new RelayCommand((s) => PrioritizeAlert((int) s), (s) => true);
+        public ICommand ArchiveAlertCommand => new RelayCommand((s) => ArchiveAlert((int)s), (s) => true);
         public ICommand MarkAlertsAsRead => new RelayCommand((s) => MarkAsRead(), (s) => true);
+        #endregion
 
+        #region Repositories
         private GenericRepository<Alert> alertsRepo;
         private GenericRepository<Asset> assetRepo;
+        #endregion
 
+        /// <summary>
+        /// Coordinator to use to navigate to other pages
+        /// </summary>
         private readonly INavigationCoordinator navCoordinator;
+
         public UserDashboardViewModel(INavigationCoordinator coord, GenericUnitOfWork uow)
         {          
             myUser = MainViewModel.Instance.CurrentUser;
@@ -77,12 +103,12 @@ namespace AssetTracker.ViewModels
 
             alertsRepo = unitOfWork.GetRepository<Alert>();
             assetRepo = unitOfWork.GetRepository<Asset>();
-
-
-            PrioritizeAlertCommand = new RelayCommand((s) => PrioritizeAlert((int)s), (s) => true);
-            ArchiveAlertCommand = new RelayCommand((s) => ArchiveAlert((int)s), (s) => true);
         }
 
+        /// <summary>
+        /// Navigate to the page linked to the alert given
+        /// </summary>
+        /// <param name="alertid">Alert to navigate to</param>
         public void NavigateToAlert(int alertid)
         {
             Alert selectedAlert = UserAlerts.FirstOrDefault(x => x.ID == alertid);
@@ -100,6 +126,10 @@ namespace AssetTracker.ViewModels
             }
         }
 
+        /// <summary>
+        /// Prioritize the alert to highlight its importance
+        /// </summary>
+        /// <param name="alertid">Alert to prioritize</param>
         public void PrioritizeAlert(int alertid)
         {
             Alert selectedAlert = UserAlerts.FirstOrDefault(x => x.ID == alertid);
@@ -112,6 +142,10 @@ namespace AssetTracker.ViewModels
             }
         }
 
+        /// <summary>
+        /// Archive the alert by marking it unread
+        /// </summary>
+        /// <param name="alertid">Alert to archive</param>
         public void ArchiveAlert(int alertid)
         {
             Alert selectedAlert = UserAlerts.FirstOrDefault(x => x.ID == alertid);
@@ -124,6 +158,9 @@ namespace AssetTracker.ViewModels
             }
         }
 
+        /// <summary>
+        /// Mark all user alerts as read
+        /// </summary>
         private void MarkAsRead()
         {
             foreach(Alert a in UserAlerts)

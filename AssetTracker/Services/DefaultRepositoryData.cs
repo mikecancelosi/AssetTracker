@@ -1,5 +1,4 @@
 ﻿using DomainModel;
-using System;
 using System.Collections.Generic;
 
 namespace AssetTracker.Services

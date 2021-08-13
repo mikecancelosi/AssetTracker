@@ -9,7 +9,6 @@ using DomainModel;
 using DomainModel.Enums;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 
@@ -18,12 +17,29 @@ namespace AssetTracker.ViewModels
     public class AssetDetailViewModel : ViewModel, ISavable
     {
         #region ModelAccessors
+        /// <summary>
+        /// Asset to base the data off of
+        /// </summary>
         public Asset myAsset { get; private set; }
+        /// <summary>
+        /// Tags bound to myAsset
+        /// </summary>
         public List<Metadata> Tags => myAsset.Metadata.Count > 0 ? myAsset.Metadata.ToList() : null;
+        /// <summary>
+        /// Changes made to myAsset since creation
+        /// </summary>
         public List<Change> Changelog { get; set; }
+        /// <summary>
+        /// Hierarchy of myAsset
+        /// </summary>
         public List<AssetHierachyObjectBuilder.AssetHierarchyObject> Hierarchy => AssetHierachyObjectBuilder.CreateHierarchy(myAsset);
+        /// <summary>
+        /// If a hierarchy object was selected, we want to navigate to it only after verifying save. Store the selection here
+        /// </summary>
         private Asset QueuedHierarchyObject;
-        
+        /// <summary>
+        /// Discussions bound to myAsset
+        /// </summary>
         public List<Discussion> DiscussionBoard
         {
             get
@@ -39,7 +55,9 @@ namespace AssetTracker.ViewModels
                 NotifyPropertyChanged("DiscussionBoard");
             }
         }
-
+        /// <summary>
+        /// Display different headings based on whether or not we are creating, cloning, or modifying
+        /// </summary>
         public string HeadingText
         {
             get
@@ -55,7 +73,9 @@ namespace AssetTracker.ViewModels
                 return "Modify Asset";
             }
         }
-
+        /// <summary>
+        /// Display text using the asset title. If null, displays default ' New Asset '
+        /// </summary>
         public string AssetTitle
         {
             get
@@ -71,7 +91,9 @@ namespace AssetTracker.ViewModels
                 NotifyPropertyChanged("IsSavable");
             }
         }
-
+        /// <summary>
+        /// Description of myAsset
+        /// </summary>
         public string Description
         {
             get
@@ -87,7 +109,9 @@ namespace AssetTracker.ViewModels
                 NotifyPropertyChanged("IsSavable");
             }
         }
-
+        /// <summary>
+        /// myAsset's category
+        /// </summary>
         public AssetCategory Category
         {
             get => myAsset.AssetCategory;
@@ -101,7 +125,9 @@ namespace AssetTracker.ViewModels
                 NotifyPropertyChanged("PhaseTimelineObjects");
             }
         }
-
+        /// <summary>
+        /// User assigned to the asset
+        /// </summary>
         public User AssignedUser
         {
             get => myAsset.AssignedToUser;
@@ -114,7 +140,9 @@ namespace AssetTracker.ViewModels
                 NotifyPropertyChanged("IsSavable");
             }
         }
-
+        /// <summary>
+        /// Phase of myAsset
+        /// </summary>
         public Phase CurrentPhase
         {
             get => myAsset.Phase;
@@ -126,7 +154,9 @@ namespace AssetTracker.ViewModels
                 NotifyPropertyChanged("IsSavable");
             }
         }
-
+        /// <summary>
+        /// User options for who can be assigned to this asset
+        /// </summary>
         public List<DatabaseBackedObject> Users
         {
             get
@@ -135,7 +165,9 @@ namespace AssetTracker.ViewModels
                         select u).ToList<DatabaseBackedObject>();
             }
         }
-
+        /// <summary>
+        /// Category options for myAsset
+        /// </summary>
         public List<DatabaseBackedObject> Categories
         {
             get
@@ -144,7 +176,9 @@ namespace AssetTracker.ViewModels
                         select c).ToList<DatabaseBackedObject>();
             }
         }
-
+        /// <summary>
+        /// Phases possible for myAsset. Change based on setting of Categories
+        /// </summary>
         public List<DatabaseBackedObject> Phases
         {
             get
@@ -156,19 +190,19 @@ namespace AssetTracker.ViewModels
         }
         #endregion
 
-        #region ViewState
+        
         /// <summary>
         /// Is myAsset a new asset we are generating?
         /// </summary>
         private bool Creating;
         /// <summary>
-        /// Are we just copying a prexisting asset
+        /// Are we copying a prexisting asset?
         /// </summary>
         private bool Cloning;
 
+        #region Violations
         public Violation DescriptionViolation => SaveViolations?.FirstOrDefault(x => x.PropertyName == "as_description") ?? null;
         public Violation NameViolation => SaveViolations?.FirstOrDefault(x => x.PropertyName == "as_displayname") ?? null;
-
         #endregion
 
         #region ISavable Properties
@@ -211,8 +245,14 @@ namespace AssetTracker.ViewModels
         }
         #endregion
 
-        #region Delete Properties    
+        #region Delete Properties 
+        /// <summary>
+        /// backing field for PromptDelete
+        /// </summary>
         private bool promptDelete;
+        /// <summary>
+        /// Should the user be prompted to delete the object
+        /// </summary>
         public bool PromptDelete
         {
             get => promptDelete;

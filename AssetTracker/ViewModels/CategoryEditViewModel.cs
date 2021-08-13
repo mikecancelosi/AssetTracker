@@ -5,7 +5,6 @@ using AssetTracker.ViewModels.Services;
 using DataAccessLayer;
 using DataAccessLayer.Strategies;
 using DomainModel;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
@@ -14,8 +13,14 @@ namespace AssetTracker.ViewModels
 {
     public class CategoryEditViewModel : ViewModel,ISavable
     {
+        /// <summary>
+        /// Category to modify
+        /// </summary>
         public AssetCategory Category { get; private set; }      
 
+        /// <summary>
+        /// Phases of this category
+        /// </summary>
         public List<Phase> CurrentPhases
         {
             get
@@ -24,6 +29,9 @@ namespace AssetTracker.ViewModels
                 return orderedList.ToList();
             }
         }
+        /// <summary>
+        /// Heading to display based on if we are creating,cloning, or modifiying the category
+        /// </summary>
         public string HeadingContent
         {
             get
@@ -42,6 +50,9 @@ namespace AssetTracker.ViewModels
                 }
             }
         }
+        /// <summary>
+        /// Name of the category
+        /// </summary>
         public string CategoryName
         {
             get => Category.ca_name;
@@ -52,9 +63,18 @@ namespace AssetTracker.ViewModels
                 NotifyPropertyChanged("IsSavable");
             }
         }
-
+        #region Saving
+        /// <summary>
+        /// Whether or not the category has changes made that are not yet committed to the db
+        /// </summary>
         public bool IsSavable => unitOfWork.HasChanges;
+        /// <summary>
+        /// Backing field for PromptSave
+        /// </summary>
         private bool promptSave;
+        /// <summary>
+        /// Should the user be prompted to save
+        /// </summary>
         public bool PromptSave
         {
             get => promptSave;
@@ -63,27 +83,62 @@ namespace AssetTracker.ViewModels
                 promptSave = value;
                 NotifyPropertyChanged("PromptSave");
             }
-        }
-        public ICommand DeleteConfirmed =>  new RelayCommand((s) => DeleteCategory(), (s) => true);
+        }        
+        /// <summary>
+        /// Command to execute the save functionality
+        /// </summary>
         public ICommand SaveCommand => new RelayCommand((s) => Save(), (s) => true);
+        /// <summary>
+        /// The user has been prompted to save before navigating away. The user rejected to do so. Continue onwards.
+        /// </summary>
         public ICommand RefuseSave => new RelayCommand((s) => navCoordinator.NavigateToQueued(), (s) => true);
-
+        /// <summary>
+        /// Any violations found when attempting to save the category
+        /// </summary>
         public List<Violation> SaveViolations { get; set; }
+        /// <summary>
+        /// Validator to use when saving the category
+        /// </summary>
+        private IModelValidator<AssetCategory> categoryValidator;
+        #endregion
 
+        /// <summary>
+        /// Is the category new?
+        /// </summary>
         public bool Creating { get; set; }
+        /// <summary>
+        /// Is this category a copy of another?
+        /// </summary>
         public bool Cloning { get; set; }
 
+        #region Repositories
         private GenericRepository<AssetCategory> categoryRepo;
         private GenericRepository<Phase> phaseRepo;
-        
-        public INavigationCoordinator navCoordinator { get; set; }
-        private IDeleteStrategy<AssetCategory> catDeleteStrategy;
+        #endregion
 
+        /// <summary>
+        /// NavCoordinator used to navigate to other pages.
+        /// </summary>
+        public INavigationCoordinator navCoordinator { get; set; }
+
+        #region Deleting
+        /// <summary>
+        /// The user has been prompted to confirmed deletion. The user has confirmed. Proceed to delete.
+        /// </summary>
+        public ICommand DeleteConfirmed => new RelayCommand((s) => DeleteCategory(), (s) => true);
+        /// <summary>
+        /// Strategy to use when deleting the category
+        /// </summary>
+        private IDeleteStrategy<AssetCategory> catDeleteStrategy;
+        #endregion
+
+        #region Violations
         public Violation CategoryNameViolation => SaveViolations?.FirstOrDefault(x => x.PropertyName == "ca_name") ?? null;
         public Violation PhasesViolation => SaveViolations?.FirstOrDefault(x => x.PropertyName == "Phases" || 
                                                                                 x.PropertyName =="ph_name") ?? null;
+        #endregion
 
-        private IModelValidator<AssetCategory> categoryValidator;
+        
 
         public CategoryEditViewModel(INavigationCoordinator coord,
                                      GenericUnitOfWork uow,
@@ -102,13 +157,19 @@ namespace AssetTracker.ViewModels
             Creating = true;
         }
 
+        /// <summary>
+        /// Set the category value 
+        /// </summary>
+        /// <param name="cat">Category to modify</param>
         public void SetCategory(AssetCategory cat)
         {
-            if (cat.ca_id > 0)
+            
+            if (cat.ca_id > 0) // This category already exists, we are modifying.
             {
                 Category = categoryRepo.GetByID(cat.ca_id);
+                Cloning = false;
             }
-            else
+            else // We are cloning
             {
                 Category = cat;
                 categoryRepo.Insert(Category);                
@@ -119,10 +180,12 @@ namespace AssetTracker.ViewModels
             NotifyPropertyChanged("HeadingContext");
         }
 
+        /// <summary>
+        /// Save the category and commit to db
+        /// </summary>
         public void Save()
         {
-            categoryRepo.Update(Category);
-            
+            categoryRepo.Update(Category);            
 
             if(categoryValidator.IsValid(unitOfWork,Category,out List<Violation> violations))
             {
@@ -154,6 +217,9 @@ namespace AssetTracker.ViewModels
             }
         }
 
+        /// <summary>
+        /// Delete the category from the db.
+        /// </summary>
         public void DeleteCategory()
         {
             catDeleteStrategy.Delete(unitOfWork, Category);
@@ -161,6 +227,11 @@ namespace AssetTracker.ViewModels
             navCoordinator.NavigateToProjectSettings();
         }
 
+        //TODO: This can be separated into its own control.
+        #region Phases
+        /// <summary>
+        /// Create a new phase for the category
+        /// </summary>
         public void OnNewPhaseClicked()
         {
             Phase phaseInst = new Phase();
@@ -172,6 +243,11 @@ namespace AssetTracker.ViewModels
             NotifyPropertyChanged("IsSavable");
         }
 
+        /// <summary>
+        /// Phase name was changed. change it in the local db
+        /// </summary>
+        /// <param name="phaseStep">Step of phase that was changed</param>
+        /// <param name="newValue">New phase name value</param>
         public void OnPhaseNameChange(int phaseStep, string newValue)
         {
             Phase phase = Category.Phases.FirstOrDefault(x => x.ph_step == phaseStep);
@@ -179,6 +255,10 @@ namespace AssetTracker.ViewModels
             phaseRepo.Update(phase);
         }
 
+        /// <summary>
+        /// Move the given phase up a step
+        /// </summary>
+        /// <param name="phaseId"></param>
         public void OnPhaseUpClicked(int phaseId)
         {
             Phase phase = Category.Phases.FirstOrDefault(x=>x.ph_id == phaseId);
@@ -201,6 +281,10 @@ namespace AssetTracker.ViewModels
             }            
         }
 
+        /// <summary>
+        /// Move the given phase down a step
+        /// </summary>
+        /// <param name="phaseId"></param>
         public void OnPhaseDownClicked(int phaseId)
         {
             Phase phase = Category.Phases.FirstOrDefault(x => x.ph_id == phaseId);
@@ -224,6 +308,10 @@ namespace AssetTracker.ViewModels
             }
         }
 
+        /// <summary>
+        /// Delete the phase with the given step
+        /// </summary>
+        /// <param name="phaseStep">Step deleted</param>
         public void OnPhaseDelete(int phaseStep)
         {
             Phase phase = Category.Phases.FirstOrDefault(x => x.ph_step == phaseStep);
@@ -241,6 +329,7 @@ namespace AssetTracker.ViewModels
 
             NotifyPropertyChanged("CurrentPhases");
             NotifyPropertyChanged("IsSavable");
-        }     
+        }
+        #endregion
     }
 }

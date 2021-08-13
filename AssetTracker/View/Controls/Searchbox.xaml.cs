@@ -1,27 +1,30 @@
-﻿using AssetTracker.ViewModels;
-using DomainModel;
+﻿using DomainModel;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace AssetTracker.View
+namespace AssetTracker.View.Controls
 {
     /// <summary>
     /// Interaction logic for Searchbox.xaml
     /// </summary>
     public partial class Searchbox : UserControl, INotifyPropertyChanged
     {
+        /// <summary>
+        /// Event called when the user has selected a new item
+        /// </summary>
         public static readonly RoutedEvent SelectionChangeRoutedEvent = EventManager.RegisterRoutedEvent("SelectionChange",
                                                                                               RoutingStrategy.Bubble,
                                                                                               typeof(RoutedEventHandler),
                                                                                               typeof(Searchbox));
+        
+        /// <summary>
+        /// Handler for when the user has selected a new item
+        /// </summary>
         public event RoutedEventHandler SelectionChange
         {
             add { this.AddHandler(SelectionChangeRoutedEvent, value); }
@@ -46,6 +49,9 @@ namespace AssetTracker.View
             set { SetValue(ItemsProperty, value); }
         }
 
+        /// <summary>
+        /// Items filtered down by the userfilter
+        /// </summary>
         public List<DatabaseBackedObject> FilteredItems
         {
             get
@@ -68,25 +74,36 @@ namespace AssetTracker.View
         /// </summary>
         public string UserFilter { get; set; }
 
+        /// <summary>
+        /// DP for the items list
+        /// </summary>
         public static readonly DependencyProperty ItemsProperty = DependencyProperty.Register("Items",
                                                                                               typeof(List<DatabaseBackedObject>),
                                                                                               typeof(Searchbox),
                                                                                               new PropertyMetadata(null,
                                                                                                                    new PropertyChangedCallback(OnItemsChanged)));
 
+        /// <summary>
+        /// DP for the base filter
+        /// </summary>
         public static readonly DependencyProperty BaseFilterProperty = DependencyProperty.Register("BaseFilter",
                                                                                                      typeof(string),
                                                                                                      typeof(Searchbox),
                                                                                                      new PropertyMetadata(null,
                                                                                                                           new PropertyChangedCallback(BaseFilterChanged)));
 
+       /// <summary>
+       ///  DP for the currently selected item
+       /// </summary>
         public static readonly DependencyProperty CurrentSelectionProperty = DependencyProperty.Register("CurrentSelection",
                                                                                                          typeof(DatabaseBackedObject),
                                                                                                          typeof(Searchbox),
                                                                                                          new PropertyMetadata(null,
                                                                                                                               new PropertyChangedCallback(SelectionChanged)));
 
-
+        /// <summary>
+        /// Introduction of property changed to update filtered item
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
@@ -106,6 +123,9 @@ namespace AssetTracker.View
             InitializeComponent();
         }
 
+        /// <summary>
+        /// When items have changed we need to update the filtered items
+        /// </summary>
         private static void OnItemsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             Searchbox thisUserControl = (Searchbox)d;
@@ -114,6 +134,9 @@ namespace AssetTracker.View
             thisUserControl.NotifyPropertyChanged("FilteredItems");
         }
 
+        /// <summary>
+        /// When the base filter has changed we need to refetch items
+        /// </summary>
         private static void BaseFilterChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             Searchbox thisUserControl = (Searchbox)d;
@@ -121,7 +144,9 @@ namespace AssetTracker.View
             thisUserControl.BaseFilter = newValue;
         }
 
-
+        /// <summary>
+        /// When the selection changes we need to alert whatever is listening to this searchbox that the selection has changed
+        /// </summary>
         private static void SelectionChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             Searchbox thisUserControl = (Searchbox)d;
@@ -129,6 +154,10 @@ namespace AssetTracker.View
             thisUserControl.SetCurrentSelection(newSelection);
         }
 
+        /// <summary>
+        /// Set the current selection and raise the event to any listeners
+        /// </summary>
+        /// <param name="newValue"></param>
         private void SetCurrentSelection(DatabaseBackedObject newValue)
         {
             CurrentSelection = newValue;
@@ -136,6 +165,9 @@ namespace AssetTracker.View
             RaiseEvent(newEventArgs);
         }
 
+        /// <summary>
+        /// When the input text has changes, that means the userfilter has changed and therefore the filtered item list should change
+        /// </summary>
         private void InputText_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (IsLoaded && ((TextBox)sender).IsFocused)
@@ -146,6 +178,9 @@ namespace AssetTracker.View
             }
         }
 
+        /// <summary>
+        /// When the textbox has focusx, we need to show the results list
+        /// </summary>
         private void InputText_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
             if (IsLoaded)
@@ -155,6 +190,9 @@ namespace AssetTracker.View
             }
         }
 
+        /// <summary>
+        /// When the textbox loses focus, we need to hide the results list, possibly select the user inputted option
+        /// </summary>        
         private void InputText_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
             if (IsLoaded)
@@ -177,6 +215,9 @@ namespace AssetTracker.View
             }
         }
 
+        /// <summary>
+        /// If an item in the results panel was selected, we need to set that object to our current selection
+        /// </summary>
         private void MainGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             DatabaseBackedObject dbo = MainGrid.SelectedItem as DatabaseBackedObject;

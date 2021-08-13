@@ -8,6 +8,7 @@
       xmlns:converters="clr-namespace:AssetTracker.View.Converters"
       xmlns:prop="clr-namespace:AssetTracker.View.Properties"
       xmlns:materialicons="clr-namespace:MaterialIcons;assembly=MaterialIcons"
+      xmlns:controls="clr-namespace:AssetTracker.View.Controls"
       mc:Ignorable="d"
       d:DataContext="{d:DesignInstance viewmodel:AssetDetailViewModel, IsDesignTimeCreatable=True}">
     <Page.Resources>
@@ -193,7 +194,7 @@
                         HorizontalAlignment="Left"
                         VerticalAlignment="Center"
                         Click="OnMetadataAdd_Clicked"
-                        Visibility="{Binding Tags.Count, Converter={StaticResource nullToVizConverter}}"
+                        Visibility="{Binding Tags.Count, Converter={StaticResource IsNullToVizConverter}}"
                         Style="{StaticResource HoverBtn}"
                         Margin="5,0,0,0">
                     <StackPanel Orientation="Horizontal">
@@ -346,7 +347,7 @@
                                         </Style.Triggers>
 
                                     </Style>
-                                    <Style TargetType="local:Searchbox">
+                                    <Style TargetType="controls:Searchbox">
                                         <Setter Property="Margin"
                                                 Value="0,5" />
                                         <Setter Property="Width"
@@ -358,7 +359,7 @@
 
                                 <StackPanel Orientation="Vertical">
                                     <TextBlock Text="Assigned To:" />
-                                    <local:Searchbox x:Name="Searchbox_AssignedTo"
+                                    <controls:Searchbox x:Name="Searchbox_AssignedTo"
                                                      Items="{Binding Users}"
                                                      CurrentSelection="{Binding AssignedUser, Mode=TwoWay}" />
                                 </StackPanel>
@@ -367,7 +368,7 @@
                                              Margin="100,0">
                                     <TextBlock Text="Category:"
                                                Foreground="White" />
-                                    <local:Searchbox x:Name="Searchbox_Category"
+                                    <controls:Searchbox x:Name="Searchbox_Category"
                                                      CurrentSelection="{Binding Category}"
                                                      Items="{Binding Categories}" />
                                 </StackPanel>
@@ -376,7 +377,7 @@
                                     <TextBlock x:Name="Status_HeaderText"
                                                Text="Current Status:"
                                                IsEnabled="{Binding Category, Converter={StaticResource IsNullInverseConverter}}" />
-                                    <local:Searchbox x:Name="Searchbox_Phase"
+                                    <controls:Searchbox x:Name="Searchbox_Phase"
                                                      IsEnabled="{Binding ElementName=Status_HeaderText, Path=IsEnabled}"
                                                      Items="{Binding Phases}"
                                                      CurrentSelection="{Binding CurrentPhase,Mode=TwoWay}" />

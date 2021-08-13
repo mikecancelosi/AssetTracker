@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="AssetTracker.View.Searchbox"
+﻿<UserControl x:Class="AssetTracker.View.Controls.Searchbox"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -49,7 +49,7 @@
                 VerticalAlignment="Center" >
             <Grid >
                 <TextBlock Text="{Binding ElementName=SearchboxControl, Path=CurrentSelection.Name}"
-                           Visibility="{Binding ElementName=InputText, Path=IsFocused, Converter={StaticResource InvertAndVisibilitate}}" />
+                           Visibility="{Binding ElementName=InputText, Path=IsFocused, Converter={StaticResource InvertBoolToViz}}" />
                 <TextBox x:Name="InputText"
                          Text="{Binding ElementName=SearchboxControl,Path=UserFilter, Mode=TwoWay}"
                          GotKeyboardFocus="InputText_GotKeyboardFocus"

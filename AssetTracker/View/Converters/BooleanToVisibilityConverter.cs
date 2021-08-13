@@ -9,7 +9,7 @@ namespace AssetTracker.View.Converters
     /// false == collapsed
     /// </summary>
     [ValueConversion(typeof(bool), typeof(System.Windows.Visibility))]
-    public class BooleanToVizConverter : IValueConverter
+    public class BooleanToVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {     

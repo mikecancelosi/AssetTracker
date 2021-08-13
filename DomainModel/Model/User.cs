@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-namespace DomainModel
+﻿namespace DomainModel
 {
     /// <summary>
     /// Users are set in project settings > Users

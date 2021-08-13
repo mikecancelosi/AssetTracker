@@ -84,14 +84,25 @@ namespace AssetTracker
         private void setServices()
         {            
             WindsorContainer container = new WindsorContainer();
+
+            // Factories
             container.Register(Component.For<IViewFactory>()
                                         .ImplementedBy<ViewFactory>());
-            container.Register(Component.For<NavigationService>().Instance(ContentFrame.NavigationService));
+
+            container.Register(Component.For<IViewModelFactory>()
+                                        .ImplementedBy<ViewModelFactory>());
+
+            // Navigation
+            container.Register(Component.For<NavigationService>()
+                                        .Instance(ContentFrame.NavigationService));
+
             container.Register(Component.For<INavigationCoordinator>()
                                         .ImplementedBy<NavigationCoordinator>()
                                         .LifeStyle.Singleton);
+
             container.Register(Component.For<NavigationObserver>());
 
+            // Delete strategies
             container.Register(Component.For<IDeleteStrategy<Asset>>()
                                         .ImplementedBy<AssetDeleteStrategy>());
 
@@ -113,9 +124,8 @@ namespace AssetTracker
             container.Register(Component.For<IDeleteStrategy<Alert>>()
                                        .ImplementedBy<AlertDeleteStrategy>());
 
-            container.Register(Component.For<IViewModelFactory>()
-                                        .ImplementedBy<ViewModelFactory>());
 
+            // Model Validators
             container.Register(Component.For<IModelValidator<Asset>>()
                                         .ImplementedBy<AssetValidator>());
 
@@ -127,6 +137,7 @@ namespace AssetTracker
 
             container.Register(Component.For<IModelValidator<AssetCategory>>()
                                        .ImplementedBy<AssetCategoryValidator>());
+
 
             navObserver = container.Resolve<NavigationObserver>();
             navCoordinator = container.Resolve<INavigationCoordinator>();

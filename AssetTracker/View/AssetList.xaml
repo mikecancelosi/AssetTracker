@@ -25,7 +25,7 @@
                             Command="{Binding CreateAssetCommand}"
                             Margin="0,0,15,10"
                             ToolTipService.ShowOnDisabled="True"
-                            ToolTipService.IsEnabled="{Binding IsEnabled, RelativeSource={RelativeSource Mode=Self},Converter={StaticResource inverseBooleanConverter}}"
+                            ToolTipService.IsEnabled="{Binding IsEnabled, RelativeSource={RelativeSource Mode=Self},Converter={StaticResource InvertBoolConverter}}"
                             IsEnabled="{Binding IsAbleToCreateAsset}">
                         <StackPanel Orientation="Vertical">
                             <materialicons:MaterialIcon Icon="ic_add"
@@ -44,9 +44,15 @@
 
                     <Button Style="{StaticResource HoverBtn}"
                             Click="DeleteAsset_Clicked"
-                            ToolTipService.IsEnabled="{Binding IsEnabled, RelativeSource={RelativeSource Mode=Self},Converter={StaticResource inverseBooleanConverter}}"
-                            IsEnabled="{Binding IsAbleToDeleteAsset}"
+                            ToolTipService.IsEnabled="{Binding IsAbleToDeleteAsset, Converter={StaticResource InvertBoolConverter}}"                           
                             ToolTipService.ShowOnDisabled="False">
+                        <Button.IsEnabled>
+                            <MultiBinding Converter="{StaticResource multiBoolAllConverter}">
+                                <Binding Path="IsAbleToDeleteAsset" />
+                                <Binding Path="CurrentSelectedAsset"
+                                         Converter="{StaticResource IsNullInverseConverter}" />
+                            </MultiBinding>
+                        </Button.IsEnabled>
                         <StackPanel Orientation="Vertical"
                                     MouseLeftButtonUp="DeleteAsset_Clicked">
                             <materialicons:MaterialIcon Icon="ic_delete"
@@ -68,7 +74,7 @@
                           VerticalAlignment="Top"
                           ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                           ItemsSource="{Binding Assets}"
-                          SelectionChanged="MainGrid_SelectionChanged"
+                          SelectedItem="{Binding CurrentSelectedAsset, Mode=TwoWay}"
                           BorderThickness="0"
                           Background="Transparent"
                           BorderBrush="Transparent"

@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-namespace DomainModel
+﻿namespace DomainModel
 {
     /// <summary>
     /// A change is logged after asset saves in order for users to

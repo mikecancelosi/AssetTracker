@@ -9,34 +9,31 @@
              StartupUri="View/MainWindow.xaml" Startup="Application_Startup">
     <Application.Resources>
         <ResourceDictionary>            
-            <converters:InverseBooleanConverter x:Key="inverseBooleanConverter" />
-            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-            
+            <converters:InverseBooleanConverter x:Key="InvertBoolConverter" />
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />            
             <converters:AlternationEqualityConverter x:Key="alternationConverter" />
-            <converters:IsNullToVisibilityConverter x:Key="nullToVizConverter" />
-            <converters:IsNullConverter x:Key="nullConverter" />
+            <converters:IsNullConverter x:Key="IsNullToBoolConverter" />
             <converters:MatchesUserIDConverter x:Key="MatchUser" />
             <converters:DatetimeToTimeElapsedConverter x:Key="TimeDisplayConv" />
             <converters:IsNullToThicknessConverter x:Key="IsNullToThick" />
-            <converters:InverseVisibilityConverter x:Key="InvertViz" />
             
             <!--#region MultiConverters-->
-            <converters:MultiBooleanToVisibilityConverter x:Key="multiBoolToVisConvert" />
             <converters:MultiBoolAllConverter x:Key="multiBoolAllConverter" />
             <converters:MultiBoolAnyConverter x:Key="multiBoolAnyConverter" />
+            <converters:MultiBoolAnyToVisibilityConverter x:Key="multiBoolAnyToVizConverter" />
             <!--#endregion-->
             
             <!--#region Converter Groups-->
-            <converters:ValueConverterGroup x:Key="MatchUserConv">
+            <converters:ValueConverterGroup x:Key="MatchUserToVizConverter">
                 <converters:MatchesUserIDConverter />
-                <converters:BooleanToVizConverter />
+                <converters:BooleanToVisibilityConverter />
             </converters:ValueConverterGroup>
-            <converters:ValueConverterGroup x:Key="MatchUserInvertAndVisibilitate">
+            <converters:ValueConverterGroup x:Key="MatchUserInvertToVizConverter">
                 <converters:MatchesUserIDConverter />
                 <converters:InverseBooleanConverter />
-                <converters:BooleanToVizConverter />
+                <converters:BooleanToVisibilityConverter />
             </converters:ValueConverterGroup> 
-            <converters:ValueConverterGroup x:Key="InvertAndVisibilitate">
+            <converters:ValueConverterGroup x:Key="InvertBoolToViz">
                 <converters:InverseBooleanConverter />
                 <BooleanToVisibilityConverter />
             </converters:ValueConverterGroup>
@@ -47,12 +44,14 @@
             <converters:ValueConverterGroup x:Key="IsNullInvertToVizConverter">
                  <converters:IsNullConverter />
                  <converters:InverseBooleanConverter />
-                 <converters:BooleanToVizConverter />
+                 <converters:BooleanToVisibilityConverter />
             </converters:ValueConverterGroup>
             <converters:ValueConverterGroup x:Key="IsNullToVizConverter">
                 <converters:IsNullConverter />
-                <converters:BooleanToVizConverter />
+                <converters:BooleanToVisibilityConverter />
             </converters:ValueConverterGroup>
+            
+            
             <!--#endregion-->
             
             

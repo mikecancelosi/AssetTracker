@@ -71,7 +71,7 @@
                            Style="{StaticResource LeftPanel_Header}" />
 
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="{Binding Role.Name}"
+                    <TextBlock Text="{Binding Role.Name, Mode=TwoWay}"
                                Margin="0,0,20,0"
                                Foreground="{StaticResource Text_Dark}" />
                     <TextBlock Foreground="{StaticResource Text_Dark}" 

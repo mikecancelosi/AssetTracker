@@ -95,6 +95,7 @@
     </Compile>
     <Compile Include="View\Converters\MultiBoolAllConverter.cs" />
     <Compile Include="View\Converters\MultiBoolAnyConverter.cs" />
+    <Compile Include="View\Converters\MultiBoolAnyToVisibilityConverter.cs" />
     <Compile Include="View\Services\AssetHierachyObjectBuilder.cs" />
     <Compile Include="Services\NavigationObserver.cs" />
     <Compile Include="Extensions\ObservableCollectionExtensions.cs" />
@@ -124,15 +125,13 @@
     </Compile>
     <Compile Include="View\Commands\RelayCommand.cs" />
     <Compile Include="View\Converters\AlternationEqualityConverter.cs" />
-    <Compile Include="View\Converters\BooleanToVizConverter.cs" />
+    <Compile Include="View\Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="View\Converters\DatetimeToTimeElapsedConverter.cs" />
     <Compile Include="View\Converters\InverseBooleanConverter.cs" />
     <Compile Include="View\Converters\InverseVisibilityConverter.cs" />
     <Compile Include="View\Converters\IsNullConverter.cs" />
     <Compile Include="View\Converters\IsNullToThicknessConverter.cs" />
-    <Compile Include="View\Converters\IsNullToVisibilityConverter.cs" />
     <Compile Include="View\Converters\MatchesUserIDConverter.cs" />
-    <Compile Include="View\Converters\MultiBooleanToVisibilityConverter.cs" />
     <Compile Include="View\Converters\MultiValueConverter.cs" />
     <Compile Include="View\Converters\ValueConverterGroup.cs" />
     <Compile Include="View\Extensions\TilePanel.cs" />
@@ -150,7 +149,7 @@
     <Compile Include="View\RoleEdit.xaml.cs">
       <DependentUpon>RoleEdit.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Searchbox.xaml.cs">
+    <Compile Include="View\Controls\Searchbox.xaml.cs">
       <DependentUpon>Searchbox.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Services\IViewFactory.cs" />
@@ -229,7 +228,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Searchbox.xaml">
+    <Page Include="View\Controls\Searchbox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

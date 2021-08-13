@@ -245,7 +245,7 @@
 
                                     <Button IsEnabled="False"
                                             Background="Transparent"
-                                            Visibility="{Binding di_usid, Converter={StaticResource MatchUserInvertAndVisibilitate}}">
+                                            Visibility="{Binding di_usid, Converter={StaticResource MatchUserInvertToVizConverter}}">
                                         <mi:MaterialIcon Icon="ic_face" />
                                     </Button>
 
@@ -283,7 +283,7 @@
 
                 <Control Template="{StaticResource ResourceKey=DiscussionReply}"
                          prop:DBOPropertyExtension.IDSource="{Binding  di_id}"
-                         Visibility="{Binding di_parentid, Converter= {StaticResource ResourceKey=nullToVizConverter} }">
+                         Visibility="{Binding di_parentid, Converter= {StaticResource ResourceKey=IsNullToVizConverter} }">
                 </Control>
             </StackPanel>
         </Border>

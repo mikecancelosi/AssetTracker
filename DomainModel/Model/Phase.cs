@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-namespace DomainModel
+﻿namespace DomainModel
 {
     /// <summary>
     /// A phase indicates the state of the asset. Many phases will

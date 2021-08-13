@@ -1,6 +1,7 @@
 ﻿using AssetTracker.Services;
 using AssetTracker.View.Commands;
 using AssetTracker.ViewModels.Interfaces;
+using AssetTracker.ViewModels.Services;
 using DataAccessLayer;
 using DataAccessLayer.Strategies;
 using DomainModel;
@@ -63,9 +64,9 @@ namespace AssetTracker.ViewModels
                 NotifyPropertyChanged("PromptSave");
             }
         }
-        public ICommand DeleteConfirmed { get; set; }
-        public ICommand SaveCommand { get; set; }
-        public ICommand RefuseSave { get; set; }
+        public ICommand DeleteConfirmed =>  new RelayCommand((s) => DeleteCategory(), (s) => true);
+        public ICommand SaveCommand => new RelayCommand((s) => Save(), (s) => true);
+        public ICommand RefuseSave => new RelayCommand((s) => navCoordinator.NavigateToQueued(), (s) => true);
 
         public List<Violation> SaveViolations { get; set; }
 
@@ -82,20 +83,23 @@ namespace AssetTracker.ViewModels
         public Violation PhasesViolation => SaveViolations?.FirstOrDefault(x => x.PropertyName == "Phases" || 
                                                                                 x.PropertyName =="ph_name") ?? null;
 
+        private IModelValidator<AssetCategory> categoryValidator;
 
-        public CategoryEditViewModel(INavigationCoordinator coord, GenericUnitOfWork uow, IDeleteStrategy<AssetCategory> catDeleteStrat)
+        public CategoryEditViewModel(INavigationCoordinator coord,
+                                     GenericUnitOfWork uow,
+                                     IDeleteStrategy<AssetCategory> catDeleteStrat,
+                                     IModelValidator<AssetCategory> categoryValidatorService)
         {
             navCoordinator = coord;
             catDeleteStrategy = catDeleteStrat;
-            navCoordinator.UserNavigationAttempt += (s) => PromptSave = true;
             unitOfWork = uow;
+            categoryValidator = categoryValidatorService;
+
+            navCoordinator.UserNavigationAttempt += (s) => PromptSave = true;           
             categoryRepo = unitOfWork.GetRepository<AssetCategory>();
             phaseRepo = unitOfWork.GetRepository<Phase>();
             Category = new AssetCategory();
             Creating = true;
-            DeleteConfirmed = new RelayCommand((s) => DeleteCategory(), (s) => true);
-            SaveCommand = new RelayCommand((s) => Save(), (s) => true);
-            RefuseSave = new RelayCommand((s) => navCoordinator.NavigateToQueued(), (s) => true);
         }
 
         public void SetCategory(AssetCategory cat)
@@ -120,7 +124,7 @@ namespace AssetTracker.ViewModels
             categoryRepo.Update(Category);
             
 
-            if(Category.IsValid(out List<Violation> violations))
+            if(categoryValidator.IsValid(unitOfWork,Category,out List<Violation> violations))
             {
                 unitOfWork.Commit();
 

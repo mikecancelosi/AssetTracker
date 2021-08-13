@@ -83,7 +83,12 @@
     <Compile Include="Services\IPermissionsProvider.cs" />
     <Compile Include="Services\RolePermissionsProvider.cs" />
     <Compile Include="Services\UserPermissionsProvider.cs" />
+    <Compile Include="ViewModels\Services\AssetCategoryValidator.cs" />
+    <Compile Include="ViewModels\Services\AssetValidator.cs" />
+    <Compile Include="ViewModels\Services\IModelValidator.cs" />
     <Compile Include="ViewModels\Services\IViewModelFactory.cs" />
+    <Compile Include="ViewModels\Services\SecRoleValidator.cs" />
+    <Compile Include="ViewModels\Services\UserValidator.cs" />
     <Compile Include="ViewModels\Services\ViewModelFactory.cs" />
     <Compile Include="View\Controls\SubNavRadioButton.xaml.cs">
       <DependentUpon>SubNavRadioButton.xaml</DependentUpon>

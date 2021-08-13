@@ -70,6 +70,7 @@ namespace AssetTracker
 
         private void OnProfileSettings_Click(object sender, RoutedEventArgs e)
         {
+            ProfileBtn_Popup.IsOpen = false;
             navCoordinator.NavigateToUserEdit(VM.CurrentUser);
         }
 
@@ -114,6 +115,18 @@ namespace AssetTracker
 
             container.Register(Component.For<IViewModelFactory>()
                                         .ImplementedBy<ViewModelFactory>());
+
+            container.Register(Component.For<IModelValidator<Asset>>()
+                                        .ImplementedBy<AssetValidator>());
+
+            container.Register(Component.For<IModelValidator<User>>()
+                                        .ImplementedBy<UserValidator>());
+
+            container.Register(Component.For<IModelValidator<SecRole>>()
+                                       .ImplementedBy<SecRoleValidator>());
+
+            container.Register(Component.For<IModelValidator<AssetCategory>>()
+                                       .ImplementedBy<AssetCategoryValidator>());
 
             navObserver = container.Resolve<NavigationObserver>();
             navCoordinator = container.Resolve<INavigationCoordinator>();

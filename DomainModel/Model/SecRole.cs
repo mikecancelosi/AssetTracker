@@ -20,18 +20,6 @@ namespace DomainModel
         {
             get => ro_name;
             set => ro_name = value;
-        }
-
-        public override bool IsValid(out List<Violation> violations)
-        {          
-            base.IsValid(out violations);
-
-            if(ro_name == "" || ro_name == null)
-            {
-                violations.Add(new Violation("You need to set the role name!", "ro_name"));
-            }
-
-            return violations.Count() == 0;
-        }      
+        } 
     }
 }

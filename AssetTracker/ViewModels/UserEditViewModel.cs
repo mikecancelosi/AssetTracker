@@ -1,6 +1,7 @@
 ﻿using AssetTracker.Services;
 using AssetTracker.View.Commands;
 using AssetTracker.ViewModels.Interfaces;
+using AssetTracker.ViewModels.Services;
 using DataAccessLayer;
 using DataAccessLayer.Strategies;
 using DomainModel;
@@ -13,10 +14,6 @@ using static DomainModel.SecPermission;
 
 namespace AssetTracker.ViewModels
 {
-    /// <summary>
-    /// TODO: Improve override visuals to show vs default/ role override
-    /// TODO: Allow setting of profile picture
-    /// </summary>
     public class UserEditViewModel : ViewModel, ISavable
     {
         public User CurrentUser { get; private set; }
@@ -126,12 +123,14 @@ namespace AssetTracker.ViewModels
         public ICommand DeleteConfirmed => new RelayCommand((s) => DeleteUser(), (s) => true);
         #endregion
 
+        #region Permissions
         public List<PermissionGroup> PermissionGroups => permissionsProvider.PermissionGroups;
         public ICommand ResetAllPermissionsCommand => new RelayCommand((s) => ResetAllPermissions(), (s) => true);
         public ICommand ActivateAllPermissionsCommand => new RelayCommand((s) => ActivateAllPermissions(), (s) => true);
         public ICommand DeactivateAllPermissionsCommand => new RelayCommand((s) => DeactivateAllPermissions(), (s) => true);
         public ICommand PermissionChanged => new RelayCommand((s) => PermissionUpdated(), (s) => true);
         private UserPermissionsProvider permissionsProvider;
+        #endregion
 
 
         #region Repositories
@@ -147,7 +146,6 @@ namespace AssetTracker.ViewModels
         public Violation PasswordViolation => SaveViolations?.FirstOrDefault(x => x.PropertyName == "us_password") ?? null;
         public Violation RoleUnassignedViolation => SaveViolations?.FirstOrDefault(x => x.PropertyName == "us_roid") ?? null;
         #endregion
-
 
         public List<DatabaseBackedObject> Roles
         {
@@ -171,11 +169,14 @@ namespace AssetTracker.ViewModels
             }
         }
 
-        public UserEditViewModel(INavigationCoordinator coord, GenericUnitOfWork uow, IDeleteStrategy<User> userDeleteStrat)
+        private IModelValidator<User> userValidator;
+
+        public UserEditViewModel(INavigationCoordinator coord, GenericUnitOfWork uow, IDeleteStrategy<User> userDeleteStrat, IModelValidator<User> userValidatorService)
         {
             navCoordinator = coord;
             userDeleteStrategy = userDeleteStrat;
             unitOfWork = uow;
+            userValidator = userValidatorService;
 
             navCoordinator.UserNavigationAttempt += (s) => PromptSave = true;            
             userRepo = unitOfWork.GetRepository<User>();
@@ -217,7 +218,7 @@ namespace AssetTracker.ViewModels
         {
             userRepo.Update(CurrentUser);
 
-            if (CurrentUser.IsValid(out List<Violation> violations))
+            if (userValidator.IsValid(unitOfWork,CurrentUser,out List<Violation> violations))
             {
                 unitOfWork.Commit();
 

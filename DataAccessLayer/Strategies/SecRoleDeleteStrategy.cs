@@ -16,7 +16,7 @@ namespace DataAccessLayer.Strategies
 
             foreach (User user in item.Users)
             {
-                //TODO: Show screen to show current users for reassignment.
+                //TODO: Show screen to show current users for reassignment. -- ASP
                 user.us_roid = (from r in roleRepo.Get()
                                 where r.ro_id != item.ro_id
                                 select r).FirstOrDefault().ID;

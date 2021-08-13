@@ -23,23 +23,6 @@ namespace DomainModel
             set => as_displayname = value;
         }
 
-        public override bool IsValid(out List<Violation> violations)
-        {
-            base.IsValid(out violations);
-
-            if(as_description == "" || as_description == null)
-            {
-                violations.Add(new Violation("You need to add a description!", "as_description"));
-            }
-
-            if (as_displayname == "" || as_description == null)
-            {
-                violations.Add(new Violation("You need to set the name!", "as_displayname"));
-            }
-
-            return violations.Count() == 0;
-        }
-
         public List<Change> GetChanges(DatabaseBackedObject beforeObject,User currentUser)
         {
             List<Change> output = new List<Change>();

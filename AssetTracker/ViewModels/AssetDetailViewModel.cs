@@ -2,6 +2,7 @@
 using AssetTracker.View.Commands;
 using AssetTracker.View.Services;
 using AssetTracker.ViewModels.Interfaces;
+using AssetTracker.ViewModels.Services;
 using DataAccessLayer;
 using DataAccessLayer.Strategies;
 using DomainModel;
@@ -269,12 +270,19 @@ namespace AssetTracker.ViewModels
         public bool UserCanDeleteAssets => PermissionsManager.HasPermission(CurrentUser, Permission.DeleteAsset, unitOfWork);
         #endregion
 
-        public AssetDetailViewModel(INavigationCoordinator coord, GenericUnitOfWork uow, IDeleteStrategy<Asset> assetDeleteStrat, IDeleteStrategy<Metadata> tagDeleteStrat)
+        private IModelValidator<Asset> assetValidator;
+
+        public AssetDetailViewModel(INavigationCoordinator coord,
+                                    GenericUnitOfWork uow, 
+                                    IDeleteStrategy<Asset> assetDeleteStrat, 
+                                    IDeleteStrategy<Metadata> tagDeleteStrat, 
+                                    IModelValidator<Asset> assetValidatorService)
         {
             navCoordinator = coord;
             assetDeleteStrategy = assetDeleteStrat;
             tagDeleteStrategy = tagDeleteStrat;
             unitOfWork = uow;
+            assetValidator = assetValidatorService;
 
             navCoordinator.UserNavigationAttempt += (s) => PromptSave = true;
 
@@ -344,7 +352,7 @@ namespace AssetTracker.ViewModels
             PromptSave = false;
             assetRepo.Update(myAsset);
 
-            if (myAsset.IsValid(out List<Violation> violations))
+            if (assetValidator.IsValid(unitOfWork,myAsset,out List<Violation> violations))
             {
                 Asset beforeAsset = assetRepo.GetDBValues(myAsset);
                 List<Change> changesToSave = myAsset.GetChanges(beforeAsset, CurrentUser);

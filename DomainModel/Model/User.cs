@@ -21,46 +21,7 @@ namespace DomainModel
         {
             get => us_displayname;
             set => us_displayname = value;
-        }
-
-        public override bool IsValid(out List<Violation> violations)
-        {
-            base.IsValid(out violations);
-
-            if(us_fname == "" || us_fname == null)
-            {
-                violations.Add(new Violation("You need to set this user's first name!", "us_fname"));
-            }
-
-            if (us_lname == "" || us_lname == null)
-            {
-                violations.Add(new Violation("You need to set this user's last name!", "us_lname"));
-            }
-
-            if (us_displayname == "" || us_displayname == null)
-            {
-                violations.Add(new Violation("You need to set this user's displayname!", "us_displayname"));
-            }
-
-            if (us_email == "" || us_email == null)
-            {
-                violations.Add(new Violation("You need to set this user's email!", "us_email"));
-            }
-
-            if (us_password == "" || us_password == null)
-            {
-                violations.Add(new Violation("You need to set this user's password!", "us_password"));
-            }
-
-            //TODO: Handle violation of having an email match another users
-
-            if(us_roid <= 0)
-            {
-                violations.Add(new Violation("You need to set this user's role!", "us_roid"));
-            }
-
-            return violations.Count() == 0;
-        }       
+        }    
 
         public override DatabaseBackedObject Clone()
         {

@@ -20,17 +20,6 @@ namespace DomainModel
         /// Name can be any of the columns and serves to give a common way to display the information 
         /// </summary>
         public abstract string Name { get; set; }
-        /// <summary>
-        /// Before saving or displaying a model, we may want to check the validity of the object.
-        /// </summary>
-        /// <param name="violations">Violations in the formation of the object</param>
-        /// <returns>Whether or not the object is valid </returns>
-        public virtual bool IsValid(out List<Violation> violations)
-        {
-            violations = new List<Violation>();
-
-            return violations.Count() == 0;
-        }
 
         /// <summary>
         /// Copy properties of on DBO to another DBO of the same type

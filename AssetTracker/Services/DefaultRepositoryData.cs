@@ -174,15 +174,6 @@ namespace AssetTracker.Services
 
             #endregion
 
-            List<Violation> violations = new List<Violation>();
-            foreach(DatabaseBackedObject dbo in output)
-            {                
-               if(!dbo.IsValid(out violations))
-               {
-                    Console.WriteLine("Violations for dbo!");
-               }
-            }
-
             return output;
         }
     }

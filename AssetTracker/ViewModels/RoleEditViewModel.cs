@@ -1,6 +1,7 @@
 ﻿using AssetTracker.Services;
 using AssetTracker.View.Commands;
 using AssetTracker.ViewModels.Interfaces;
+using AssetTracker.ViewModels.Services;
 using DataAccessLayer;
 using DataAccessLayer.Strategies;
 using DomainModel;
@@ -85,8 +86,9 @@ namespace AssetTracker.ViewModels
         private IDeleteStrategy<SecRole> roleDeleteStrategy;
 
         private RolePermissionsProvider permissionProvider;
+        private IModelValidator<SecRole> roleValidator;
 
-        public RoleEditViewModel(INavigationCoordinator coord, GenericUnitOfWork uow, IDeleteStrategy<SecRole> roleDeleteStrat)
+        public RoleEditViewModel(INavigationCoordinator coord, GenericUnitOfWork uow, IDeleteStrategy<SecRole> roleDeleteStrat, IModelValidator<SecRole> roleValidatorService)
         {
             navCoordinator = coord;
             roleDeleteStrategy = roleDeleteStrat;
@@ -122,7 +124,7 @@ namespace AssetTracker.ViewModels
         {
             roleRepo.Update(Role);
 
-            if (Role.IsValid(out List<Violation> violations))
+            if (roleValidator.IsValid(unitOfWork,Role,out List<Violation> violations))
             {
                 unitOfWork.Commit();
 

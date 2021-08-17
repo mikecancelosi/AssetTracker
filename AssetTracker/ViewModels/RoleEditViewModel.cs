@@ -3,6 +3,7 @@ using AssetTracker.View.Commands;
 using AssetTracker.ViewModels.Interfaces;
 using AssetTracker.ViewModels.Services;
 using DataAccessLayer;
+using DataAccessLayer.Services;
 using DataAccessLayer.Strategies;
 using DomainModel;
 using System.Collections.Generic;
@@ -114,9 +115,8 @@ namespace AssetTracker.ViewModels
         public ICommand PermissionChanged => new RelayCommand((s) => PermissionUpdated(), (s) => true);
         #endregion
 
-
         #region Repositories
-        private GenericRepository<SecRole> roleRepo;
+        private IRepository<SecRole> roleRepo;
         #endregion
 
         #region ErrorHandling
@@ -133,7 +133,7 @@ namespace AssetTracker.ViewModels
         private RolePermissionsProvider permissionProvider;
 
 
-        public RoleEditViewModel(INavigationCoordinator coord, GenericUnitOfWork uow, IDeleteStrategy<SecRole> roleDeleteStrat, IModelValidator<SecRole> roleValidatorService)
+        public RoleEditViewModel(INavigationCoordinator coord, IUnitOfWork uow, IDeleteStrategy<SecRole> roleDeleteStrat, IModelValidator<SecRole> roleValidatorService)
         {
             navCoordinator = coord;
             roleDeleteStrategy = roleDeleteStrat;

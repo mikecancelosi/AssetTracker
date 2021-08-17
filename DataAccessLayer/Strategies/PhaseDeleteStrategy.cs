@@ -1,13 +1,14 @@
-﻿using DomainModel;
+﻿using DataAccessLayer.Services;
+using DomainModel;
 using System.Linq;
 
 namespace DataAccessLayer.Strategies
 {
     public class PhaseDeleteStrategy : IDeleteStrategy<Phase>
     {
-        public void Delete(GenericUnitOfWork uow, Phase item)
+        public void Delete(IUnitOfWork uow, Phase item)
         {
-            GenericRepository<Phase> phaseRepo = uow.GetRepository<Phase>();
+            IRepository<Phase> phaseRepo = uow.GetRepository<Phase>();
 
             foreach(var asset in item.AssetsInPhase.ToList())
             {

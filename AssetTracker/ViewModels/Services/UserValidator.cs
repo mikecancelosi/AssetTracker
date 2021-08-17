@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer;
+using DataAccessLayer.Services;
 using DomainModel;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ namespace AssetTracker.ViewModels.Services
 {
     public class UserValidator : IModelValidator<User>
     {
-        public bool IsValid(GenericUnitOfWork uow, User item, out List<Violation> violations)
+        public bool IsValid(IUnitOfWork uow, User item, out List<Violation> violations)
         {
             violations = new List<Violation>();
 
@@ -32,7 +33,7 @@ namespace AssetTracker.ViewModels.Services
             }
             else
             {
-                GenericRepository<User> userRepo = uow.GetRepository<User>();
+                IRepository<User> userRepo = uow.GetRepository<User>();
                 User match = (from u in userRepo.Get()
                               where u.us_email == item.us_email
                               && u.us_id != item.ID

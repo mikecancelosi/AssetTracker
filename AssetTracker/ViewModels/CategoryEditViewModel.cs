@@ -3,6 +3,7 @@ using AssetTracker.View.Commands;
 using AssetTracker.ViewModels.Interfaces;
 using AssetTracker.ViewModels.Services;
 using DataAccessLayer;
+using DataAccessLayer.Services;
 using DataAccessLayer.Strategies;
 using DomainModel;
 using System.Collections.Generic;
@@ -112,8 +113,8 @@ namespace AssetTracker.ViewModels
         public bool Cloning { get; set; }
 
         #region Repositories
-        private GenericRepository<AssetCategory> categoryRepo;
-        private GenericRepository<Phase> phaseRepo;
+        private IRepository<AssetCategory> categoryRepo;
+        private IRepository<Phase> phaseRepo;
         #endregion
 
         /// <summary>
@@ -141,7 +142,7 @@ namespace AssetTracker.ViewModels
         
 
         public CategoryEditViewModel(INavigationCoordinator coord,
-                                     GenericUnitOfWork uow,
+                                     IUnitOfWork uow,
                                      IDeleteStrategy<AssetCategory> catDeleteStrat,
                                      IModelValidator<AssetCategory> categoryValidatorService)
         {

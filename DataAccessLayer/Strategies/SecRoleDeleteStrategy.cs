@@ -1,11 +1,12 @@
-﻿using DomainModel;
+﻿using DataAccessLayer.Services;
+using DomainModel;
 using System.Linq;
 
 namespace DataAccessLayer.Strategies
 {
     public class SecRoleDeleteStrategy : IDeleteStrategy<SecRole>
     {
-        public void Delete(GenericUnitOfWork uow, SecRole item)
+        public void Delete(IUnitOfWork uow, SecRole item)
         {
             var roleRepo = uow.GetRepository<SecRole>();
             var roleOverrideRepo = uow.GetRepository<SecPermission2>();

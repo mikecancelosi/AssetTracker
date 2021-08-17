@@ -3,6 +3,7 @@ using AssetTracker.View.Commands;
 using AssetTracker.ViewModels.Interfaces;
 using AssetTracker.ViewModels.Services;
 using DataAccessLayer;
+using DataAccessLayer.Services;
 using DataAccessLayer.Strategies;
 using DomainModel;
 using System.Collections.Generic;
@@ -194,8 +195,8 @@ namespace AssetTracker.ViewModels
 
 
         #region Repositories
-        private GenericRepository<User> userRepo;
-        private GenericRepository<SecRole> roleRepo;
+        private IRepository<User> userRepo;
+        private IRepository<SecRole> roleRepo;
         #endregion
 
         #region ErrorChecks
@@ -219,7 +220,7 @@ namespace AssetTracker.ViewModels
             }
         }
 
-        public UserEditViewModel(INavigationCoordinator coord, GenericUnitOfWork uow, IDeleteStrategy<User> userDeleteStrat, IModelValidator<User> userValidatorService)
+        public UserEditViewModel(INavigationCoordinator coord, IUnitOfWork uow, IDeleteStrategy<User> userDeleteStrat, IModelValidator<User> userValidatorService)
         {
             navCoordinator = coord;
             userDeleteStrategy = userDeleteStrat;

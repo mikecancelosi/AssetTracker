@@ -88,6 +88,7 @@
     <Compile Include="Model\Change.cs" />
     <Compile Include="Model\DatabaseBackedObject.cs" />
     <Compile Include="Model\Discussion.cs" />
+    <Compile Include="Model\Metadata.cs" />
     <Compile Include="Model\Phase.cs" />
     <Compile Include="Model\SecPermission.cs" />
     <Compile Include="Model\SecPermission3.cs" />

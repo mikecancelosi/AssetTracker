@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer;
+using DataAccessLayer.Services;
 using DomainModel;
 using System.Linq;
 
@@ -6,12 +7,12 @@ namespace AssetTracker.Services
 {
     public class PermissionsManager
     {
-        public static bool HasPermission(User user, Permission permissionToCheck, GenericUnitOfWork uow)
+        public static bool HasPermission(User user, Permission permissionToCheck, IUnitOfWork uow)
         {
-            GenericRepository<User> userRepo = uow.GetRepository<User>();
-            GenericRepository<SecPermission> permissionRepo = uow.GetRepository<SecPermission>();
-            GenericRepository<SecPermission2> userOverrideRepo = uow.GetRepository<SecPermission2>();
-            GenericRepository<SecPermission3> roleOverrideRepo = uow.GetRepository<SecPermission3>();
+            IRepository<User> userRepo = uow.GetRepository<User>();
+            IRepository<SecPermission> permissionRepo = uow.GetRepository<SecPermission>();
+            IRepository<SecPermission2> userOverrideRepo = uow.GetRepository<SecPermission2>();
+            IRepository<SecPermission3> roleOverrideRepo = uow.GetRepository<SecPermission3>();
 
             var permission = permissionRepo.GetByID((int)permissionToCheck);
             bool defaultValue = permission.pr_default;

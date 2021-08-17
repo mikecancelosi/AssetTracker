@@ -6,6 +6,7 @@ using AssetTracker.View.Commands;
 using DomainModel;
 using DataAccessLayer;
 using DataAccessLayer.Strategies;
+using DataAccessLayer.Services;
 
 namespace AssetTracker.ViewModels
 {
@@ -26,7 +27,7 @@ namespace AssetTracker.ViewModels
         /// <summary>
         /// Repo to get the asset list from
         /// </summary>
-        private GenericRepository<Asset> assetRepo;
+        private IRepository<Asset> assetRepo;
         /// <summary>
         /// Coordinator instance top use to navigate away
         /// </summary>
@@ -47,7 +48,7 @@ namespace AssetTracker.ViewModels
         private User LoggedInUser;
 
         public AssetListViewModel(INavigationCoordinator coord,
-                                  GenericUnitOfWork uow,
+                                  IUnitOfWork uow,
                                   User loggedInUser,
                                   IDeleteStrategy<Asset> assetDeleteStrat)
         {

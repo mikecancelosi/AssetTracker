@@ -4,6 +4,7 @@ using AssetTracker.ViewModels;
 using AssetTracker.ViewModels.Services;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
+using DataAccessLayer.Services;
 using DataAccessLayer.Strategies;
 using DomainModel;
 using System;
@@ -84,6 +85,13 @@ namespace AssetTracker
         private void setServices()
         {            
             WindsorContainer container = new WindsorContainer();
+
+            // Foundational services
+            container.Register(Component.For(typeof(IRepository<>))
+                                        .ImplementedBy(typeof(GenericRepository<>)));
+
+            container.Register(Component.For<IUnitOfWork>()
+                                        .ImplementedBy<GenericUnitOfWork>());
 
             // Factories
             container.Register(Component.For<IViewFactory>()

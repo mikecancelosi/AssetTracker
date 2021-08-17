@@ -1,6 +1,7 @@
 ﻿using AssetTracker.Services;
 using AssetTracker.View.Commands;
 using DataAccessLayer;
+using DataAccessLayer.Services;
 using DomainModel;
 using DomainModel.Enums;
 using System;
@@ -86,8 +87,8 @@ namespace AssetTracker.ViewModels
         #endregion
 
         #region Repositories
-        private GenericRepository<Alert> alertsRepo;
-        private GenericRepository<Asset> assetRepo;
+        private IRepository<Alert> alertsRepo;
+        private IRepository<Asset> assetRepo;
         #endregion
 
         /// <summary>
@@ -95,7 +96,7 @@ namespace AssetTracker.ViewModels
         /// </summary>
         private readonly INavigationCoordinator navCoordinator;
 
-        public UserDashboardViewModel(INavigationCoordinator coord, GenericUnitOfWork uow)
+        public UserDashboardViewModel(INavigationCoordinator coord, IUnitOfWork uow)
         {          
             myUser = MainViewModel.Instance.CurrentUser;
             navCoordinator = coord;

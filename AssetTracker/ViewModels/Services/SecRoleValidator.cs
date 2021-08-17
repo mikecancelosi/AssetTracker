@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer;
+using DataAccessLayer.Services;
 using DomainModel;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ namespace AssetTracker.ViewModels.Services
 {
     public class SecRoleValidator : IModelValidator<SecRole>
     {
-        public bool IsValid(GenericUnitOfWork uow, SecRole item, out List<Violation> violations)
+        public bool IsValid(IUnitOfWork uow, SecRole item, out List<Violation> violations)
         {
             violations = new List<Violation>();
 

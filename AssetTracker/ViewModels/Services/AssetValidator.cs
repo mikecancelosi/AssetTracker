@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer;
+using DataAccessLayer.Services;
 using DomainModel;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ namespace AssetTracker.ViewModels.Services
 {
     public class AssetValidator : IModelValidator<Asset>
     {
-        public bool IsValid(GenericUnitOfWork uow, Asset item, out List<Violation> violations)
+        public bool IsValid(IUnitOfWork uow, Asset item, out List<Violation> violations)
         {
             violations = new List<Violation>();
 

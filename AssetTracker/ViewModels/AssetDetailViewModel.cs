@@ -4,6 +4,7 @@ using AssetTracker.View.Services;
 using AssetTracker.ViewModels.Interfaces;
 using AssetTracker.ViewModels.Services;
 using DataAccessLayer;
+using DataAccessLayer.Services;
 using DataAccessLayer.Strategies;
 using DomainModel;
 using DomainModel.Enums;
@@ -24,7 +25,9 @@ namespace AssetTracker.ViewModels
         /// <summary>
         /// Tags bound to myAsset
         /// </summary>
-        public List<Metadata> Tags => myAsset.Metadata.Count > 0 ? myAsset.Metadata.ToList() : null;
+        public List<Metadata> Tags => (from t in tagsRepo.Get()
+                                       where t.md_asid == myAsset.ID
+                                       select t).ToList();
         /// <summary>
         /// Changes made to myAsset since creation
         /// </summary>
@@ -286,14 +289,14 @@ namespace AssetTracker.ViewModels
         #endregion
 
         #region Repositories
-        private GenericRepository<Asset> assetRepo;
-        private GenericRepository<Discussion> discussionRepo;
-        private GenericRepository<Change> changesRepo;
-        private GenericRepository<Alert> alertsRepo;
-        private GenericRepository<Metadata> tagsRepo;
-        private GenericRepository<User> usersRepo;
-        private GenericRepository<Phase> phaseRepo;
-        private GenericRepository<AssetCategory> categoryRepo;
+        private IRepository<Asset> assetRepo;
+        private IRepository<Discussion> discussionRepo;
+        private IRepository<Change> changesRepo;
+        private IRepository<Alert> alertsRepo;
+        private IRepository<Metadata> tagsRepo;
+        private IRepository<User> usersRepo;
+        private IRepository<Phase> phaseRepo;
+        private IRepository<AssetCategory> categoryRepo;
         #endregion
 
         /// <summary>
@@ -313,7 +316,7 @@ namespace AssetTracker.ViewModels
         private IModelValidator<Asset> assetValidator;
 
         public AssetDetailViewModel(INavigationCoordinator coord,
-                                    GenericUnitOfWork uow, 
+                                    IUnitOfWork uow, 
                                     IDeleteStrategy<Asset> assetDeleteStrat, 
                                     IDeleteStrategy<Metadata> tagDeleteStrat, 
                                     IModelValidator<Asset> assetValidatorService)
@@ -359,7 +362,6 @@ namespace AssetTracker.ViewModels
                          select s).ToList();
             Creating = false;
             Cloning = ast.ID == 0;
-            unitOfWork.Rollback();
 
             NotifyPropertyChanged("myAsset");
             NotifyPropertyChanged("Changelog");
@@ -456,9 +458,12 @@ namespace AssetTracker.ViewModels
         /// Delete the selected tag
         /// </summary>
         /// <param name="id"></param>
-        public void DeleteTag(int id)
+        public void DeleteTag(string displayText)
         {
-            Metadata data = tagsRepo.GetByID(id);
+            Metadata data = (from t in tagsRepo.Get()
+                             where t.md_asid == myAsset.as_id
+                             && t.md_value == displayText
+                             select t).FirstOrDefault();
             tagDeleteStrategy.Delete(unitOfWork, data);
             unitOfWork.Commit();
 

@@ -1,6 +1,7 @@
 ﻿using AssetTracker.Services;
 using AssetTracker.View.Commands;
 using DataAccessLayer;
+using DataAccessLayer.Services;
 using DataAccessLayer.Strategies;
 using DomainModel;
 using DomainModel.Enums;
@@ -205,11 +206,11 @@ namespace AssetTracker.ViewModels
         }
 
         #region Repositories
-        private GenericRepository<User> userRepo;
-        private GenericRepository<SecRole> roleRepo;
-        private GenericRepository<AssetCategory> categoryRepo;
-        private GenericRepository<Alert> alertRepo;
-        private GenericRepository<SecPermission3> roleOverrideRepo;
+        private IRepository<User> userRepo;
+        private IRepository<SecRole> roleRepo;
+        private IRepository<AssetCategory> categoryRepo;
+        private IRepository<Alert> alertRepo;
+        private IRepository<SecPermission3> roleOverrideRepo;
         #endregion
               
         #region Permissions
@@ -240,7 +241,7 @@ namespace AssetTracker.ViewModels
         private readonly INavigationCoordinator navCoordinator;
 
         public ProjectSettingsViewModel(INavigationCoordinator coord,
-                                        GenericUnitOfWork uow,
+                                        IUnitOfWork uow,
                                         User loggedInUser,
                                         IDeleteStrategy<SecRole> roleDeleteStrat,
                                         IDeleteStrategy<Alert> alertDeleteStrat,

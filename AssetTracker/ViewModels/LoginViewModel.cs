@@ -1,5 +1,6 @@
 ﻿using AssetTracker.Services;
 using DataAccessLayer;
+using DataAccessLayer.Services;
 using DomainModel;
 using System.Linq;
 
@@ -46,13 +47,13 @@ namespace AssetTracker.ViewModels
         /// <summary>
         /// Repo to check for validation of login information
         /// </summary>
-        private GenericRepository<User> userRepo;
+        private IRepository<User> userRepo;
 
         /// <summary>
         /// Coordinator to navigate away on successful login 
         /// </summary>
         private INavigationCoordinator navCoordinator;
-        public LoginViewModel(INavigationCoordinator coord, GenericUnitOfWork uow)
+        public LoginViewModel(INavigationCoordinator coord, IUnitOfWork uow)
         {          
             navCoordinator = coord;
             unitOfWork = uow;

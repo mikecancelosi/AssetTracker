@@ -1,13 +1,14 @@
-﻿using DomainModel;
+﻿using DataAccessLayer.Services;
+using DomainModel;
 using System.Linq;
 
 namespace DataAccessLayer.Strategies
 {
     public class UserDeleteStrategy : IDeleteStrategy<User>
     {
-        public void Delete(GenericUnitOfWork uow, User item)
+        public void Delete(IUnitOfWork uow, User item)
         {
-            GenericRepository<User> userRepo = uow.GetRepository<User>();
+            IRepository<User> userRepo = uow.GetRepository<User>();
 
             foreach(Asset asset in item.AssetsAssigned.ToList())
             {

@@ -6,13 +6,6 @@ namespace AssetTracker.ViewModels.Services
 {
     public interface IViewModelFactory
     {
-        IDeleteStrategy<User> userDeleteStrategy { get; }
-        IDeleteStrategy<Asset> assetDeleteStrategy { get; }
-        IDeleteStrategy<SecRole> roleDeleteStrategy { get; }
-        IDeleteStrategy<AssetCategory> catDeleteStrategy { get; }
-        IDeleteStrategy<Alert> alertDeleteStrategy { get; }
-        IDeleteStrategy<Metadata> tagDeleteStrategy { get; }
-
         LoginViewModel CreateLoginViewModel(INavigationCoordinator navCoord);
         UserEditViewModel CreateUserEditViewModel(INavigationCoordinator navCoord, User userToEdit = null);
         AssetDetailViewModel CreateAssetDetailViewModel(INavigationCoordinator navCoord, Asset asset = null);

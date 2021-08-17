@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer;
+using DataAccessLayer.Services;
 using DomainModel;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace CodeGenerator
         private static string DirectoryLocation => ParentDirectory + "DomainModel";
         private static string FileLocation => Path.Combine(DirectoryLocation, FILENAME);
 
-        public static void BuildFile(GenericUnitOfWork uow)
+        public static void BuildFile(IUnitOfWork uow)
         {
             string output = "";
 
@@ -35,7 +36,7 @@ namespace CodeGenerator
             output += "\tpublic enum Permission \n" +
                       "\t{ \n";
 
-            GenericRepository<SecPermission> permissionRepo = uow.GetRepository<SecPermission>();
+            IRepository<SecPermission> permissionRepo = uow.GetRepository<SecPermission>();
 
             List<SecPermission> permissionList = (from p in permissionRepo.Get()
                                                   select p).ToList();

@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer;
+using DataAccessLayer.Services;
 using DomainModel;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -55,13 +56,13 @@ namespace AssetTracker.Services
 
         private List<SecPermission3> roleOverrides;
 
-        private GenericUnitOfWork unitOfWork;
+        private IUnitOfWork unitOfWork;
         private SecRole Role;
-        private GenericRepository<SecPermission> permissionRepo;
-        private GenericRepository<SecPermission3> roleOverrideRepo;
-        private GenericRepository<SecPermission4> permissionHeaderRepo;
+        private IRepository<SecPermission> permissionRepo;
+        private IRepository<SecPermission3> roleOverrideRepo;
+        private IRepository<SecPermission4> permissionHeaderRepo;
 
-        public RolePermissionsProvider(GenericUnitOfWork uow, SecRole role)
+        public RolePermissionsProvider(IUnitOfWork uow, SecRole role)
         {
             unitOfWork = uow;
             Role = role;

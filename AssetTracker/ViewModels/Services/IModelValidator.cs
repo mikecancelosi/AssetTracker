@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer;
+using DataAccessLayer.Services;
 using DomainModel;
 using System.Collections.Generic;
 
@@ -18,6 +19,6 @@ namespace AssetTracker.ViewModels.Services
         /// <param name="item">DBO to validate</param>
         /// <param name="violations">Any violations that were found</param>
         /// <returns>Whether the dbo is valid ( if any violations were found this is false )</returns>
-        bool IsValid(GenericUnitOfWork uow, T item, out List<Violation> violations);
+        bool IsValid(IUnitOfWork uow, T item, out List<Violation> violations);
     }
 }

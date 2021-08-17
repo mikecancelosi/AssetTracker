@@ -1,14 +1,15 @@
-﻿using DomainModel;
+﻿using DataAccessLayer.Services;
+using DomainModel;
 
 namespace DataAccessLayer.Strategies
 {
     public class TagDeleteStrategy : IDeleteStrategy<Metadata>
     {
-        public void Delete(GenericUnitOfWork uow, Metadata item)
+        public void Delete(IUnitOfWork uow, Metadata item)
         {
-            GenericRepository<Metadata> tagRepo = uow.GetRepository<Metadata>();
+            IRepository<Metadata> tagRepo = uow.GetRepository<Metadata>();
 
-            item.Asset.Metadata.Remove(item);
+            item.Asset?.Metadata.Remove(item);
 
             tagRepo.Delete(item);
         }

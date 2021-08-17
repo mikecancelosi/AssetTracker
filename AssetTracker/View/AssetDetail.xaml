@@ -133,7 +133,7 @@
                                                    VerticalAlignment="Center" />
                                         <Button VerticalAlignment="Stretch"
                                                 Click="OnMetadataDelete_Clicked"
-                                                Tag="{Binding md_id}"
+                                                Tag="{Binding md_value}"
                                                 Style="{StaticResource HoverBtn}">
                                             <materialicons:MaterialIcon Icon="ic_close"
                                                                         Foreground="{StaticResource Text_Dark}"

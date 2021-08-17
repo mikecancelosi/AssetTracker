@@ -1,66 +1,40 @@
 ﻿using AssetTracker.Services;
 using DataAccessLayer;
+using DataAccessLayer.Services;
 using DataAccessLayer.Strategies;
 using DomainModel;
 
 namespace AssetTracker.ViewModels.Services
 {
     public class ViewModelFactory : IViewModelFactory
-    {       
-        public IDeleteStrategy<User> userDeleteStrategy { get; private set; }
+    {
+        private readonly IDeleteStrategyFactory deleteStrategyFactory;
+        private readonly IUnitOfWorkFactory uowFactory;
+        private readonly IModelValidatorFactory modelValidatorFactory;
 
-        public IDeleteStrategy<Asset> assetDeleteStrategy { get; private set; }
-
-        public IDeleteStrategy<SecRole> roleDeleteStrategy { get; private set; }
-
-        public IDeleteStrategy<AssetCategory> catDeleteStrategy { get; private set; }
-
-        public IDeleteStrategy<Alert> alertDeleteStrategy { get; private set; }
-
-        public IDeleteStrategy<Metadata> tagDeleteStrategy { get; private set; }
-
-        public IModelValidator<Asset> assetValidator { get; private set; }
-
-        public IModelValidator<User> userValidator { get; private set; }
-
-        public IModelValidator<AssetCategory> categoryValidator { get; private set; }
-
-        public IModelValidator<SecRole> roleValidator { get; private set; }
-
-        public ViewModelFactory(IDeleteStrategy<User> userDeleteStrategy,
-                                IDeleteStrategy<Asset> assetDeleteStrategy,
-                                IDeleteStrategy<SecRole> roleDeleteStrategy,
-                                IDeleteStrategy<AssetCategory> catDeleteStrategy,
-                                IDeleteStrategy<Alert> alertDeleteStrategy,
-                                IDeleteStrategy<Metadata> tagDeleteStrategy,
-                                IModelValidator<Asset> assetValidator,
-                                IModelValidator<User> userValidator,
-                                IModelValidator<AssetCategory> categoryValidator,
-                                IModelValidator<SecRole> roleValidator)
+        public ViewModelFactory(IDeleteStrategyFactory deleteStrategyFactory,
+                                IModelValidatorFactory modelValidatorFactory,
+                                IUnitOfWorkFactory uowFactory)
         {
-            this.userDeleteStrategy = userDeleteStrategy;
-            this.assetDeleteStrategy = assetDeleteStrategy;
-            this.roleDeleteStrategy = roleDeleteStrategy;
-            this.catDeleteStrategy = catDeleteStrategy;
-            this.alertDeleteStrategy = alertDeleteStrategy;
-            this.tagDeleteStrategy = tagDeleteStrategy;
-            this.assetValidator = assetValidator;
-            this.userValidator = userValidator;
-            this.categoryValidator = categoryValidator;
-            this.roleValidator = roleValidator;
+            this.deleteStrategyFactory = deleteStrategyFactory;
+            this.modelValidatorFactory = modelValidatorFactory;
+            this.uowFactory = uowFactory;
         }
 
         public LoginViewModel CreateLoginViewModel(INavigationCoordinator navCoord)
         {
-            GenericUnitOfWork uow = new GenericUnitOfWork(new TrackerContext());
+            IUnitOfWork uow = uowFactory.BuildUOW();
             LoginViewModel vm = new LoginViewModel(navCoord, uow);
             return vm;
         }
 
         public UserEditViewModel CreateUserEditViewModel(INavigationCoordinator navCoord, User userToEdit = null)
         {
-            GenericUnitOfWork uow = new GenericUnitOfWork(new TrackerContext());
-            UserEditViewModel vm = new UserEditViewModel(navCoord, uow, userDeleteStrategy,userValidator);
+            IUnitOfWork uow = uowFactory.BuildUOW();
+            UserEditViewModel vm = new UserEditViewModel(navCoord, 
+                                                         uow,
+                                                         deleteStrategyFactory.BuildUserStrategy(),
+                                                         modelValidatorFactory.BuildUserValidator());
             if (userToEdit != null)
             {
                 vm.SetUser(userToEdit);
@@ -70,8 +44,12 @@ namespace AssetTracker.ViewModels.Services
 
         public AssetDetailViewModel CreateAssetDetailViewModel(INavigationCoordinator navCoord, Asset asset = null)
         {
-            GenericUnitOfWork uow = new GenericUnitOfWork(new TrackerContext());
-            AssetDetailViewModel vm = new AssetDetailViewModel(navCoord, uow, assetDeleteStrategy, tagDeleteStrategy,assetValidator);
+            IUnitOfWork uow = uowFactory.BuildUOW();
+            AssetDetailViewModel vm = new AssetDetailViewModel(navCoord,
+                                                               uow,
+                                                               deleteStrategyFactory.BuildAssetStrategy(),
+                                                               deleteStrategyFactory.BuildMetadataStrategy(),
+                                                               modelValidatorFactory.BuildAssetValidator());
             if (asset != null)
             {
                 vm.SetAsset(asset);
@@ -81,15 +59,18 @@ namespace AssetTracker.ViewModels.Services
 
         public UserDashboardViewModel CreateUserDashboardViewModel(INavigationCoordinator navCoord)
         {
-            GenericUnitOfWork uow = new GenericUnitOfWork(new TrackerContext());
+            IUnitOfWork uow = uowFactory.BuildUOW();
             UserDashboardViewModel vm = new UserDashboardViewModel(navCoord, uow);
             return vm;
         }
 
         public RoleEditViewModel CreateRoleEditViewModel(INavigationCoordinator navCoord, SecRole roleToEdit = null)
         {
-            GenericUnitOfWork uow = new GenericUnitOfWork(new TrackerContext());
-            RoleEditViewModel vm = new RoleEditViewModel(navCoord, uow, roleDeleteStrategy,roleValidator);
+            IUnitOfWork uow = uowFactory.BuildUOW();
+            RoleEditViewModel vm = new RoleEditViewModel(navCoord,
+                                                         uow,
+                                                         deleteStrategyFactory.BuildRoleStrategy(),
+                                                         modelValidatorFactory.BuildRoleValidator());
             if (roleToEdit != null)
             {
                 vm.SetRole(roleToEdit);
@@ -99,26 +80,39 @@ namespace AssetTracker.ViewModels.Services
 
         public ProjectSettingsViewModel CreateProjectSettingsViewModel(INavigationCoordinator navCoord)
         {
-            GenericUnitOfWork uow = new GenericUnitOfWork(new TrackerContext());
-            ProjectSettingsViewModel vm = new ProjectSettingsViewModel(navCoord, uow, MainViewModel.Instance.CurrentUser, roleDeleteStrategy, alertDeleteStrategy, userDeleteStrategy, catDeleteStrategy);
+            IUnitOfWork uow = uowFactory.BuildUOW();
+            ProjectSettingsViewModel vm = new ProjectSettingsViewModel(navCoord,
+                                                                       uow, 
+                                                                       MainViewModel.Instance.CurrentUser, 
+                                                                       deleteStrategyFactory.BuildRoleStrategy(),
+                                                                       deleteStrategyFactory.BuildAlertStrategy(),
+                                                                       deleteStrategyFactory.BuildUserStrategy(),
+                                                                       deleteStrategyFactory.BuildCategoryStrategy());
             return vm;
         }
 
         public AssetListViewModel CreateAssetListViewModel(INavigationCoordinator navCoord)
         {
-            GenericUnitOfWork uow = new GenericUnitOfWork(new TrackerContext());
-            AssetListViewModel vm = new AssetListViewModel(navCoord, uow, MainViewModel.Instance.CurrentUser, assetDeleteStrategy);
+            IUnitOfWork uow = uowFactory.BuildUOW();
+            AssetListViewModel vm = new AssetListViewModel(navCoord,
+                                                           uow, 
+                                                           MainViewModel.Instance.CurrentUser,
+                                                           deleteStrategyFactory.BuildAssetStrategy());
             return vm;
         }
 
         public CategoryEditViewModel CreateCategoryEditViewModel(INavigationCoordinator navCoord, AssetCategory cat = null)
         {
-            GenericUnitOfWork uow = new GenericUnitOfWork(new TrackerContext());
-            CategoryEditViewModel vm = new CategoryEditViewModel(navCoord, uow, catDeleteStrategy, categoryValidator);
+            IUnitOfWork uow = uowFactory.BuildUOW();
+            CategoryEditViewModel vm = new CategoryEditViewModel(navCoord,
+                                                                 uow, 
+                                                                 deleteStrategyFactory.BuildCategoryStrategy(),
+                                                                 modelValidatorFactory.BuildCategoryValidator());
             if (cat != null)
             {
                 vm.SetCategory(cat);
             }
+
             return vm;
         }
     }

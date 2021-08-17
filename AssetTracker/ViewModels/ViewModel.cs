@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer;
+using DataAccessLayer.Services;
 using System;
 using System.ComponentModel;
 
@@ -22,7 +23,7 @@ namespace AssetTracker.ViewModels
         /// <summary>
         /// Context reference
         /// </summary>
-        protected GenericUnitOfWork unitOfWork;
+        protected IUnitOfWork unitOfWork;
 
     }
 }

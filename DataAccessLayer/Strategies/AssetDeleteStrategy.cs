@@ -1,13 +1,14 @@
-﻿using DomainModel;
+﻿using DataAccessLayer.Services;
+using DomainModel;
 
 namespace DataAccessLayer.Strategies
 {
     public class AssetDeleteStrategy : IDeleteStrategy<Asset>
     {
-        public void Delete(GenericUnitOfWork uow, Asset item)
+        public void Delete(IUnitOfWork uow, Asset item)
         {
-            GenericRepository<AssetLink> linkRepo = uow.GetRepository<AssetLink>();
-            GenericRepository<Asset> assetRepo = uow.GetRepository<Asset>();
+            IRepository<AssetLink> linkRepo = uow.GetRepository<AssetLink>();
+            IRepository<Asset> assetRepo = uow.GetRepository<Asset>();
 
             if(item.AssetLink != null)
             {

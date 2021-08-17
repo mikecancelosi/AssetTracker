@@ -52,8 +52,8 @@ namespace AssetTracker.View
         /// </summary>
         private void OnMetadataDelete_Clicked(object sender, RoutedEventArgs e)
         {
-            int id = (int)((Button)sender).Tag;
-            VM.DeleteTag(id);
+            string tag = ((Button)sender).Tag.ToString();
+            VM.DeleteTag(tag);
         }
 
         /// <summary>

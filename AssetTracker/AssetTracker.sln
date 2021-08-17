@@ -5,11 +5,13 @@ VisualStudioVersion = 16.0.31112.23
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetTracker", "AssetTracker.csproj", "{F80291FC-D2D1-4AB7-9280-80E33DFCFDF6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeGenerator", "..\CodeGenerator\CodeGenerator.csproj", "{6C246D73-925B-4D19-9D6A-B3ABC78A266F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeGenerator", "..\CodeGenerator\CodeGenerator.csproj", "{6C246D73-925B-4D19-9D6A-B3ABC78A266F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccessLayer", "..\DataAccessLayer\DataAccessLayer.csproj", "{32E92E03-80BB-4F81-9605-A76DE48145D6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomainModel", "..\DomainModel\DomainModel.csproj", "{6E5F6CA5-49CA-4FE9-8A21-9BEC8F0DEF8B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "..\Tests\Tests.csproj", "{3B84C7E6-7197-435F-B7F0-FF87DBC6AE52}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{6E5F6CA5-49CA-4FE9-8A21-9BEC8F0DEF8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6E5F6CA5-49CA-4FE9-8A21-9BEC8F0DEF8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6E5F6CA5-49CA-4FE9-8A21-9BEC8F0DEF8B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B84C7E6-7197-435F-B7F0-FF87DBC6AE52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B84C7E6-7197-435F-B7F0-FF87DBC6AE52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B84C7E6-7197-435F-B7F0-FF87DBC6AE52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B84C7E6-7197-435F-B7F0-FF87DBC6AE52}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

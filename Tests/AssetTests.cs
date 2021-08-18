@@ -11,20 +11,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 using Tests.Services;
 
 namespace Tests
 {
-    public class AssetTests
-    {
-        
+    internal sealed class AssetTests : BaseIntegrationFixture
+    {        
         private INavigationCoordinator navigationCoordinator;
         private IDeleteStrategyFactory deleteStrategyFactory;
-        private ModelValidatorFactory modelValidatorFactory;
+        private ModelValidatorFactory modelValidatorFactory;       
+
 
         [SetUp]
         public void Setup()
-        {
+        {          
             deleteStrategyFactory = new DeleteStrategyFactory();
             modelValidatorFactory = new ModelValidatorFactory();
             navigationCoordinator = new Mock<INavigationCoordinator>().Object;
@@ -34,7 +35,7 @@ namespace Tests
         public void CreateAsset()
         {
             //Arrange
-            var uowFactory = new TestUOWFactory();
+            var uowFactory = new TestUOWFactory(Context);
             IViewModelFactory viewModelFactory = new ViewModelFactory(deleteStrategyFactory, modelValidatorFactory, uowFactory);
 
             //Act
@@ -48,21 +49,21 @@ namespace Tests
         [Test]
         public void SetAsset()
         {
-            //Arrange
-            string expectedName = "Test object";
-            Asset newAsset = new Asset()
+            //Arrange            
+            Asset testAsset = new Asset()
             {
-                as_description = "Object used for testing",
-                as_displayname = expectedName
+                as_displayname = "Test Object",
+                as_description = "Object for testing"
             };
-            List<Asset> assetSource = new List<Asset>() { newAsset };
-            GenericTestRepository<Asset> assetRepo = new GenericTestRepository<Asset>(assetSource);
-            var uowFactory = new TestUOWFactory(assetRepo);
+            Context.Assets.Add(testAsset);
+            string expectedName = testAsset.as_displayname;
+            var uowFactory = new TestUOWFactory(Context);
             IViewModelFactory viewModelFactory = new ViewModelFactory(deleteStrategyFactory, modelValidatorFactory, uowFactory);
 
             //Act
+            
             var assetDetailViewModel = viewModelFactory.CreateAssetDetailViewModel(navigationCoordinator);
-            assetDetailViewModel.SetAsset(newAsset);
+            assetDetailViewModel.SetAsset(testAsset);
 
             //Assert
             Assert.AreNotEqual("",assetDetailViewModel.myAsset.as_description);
@@ -73,20 +74,13 @@ namespace Tests
         public void AddTag()
         {
             //Arrange
-            string expectedName = "Test object";
-            Asset newAsset = new Asset()
-            {
-                as_description = "Object used for testing",
-                as_displayname = expectedName
-            };
-            List<Asset> assetSource = new List<Asset>() { newAsset };
-            GenericTestRepository<Asset> assetRepo = new GenericTestRepository<Asset>(assetSource);
-            var uowFactory = new TestUOWFactory(assetRepo);
+            Asset testAsset = Context.Assets.FirstOrDefault();           
+            var uowFactory = new TestUOWFactory(Context);
             IViewModelFactory viewModelFactory = new ViewModelFactory(deleteStrategyFactory, modelValidatorFactory, uowFactory);
 
             //Act
             var assetDetailViewModel = viewModelFactory.CreateAssetDetailViewModel(navigationCoordinator);
-            assetDetailViewModel.SetAsset(newAsset);
+            assetDetailViewModel.SetAsset(testAsset);
             assetDetailViewModel.AddTag("TestTag");
 
             //Assert
@@ -97,20 +91,13 @@ namespace Tests
         public void DeleteTag()
         {
             //Arrange
-            string expectedName = "Test object";
-            Asset newAsset = new Asset()
-            {
-                as_description = "Object used for testing",
-                as_displayname = expectedName
-            };
-            List<Asset> assetSource = new List<Asset>() { newAsset };
-            GenericTestRepository<Asset> assetRepo = new GenericTestRepository<Asset>(assetSource);
-            var uowFactory = new TestUOWFactory(assetRepo);
+            Asset testAsset = Context.Assets.FirstOrDefault();
+            var uowFactory = new TestUOWFactory(Context);
             IViewModelFactory viewModelFactory = new ViewModelFactory(deleteStrategyFactory, modelValidatorFactory, uowFactory);
 
             //Act
             var assetDetailViewModel = viewModelFactory.CreateAssetDetailViewModel(navigationCoordinator);
-            assetDetailViewModel.SetAsset(newAsset);
+            assetDetailViewModel.SetAsset(testAsset);
             assetDetailViewModel.AddTag("TestTag");
             assetDetailViewModel.DeleteTag("TestTag");
 

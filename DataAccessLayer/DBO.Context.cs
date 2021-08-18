@@ -12,6 +12,7 @@ namespace DataAccessLayer
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Common;
     using DomainModel;
     using System.Data.Entity.Core.Objects;
     using System.Linq;
@@ -20,6 +21,16 @@ namespace DataAccessLayer
     {
         public TrackerContext()
             : base("name=TrackerContext")
+        {
+        }
+    
+         public TrackerContext(string connectionString)
+            : base(connectionString)
+        {
+        }
+    
+          public TrackerContext(DbConnection connection)
+            : base(connection,false)
         {
         }
     

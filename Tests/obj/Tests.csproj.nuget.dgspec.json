@@ -98,9 +98,17 @@
         "net5.0": {
           "targetAlias": "net5.0",
           "dependencies": {
+            "Effort.EF6": {
+              "target": "Package",
+              "version": "[2.2.14, )"
+            },
             "EntityFramework": {
               "target": "Package",
               "version": "[6.4.4, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[5.0.9, )"
             },
             "Microsoft.NET.Test.Sdk": {
               "target": "Package",

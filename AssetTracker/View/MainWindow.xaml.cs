@@ -100,6 +100,12 @@ namespace AssetTracker
             container.Register(Component.For<IViewModelFactory>()
                                         .ImplementedBy<ViewModelFactory>());
 
+            container.Register(Component.For<IModelValidatorFactory>()
+                                        .ImplementedBy<ModelValidatorFactory>());
+
+            container.Register(Component.For<IUnitOfWorkFactory>()
+                                        .ImplementedBy<UnitOfWorkFactory>());
+
             // Navigation
             container.Register(Component.For<NavigationService>()
                                         .Instance(ContentFrame.NavigationService));
@@ -131,6 +137,9 @@ namespace AssetTracker
 
             container.Register(Component.For<IDeleteStrategy<Alert>>()
                                        .ImplementedBy<AlertDeleteStrategy>());
+
+            container.Register(Component.For<IDeleteStrategyFactory>()
+                                        .ImplementedBy<DeleteStrategyFactory>());
 
 
             // Model Validators

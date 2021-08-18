@@ -43,6 +43,7 @@ namespace <#=code.EscapeNamespace(codeNamespace)#>
 using System;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.Data.Common;
 using DomainModel;
 <#
 if (container.FunctionImports.Any())
@@ -81,6 +82,16 @@ foreach (var entitySet in container.BaseEntitySets.OfType<EntitySet>())
 #>
     }
 
+     public <#=code.Escape(container)#>(string connectionString)
+        : base(connectionString)
+    {
+    }
+
+      public <#=code.Escape(container)#>(DbConnection connection)
+        : base(connection,false)
+    {
+    }
+
     protected override void OnModelCreating(DbModelBuilder modelBuilder)
     {
         throw new UnintentionalCodeFirstException();
@@ -101,6 +112,9 @@ foreach (var entitySet in container.BaseEntitySets.OfType<EntitySet>())
 #>
 }
 <#
+
+
+
 
 if (!String.IsNullOrEmpty(codeNamespace))
 {

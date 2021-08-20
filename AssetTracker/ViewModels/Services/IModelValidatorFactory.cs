@@ -1,7 +1,7 @@
 ﻿
 using DomainModel;
 
-namespace AssetTracker.ViewModels.Services
+namespace Quipu.ViewModels.Services
 {
     public interface IModelValidatorFactory
     {

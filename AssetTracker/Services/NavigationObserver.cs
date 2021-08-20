@@ -1,9 +1,9 @@
-﻿using AssetTracker.View.Services;
-using AssetTracker.ViewModels;
+﻿using Quipu.View.Services;
+using Quipu.ViewModels;
 using System.Windows.Controls;
 using System.Windows.Navigation;
 
-namespace AssetTracker.Services
+namespace Quipu.Services
 {
     /// <summary>
     /// Observes Navigation coordinator for when its current viewmodel actually changes

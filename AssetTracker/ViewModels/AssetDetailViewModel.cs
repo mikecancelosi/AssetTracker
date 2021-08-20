@@ -1,8 +1,8 @@
-﻿using AssetTracker.Services;
-using AssetTracker.View.Commands;
-using AssetTracker.View.Services;
-using AssetTracker.ViewModels.Interfaces;
-using AssetTracker.ViewModels.Services;
+﻿using Quipu.Services;
+using Quipu.View.Commands;
+using Quipu.View.Services;
+using Quipu.ViewModels.Interfaces;
+using Quipu.ViewModels.Services;
 using DataAccessLayer;
 using DataAccessLayer.Services;
 using DataAccessLayer.Strategies;
@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
 
-namespace AssetTracker.ViewModels
+namespace Quipu.ViewModels
 {
     public class AssetDetailViewModel : ViewModel, ISavable
     {

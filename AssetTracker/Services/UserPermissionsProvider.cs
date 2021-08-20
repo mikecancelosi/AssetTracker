@@ -6,7 +6,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using static DomainModel.SecPermission;
 
-namespace AssetTracker.Services
+namespace Quipu.Services
 {
     public class UserPermissionsProvider : IPermissionsProvider
     {

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AssetTracker.ViewModels.Services
+namespace Quipu.ViewModels.Services
 {
     public class ModelValidatorFactory : IModelValidatorFactory
     {

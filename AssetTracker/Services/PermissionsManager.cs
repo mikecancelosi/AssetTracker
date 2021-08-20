@@ -3,7 +3,7 @@ using DataAccessLayer.Services;
 using DomainModel;
 using System.Linq;
 
-namespace AssetTracker.Services
+namespace Quipu.Services
 {
     public class PermissionsManager
     {

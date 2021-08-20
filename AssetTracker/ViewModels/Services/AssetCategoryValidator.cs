@@ -4,7 +4,7 @@ using DomainModel;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AssetTracker.ViewModels.Services
+namespace Quipu.ViewModels.Services
 {
     public class AssetCategoryValidator : IModelValidator<AssetCategory>
     {

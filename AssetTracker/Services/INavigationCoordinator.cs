@@ -1,8 +1,8 @@
-﻿using AssetTracker.ViewModels;
+﻿using Quipu.ViewModels;
 using DomainModel;
 using System;
 
-namespace AssetTracker.Services
+namespace Quipu.Services
 {
     /// <summary>
     /// Navigation coordinator handles storing viewmodels if 

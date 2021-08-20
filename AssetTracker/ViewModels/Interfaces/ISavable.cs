@@ -1,9 +1,9 @@
-﻿using AssetTracker.Services;
+﻿using Quipu.Services;
 using DomainModel;
 using System.Collections.Generic;
 using System.Windows.Input;
 
-namespace AssetTracker.ViewModels.Interfaces
+namespace Quipu.ViewModels.Interfaces
 {
     public interface ISavable
     {

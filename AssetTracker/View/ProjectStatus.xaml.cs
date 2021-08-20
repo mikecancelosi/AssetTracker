@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace AssetTracker.View
+namespace Quipu.View
 {
     /// <summary>
     /// Interaction logic for ProjectStatus.xaml

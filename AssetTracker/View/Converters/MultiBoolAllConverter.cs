@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Data;
 
-namespace AssetTracker.View.Converters
+namespace Quipu.View.Converters
 {
     public class MultiBoolAllConverter : IMultiValueConverter
     {

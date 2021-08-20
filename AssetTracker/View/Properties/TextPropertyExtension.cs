@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace AssetTracker.View.Properties
+namespace Quipu.View.Properties
 {
     /// <summary>
     /// Used to store textsources

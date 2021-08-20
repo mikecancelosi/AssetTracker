@@ -1,14 +1,14 @@
-﻿using AssetTracker.Services;
+﻿using Quipu.Services;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
-using AssetTracker.View.Commands;
+using Quipu.View.Commands;
 using DomainModel;
 using DataAccessLayer;
 using DataAccessLayer.Strategies;
 using DataAccessLayer.Services;
 
-namespace AssetTracker.ViewModels
+namespace Quipu.ViewModels
 {
     public class AssetListViewModel : ViewModel
     {       

@@ -1,7 +1,7 @@
-﻿using AssetTracker.Services;
-using AssetTracker.View.Services;
-using AssetTracker.ViewModels;
-using AssetTracker.ViewModels.Services;
+﻿using Quipu.Services;
+using Quipu.View.Services;
+using Quipu.ViewModels;
+using Quipu.ViewModels.Services;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using DataAccessLayer.Services;
@@ -11,7 +11,7 @@ using System;
 using System.Windows;
 using System.Windows.Navigation;
 
-namespace AssetTracker
+namespace Quipu
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

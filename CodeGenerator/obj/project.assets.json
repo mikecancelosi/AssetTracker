@@ -279,19 +279,6 @@
           }
         }
       },
-      "AssetTracker/1.0.0": {
-        "type": "project",
-        "dependencies": {
-          "DataAccessLayer": "1.0.0",
-          "DomainModel": "1.0.0"
-        },
-        "compile": {
-          "bin/placeholder/AssetTracker.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/AssetTracker.dll": {}
-        }
-      },
       "DataAccessLayer/1.0.0": {
         "type": "project",
         "dependencies": {
@@ -311,6 +298,19 @@
         },
         "runtime": {
           "bin/placeholder/DomainModel.dll": {}
+        }
+      },
+      "Quipu.Desktop/1.0.0": {
+        "type": "project",
+        "dependencies": {
+          "DataAccessLayer": "1.0.0",
+          "DomainModel": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/Quipu.Desktop.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Quipu.Desktop.dll": {}
         }
       }
     }
@@ -1061,11 +1061,6 @@
         "version.txt"
       ]
     },
-    "AssetTracker/1.0.0": {
-      "type": "project",
-      "path": "../AssetTracker/AssetTracker.csproj",
-      "msbuildProject": "../AssetTracker/AssetTracker.csproj"
-    },
     "DataAccessLayer/1.0.0": {
       "type": "project",
       "path": "../DataAccessLayer/DataAccessLayer.csproj",
@@ -1075,12 +1070,17 @@
       "type": "project",
       "path": "../DomainModel/DomainModel.csproj",
       "msbuildProject": "../DomainModel/DomainModel.csproj"
+    },
+    "Quipu.Desktop/1.0.0": {
+      "type": "project",
+      "path": "../AssetTracker/Quipu.Desktop.csproj",
+      "msbuildProject": "../AssetTracker/Quipu.Desktop.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net5.0": [
-      "AssetTracker >= 1.0.0",
       "EntityFramework >= 6.4.4",
+      "Quipu.Desktop >= 1.0.0",
       "System.Configuration.ConfigurationManager >= 5.0.0",
       "System.Data.SqlClient >= 4.8.2"
     ]
@@ -1092,9 +1092,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\mikec\\Documents\\Projects\\AssetTrackerProjects\\CodeGenerator\\CodeGenerator.csproj",
-      "projectName": "CodeGenerator",
-      "projectPath": "C:\\Users\\mikec\\Documents\\Projects\\AssetTrackerProjects\\CodeGenerator\\CodeGenerator.csproj",
+      "projectUniqueName": "C:\\Users\\mikec\\Documents\\Projects\\AssetTrackerProjects\\CodeGenerator\\Quipu.CodeGenerator.csproj",
+      "projectName": "Quipu.CodeGenerator",
+      "projectPath": "C:\\Users\\mikec\\Documents\\Projects\\AssetTrackerProjects\\CodeGenerator\\Quipu.CodeGenerator.csproj",
       "packagesPath": "C:\\Users\\mikec\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\mikec\\Documents\\Projects\\AssetTrackerProjects\\CodeGenerator\\obj\\",
       "projectStyle": "PackageReference",
@@ -1116,8 +1116,8 @@
         "net5.0": {
           "targetAlias": "net5.0",
           "projectReferences": {
-            "C:\\Users\\mikec\\Documents\\Projects\\AssetTrackerProjects\\AssetTracker\\AssetTracker.csproj": {
-              "projectPath": "C:\\Users\\mikec\\Documents\\Projects\\AssetTrackerProjects\\AssetTracker\\AssetTracker.csproj"
+            "C:\\Users\\mikec\\Documents\\Projects\\AssetTrackerProjects\\AssetTracker\\Quipu.Desktop.csproj": {
+              "projectPath": "C:\\Users\\mikec\\Documents\\Projects\\AssetTrackerProjects\\AssetTracker\\Quipu.Desktop.csproj"
             }
           }
         }

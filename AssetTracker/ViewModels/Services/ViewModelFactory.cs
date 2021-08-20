@@ -1,10 +1,10 @@
-﻿using AssetTracker.Services;
+﻿using Quipu.Services;
 using DataAccessLayer;
 using DataAccessLayer.Services;
 using DataAccessLayer.Strategies;
 using DomainModel;
 
-namespace AssetTracker.ViewModels.Services
+namespace Quipu.ViewModels.Services
 {
     public class ViewModelFactory : IViewModelFactory
     {

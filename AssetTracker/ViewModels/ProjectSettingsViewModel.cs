@@ -1,5 +1,5 @@
-﻿using AssetTracker.Services;
-using AssetTracker.View.Commands;
+﻿using Quipu.Services;
+using Quipu.View.Commands;
 using DataAccessLayer;
 using DataAccessLayer.Services;
 using DataAccessLayer.Strategies;
@@ -10,7 +10,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 
-namespace AssetTracker.ViewModels
+namespace Quipu.ViewModels
 {
     public class ProjectSettingsViewModel : ViewModel
     {

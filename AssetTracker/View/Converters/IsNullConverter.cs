@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace AssetTracker.View.Converters
+namespace Quipu.View.Converters
 {
     /// <summary>
     /// Determines if the value is null or not. 

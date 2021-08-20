@@ -3,7 +3,7 @@ using DataAccessLayer.Services;
 using System;
 using System.ComponentModel;
 
-namespace AssetTracker.ViewModels
+namespace Quipu.ViewModels
 {
     public abstract class ViewModel : INotifyPropertyChanged
     {

@@ -1,11 +1,11 @@
-﻿using AssetTracker.ViewModels;
-using AssetTracker.ViewModels.Interfaces;
-using AssetTracker.ViewModels.Services;
+﻿using Quipu.ViewModels;
+using Quipu.ViewModels.Interfaces;
+using Quipu.ViewModels.Services;
 using DomainModel;
 using System;
 using System.Linq;
 
-namespace AssetTracker.Services
+namespace Quipu.Services
 {
     /// <summary>
     /// Base concrete implementation of INavigationCoordinator.

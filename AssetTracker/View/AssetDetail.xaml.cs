@@ -1,9 +1,9 @@
-﻿using AssetTracker.ViewModels;
+﻿using Quipu.ViewModels;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace AssetTracker.View
+namespace Quipu.View
 {
     /// <summary>
     /// Interaction logic for AssetDetail.xaml

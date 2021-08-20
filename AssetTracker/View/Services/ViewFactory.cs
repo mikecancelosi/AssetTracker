@@ -1,9 +1,9 @@
-﻿using AssetTracker.Services;
-using AssetTracker.ViewModels;
+﻿using Quipu.Services;
+using Quipu.ViewModels;
 using System;
 using System.Windows.Controls;
 
-namespace AssetTracker.View.Services
+namespace Quipu.View.Services
 {
     public class ViewFactory : IViewFactory
     {

@@ -1,6 +1,6 @@
 ﻿using DomainModel;
 
-namespace AssetTracker.ViewModels
+namespace Quipu.ViewModels
 {
     public class MainViewModel : ViewModel
     {

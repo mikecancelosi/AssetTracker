@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Data;
 
-namespace AssetTracker.View.Converters
+namespace Quipu.View.Converters
 {
     /// <summary>
     /// Custom converter to make an 'time elapsed' string shorter and more attractive

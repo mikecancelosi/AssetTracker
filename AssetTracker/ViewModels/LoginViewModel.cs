@@ -1,10 +1,10 @@
-﻿using AssetTracker.Services;
+﻿using Quipu.Services;
 using DataAccessLayer;
 using DataAccessLayer.Services;
 using DomainModel;
 using System.Linq;
 
-namespace AssetTracker.ViewModels
+namespace Quipu.ViewModels
 {
     public class LoginViewModel : ViewModel
     {

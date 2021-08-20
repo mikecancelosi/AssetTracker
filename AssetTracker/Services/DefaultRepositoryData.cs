@@ -1,7 +1,7 @@
 ﻿using DomainModel;
 using System.Collections.Generic;
 
-namespace AssetTracker.Services
+namespace Quipu.Services
 {
     /// <summary>
     /// This class serves to set up test data for an empty database.

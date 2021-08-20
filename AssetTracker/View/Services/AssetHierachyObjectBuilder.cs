@@ -1,7 +1,7 @@
 ﻿using DomainModel;
 using System.Collections.Generic;
 
-namespace AssetTracker.View.Services
+namespace Quipu.View.Services
 {
     public  class AssetHierachyObjectBuilder
     {

@@ -1,10 +1,10 @@
-﻿<Page x:Class="AssetTracker.View.Login"
+﻿<Page x:Class="Quipu.View.Login"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      xmlns:local="clr-namespace:AssetTracker.View"
-      xmlns:viewmodel="clr-namespace:AssetTracker.ViewModels"
+      xmlns:local="clr-namespace:Quipu.View"
+      xmlns:viewmodel="clr-namespace:Quipu.ViewModels"
       xmlns:materialicons="clr-namespace:MaterialIcons;assembly=MaterialIcons"
       mc:Ignorable="d"
       Title="Login"
@@ -46,7 +46,7 @@
                     <materialicons:MaterialIcon Icon="ic_person"
                                                 Foreground="{StaticResource Text_Dark}"
                                                 Height="30" />
-                    <TextBlock Text="Login to AssetTracker"
+                    <TextBlock Text="Login to Quipu"
                                VerticalAlignment="Center" />
                 </StackPanel>
 

@@ -1,8 +1,8 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:extensions="clr-namespace:AssetTracker.View.Extensions"
-                    xmlns:conv="clr-namespace:AssetTracker.View.Converters"
-                    xmlns:prop="clr-namespace:AssetTracker.View.Properties">
+                    xmlns:extensions="clr-namespace:Quipu.View.Extensions"
+                    xmlns:conv="clr-namespace:Quipu.View.Converters"
+                    xmlns:prop="clr-namespace:Quipu.View.Properties">
 
 
     <Style x:Key="PermissionsCheckbox"

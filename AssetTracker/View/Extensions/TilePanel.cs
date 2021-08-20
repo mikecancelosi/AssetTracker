@@ -4,7 +4,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace AssetTracker.View.Extensions
+namespace Quipu.View.Extensions
 {
     /// <summary>
     /// Like a wrappanel, but allows for panels that don't necessary line up in the vertical 

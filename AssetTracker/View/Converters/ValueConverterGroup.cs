@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Data;
 
-namespace AssetTracker.View.Converters
+namespace Quipu.View.Converters
 {
     /// <summary>
     /// Used to allow multiple converters to run through the data to return desired output

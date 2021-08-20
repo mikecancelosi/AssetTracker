@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace AssetTracker.View.Controls
+namespace Quipu.View.Controls
 {
     /// <summary>
     /// Interaction logic for SubNavRadioButton.xaml

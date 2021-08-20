@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "2LsakiJFJEGNAFQkniPi4v6VmC6H7Vr9slzhQo4C18DfH3tyCdrtyy7DF9OjGZGhB/Q0m7yPYWpkSVtaVQ2LGg==",
+  "dgSpecHash": "+AhqrfeYE5mV+gAa956sblswlVV7ZoRkmZaVJvCwqGzs1EYcZL0+7EX/TSnv68W+/IDuf/Ptty1hNK5Ek8AJ7w==",
   "success": true,
-  "projectFilePath": "C:\\Users\\mikec\\Documents\\Projects\\AssetTrackerProjects\\CodeGenerator\\CodeGenerator.csproj",
+  "projectFilePath": "C:\\Users\\mikec\\Documents\\Projects\\AssetTrackerProjects\\CodeGenerator\\Quipu.CodeGenerator.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\mikec\\.nuget\\packages\\entityframework\\6.4.4\\entityframework.6.4.4.nupkg.sha512",
     "C:\\Users\\mikec\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",

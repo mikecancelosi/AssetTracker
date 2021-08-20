@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using static DomainModel.SecPermission;
 
-namespace AssetTracker.Services
+namespace Quipu.Services
 {
     public interface IPermissionsProvider
     {

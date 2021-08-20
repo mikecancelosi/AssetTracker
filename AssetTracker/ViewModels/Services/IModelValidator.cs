@@ -3,7 +3,7 @@ using DataAccessLayer.Services;
 using DomainModel;
 using System.Collections.Generic;
 
-namespace AssetTracker.ViewModels.Services
+namespace Quipu.ViewModels.Services
 {
     /// <summary>
     /// Validators remove validation responsbility from the model and

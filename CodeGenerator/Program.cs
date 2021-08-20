@@ -1,7 +1,7 @@
 ﻿using DataAccessLayer;
 using DataAccessLayer.Services;
 
-namespace CodeGenerator
+namespace Quipu.CodeGenerator
 {
     class Program
     {

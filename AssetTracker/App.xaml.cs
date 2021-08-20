@@ -1,7 +1,7 @@
 ﻿using Castle.Windsor;
 using System.Windows;
 
-namespace AssetTracker
+namespace Quipu
 {
     /// <summary>
     /// Interaction logic for App.xaml

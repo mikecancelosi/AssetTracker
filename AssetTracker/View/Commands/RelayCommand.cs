@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace AssetTracker.View.Commands
+namespace Quipu.View.Commands
 {
     /// <summary>
     /// Multi purpose use ICommand class

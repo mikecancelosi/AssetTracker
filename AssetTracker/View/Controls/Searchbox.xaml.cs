@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace AssetTracker.View.Controls
+namespace Quipu.View.Controls
 {
     /// <summary>
     /// Interaction logic for Searchbox.xaml

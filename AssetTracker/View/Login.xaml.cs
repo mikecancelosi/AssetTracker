@@ -1,8 +1,8 @@
-﻿using AssetTracker.ViewModels;
+﻿using Quipu.ViewModels;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace AssetTracker.View
+namespace Quipu.View
 {
     /// <summary>
     /// Interaction logic for Login.xaml

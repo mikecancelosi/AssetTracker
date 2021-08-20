@@ -6,7 +6,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 
-namespace AssetTracker.Extensions
+namespace Quipu.Extensions
 {
     public static class ObservableCollectionExtensions
     {

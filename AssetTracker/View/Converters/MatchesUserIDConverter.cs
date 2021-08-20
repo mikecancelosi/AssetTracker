@@ -1,9 +1,9 @@
-﻿using AssetTracker.ViewModels;
+﻿using Quipu.ViewModels;
 using System;
 using System.Globalization;
 using System.Windows.Data;
 
-namespace AssetTracker.View.Converters
+namespace Quipu.View.Converters
 {
     [ValueConversion(typeof(int), typeof(System.Windows.Visibility))]
     public class MatchesUserIDConverter : IValueConverter

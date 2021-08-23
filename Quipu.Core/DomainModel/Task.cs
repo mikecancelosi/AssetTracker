@@ -17,6 +17,7 @@ namespace Quipu.Core.DomainModel
 
         [Key]
         public int ID { get; set; }
+        [Required(ErrorMessage ="A task needs to have a title")]
         public string Name { get; set; }
         public string Description { get; set; }
         public int? Assigned_User_ID { get; set; }

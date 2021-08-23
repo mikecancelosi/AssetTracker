@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31112.23
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quipu.Core", "..\Quipu.Core\Quipu.Core.csproj", "{B20727D2-CBDE-4930-BB6A-7A6EB0F2373A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quipu.Core", "..\Quipu.Core\Quipu.Core.csproj", "{B20727D2-CBDE-4930-BB6A-7A6EB0F2373A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quipu.Web", "Quipu.Web\Quipu.Web.csproj", "{D0B620EE-E843-49B3-9964-D2B776903CBF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{B20727D2-CBDE-4930-BB6A-7A6EB0F2373A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B20727D2-CBDE-4930-BB6A-7A6EB0F2373A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B20727D2-CBDE-4930-BB6A-7A6EB0F2373A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0B620EE-E843-49B3-9964-D2B776903CBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0B620EE-E843-49B3-9964-D2B776903CBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0B620EE-E843-49B3-9964-D2B776903CBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0B620EE-E843-49B3-9964-D2B776903CBF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

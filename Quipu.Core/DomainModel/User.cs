@@ -19,10 +19,13 @@ namespace Quipu.Core.DomainModel
 
         [Key]
         public int ID { get; set; }
+        [Required(ErrorMessage ="User needs to have a display name")]
         public string Display_Name { get; set; }
         public string First_Name { get; set; }
         public string Last_Name { get; set; }
+        [Required(ErrorMessage ="User needs to be able to login to the system")]
         public string Login { get; set; }
+        [Required(ErrorMessage ="User needs a password to login to the system")]
         public string Password { get; set; }
 
         public virtual ICollection<Task> TasksAssigned { get; set; }
